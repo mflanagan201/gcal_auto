@@ -32,9 +32,6 @@ jobs:
       run: |
         R -e 'install.packages(c("gargle", "googleAuthR", "jsonlite", "knitr", "dplyr", "huxtable", "tidyverse", "rmarkdown", "csodata", "xts", "calendar", "DescTools", "splitstackshape", "pdftools", "rvest", "lubridate", "httr2"), repos="http://cran.rstudio.com/")'
 
-  install.packages("tidyr", type = "source")
-
-
     - name: Debug
       run: |
        ls -R
