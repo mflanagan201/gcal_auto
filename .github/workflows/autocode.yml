@@ -30,6 +30,9 @@ jobs:
         R -e 'system("sudo apt-get install libcurl4-openssl-dev")'
         R -e 'system("sudo apt-get install libharfbuzz-dev")'
         R -e 'system("sudo apt-get install libfribidi_dev")'
+        R -e 'system("sudo apt-get install -y libpoppler-cpp-dev")'
+        R -e 'system("sudo apt-get install harfbuzz-devel fribidi-devel")'
+
         R -e 'install.packages(c("httr","gargle", "googleAuthR", "jsonlite", "knitr", "dplyr", "huxtable", "tidyverse", "rmarkdown", "csodata", "xts", "calendar", "DescTools", "splitstackshape", "pdftools", "rvest", "lubridate", "httr2"), repos="http://cran.rstudio.com/")'
 
     - name: Debug
