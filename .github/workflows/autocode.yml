@@ -28,7 +28,8 @@ jobs:
     - name: Install dependencies1
       uses: r-lib/actions/setup-r-dependencies@v2
       with:
-          extra-packages: "curl"
+          extra-packages: |
+            curl
           
     - name: Install dependencies2
       run: |
