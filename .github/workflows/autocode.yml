@@ -29,7 +29,7 @@ jobs:
   
     - name: Install dependencies2
       run: |
-        R -e 'system("sudo apt install libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev")'
+        R -e 'system("sudo apt install libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev")'
         R -e 'system("sudo apt-get install libcurl4-openssl-dev")'
         R -e 'system("sudo apt-get install libharfbuzz-dev")'
         R -e 'system("sudo apt-get install libfribidi_dev")'
