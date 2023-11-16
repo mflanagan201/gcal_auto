@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '30 15 * * *'  # Adjusted to run at 17:30 UTC
+    - cron: '31 15 * * *'  # Adjusted to run at 17:30 UTC
 
 jobs:
   run_rscript:
