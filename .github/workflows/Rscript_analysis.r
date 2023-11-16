@@ -13,6 +13,7 @@ library(splitstackshape)
 library(pdftools)
 library(rvest)
 library(lubridate)
+library(stringr)
 
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
 google_client_secret <- Sys.getenv("GOOGLE_CLIENT_SECRET")
