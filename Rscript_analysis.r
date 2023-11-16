@@ -46,56 +46,56 @@ EUROSTAT_calendar<-ical(EUROSTAT_cal_short)
 PMI_CALENDAR<-"https://www.pmi.spglobal.com/Public/Release/ReleaseDates"
 
 
-PMI_URL_download<-pdf_text("C:/Users/flanagam/Downloads/UK_Rel_Dates_2.pdf") %>% .[[1]] %>% stringr::str_split("\n")  %>%  unlist() %>% matrix()  
-PMI_URL_download_PG2<-pdf_text("C:/Users/flanagam/Downloads/UK_Rel_Dates_2.pdf") %>% .[[2]] %>% stringr::str_split("\n")  %>%  unlist() %>% matrix()  
+#PMI_URL_download<-pdf_text("C:/Users/flanagam/Downloads/UK_Rel_Dates_2.pdf") %>% .[[1]] %>% stringr::str_split("\n")  %>%  unlist() %>% matrix()  
+#PMI_URL_download_PG2<-pdf_text("C:/Users/flanagam/Downloads/UK_Rel_Dates_2.pdf") %>% .[[2]] %>% stringr::str_split("\n")  %>%  unlist() %>% matrix()  
 
-PMI_URL_download_PG1<-PMI_URL_download[3:nrow(PMI_URL_download)] %>% data.frame() 
-PMI_URL_download_PG2<-PMI_URL_download_PG2[3:nrow(PMI_URL_download)] %>% data.frame() 
-
-
-
-PMI_URL_download_ALL<-rbind(PMI_URL_download_PG1,PMI_URL_download_PG2)
+#PMI_URL_download_PG1<-PMI_URL_download[3:nrow(PMI_URL_download)] %>% data.frame() 
+#PMI_URL_download_PG2<-PMI_URL_download_PG2[3:nrow(PMI_URL_download)] %>% data.frame() 
 
 
+
+#PMI_URL_download_ALL<-rbind(PMI_URL_download_PG1,PMI_URL_download_PG2)
 
 
 
 
-Date_PMI<-substr(PMI_URL_download_ALL[[1]],1,23) %>% as.Date(format = "%d %b") %>% as.data.frame()
-Name_PMI<-substr(PMI_URL_download_ALL[[1]],100,130) %>% as.data.frame()
-
-PMI_DF<-data.frame(Date_PMI,Name_PMI) %>% na.omit() 
-colnames(PMI_DF)<-c("Date", "Release")
-PMI_XTS<-as.xts(PMI_DF,PMI_DF$Date)
-PMI_XTS$Location<-"S&P Global"
-
-RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XTS),ncol=3))
-
-for(i in 1:nrow(PMI_XTS)){
-  if(PMI_XTS$Release[i] %like any% c("%Ireland Manufacturing PMI*%","%Ireland Manufacturing PMI%","%Ireland Services PMI*%","%Ireland Services PMI%","%Ireland Construction PMI%")){
-    RELEASE_PMI[i,]<-PMI_XTS[i,]
-  } else {
-    RELEASE_PMI[i,] <- NA
-  }
-}
 
 
-RELEASE_PMI<-na.omit(RELEASE_PMI)
-colnames(RELEASE_PMI)<-c("Date","Release","Location")
+#Date_PMI<-substr(PMI_URL_download_ALL[[1]],1,23) %>% as.Date(format = "%d %b") %>% as.data.frame()
+#Name_PMI<-substr(PMI_URL_download_ALL[[1]],100,130) %>% as.data.frame()
+
+#PMI_DF<-data.frame(Date_PMI,Name_PMI) %>% na.omit() 
+#colnames(PMI_DF)<-c("Date", "Release")
+#PMI_XTS<-as.xts(PMI_DF,PMI_DF$Date)
+#PMI_XTS$Location<-"S&P Global"
+
+#RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XTS),ncol=3))
+
+#for(i in 1:nrow(PMI_XTS)){
+#  if(PMI_XTS$Release[i] %like any% c("%Ireland Manufacturing PMI*%","%Ireland Manufacturing PMI%","%Ireland Services PMI*%","%Ireland Services PMI%","%Ireland Construction PMI%")){
+#    RELEASE_PMI[i,]<-PMI_XTS[i,]
+#  } else {
+#    RELEASE_PMI[i,] <- NA
+#  }
+#}
 
 
-RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_PMI$Date,"%Y-%m-%d")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-
-PMI_RELEASE = data.frame(DTSTART = RELEASE_PMI_DATE,
-                         DTEND = RELEASE_PMI_DATE+1,
-                         SUMMARY =RELEASE_PMI$Release ,
-                         LOCATION = RELEASE_PMI$Location,
-                         transparent=TRUE)
+#RELEASE_PMI<-na.omit(RELEASE_PMI)
+#colnames(RELEASE_PMI)<-c("Date","Release","Location")
 
 
+#RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_PMI$Date,"%Y-%m-%d")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
 
-PMI_RELEASE<-PMI_RELEASE %>%
-  mutate(UID = replicate(nrow(PMI_RELEASE), ic_guid()))
+#PMI_RELEASE = data.frame(DTSTART = RELEASE_PMI_DATE,
+#                         DTEND = RELEASE_PMI_DATE+1,
+#                        SUMMARY =RELEASE_PMI$Release ,
+#                         LOCATION = RELEASE_PMI$Location,
+#                         transparent=TRUE)
+
+
+
+#PMI_RELEASE<-PMI_RELEASE %>%
+#  mutate(UID = replicate(nrow(PMI_RELEASE), ic_guid()))
 
 
 
@@ -297,12 +297,21 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
   mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-
 if(event_CB$SUMMARY!="NA"){
-  event_all<-rbind(Monetary_Policy_Decisions,event_CB,CSO_event,PMI_RELEASE)
+  event_all<-rbind(Monetary_Policy_Decisions,event_CB,CSO_event)
 } else {
-  event_all<-rbind(Monetary_Policy_Decisions,CSO_event,PMI_RELEASE)
+  event_all<-rbind(Monetary_Policy_Decisions,CSO_event)
 }
+
+
+
+
+
+#if(event_CB$SUMMARY!="NA"){
+#  event_all<-rbind(Monetary_Policy_Decisions,event_CB,CSO_event,PMI_RELEASE)
+#} else {
+#  event_all<-rbind(Monetary_Policy_Decisions,CSO_event,PMI_RELEASE)
+#}
 
 event_all = subset(event_all, !(SUMMARY %like any% c("%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
                                                      ,"%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
