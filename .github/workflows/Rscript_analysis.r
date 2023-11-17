@@ -276,7 +276,6 @@ colnames(Monetary_Policy_Decisions)<-c("DTSTART",     "DTEND" ,      "SUMMARY"  
 
 
 #CSO Calendar Below
-cso_clear_cache()
 CSO_cal<-"https://cdn.cso.ie/static/data/ReleaseCalendar.json" %>%
   request() %>%
   req_perform() %>%
