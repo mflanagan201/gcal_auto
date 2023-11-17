@@ -17,6 +17,7 @@ library(lubridate)
 library(stringr)
 library(rlang)
 library(purrr)
+library(httpuv)
 
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
 google_client_secret <- Sys.getenv("GOOGLE_CLIENT_SECRET")
