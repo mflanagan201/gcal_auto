@@ -347,14 +347,6 @@ google_app <- httr::oauth_app(
 
 
 
-google_app <- httr::oauth_app(
-  "THIS_IS_A_NAME",
-  key = "500583945095-psku68b6caon0uug08f3iuihm3umrnqe.apps.googleusercontent.com",
-  secret = "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"
-  
-)
-
-
 
 G_ENDPOINT<-oauth_endpoint(authorize="https://accounts.google.com/o/oauth2/auth",
                            access="https://accounts.google.com/o/oauth2/token")
