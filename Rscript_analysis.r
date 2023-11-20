@@ -352,11 +352,12 @@ G_ENDPOINT<-oauth_endpoint(authorize="https://accounts.google.com/o/oauth2/auth"
                            access="https://accounts.google.com/o/oauth2/token")
 
 
-oauth_2<-oauth2.0_token(G_ENDPOINT,google_app, scope=c(
-  "https://www.googleapis.com/auth/calendar",
-  "https://www.googleapis.com/auth/calendar.events"
-))
+#oauth_2<-oauth2.0_token(G_ENDPOINT,google_app, scope=c(
+#  "https://www.googleapis.com/auth/calendar",
+#  "https://www.googleapis.com/auth/calendar.events"
+#))
 
+oauth_2 <- readRDS("credentials_file_1.json")
 oauth_2$refresh()
 
 calendar_url <- "https://www.googleapis.com/calendar/v3/calendars/9b1e48819517c85b915328ee7dfb7f8ef4c08ddf55af4c22a9e5688fc50adff8@group.calendar.google.com/events"
