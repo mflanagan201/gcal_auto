@@ -357,7 +357,8 @@ G_ENDPOINT<-oauth_endpoint(authorize="https://accounts.google.com/o/oauth2/auth"
 
 cat("authentication begins")
 
-oauth_2 <- readRDS("https://github.com/mflanagan201/gcal_auto/blob/a657f1dd8454396c946cf0f9532f6990325182b4/credentials_file_1.json")
+
+oauth_2 <- readRDS("credentials_file_1.json")
 oauth_2$refresh()
 
 cat("authentication ends")
