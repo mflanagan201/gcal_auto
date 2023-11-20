@@ -339,31 +339,28 @@ CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
 
 google_app <- httr::oauth_app(
   "THIS_IS_A_NAME",
-  key = google_client_id,
-  secret = google_client_secret
-)
-
-
-
-google_app <- httr::oauth_app(
-  "THIS_IS_A_NAME",
   key = "500583945095-psku68b6caon0uug08f3iuihm3umrnqe.apps.googleusercontent.com",
   secret = "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"
   
 )
 
 
-
 G_ENDPOINT<-oauth_endpoint(authorize="https://accounts.google.com/o/oauth2/auth",
                            access="https://accounts.google.com/o/oauth2/token")
 
 
-oauth_2<-oauth2.0_token(G_ENDPOINT,google_app, scope=c(
-  "https://www.googleapis.com/auth/calendar",
-  "https://www.googleapis.com/auth/calendar.events"
-))
+#oauth_2<-oauth2.0_token(G_ENDPOINT,google_app, scope=c(
+ # "https://www.googleapis.com/auth/calendar",
+ # "https://www.googleapis.com/auth/calendar.events"
+#))
 
+
+cat("authentication begins")
+
+oauth_2 <- readRDS("https://github.com/mflanagan201/gcal_auto/blob/a657f1dd8454396c946cf0f9532f6990325182b4/credentials_file_1.json")
 oauth_2$refresh()
+
+cat("authentication ends")
 
 calendar_url <- "https://www.googleapis.com/calendar/v3/calendars/9b1e48819517c85b915328ee7dfb7f8ef4c08ddf55af4c22a9e5688fc50adff8@group.calendar.google.com/events"
 
