@@ -49,7 +49,3 @@ jobs:
 
     - name: Run R script
       run: Rscript .github/workflows/Rscript_analysis.r
-
-
-    
-        git push
