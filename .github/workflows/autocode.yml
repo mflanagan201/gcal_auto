@@ -51,10 +51,5 @@ jobs:
       run: Rscript .github/workflows/Rscript_analysis.r
 
 
-    - name: Commit changes
-      run: |
-        git config --local user.email "mflanagan202@gmail.com"
-        git config --local user.name "mflanagan201"
-        git add .
-        git commit -m "Update Google Calendar events [skip ci]"
+    
         git push
