@@ -18,7 +18,6 @@ library(stringr)
 library(rlang)
 library(purrr)
 library(httpuv)
-library(xlsx)
 
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
 google_client_secret <- Sys.getenv("GOOGLE_CLIENT_SECRET")
@@ -339,7 +338,7 @@ CALENDAR_ALL_XTS<-as.xts(CALENDAR_ALL,order.by=as.Date(CALENDAR_ALL$DTSTART))
 CALENDAR_ALL_short<-CALENDAR_ALL_XTS[seq(from=Sys.Date(),length.out=50, by='days')] %>% data.frame() %>% ical()
 CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
 
-write.xlsx(CALENDAR_ALL_short, file='Econ_Calendar.xlsx')
+write.csv(CALENDAR_ALL_short, file="ECON_CAL.CSV")
 
 google_app <- httr::oauth_app(
   "THIS_IS_A_NAME",
