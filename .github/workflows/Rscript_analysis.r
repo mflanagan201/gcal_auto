@@ -18,6 +18,8 @@ library(stringr)
 library(rlang)
 library(purrr)
 library(httpuv)
+library(xlsx)
+
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
 google_client_secret <- Sys.getenv("GOOGLE_CLIENT_SECRET")
 
