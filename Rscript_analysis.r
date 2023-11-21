@@ -1,4 +1,4 @@
-
+CALENDAR_ALL_short
 library(httr)
 library(gargle)
 library(googleAuthR)
@@ -461,3 +461,4 @@ if(is.data.frame(data.frame(events_data$items))){
 #Mortgage_Arrears_df<-data.frame("Mortgage Arrears", (Mortgage_Arrears))
 #colnames(Mortgage_Arrears_df)<-c("Title","Date")
 
+write.csv(CALENDAR_ALL_short,"econ_cal.csv")
