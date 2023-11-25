@@ -50,11 +50,13 @@ jobs:
     - name: Run R script
       run: Rscript .github/workflows/Rscript_analysis.r
 
+    - name: Move CSV to Repository
+      run: mv .github/workflows/econ_cal.csv
 
     - name: Commit and Push Changes
       run: |
         git config --local user.email "mflanagan202@gmail.com"
-        git config --local user.name "mflanagan"
+        git config --local user.name "mflanagan201"
         git add .github/workflows/econ_cal.csv
         git commit -m "Add generated CSV file"
         git push
