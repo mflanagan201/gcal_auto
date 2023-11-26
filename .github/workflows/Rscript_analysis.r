@@ -419,7 +419,6 @@ if(is.data.frame(data.frame(events_data$items))){
 library(csodata)
 library(gmailr)
 library(emayili)
-library(dplyr)
 
 
 smtp <- server(host = "smtp.gmail.com",
