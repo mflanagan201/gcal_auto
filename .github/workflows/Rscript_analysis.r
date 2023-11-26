@@ -416,54 +416,50 @@ if(is.data.frame(data.frame(events_data$items))){
   
 }
 
+library(csodata)
+library(gmailr)
+library(emayili)
+library(dplyr)
 
 
-# Change events status
-#  for (i in seq_along(events_data$items)) {
-
-#   events_data$items[[i]]$status<-c("confirmed")
-
-#  httr::PUT(paste0(calendar_url, "/", events_data$items[[i]]$id),body=events_data$items[[i]], encode="json",    add_headers(Authorization = paste("Bearer", oauth_2$credentials$access_token)),
-#                    "Content-Type"="application/json",    query=list(showDeleted=FALSE,showHiddenInvitations=FALSE))
-#  }
+smtp <- server(host = "smtp.gmail.com",
+               port = 465,
+               username = "mflanagan201@gmail.com",
+               password = "ddauvuifpknvsobo")
 
 
+for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
+  if(Sys.Date()+2==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Earnings and Labour Costs%")){
+    
+    Body_INFLATION<-emayili::envelope(
+      from = "mflanagan201@gmail.com",
+      to=c("michael.flanagan@finance.gov.ie"),
+      subject = "[Auto-Email] Inflation Chartpack"
+    ) %>%
+      # Render R Markdown from a file.
+      emayili::render("C:/Users/flanagam/Documents/Inflation_Breakdown_v4.Rmd")
+    
+    smtp(Body_INFLATION)  
+    
+    
+  } else if (Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
+      
+    Body_EXTERNAL_TRADE<-emayili::envelope(
+      from = "mflanagan201@gmail.com",
+      to=c("michael.flanagan@finance.gov.ie"),
+      subject = "External Trade Release!"
+    ) %>%
+      # Render R Markdown from a file.
+      emayili::render("C:/Users/flanagam/Documents/Monthly_External_Trade_Beta_4.Rmd")
+    
+    smtp(Body_EXTERNAL_TRADE)  
+    
+    
+  } else { 
+    
+    print("Don't run code")
+  }
+}
 
 
-
-
-
-#  oauth_2$refresh()
-
-# Delete events
-
-
-
-#test_pdf <- pdftools::pdf_text(pdf = "https://www.centralbank.ie/docs/default-source/statistics/statistical-tables-publication-calendar.pdf")
-#by_row_pdf <- stringr::str_split(test_pdf,"\n")
-
-
-#CB_Retail_Interest_Rates<-(by_row_pdf[[1]])[7] %>% t() %>% as.data.frame() %>%
-#  cSplit( 'V1', sep=" ") %>% t() %>% as.Date(format="%d/%m/%Y") %>% na.omit()
-
-#CB_Retail_Interest_Rates_df<-data.frame("Retail Interest Rates", (CB_Retail_Interest_Rates))
-#colnames(CB_Retail_Interest_Rates_df)<-c("Title","Date")
-
-#CB_Credit_Debit_Card<-(by_row_pdf[[1]])[10] %>% t() %>% as.data.frame() %>%
-#  cSplit( 'V1', sep=" ") %>% t() %>% as.Date(format="%d/%m/%Y") %>% na.omit()
-
-#CB_Credit_Debit_Card_df<-data.frame("Credit and Debit Card Statistics", (CB_Credit_Debit_Card))
-#colnames(CB_Credit_Debit_Card_df)<-c("Title","Date")
-
-
-
-#Private_Household_Credit_Deposits<-seq(from=as.Date("30/03/2023",format="%d/%m/%Y"), to=as.Date("31/12/2023",format="%d/%m/%Y"), by="quarter")
-#Private_Household_Credit_Deposits_df<-data.frame("Private Household Credit and Deposits", (Private_Household_Credit_Deposits))
-#colnames(Private_Household_Credit_Deposits_df)<-c("Title","Date")
-
-
-
-#Mortgage_Arrears<-seq(from=as.Date("15/03/2023",format="%d/%m/%Y"), to=as.Date("15/12/2023",format="%d/%m/%Y"), by="quarter")
-#Mortgage_Arrears_df<-data.frame("Mortgage Arrears", (Mortgage_Arrears))
-#colnames(Mortgage_Arrears_df)<-c("Title","Date")
 
