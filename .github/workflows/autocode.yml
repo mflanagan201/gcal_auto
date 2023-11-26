@@ -52,5 +52,5 @@ jobs:
         git config --local user.email "mflanagan202@gmail.com"
         git config --local user.name "mflanagan201"
         git add econ_cal.csv
-        git commit -m "Add generated CSV file"
+        git commit -m "Add econ_cal.csv"
         git push
