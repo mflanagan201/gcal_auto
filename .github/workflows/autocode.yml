@@ -40,9 +40,7 @@ jobs:
         R -e 'system("sudo apt-get install libgdal-dev")'
         R -e 'system("sudo apt-get install r-cran-sf")'
 
-        R -e 'install.packages(c("rJava","xlsxjars","xlsx","gmailr","emayili","csodata","httr", "gargle", "googleAuthR", "jsonlite", "knitr", "dplyr", "huxtable", "tidyverse", "rmarkdown", "csodata", "xts", "calendar", "DescTools", "splitstackshape", "pdftools", "rvest", "lubridate", "httr2","stringr","rlang","purrr","httpuv","xlsx"), repos="http://cran.rstudio.com/")'
-
-
+        R -e 'install.packages(c("waterfalls","readxl","units","rdbnomics","openxlsx","reshape","rJava","xlsxjars","xlsx","gmailr","emayili","csodata","httr", "gargle", "googleAuthR", "jsonlite", "knitr", "dplyr", "huxtable", "tidyverse", "rmarkdown", "csodata", "xts", "calendar", "DescTools", "splitstackshape", "pdftools", "rvest", "lubridate", "httr2","stringr","rlang","purrr","httpuv","xlsx"), repos="http://cran.rstudio.com/")'
 
     - name: Debug
       run: |
