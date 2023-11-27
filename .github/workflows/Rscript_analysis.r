@@ -436,7 +436,7 @@ for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
       # Render R Markdown from a file.
-      emayili::render("Inflation_Breakdown_v4.Rmd")
+      emayili::render(".github/workflows/Inflation_Breakdown_v4.Rmd")
     
     smtp(Body_INFLATION)  
     
