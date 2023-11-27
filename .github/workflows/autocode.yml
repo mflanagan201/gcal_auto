@@ -35,6 +35,9 @@ jobs:
         R -e 'system("sudo apt-get install libfribidi_dev")'
         R -e 'system("sudo apt-get install -y libpoppler-cpp-dev")'
         R -e 'system("sudo apt-get install harfbuzz-devel fribidi-devel")'
+        R -e 'system("sudo apt-get install -y default-jre")'
+        R -e 'system("sudo apt-get install -y default-jdk")'
+
         R -e 'install.packages(c("rJava","xlsxjars","xlsx","sf","gmailr","emayili","csodata","httr", "gargle", "googleAuthR", "jsonlite", "knitr", "dplyr", "huxtable", "tidyverse", "rmarkdown", "csodata", "xts", "calendar", "DescTools", "splitstackshape", "pdftools", "rvest", "lubridate", "httr2","stringr","rlang","purrr","httpuv","xlsx"), repos="http://cran.rstudio.com/")'
 
 
