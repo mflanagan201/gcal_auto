@@ -436,7 +436,7 @@ for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
       # Render R Markdown from a file.
-      emayili::render("C:/Users/flanagam/Documents/Inflation_Breakdown_v4.Rmd")
+      emayili::render("Inflation_Breakdown_v4.Rmd")
     
     smtp(Body_INFLATION)  
     
@@ -449,7 +449,7 @@ for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
       subject = "External Trade Release!"
     ) %>%
       # Render R Markdown from a file.
-      emayili::render("C:/Users/flanagam/Documents/Monthly_External_Trade_Beta_4.Rmd")
+      emayili::render("Monthly_External_Trade_Beta_4.Rmd")
     
     smtp(Body_EXTERNAL_TRADE)  
     
