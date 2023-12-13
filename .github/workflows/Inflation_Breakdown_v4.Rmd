@@ -32,6 +32,8 @@ library(lubridate)
 library(readxl)
 library(waterfalls)
 library(stringr)
+library(tidyquant)
+library(quantmod)
 
 
 
@@ -275,7 +277,6 @@ SERVICES_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE") %>% .$period %>% as.D
 
 SERVICES_INDEX_XTS<-as.xts(SERVICES_INDEX,order.by=SERVICES_DATE)
 
-getwd()
 
 Core_SERVICES_INDEX_DEC_2016<-c(101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.2,101.8,103.0,104.1,103.5,104.3,105.8,105.9,104.0,103.4,102.9,103.3,102.6,103.7,104.6,104.0,104.7,105.0,106.4,106.3,105.1,104.6,103.7,104.4,104.2,105.4,106.6,107.0,106.3,107.3,108.0,108.1,107.4,106.8,106.3,107.0,106.0,107.0,108.1,108.5,107.7,109.0,108.2,108.2,107.9,106.8,107.3,108.9,108.5,108.9,109.0,109.4,109.4,110.0,110.6,111.3,110.7,111.1,111.1,112.2,110.8,111.3,112.6,114.5,113.9,114.8) %>% as.numeric() 
 
@@ -3467,7 +3468,6 @@ for (i in 1:length(index(SERVICES_GOODS_XTS_WEIGHT["2017/"]))) {
 
 
 
-
 WEIGHTS_GOODS_SERVICES_COMBO<-merge(SERVICES_GOODS_XTS_WEIGHT["2017/"],index(PROCESSED_FOOD_INDEX["2017/"]))
 WEIGHTS_GOODS_SERVICES_COMBO_CP0621_3_XTS<-WEIGHTS_GOODS_SERVICES_COMBO$CP0621_XTS+WEIGHTS_GOODS_SERVICES_COMBO$CP0623_XTS
 
@@ -5097,7 +5097,7 @@ Index_names<-c("Actual Rent", "Repair of Dwelling","Refuse Collection","Sewerage
 colnames(CONTRIBUTION)<-Index_names
 
 write.xlsx(CONTRIBUTION, "inflation_contributions.xlsx")
-sort_contribution<-sort(data.frame(CONTRIBUTION[72,1:ncol(CONTRIBUTION)]), decreasing = FALSE) %>% data.frame()
+sort_contribution<-sort(as_vector(CONTRIBUTION[72,1:ncol(CONTRIBUTION)]), decreasing = FALSE) %>% data.frame()
 
 
 
@@ -5285,7 +5285,7 @@ colnames(latest_annual_Change_contributions)<-c(Previous,"Energy","Food","NEIG",
 latest_annual_Change_contributions<-melt(latest_annual_Change_contributions)
 latest_annual_Change_contributions$colour <- ifelse(latest_annual_Change_contributions$value < 0, DOF_colours[1],DOF_colours[2])
 
-waterfall_graph_change_annual_inflation<-latest_annual_Change_contributions  %>% waterfall(calc_total=TRUE, fill_by_sign =FALSE,  fill_colours = latest_annual_Change_contributions$colour,  total_rect_color = DOF_colours[2], total_axis_text=CURRENT,scale_y_to_waterfall=TRUE)+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme_bw()+coord_cartesian(ylim=c(2, 7))+scale_fill_manual(values=c(positive="firebrick1",negative="steelblue"))
+waterfall_graph_change_annual_inflation<-latest_annual_Change_contributions  %>% waterfall(calc_total=TRUE, fill_by_sign =FALSE,  fill_colours = latest_annual_Change_contributions$colour,  total_rect_color = DOF_colours[2], total_axis_text=CURRENT,scale_y_to_waterfall=TRUE)+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme_bw()+coord_cartesian(ylim=c(sum(latest_annual_Change_contributions$value)-1, max(latest_annual_Change_contributions$value)+1))+scale_fill_manual(values=c(positive="firebrick1",negative="steelblue"))
 
 
 
@@ -5407,8 +5407,8 @@ length<-round(ncol(x)*0.50)
 
 
 
-exclude_top<-colnames((sort(x[200,],decreasing=TRUE))[1:23]) 
-exclude_bottom<-colnames((sort(x[200,],decreasing=FALSE))[1:23])
+exclude_top<-colnames((sort(as_vector(x[200,]),decreasing=TRUE))[1:23]) 
+exclude_bottom<-colnames((sort(as_vector(x[200,]),decreasing=FALSE))[1:23])
 
 exclude<-c(exclude_bottom,exclude_top)
 
@@ -5422,14 +5422,16 @@ DF<-data.frame(matrix(nrow = nrow(x), ncol = 23))
 
 
 for(i in 1:(nrow(x))){
-DF[i,]  <-t(data.frame(colnames(sort(data.frame(x[i]),decreasing=TRUE)))) 
+DF[i,]  <-t(data.frame(colnames(x[i,sort.list(as.array(x[i]),decreasing = TRUE)]))) 
 }
 
 
 DF_decreased<-data.frame(matrix(nrow = nrow(x), ncol = 23)) 
 
+
+##ERROR 
 for(i in 1:(nrow(x))){
-  DF_decreased[i,]  <-t(data.frame(colnames(sort(data.frame(x[i]),decreasing=FALSE)))) 
+  DF_decreased[i,]  <-t(data.frame(colnames(x[i,sort.list(as.array(x[i]),decreasing = FALSE)]))) 
 }
 
 
@@ -6923,20 +6925,20 @@ saveWorkbook(COMPO_INFLATION_EXCEL, "COMPO_INFLATION_EXCEL.xlsx", overwrite = TR
 
 
 #download data ggplot
-embed_data= function(x= mtcars, filename= "file.csv", label= "Download Graph Data"){
+#embed_data= function(x= mtcars, filename= "file.csv", label= "Download Graph Data"){
 
   # Create encoded Base64 datastream 
-  encode_data= function(x){
-    write.csv(x, "./file.csv")
-    enc= sprintf('data:text/csv;base64,%s', openssl::base64_encode(paste0(readLines("./file.csv"), collapse="\n")) )
-    unlink("./file.csv")
-    return(enc)
-  }
+#  encode_data= function(x){
+#    write.csv(x, "./file.csv")
+#    enc= sprintf('data:text/csv;base64,%s', openssl::base64_encode(paste0(readLines("./file.csv"), collapse="\n")) )
+#    unlink("./file.csv")
+#    return(enc)
+#  }
 
   # String result ready to be placed in rmarkdown
-  paste0("<a download='", filename, "' href=", encode_data(x), ">", label, "</a>")
+ # paste0("<a download='", filename, "' href=", encode_data(x), ">", label, "</a>")
 
-}
+#}
 
 
 
@@ -7039,19 +7041,19 @@ Carryover<-(OVERALL_HICP_XTS[length(OVERALL_HICP_XTS)]-mean(OVERALL_HICP_XTS["20
 Carryover_TEXT<-paste0(round(Carryover,1),sep="%")
 
 
-Contribution_highest_name<-sort(last(summary_contribution[1:5]))[(ncol(summary_contribution[1:5]))] %>% names()
+Contribution_highest_name<-sort(as_vector(last(summary_contribution[1:5])))[(ncol(summary_contribution[1:5]))] %>% names()
 
-Contribution_highest_number<-sort(last(summary_contribution[1:5]))[(ncol(summary_contribution[1:5]))] %>% round(1)
+Contribution_highest_number<-sort(as_vector(last(summary_contribution[1:5])))[(ncol(summary_contribution[1:5]))] %>% round(1)
 Contribution_highest_number_text<-as.numeric(Contribution_highest_number)
 
 Contribution_highest_percent<-(Contribution_highest_number/rowSums(last(summary_contribution)[1:5]))*100 %>% round(1)
-Contribution_highest_percent<-paste0(round(as.numeric(Contribution_highest_percent[,1]),1), sep="%")
+Contribution_highest_percent<-paste0(round(as.numeric(Contribution_highest_percent),1), sep="%")
 
 
 CURRENT_DATE_COMPONENTS<-format((summary_contribution$Date)[length(summary_contribution$Date)],format="%B %Y")
 
 
-sub_compon_max<-sort(last(CONTRIBUTION),decreasing = TRUE)[1] %>% round(1)
+sub_compon_max<-sort(last(as_vector(CONTRIBUTION)),decreasing = TRUE)[1] %>% round(1)
 
 
 growth_goods<-growth(overall_GOODS_index, 12) %>% round(1)
@@ -7059,7 +7061,7 @@ growth_Services<-growth(overall_service_index,12) %>% round(1)
 growth_Services_TEXT<-conditional(growth_Services[length(growth_Services)])
 
 
-ORDER_SERVICES_CONTRIBUTION<-last(CONTRIBUTION[1:36]) %>% data.frame() %>% 
+ORDER_SERVICES_CONTRIBUTION<-last(CONTRIBUTION[1:36]) %>% data.frame() %>% as_vector() %>% 
   sort(decreasing = TRUE) 
 
 names(ORDER_SERVICES_CONTRIBUTION)<-ORDER_SERVICES_CONTRIBUTION %>% names() %>% gsub(
@@ -7140,7 +7142,7 @@ INFLATION_CON_plot_WITH_LINE
 Inflation_contributions_graph_data<-summary_contribution[1:5] %>% round(3)
 
 ```
-`r embed_data(Inflation_contributions_graph_data,filename="Inflation_contributions_graph_data.csv.csv")` 
+
 <br>
 <br>
 
@@ -7178,12 +7180,12 @@ colnames(LATEST_Contribution_CHANGE)<-LATEST_Contribution_CHANGE %>% names() %>%
                         replacement = " ")    %>% str_squish()
 
 
-Last_month_decreasing_component<-paste0(lag(GROWTH_COMPONENTS[names(sort(LATEST_Contribution_CHANGE)[1])],1)[nrow(GROWTH_COMPONENTS),],sep="%")
-Current_month_decreasing_component<-paste0(GROWTH_COMPONENTS[names(sort(LATEST_Contribution_CHANGE)[1])][nrow(GROWTH_COMPONENTS),],sep="%")
+Last_month_decreasing_component<-paste0(lag(GROWTH_COMPONENTS[names(sort(as_vector(LATEST_Contribution_CHANGE))[1])],1)[nrow(GROWTH_COMPONENTS),],sep="%")
+Current_month_decreasing_component<-paste0(GROWTH_COMPONENTS[names(sort(as_vector(LATEST_Contribution_CHANGE))[1])][nrow(GROWTH_COMPONENTS),],sep="%")
 
 
-Last_month_increasing_component<-paste0(lag(GROWTH_COMPONENTS[names(sort(LATEST_Contribution_CHANGE,decreasing = TRUE)[1])],1)[nrow(GROWTH_COMPONENTS),],sep="%")
-Current_month_increasing_component<-paste0(GROWTH_COMPONENTS[names(sort(LATEST_Contribution_CHANGE,decreasing = TRUE)[1])][nrow(GROWTH_COMPONENTS),],sep="%")
+Last_month_increasing_component<-paste0(lag(GROWTH_COMPONENTS[(names(sort(as_vector(LATEST_Contribution_CHANGE),decreasing = TRUE)))[1]],1)[nrow(GROWTH_COMPONENTS),],sep="%")
+Current_month_increasing_component<-paste0((GROWTH_COMPONENTS[(names(sort(as_vector(LATEST_Contribution_CHANGE),decreasing = TRUE)))[1]])[nrow(GROWTH_COMPONENTS),],sep="%")
 
 Waterfall_graph_data<-data.frame(Inflation_Contributions[nrow(Inflation_Contributions)-1,],ENERGY_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],FOOD_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],NEIG_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],Rent_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],CORE_SERVICES_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],Inflation_Contributions[nrow(Inflation_Contributions),]) %>% round(3)
 
@@ -7196,11 +7198,10 @@ overall_waterfall_text<-conditional_alt2(last(Inflation_Contributions)-as.numeri
 
 text1<-paste0(as.numeric(round(last(Inflation_Contributions),1)),sep="%")
 text2<-paste0(as.numeric(round(last(lag(Inflation_Contributions,1)),1)),sep="%")
-text3<-names(sort(LATEST_Contribution_CHANGE)[1])
-text4<-names(sort(LATEST_Contribution_CHANGE,decreasing = TRUE)[1])
+text3<-names(sort(as_vector(LATEST_Contribution_CHANGE))[1])
+text4<-names(sort(as_vector(LATEST_Contribution_CHANGE),decreasing = TRUE)[1])
 
 ```
-`r embed_data(Waterfall_graph_data, filename="Waterfall_graph_data.csv.csv")` 
 
 ***
 
@@ -7257,7 +7258,7 @@ current_core_inflation<-trimmed_graph_data$`Core Inflation`[nrow(trimmed_graph_d
 ```{r trim_graph_4, echo=FALSE, warning=FALSE}
 trimming_series<-growth_SERVICES_GOODS["2017/"] 
 colnames(trimming_series)<-c(Index_names)
-exclusion_max<-trimming_series[nrow(trimming_series)] %>% data.frame() %>% sort(decreasing = TRUE) %>% round(1) 
+exclusion_max<-trimming_series[nrow(trimming_series)] %>% data.frame() %>% as_vector() %>% sort(decreasing = TRUE) %>% round(1) 
 
 
 ```
@@ -7275,7 +7276,7 @@ exclusion_list<-exclusion_max[1:9] %>% names() %>% gsub(
 
 ```{r trim_graph_6, echo=FALSE, warning=FALSE}
 
-exclusion_min<-trimming_series[nrow(trimming_series)] %>% data.frame() %>% sort(decreasing = FALSE) %>% round(1) 
+exclusion_min<-trimming_series[nrow(trimming_series)] %>% data.frame() %>% as_vector() %>% sort(decreasing = FALSE) %>% round(1) 
 ```
 
 
@@ -7289,7 +7290,7 @@ exclusion_list_min<-exclusion_min[1:9] %>% names() %>% gsub(
                  replacement = " ")    %>% str_squish() 
 
 ```
-`r embed_data(trimmed_graph_data, filename="trimmed_graph_data.csv.csv")` 
+ 
 
 ***
 * The trimmed mean inflation is an internal DOF calculation based on excluding the series with highest and lowest rates of annual growth. 
@@ -7329,7 +7330,7 @@ text_low_basket<-round(last(graph_data_inflation_basket$`0%-2%`+graph_data_infla
 
 
 ```
-`r embed_data(graph_data_inflation_basket, filename="graph_data_inflation_basket.csv.csv")` 
+
 
 ***
 
@@ -7362,7 +7363,7 @@ Latest_over_5_over_12_ex_energy_TEXT<-paste0(Latest_over_5_over_12_ex_energy,"%"
 
 ```
 
-`r embed_data(over_five_12_Months, filename="Above_5_per_cent_12_months.csv.csv")` 
+
 
 ***
 
@@ -7389,7 +7390,7 @@ DF<-data.frame(SERVICES_GOODS_XTS_INDEX_GROWTH,index(SERVICES_GOODS_XTS_INDEX_GR
 colnames(DF)<-c(Index_names,"Date")
 
 
-DFF<-DF[names(sort(CONTRIBUTION[nrow(CONTRIBUTION),],decreasing = TRUE)[1:20])]
+DFF<-DF[names(sort(as_vector(CONTRIBUTION[nrow(CONTRIBUTION),]),decreasing = TRUE)[1:20])]
 DFF<-data.frame(DFF,index(SERVICES_GOODS_XTS_INDEX_GROWTH["2021/"]))
 DFF<-DFF[which(colnames(DFF)!="Gas")]
 DFF<-DFF[which(colnames(DFF)!="Electricity")]
@@ -7415,7 +7416,7 @@ DFFF<-DFFF %>% mutate(variable = recode(.$variable,  "Mineral.Water..Soft.Drinks
 
 GG_heatmap<-ggplot(data=DFFF, aes(y=variable,x=index.SERVICES_GOODS_XTS_INDEX_GROWTH..2021....,fill=value, label=value))+
                    geom_tile(color="black",size=1.1, lwd = 0,
-            linetype = 0)+geom_text(aes(label = value), color = "black", size = 2) +scale_fill_gradient(low = "green", high = "red")+  theme(legend.position = "none")
+            linetype = 0)+geom_text(aes(label = value), color = "black", size = 2)+scale_fill_gradient2(low = "green", high = "red",midpoint = 1)+  theme(legend.position = "none")
 
        
 GG_heatmap<-GG_heatmap+labs(title="Heatmap of the highest contribution to annual inflation (excl.Energy)", caption="Source: CSO, Eurostat, DOF calculations",
@@ -7424,21 +7425,21 @@ GG_heatmap
 
 
 
-NAMES_HIGH_HEATMAP<-sort(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)[1] %>% names()
+NAMES_HIGH_HEATMAP<-sort(as_vector(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),]),decreasing = TRUE)[1] %>% names()
 heatmap_date<-last(unique(DFFF$index.SERVICES_GOODS_XTS_INDEX_GROWTH..2021....))
 
-text_heatmap_growth_rate<-sort(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)[1] %>% as.numeric() %>% paste0(sep="%")
+text_heatmap_growth_rate<-sort(as_vector(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),]),decreasing = TRUE)[1] %>% as.numeric() %>% paste0(sep="%")
 
-NAMES_HIGH_HEATMAP_2<-sort(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)[2] %>% names()
-text_heatmap_growth_rate_2<-sort(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)[2] %>% as.numeric() %>% paste0(sep="%")
+NAMES_HIGH_HEATMAP_2<-sort(as_vector(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),]),decreasing = TRUE)[2] %>% names()
+text_heatmap_growth_rate_2<-sort(as_vector(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),]),decreasing = TRUE)[2] %>% as.numeric() %>% paste0(sep="%")
 
-NAMES_HIGH_HEATMAP_3<-sort(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)[3] %>% names()
-text_heatmap_growth_rate_3<-sort(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)[3] %>% as.numeric() %>% paste0(sep="%")
+NAMES_HIGH_HEATMAP_3<-sort(as_vector(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),]),decreasing = TRUE)[3] %>% names()
+text_heatmap_growth_rate_3<-sort(as_vector(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),]),decreasing = TRUE)[3] %>% as.numeric() %>% paste0(sep="%")
 
        
 ```
 
-`r embed_data(Graph_Data_Heatmap, filename="Graph_Data_Heatmap.csv.csv")`
+
 
 ***
 * The heatmap above excludes the energy components to allow for a greater focus on the core components. 
@@ -7545,7 +7546,7 @@ Text_IRELAND_Lower_Last<-paste0(((colnames(IRELAND_LOWER_VAL[length(IRELAND_LOWE
 text_IRE_EA_DIFF<-conditional_alt2(IRE_EA_DIFF$value[nrow(IRE_EA_DIFF)])
 
 ```
-`r embed_data(Graph_Data_EA, filename="Graph_Data_EA.csv.csv")`
+
 
 ***
 
@@ -7615,7 +7616,7 @@ EXPECTED_INFLT_graph
 
 ```
 
-`r embed_data(expectations_graph_data, filename="expectations_graph_data.csv.csv")`
+
 
 ***
 
@@ -7627,3 +7628,114 @@ EXPECTED_INFLT_graph
 <br>
 <br>
 
+```{r Commodities, warning=FALSE, include=FALSE}
+library(tidyquant)
+
+tickers<- c("GC=F","SI=F","PL=F","HG=F","NG=F","ZC=F","ZM=F","HO=F","KE=F","LBS=F","SB=F","PA=F","ALI=F","RB=F","BZ=F","HO=F","NG=F")
+
+
+Data  <- tq_get(tickers, get = "stock.prices", from = " 2000-01-01")
+
+df<- Data %>% group_by(symbol) %>% mutate(x=ifelse(symbol))
+
+#energy commodities
+Natural_GAS_Futures<- subset(df, symbol=="NG=F") %>% select(-x) 
+Gasoline_Futures<- subset(df, symbol=="RB=F") %>% select(-x) 
+Brent_crude_oil_Futures<- subset(df, symbol=="BZ=F") %>% select(-x) 
+heating_oil_Futures<- subset(df, symbol=="HO=F") %>% select(-x) 
+
+
+
+
+Gold_Futures<-subset(df, symbol=="GC=F") %>% select(-x)
+Silver_Futures<-subset(df, symbol=="SI=F") %>% select(-x)
+Platinum_Futures<- subset(df, symbol=="PL=F") %>% select(-x)
+Copper_Futures<- subset(df, symbol=="HG=F") %>% select(-x) 
+Corn_Futures<- subset(df, symbol=="ZC=F") %>% select(-x) 
+Soybean_Meal_Futures<- subset(df, symbol=="ZM=F") %>% select(-x) 
+Heating_Oil_Futures<- subset(df, symbol=="HO=F") %>% select(-x) 
+Wheat_Futures<- subset(df, symbol=="KE=F") %>% select(-x) 
+Random_Length_Lumber_Futures<- subset(df, symbol=="LBS=F") %>% select(-x)
+Sugar_Futures<- subset(df, symbol=="SB=F") %>% select(-x)
+Palladium_Futures<- subset(df, symbol=="PA=F") %>% select(-x)
+Aluminum_Futures<- subset(df, symbol=="ALI=F") %>% select(-x)
+
+
+Natural_GAS_Futures_xts<-as.xts(Natural_GAS_Futures$close, order.by =Natural_GAS_Futures$date)
+Natural_GAS_Futures_xts<-Natural_GAS_Futures_xts[!duplicated(Natural_GAS_Futures_xts)]
+Gasoline_Futures_xts<-as.xts(Gasoline_Futures$close, order.by =Gasoline_Futures$date)
+Brent_crude_oil_Futures_xts<-as.xts(Brent_crude_oil_Futures$close, order.by =Brent_crude_oil_Futures$date)
+heating_oil_Futures_xts<-as.xts(heating_oil_Futures$close, order.by =heating_oil_Futures$date) 
+heating_oil_Futures_xts<-heating_oil_Futures_xts[!duplicated(heating_oil_Futures_xts)]
+
+CHANGE_NAT_GAS_WAR<-100*(as.numeric(last(Natural_GAS_Futures_xts))- Natural_GAS_Futures_xts["2022-02-01"])/Natural_GAS_Futures_xts["2022-02-01"] %>% round(1)
+
+CHANGE_NAT_GAS_BUDGET<-100*(as.numeric(last(Natural_GAS_Futures_xts))- Natural_GAS_Futures_xts["2023-04-18"])/Natural_GAS_Futures_xts["2023-04-18"] %>% round(1)
+
+CHANGE_NAT_GAS_BUDGET<-round(CHANGE_NAT_GAS_BUDGET,1)
+
+CHANGE_Gasoline_WAR<-100*(as.numeric(last(Gasoline_Futures_xts))- Gasoline_Futures_xts["2022-02-01"])/Gasoline_Futures_xts["2022-02-01"] %>% round(1)
+
+
+CHANGE_Gasoline_BUDGET<-100*(as.numeric(last(Gasoline_Futures_xts))- Gasoline_Futures_xts["2023-04-18"])/Gasoline_Futures_xts["2023-04-18"] %>% round(1)
+
+
+CHANGE_BRENT_WAR<-100*(as.numeric(last(Brent_crude_oil_Futures_xts))- Brent_crude_oil_Futures_xts["2022-02-01"])/Brent_crude_oil_Futures_xts["2022-02-01"] %>% round(1)
+
+
+CHANGE_BRENT_BUDGET<-100*(as.numeric(last(Brent_crude_oil_Futures_xts))- Brent_crude_oil_Futures_xts["2023-04-18"])/Brent_crude_oil_Futures_xts["2023-04-18"] %>% round(1)
+
+
+CHANGE_HEATING_OIL_WAR<-100*(as.numeric(last(heating_oil_Futures_xts))- heating_oil_Futures_xts["2022-02-01"])/heating_oil_Futures_xts["2022-02-01"] %>% round(1)
+
+CHANGE_HEATING_OIL_BUDGET<-100*(as.numeric(last(heating_oil_Futures_xts))- heating_oil_Futures_xts["2023-04-18"])/heating_oil_Futures_xts["2023-04-18"] %>% round(1)
+
+
+ENERGY_BUDGET_CHANGE<-merge(CHANGE_NAT_GAS_BUDGET,CHANGE_Gasoline_BUDGET,CHANGE_BRENT_BUDGET,CHANGE_HEATING_OIL_BUDGET) %>% data.frame()
+
+colnames(ENERGY_BUDGET_CHANGE)<-c("Natural Gas", "Gasoline","Brent Crude Oil","Heating Oil")
+
+ENERGY_BUDGET_CHANGE<-ENERGY_BUDGET_CHANGE %>% melt() 
+
+```
+
+```{r Energy Graph, echo=FALSE, warning=FALSE}
+
+Gold_Futures_xts<-as.xts(Gold_Futures$close, order.by =Gold_Futures$date)
+Silver_Futures_xts<-as.xts(Silver_Futures$close, order.by =Silver_Futures$date)
+Platinum_Futures_xts<-as.xts(Platinum_Futures$close, order.by =Platinum_Futures$date)
+Copper_Futures_xts<-as.xts(Copper_Futures$close, order.by =Copper_Futures$date)
+Natural_GAS_Futures_xts<-as.xts(Natural_GAS_Futures$close, order.by =Natural_GAS_Futures$date)
+Corn_Futures_xts<-as.xts(Corn_Futures$close, order.by =Corn_Futures$date)
+Soybean_Meal_Futures_xts<-as.xts(Soybean_Meal_Futures$close, order.by =Soybean_Meal_Futures$date)
+Heating_Oil_Futures_xts<-as.xts(Heating_Oil_Futures$close, order.by =Heating_Oil_Futures$date)
+Wheat_Futures_xts<-as.xts(Wheat_Futures$close, order.by =Wheat_Futures$date)
+Random_Length_Lumber_Futures_xts<-as.xts(Random_Length_Lumber_Futures$close, order.by =Random_Length_Lumber_Futures$date)
+Sugar_Futures_xts<-as.xts(Sugar_Futures$close, order.by =Sugar_Futures$date)
+Palladium_Futures_xts<-as.xts(Palladium_Futures$close, order.by =Palladium_Futures$date)
+Aluminum_Futures_xts<-as.xts(Aluminum_Futures$close, order.by =Aluminum_Futures$date)
+
+
+xts<-cbind(Brent_crude_oil_Futures_xts,Natural_GAS_Futures_xts,Gold_Futures_xts,Silver_Futures_xts,Platinum_Futures_xts,Copper_Futures_xts,Corn_Futures_xts,Soybean_Meal_Futures_xts,heating_oil_Futures_xts, Random_Length_Lumber_Futures_xts,Sugar_Futures_xts,Palladium_Futures_xts,Aluminum_Futures_xts)  %>% na.omit()
+
+COMMODITY_CHANGE<-data.frame(matrix(NA, nrow=1,ncol=ncol(xts)))
+
+for(i in 1:ncol(xts)){
+  
+  
+COMMODITY_CHANGE[,i]<-(last(na.omit(xts[,i]))/(as.numeric(xts["2023-04-18",i]))-1)*100    
+}
+
+
+
+days<-(Sys.Date()-as.Date("2023-04-18")) %>% as.numeric()
+
+
+```
+
+
+```{r Graph text, warning=FALSE, include=FALSE}
+CHANGE_BRENT_BUDGET_TEXT<-conditional(CHANGE_BRENT_BUDGET)
+CHANGE_NAT_GAS_BUDGET_TEXT<-conditional(CHANGE_NAT_GAS_BUDGET)
+
+```
