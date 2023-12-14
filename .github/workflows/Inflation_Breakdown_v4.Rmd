@@ -21,7 +21,6 @@ tidy.opts=list(width.cutoff=10))
 library('tidyverse')
 library(reshape)
 library('xts')
-
 library('openxlsx')
 library("dplyr")
 library(xts)
@@ -32,8 +31,6 @@ library(lubridate)
 library(readxl)
 library(waterfalls)
 library(stringr)
-library(tidyquant)
-library(quantmod)
 
 
 
@@ -7628,114 +7625,6 @@ EXPECTED_INFLT_graph
 <br>
 <br>
 
-```{r Commodities, warning=FALSE, include=FALSE}
-library(tidyquant)
 
-tickers<- c("GC=F","SI=F","PL=F","HG=F","NG=F","ZC=F","ZM=F","HO=F","KE=F","LBS=F","SB=F","PA=F","ALI=F","RB=F","BZ=F","HO=F","NG=F")
-
-
-Data  <- tq_get(tickers, get = "stock.prices", from = " 2000-01-01")
-
-df<- Data %>% group_by(symbol) %>% mutate(x=ifelse(symbol))
-
-#energy commodities
-Natural_GAS_Futures<- subset(df, symbol=="NG=F") %>% select(-x) 
-Gasoline_Futures<- subset(df, symbol=="RB=F") %>% select(-x) 
-Brent_crude_oil_Futures<- subset(df, symbol=="BZ=F") %>% select(-x) 
-heating_oil_Futures<- subset(df, symbol=="HO=F") %>% select(-x) 
-
-
-
-
-Gold_Futures<-subset(df, symbol=="GC=F") %>% select(-x)
-Silver_Futures<-subset(df, symbol=="SI=F") %>% select(-x)
-Platinum_Futures<- subset(df, symbol=="PL=F") %>% select(-x)
-Copper_Futures<- subset(df, symbol=="HG=F") %>% select(-x) 
-Corn_Futures<- subset(df, symbol=="ZC=F") %>% select(-x) 
-Soybean_Meal_Futures<- subset(df, symbol=="ZM=F") %>% select(-x) 
-Heating_Oil_Futures<- subset(df, symbol=="HO=F") %>% select(-x) 
-Wheat_Futures<- subset(df, symbol=="KE=F") %>% select(-x) 
-Random_Length_Lumber_Futures<- subset(df, symbol=="LBS=F") %>% select(-x)
-Sugar_Futures<- subset(df, symbol=="SB=F") %>% select(-x)
-Palladium_Futures<- subset(df, symbol=="PA=F") %>% select(-x)
-Aluminum_Futures<- subset(df, symbol=="ALI=F") %>% select(-x)
-
-
-Natural_GAS_Futures_xts<-as.xts(Natural_GAS_Futures$close, order.by =Natural_GAS_Futures$date)
-Natural_GAS_Futures_xts<-Natural_GAS_Futures_xts[!duplicated(Natural_GAS_Futures_xts)]
-Gasoline_Futures_xts<-as.xts(Gasoline_Futures$close, order.by =Gasoline_Futures$date)
-Brent_crude_oil_Futures_xts<-as.xts(Brent_crude_oil_Futures$close, order.by =Brent_crude_oil_Futures$date)
-heating_oil_Futures_xts<-as.xts(heating_oil_Futures$close, order.by =heating_oil_Futures$date) 
-heating_oil_Futures_xts<-heating_oil_Futures_xts[!duplicated(heating_oil_Futures_xts)]
-
-CHANGE_NAT_GAS_WAR<-100*(as.numeric(last(Natural_GAS_Futures_xts))- Natural_GAS_Futures_xts["2022-02-01"])/Natural_GAS_Futures_xts["2022-02-01"] %>% round(1)
-
-CHANGE_NAT_GAS_BUDGET<-100*(as.numeric(last(Natural_GAS_Futures_xts))- Natural_GAS_Futures_xts["2023-04-18"])/Natural_GAS_Futures_xts["2023-04-18"] %>% round(1)
-
-CHANGE_NAT_GAS_BUDGET<-round(CHANGE_NAT_GAS_BUDGET,1)
-
-CHANGE_Gasoline_WAR<-100*(as.numeric(last(Gasoline_Futures_xts))- Gasoline_Futures_xts["2022-02-01"])/Gasoline_Futures_xts["2022-02-01"] %>% round(1)
-
-
-CHANGE_Gasoline_BUDGET<-100*(as.numeric(last(Gasoline_Futures_xts))- Gasoline_Futures_xts["2023-04-18"])/Gasoline_Futures_xts["2023-04-18"] %>% round(1)
-
-
-CHANGE_BRENT_WAR<-100*(as.numeric(last(Brent_crude_oil_Futures_xts))- Brent_crude_oil_Futures_xts["2022-02-01"])/Brent_crude_oil_Futures_xts["2022-02-01"] %>% round(1)
-
-
-CHANGE_BRENT_BUDGET<-100*(as.numeric(last(Brent_crude_oil_Futures_xts))- Brent_crude_oil_Futures_xts["2023-04-18"])/Brent_crude_oil_Futures_xts["2023-04-18"] %>% round(1)
-
-
-CHANGE_HEATING_OIL_WAR<-100*(as.numeric(last(heating_oil_Futures_xts))- heating_oil_Futures_xts["2022-02-01"])/heating_oil_Futures_xts["2022-02-01"] %>% round(1)
-
-CHANGE_HEATING_OIL_BUDGET<-100*(as.numeric(last(heating_oil_Futures_xts))- heating_oil_Futures_xts["2023-04-18"])/heating_oil_Futures_xts["2023-04-18"] %>% round(1)
-
-
-ENERGY_BUDGET_CHANGE<-merge(CHANGE_NAT_GAS_BUDGET,CHANGE_Gasoline_BUDGET,CHANGE_BRENT_BUDGET,CHANGE_HEATING_OIL_BUDGET) %>% data.frame()
-
-colnames(ENERGY_BUDGET_CHANGE)<-c("Natural Gas", "Gasoline","Brent Crude Oil","Heating Oil")
-
-ENERGY_BUDGET_CHANGE<-ENERGY_BUDGET_CHANGE %>% melt() 
-
-```
-
-```{r Energy Graph, echo=FALSE, warning=FALSE}
-
-Gold_Futures_xts<-as.xts(Gold_Futures$close, order.by =Gold_Futures$date)
-Silver_Futures_xts<-as.xts(Silver_Futures$close, order.by =Silver_Futures$date)
-Platinum_Futures_xts<-as.xts(Platinum_Futures$close, order.by =Platinum_Futures$date)
-Copper_Futures_xts<-as.xts(Copper_Futures$close, order.by =Copper_Futures$date)
-Natural_GAS_Futures_xts<-as.xts(Natural_GAS_Futures$close, order.by =Natural_GAS_Futures$date)
-Corn_Futures_xts<-as.xts(Corn_Futures$close, order.by =Corn_Futures$date)
-Soybean_Meal_Futures_xts<-as.xts(Soybean_Meal_Futures$close, order.by =Soybean_Meal_Futures$date)
-Heating_Oil_Futures_xts<-as.xts(Heating_Oil_Futures$close, order.by =Heating_Oil_Futures$date)
-Wheat_Futures_xts<-as.xts(Wheat_Futures$close, order.by =Wheat_Futures$date)
-Random_Length_Lumber_Futures_xts<-as.xts(Random_Length_Lumber_Futures$close, order.by =Random_Length_Lumber_Futures$date)
-Sugar_Futures_xts<-as.xts(Sugar_Futures$close, order.by =Sugar_Futures$date)
-Palladium_Futures_xts<-as.xts(Palladium_Futures$close, order.by =Palladium_Futures$date)
-Aluminum_Futures_xts<-as.xts(Aluminum_Futures$close, order.by =Aluminum_Futures$date)
-
-
-xts<-cbind(Brent_crude_oil_Futures_xts,Natural_GAS_Futures_xts,Gold_Futures_xts,Silver_Futures_xts,Platinum_Futures_xts,Copper_Futures_xts,Corn_Futures_xts,Soybean_Meal_Futures_xts,heating_oil_Futures_xts, Random_Length_Lumber_Futures_xts,Sugar_Futures_xts,Palladium_Futures_xts,Aluminum_Futures_xts)  %>% na.omit()
-
-COMMODITY_CHANGE<-data.frame(matrix(NA, nrow=1,ncol=ncol(xts)))
-
-for(i in 1:ncol(xts)){
-  
-  
-COMMODITY_CHANGE[,i]<-(last(na.omit(xts[,i]))/(as.numeric(xts["2023-04-18",i]))-1)*100    
-}
-
-
-
-days<-(Sys.Date()-as.Date("2023-04-18")) %>% as.numeric()
-
-
-```
-
-
-```{r Graph text, warning=FALSE, include=FALSE}
-CHANGE_BRENT_BUDGET_TEXT<-conditional(CHANGE_BRENT_BUDGET)
-CHANGE_NAT_GAS_BUDGET_TEXT<-conditional(CHANGE_NAT_GAS_BUDGET)
 
 ```
