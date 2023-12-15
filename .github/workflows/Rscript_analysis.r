@@ -449,7 +449,7 @@ for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
       subject = "External Trade Release!"
     ) %>%
       # Render R Markdown from a file.
-      emayili::render("Monthly_External_Trade_Beta_4.Rmd")
+      emayili::render(".github/workflows/Monthly_External_Trade_Beta_4.Rmd")
     
     smtp(Body_EXTERNAL_TRADE)  
     
