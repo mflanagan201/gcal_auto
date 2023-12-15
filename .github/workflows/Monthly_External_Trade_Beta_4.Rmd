@@ -36,6 +36,7 @@ library(htmlwidgets)
 library(kableExtra)
 library(tinytex)
 library(webshot2)
+library(readr)
 
 
 cso_clear_cache() 
@@ -5800,9 +5801,6 @@ write.xlsx(dataset_names, file = 'external_trade_excel2.xlsx')
 
 
 ```{r net import semiconductors, warning=FALSE, include=FALSE}
-library(tradestatistics)
-library(RCurl)
-library(readr)
 
 
 
