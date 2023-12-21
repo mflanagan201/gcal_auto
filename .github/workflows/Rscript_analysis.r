@@ -402,9 +402,9 @@ if(is.data.frame(data.frame(events_data$items))){
     new_event<- list(
       summary = paste(CALENDAR_ALL_short$SUMMARY[i]),
       start = list(dateTime= paste0(format(as.Date(CALENDAR_ALL_short$DTSTART[i]),"%Y-%m-%d"),"T",format(as.Date(CALENDAR_ALL_short$DTSTART[i]),"%H:%M:%S")), timeZone = "GMT"),
-      end = list(dateTime= paste0(format(as.Date(CALENDAR_ALL_short$DTEND[i]),"%Y-%m-%d"),"T",format(as.Date(CALENDAR_ALL_short$DTEND[i]),"%H:%M:%S")), timeZone = "GMT"),
-      status = "confirmed",
-      location =CALENDAR_ALL_short$LOCATION[i])
+      end = list(dateTime= paste0(format(as.Date(CALENDAR_ALL_short$DTEND[i]),"%Y-%m-%d"),"T",format(as.Date(CALENDAR_ALL_short$DTEND[i]),"%H:%M:%S")), timeZone = "GMT"),
+      location =CALENDAR_ALL_short$LOCATION[i],
+status = c("confirmed"))
     
     POST(calendar_url, body = toJSON(new_event), add_headers(Authorization = paste("Bearer", oauth_2$credentials$access_token)))
     
