@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '00 06 * * *'  # Adjusted to run at 17:30 UTC
+    - cron: '00 06 * * *'  
 
 jobs:
   run_rscript:
@@ -26,7 +26,7 @@ jobs:
     - name: Cache R packages
       uses: actions/cache@v3.3.2
       with:
-       key: ${{ runner.os }}-r-${{ hashFiles('.github/workflows/Rscript_analysis.r') }}
+       key: ${{ runner.os }}-r-${{ hashFiles('.github/workflows/Rscript_analysis.r.cache') }}
        restore-keys: ${{ runner.os }}-r-
 
     - name: Install dependencies      
