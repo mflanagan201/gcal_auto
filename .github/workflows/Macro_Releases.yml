@@ -49,10 +49,10 @@ jobs:
         echo "Current directory: $(pwd)"
 
     - name: Make script executable
-      run: chmod +x .github/workflows/Macro_Releases.r
+      run: chmod +x .github/workflows/Macro_Releases.R
 
     - name: Run R script
-      run: Rscript .github/workflows/Macro_Releases.r
+      run: Rscript .github/workflows/Macro_Releases.R
 
     - name: Commit and Push Changes
       run: |
