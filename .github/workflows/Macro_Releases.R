@@ -31,7 +31,7 @@ smtp <- server(host = "smtp.gmail.com",
 
 
 for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
-  if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%","%Flash Estimate of Harmonised Index of Consumer Prices%")){
+  if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%","%Flash Estimate of Harmonised Index of Consumer Prices%")){
     
     Body_INFLATION<-emayili::envelope(
       from = "mflanagan201@gmail.com",
