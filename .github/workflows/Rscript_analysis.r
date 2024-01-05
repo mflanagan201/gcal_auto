@@ -143,7 +143,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
     RELEASE_CB[i,2]<-NA
   }
   
-  if(RELEASE_CB[i,2] %like any% c("%Activity: Statistics: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Holders of Irish Government Bonds%")){
+  if(RELEASE_CB[i,2] %like any% c("%Monthly Card Payment Statistics%" ,"%Activity: Statistics: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Holders of Irish Government Bonds%")){
     RELEASE_CB[i,1]<-RELEASE_CB[i,1]
     RELEASE_CB[i,2]<-RELEASE_CB[i,2]
   } else {
@@ -299,23 +299,9 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
   mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-if(event_CB$SUMMARY!="NA"){
-  event_all<-rbind(Monetary_Policy_Decisions,event_CB,CSO_event)
-} else {
-  event_all<-rbind(Monetary_Policy_Decisions,CSO_event)
-}
+event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB)
 
-
-
-
-
-#if(event_CB$SUMMARY!="NA"){
-#  event_all<-rbind(Monetary_Policy_Decisions,event_CB,CSO_event,PMI_RELEASE)
-#} else {
-#  event_all<-rbind(Monetary_Policy_Decisions,CSO_event,PMI_RELEASE)
-#}
-
-event_all = subset(event_all, !(SUMMARY %like any% c("%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
+event_all = subset(event_all, !(SUMMARY %like any% c("%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
                                                      ,"%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
 
 
