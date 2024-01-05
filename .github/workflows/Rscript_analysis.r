@@ -157,6 +157,7 @@ colnames(RELEASE_CB)<-(c("Date","Release"))
 
 
 Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity: Statistics:", " ")
 
 if(is.na(Date_CB)){
   event_CB = data.frame(DTSTART = "NA",
