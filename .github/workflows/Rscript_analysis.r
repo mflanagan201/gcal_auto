@@ -117,7 +117,7 @@ RELEASE_CB<-data.frame(matrix(NA,nrow=nrow(CB_Schedule_table3),ncol=2))
 
 for(i in 1:nrow(CB_Schedule_table3)){
   
-  Date_CB[i,1]<-paste(format(parse_date_time2(paste0(CB_Schedule_table3[i,]," 2023"),orders="%d-%m-%Y"),"%d/%m/%Y"))
+  Date_CB[i,1]<-paste(format(parse_date_time2(paste0(CB_Schedule_table3[i,]," 2024"),orders="%d-%m-%Y"),"%d/%m/%Y"))
   
 }
 
@@ -143,7 +143,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
     RELEASE_CB[i,2]<-NA
   }
   
-  if(RELEASE_CB[i,2] %like any% c("%Monthly Card Payment Statistics%" ,"%Activity: Statistics: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Holders of Irish Government Bonds%")){
+  if(RELEASE_CB[i,2] %like any% c("%Monthly Card Payment Statistics%" ,"%Activity: Statistics: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%")){
     RELEASE_CB[i,1]<-RELEASE_CB[i,1]
     RELEASE_CB[i,2]<-RELEASE_CB[i,2]
   } else {
@@ -159,7 +159,7 @@ colnames(RELEASE_CB)<-(c("Date","Release"))
 Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
 RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity: Statistics:", " ")
 
-if(is.na(Date_CB)){
+if(is.na(Date_CB[1])){
   event_CB = data.frame(DTSTART = "NA",
                         DTEND = "NA",
                         SUMMARY = "NA",
@@ -217,9 +217,9 @@ colnames(Central_Banks_Schedules)<-c("FED","ECB","Bank of England")
 
 for (i in 1:nrow(Central_Banks_Schedules)+1){
   
-  Central_Banks_Schedules[i,1]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,1] ," ",Central_Banks_Schedules[i+1,1]," 2023"),orders="%d %m %Y"))
-  Central_Banks_Schedules[i,2]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,2] ," ",Central_Banks_Schedules[i+1,2]," 2023"),orders="%d %m %Y"))
-  Central_Banks_Schedules[i,3]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,3] ," ",Central_Banks_Schedules[i+1,3]," 2023"),orders="%d %m %Y"))
+  Central_Banks_Schedules[i,1]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,1] ," ",Central_Banks_Schedules[i+1,1]," 2024"),orders="%d %m %Y"))
+  Central_Banks_Schedules[i,2]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,2] ," ",Central_Banks_Schedules[i+1,2]," 2024"),orders="%d %m %Y"))
+  Central_Banks_Schedules[i,3]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,3] ," ",Central_Banks_Schedules[i+1,3]," 2024"),orders="%d %m %Y"))
   
 }
 
@@ -305,22 +305,95 @@ event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB)
 event_all = subset(event_all, !(SUMMARY %like any% c("%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
                                                      ,"%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
 
+exch_days<-seq(from=as.Date(c("2024-01-01")),to=as.Date(c("2024-12-31")), by="day")
+exch_weekdays<-exch_days[format(exch_days,"%a") != c("Sun","Sat")]
 
-DOF_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.default("2023/11/03","2023/12/04"), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+for(i in seq_along(exch_weekdays)){
+  if (format(exch_weekdays[i],"%Y-%m-%d") %like any% c("2024-01-01","2024-02-05","2024-03-18","2024-04-01","2024-05-06","2024-06-03","2024-08-05","2024-10-28","2024-12-25","2024-12-26")){
+    exch_weekdays[i]<-NA 
+  }
+}
+
+
+January<-NA
+February<-NA
+March<-NA
+April<-NA
+May<-NA
+June<-NA
+July<-NA
+August<-NA
+September<-NA
+October<-NA
+November<-NA
+December<-NA
+
+exch_weekdays<-na.omit(exch_weekdays)
+for(i in seq_along(exch_weekdays)){
+if(format(exch_weekdays[i],"%m")=="01"){
+  January[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="02"){
+  February[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="03"){
+  March[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="04"){
+  April[i]<-exch_weekdays[i] 
+} else if(format(exch_weekdays[i],"%m")=="05"){
+  May[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="06"){
+  June[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="07"){
+  July[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="08"){
+  August[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="09"){
+  September[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="10"){
+  October[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="11"){
+  November[i]<-exch_weekdays[i]
+} else if(format(exch_weekdays[i],"%m")=="12"){
+  December[i]<-exch_weekdays[i] 
+}
+}
+
+Exch_Release<-as.Date(c(
+  na.omit(January)[3],
+  na.omit(February)[4],
+  na.omit(March)[4],
+  na.omit(April)[4],
+  na.omit(May)[4],
+  na.omit(June)[4],
+  na.omit(July)[4],
+  na.omit(August)[4],
+  na.omit(September)[4],
+  na.omit(October)[4],
+  na.omit(November)[4],
+  na.omit(December)[4]
+))
+
+
+DOF_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.default(paste(Exch_Release[1:12]
+)), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+
+
+
+
+
 
 
 DOF_EVENTS<-data.frame(DTSTART = DOF_DATE,
-           DTEND = DOF_DATE+1,
-           SUMMARY = paste("Exchequer Returns"),
-           LOCATION = c("Department of Finance"),
-           transparent=TRUE)
-DOF_EVENTS_2023 <- DOF_EVENTS %>%
+                       DTEND = DOF_DATE+1,
+                       SUMMARY = paste("Exchequer Returns"),
+                       LOCATION = c("Department of Finance"),
+                       transparent=TRUE)
+DOF_EVENTS_2024 <- DOF_EVENTS %>%
   mutate(UID = replicate(nrow(DOF_EVENTS), ic_guid()))
 
 
 
 
-CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2023)
+CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024)
 CALENDAR_ALL_XTS<-as.xts(CALENDAR_ALL,order.by=as.Date(CALENDAR_ALL$DTSTART))
 CALENDAR_ALL_short<-CALENDAR_ALL_XTS[seq(from=Sys.Date(),length.out=50, by='days')] %>% data.frame() %>% ical()
 CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
@@ -340,8 +413,8 @@ G_ENDPOINT<-oauth_endpoint(authorize="https://accounts.google.com/o/oauth2/auth"
 
 
 #oauth_2<-oauth2.0_token(G_ENDPOINT,google_app, scope=c(
- # "https://www.googleapis.com/auth/calendar",
- # "https://www.googleapis.com/auth/calendar.events"
+# "https://www.googleapis.com/auth/calendar",
+# "https://www.googleapis.com/auth/calendar.events"
 #))
 
 
@@ -402,7 +475,6 @@ if(is.data.frame(data.frame(events_data$items))){
   print(events_data$error$message)
   
 }
-
 
 
 
