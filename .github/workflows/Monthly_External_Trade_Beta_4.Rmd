@@ -1391,7 +1391,7 @@ annual_growth_exports_val_text<-conditional(annual_growth_exports_val$TOTAL[leng
 YTD_2022_annual<- 100*(sum(Total_Export_Country$TOTAL["2023"])-sum(Total_Export_Country$TOTAL["2022"][1:length(Total_Export_Country$TOTAL["2023"])]))/sum(Total_Export_Country$TOTAL["2022"][1:length(Total_Export_Country$TOTAL["2023"])])
 YTD_2022_annual_text<-conditional(YTD_2022_annual)
 
-delta_Budget_2022<-(YTD_2022_annual-11)
+delta_Budget_2022<-(YTD_2022_annual-1.4)
 export_nominal_budget<-conditional_alt4(delta_Budget_2022)
 
 
@@ -1493,8 +1493,8 @@ d<-colnames(summary_table[length(summary_table)])
 
 
 
-format_table1<-formattable(x=(summary_table),list(area(col=ncol(summary_table)) ~  formatter("span", style = ~ style(color = ifelse(summary_table[ncol(summary_table)]< summary_table[ncol(summary_table)-1], "red",ifelse(summary_table[ncol(summary_table)] >= summary_table[ncol(summary_table)-1],"green","grey"))),
- ~ icontext(ifelse(summary_table[ncol(summary_table)] =="", "arrow-none",ifelse(summary_table[ncol(summary_table)] <summary_table[ncol(summary_table)-1],"arrow-down",ifelse(summary_table[ncol(summary_table)] > summary_table[ncol(summary_table)-1],"arrow-up",""))),pull(summary_table)))))
+format_table1<-formattable(x=(summary_table),list(area(col=ncol(summary_table)) ~  formatter("span", style = ~ style(color = ifelse(summary_table[ncol(summary_table)]< 0, "red",ifelse(summary_table[ncol(summary_table)] >= 0,"green","grey"))),
+ ~ icontext(ifelse(summary_table[ncol(summary_table)] =="", "arrow-none",ifelse(summary_table[ncol(summary_table)] <0,"arrow-down",ifelse(summary_table[ncol(summary_table)] > 0,"arrow-up",""))),pull(summary_table)))))
 
 
 
@@ -1552,7 +1552,7 @@ webshot(html_print(as.htmlwidget(format_table1)),zoom = 3)
 -  Compared to Pre-Covid levels, the seasonally adjusted value and  volume of exports have `r Pre_Covid_export_text` and `r Pre_Covid_export_text_vol` respectively. 
 <br>
 <br>
--  As part of SPU 2023, the Department forecast nominal goods export growth of 11% in 2023. Year to date, exports have `r YTD_2022_annual_text` in `r current_date`. As a result exports are currently running `r export_nominal_budget`.  
+-  As part of Budget, the Department forecast nominal goods export growth of 1.4% in 2023. Year to date, exports have `r YTD_2022_annual_text` in `r current_date`. As a result exports are currently running `r export_nominal_budget`.  
 <br>
 <br>
 
@@ -5546,7 +5546,7 @@ Imports_graph<-ggplot(data=headline_indicator,aes(x=index(headline_indicator)))+
     scale_color_manual(name = "", values = c("Imports" = DOF_colours[1],"Imports Excl. Energy" = DOF_colours[2],"Imports Excl. Aircraft" = DOF_colours[3]))+
   theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
 
-Imports_graph<-Imports_graph+ theme(legend.position=c(0.8, 0.2))
+Imports_graph<-Imports_graph+ theme(legend.position=c(0.5, 0.2))
 
 
 
