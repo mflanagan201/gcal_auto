@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '40 10 * * *'  
+    - cron: '29 10 * * *'  
 
 jobs:
   run_rscript:
