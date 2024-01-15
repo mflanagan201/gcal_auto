@@ -1406,7 +1406,7 @@ Pre_Covid_export_text_vol<-conditional(Pre_Covid_export_vol)
 
 
 
-summary_table<-data.frame((merge(monthly_growth_exports_vol["2022-12-01/"],monthly_growth_exports_val["2022-12-01/"],monthly_growth_imports_val["2022-12-01/"],annual_growth_exports_vol["2022-12-01/"],annual_growth_exports_val["2022-12-01/"],annual_growth_imports_val["2022-12-01/"])))
+summary_table<-data.frame((merge(monthly_growth_exports_vol["2023-03-01/"],monthly_growth_exports_val["2023-03-01/"],monthly_growth_imports_val["2023-03-01/"],annual_growth_exports_vol["2023-03-01/"],annual_growth_exports_val["2023-03-01/"],annual_growth_imports_val["2023-03-01/"])))
 r<-as.Date(rownames(summary_table))
 rt<-format(r,"%b-%Y")
 
