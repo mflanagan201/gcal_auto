@@ -609,7 +609,7 @@ Body_weekly_email<-emayili::envelope(
   emayili::render(' <span class="text-center" style="color:#A3915E"> <left> <font size="4"> *Hi, The following economic releases will be released next week.* </font> </left> </span>
 
 
-                         
+                
                        {{NEXT_WEEK_release_text_1}}   
                        </br>
                        </br>
@@ -689,7 +689,7 @@ Body_weekly_email<-emayili::envelope(
 ')
 
 
-if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
+if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Fri"))){
   smtp(Body_weekly_email)  
 }
 
