@@ -158,14 +158,12 @@ Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"
 RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity: Statistics:", " ")
 
 if(is.na(Date_CB[1])){
-  event_CB = data.frame(DTSTART = "NA",
-                        DTEND = "NA",
+  event_CB = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
+                        DTEND = c("2024-12-01 10:00:00 GMT"),
                         SUMMARY = "NA",
                         LOCATION = c("Central Bank of Ireland"),
                         transparent=TRUE)
-  
-  
-  
+
   
 } else {
   
@@ -391,7 +389,7 @@ DOF_EVENTS_2024 <- DOF_EVENTS %>%
 
 
 
-CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all)
+CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024)
 CALENDAR_ALL_XTS<-as.xts(CALENDAR_ALL,order.by=as.Date(CALENDAR_ALL$DTSTART))
 CALENDAR_ALL_short<-CALENDAR_ALL_XTS[seq(from=Sys.Date(),length.out=50, by='days')] %>% data.frame() %>% ical()
 CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
@@ -475,4 +473,230 @@ if(is.data.frame(data.frame(events_data$items))){
 }
 
 
+NEXT_WEEK_release<-NA
+for(i in 1:nrow(CALENDAR_ALL_XTS)){
+  if(index(CALENDAR_ALL_XTS$DTSTART[i]) %like any% (seq(from=Sys.Date()+1,to=Sys.Date()+7, by="day"))){
+    NEXT_WEEK_release[i]<-paste0("* ",format(index(CALENDAR_ALL_XTS$DTSTART[i]),"%A"),": ",CALENDAR_ALL_XTS$LOCATION[i]," - " ,CALENDAR_ALL_XTS$SUMMARY[i]) 
+  }
+}
 
+
+NEXT_WEEK_release<-na.omit(NEXT_WEEK_release)
+
+NEXT_WEEK_release_text_1<-if(paste(NEXT_WEEK_release[1])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[1]))
+}
+
+NEXT_WEEK_release_text_2<-if(paste(NEXT_WEEK_release[2])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[2]))
+}
+
+
+NEXT_WEEK_release_text_3<-if(paste(NEXT_WEEK_release[3])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[3]))
+}
+
+
+NEXT_WEEK_release_text_4<-if(paste(NEXT_WEEK_release[4])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[4]))
+}
+
+
+
+NEXT_WEEK_release_text_5<-if(paste(NEXT_WEEK_release[5])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[5]))
+}
+
+
+
+NEXT_WEEK_release_text_6<-if(paste(NEXT_WEEK_release[6])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[6]))
+}
+
+
+
+NEXT_WEEK_release_text_7<-if(paste(NEXT_WEEK_release[7])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[7]))
+}
+
+
+NEXT_WEEK_release_text_8<-if(paste(NEXT_WEEK_release[8])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[8]))
+}
+
+
+NEXT_WEEK_release_text_9<-if(paste(NEXT_WEEK_release[9])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[9]))
+}
+
+
+
+NEXT_WEEK_release_text_10<-if(paste(NEXT_WEEK_release[10])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[10]))
+}
+
+
+
+NEXT_WEEK_release_text_11<-if(paste(NEXT_WEEK_release[11])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[11]))
+}
+
+NEXT_WEEK_release_text_12<-if(paste(NEXT_WEEK_release[12])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[12]))
+}
+
+
+NEXT_WEEK_release_text_13<-if(paste(NEXT_WEEK_release[13])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[13]))
+}
+
+
+NEXT_WEEK_release_text_14<-if(paste(NEXT_WEEK_release[14])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[14]))
+}
+
+
+NEXT_WEEK_release_text_15<-if(paste(NEXT_WEEK_release[15])== "NA"){
+  paste0("")
+} else {
+  paste0(na.omit(NEXT_WEEK_release[15]))
+}
+
+
+
+smtp <- server(host = "smtp.gmail.com",
+               port = 587,
+               username = "mflanagan201@gmail.com",
+               password = "ddauvuifpknvsobo")
+
+
+
+Body_weekly_email<-emayili::envelope(
+  to=c("michael.flanagan@finance.gov.ie"
+  ),bcc=c("michael.flanagan@finance.gov.ie"),
+  
+  from="mflanagan201@gmail.com",
+  subject = "Weekly Economic Calendar"
+) %>%
+  emayili::render(' <span class="text-center" style="color:#A3915E"> <left> <font size="4"> *Hi, The following economic releases will be released next week.* </font> </left> </span>
+
+
+                         
+                       {{NEXT_WEEK_release_text_1}}   
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_2}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_3}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_4}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_5}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_6}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_7}}
+                       </br>
+                       </br>
+                       </br>        
+                       
+                       {{NEXT_WEEK_release_text_8}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_9}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_10}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_11}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_12}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_13}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_14}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_15}}
+                       </br>
+                       </br>
+                       </br> 
+
+                       
+')
+
+
+if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
+  smtp(Body_weekly_email)  
+}
+
+
+
+
+#"Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Brendan.O'Connor@finance.gov.ie","Shane.Dunne@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie", "Sarah.Hogan@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie"
+
+
+  
