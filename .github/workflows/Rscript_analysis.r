@@ -592,7 +592,7 @@ NEXT_WEEK_release_text_15<-if(paste(NEXT_WEEK_release[15])== "NA"){
 
 
 
-smtp <- server(host = "smtp.gmail.com",
+smtp <- emayili::server(host = "smtp.gmail.com",
                port = 587,
                username = "mflanagan201@gmail.com",
                password = "ddauvuifpknvsobo")
