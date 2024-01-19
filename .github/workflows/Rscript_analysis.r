@@ -355,17 +355,17 @@ if(format(exch_weekdays[i],"%m")=="01"){
 
 Exch_Release<-as.Date(c(
   na.omit(January)[3],
-  na.omit(February)[4],
-  na.omit(March)[4],
-  na.omit(April)[4],
-  na.omit(May)[4],
-  na.omit(June)[4],
-  na.omit(July)[4],
-  na.omit(August)[4],
-  na.omit(September)[4],
-  na.omit(October)[4],
-  na.omit(November)[4],
-  na.omit(December)[4]
+  na.omit(February)[3],
+  na.omit(March)[3],
+  na.omit(April)[3],
+  na.omit(May)[3],
+  na.omit(June)[3],
+  na.omit(July)[3],
+  na.omit(August)[3],
+  na.omit(September)[3],
+  na.omit(October)[3],
+  na.omit(November)[3],
+  na.omit(December)[3]
 ))
 
 
