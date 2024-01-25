@@ -181,6 +181,144 @@ event_CB <- event_CB %>%
   mutate(UID = replicate(nrow(event_CB), ic_guid()))
 
 
+#OECD Calendar Below
+
+OECD_RELEASE<-"https://www.oecd.org/about/upcoming-events/"
+OECD_URL_download<-read_html(OECD_RELEASE)
+OECD_Schedule_table<-OECD_URL_download %>% html_nodes(xpath='/html/body/section[3]')   %>% html_text()
+OECD_Schedule_table_2<-OECD_Schedule_table[[1]] %>% stringr::str_split("\n") %>% data.frame()
+
+
+RELEASE_OECD<-data.frame(matrix(NA,nrow=nrow(OECD_Schedule_table_2),ncol=2))
+
+
+for(i in 1:nrow(OECD_Schedule_table_2)){
+if(OECD_Schedule_table_2[i,1]==""){
+  OECD_Schedule_table_2[i,1]<-NA 
+} else {
+  OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[i,1]
+}
+}
+
+
+for(i in 1:nrow(OECD_Schedule_table_3)){
+  if(OECD_Schedule_table_3[i,1] %like any% c("%Economic Outlook%")){
+    RELEASE_OECD[i,1]<-OECD_Schedule_table_3[i,1]
+    RELEASE_OECD[i,2]<-OECD_Schedule_table_3[i+1,1]
+      } 
+}
+
+RELEASE_OECD<-na.omit(RELEASE_OECD)
+colnames(RELEASE_OECD)<-c("Release", "Date")
+RELEASE_OECD$Date<-parse_date_time2(paste0(RELEASE_OECD$Date," 2024"),orders="%d-%m-%Y")
+
+
+if(is.na(RELEASE_OECD)){
+  EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
+                        DTEND = c("2024-12-01 10:00:00 GMT"),
+                        SUMMARY = "NA",
+                        LOCATION = c("OECD"),
+                        transparent=TRUE)
+  
+  
+  
+  
+} else {
+  
+  EVENTS_OECD = data.frame(DTSTART = RELEASE_OECD$Date,
+                        DTEND = RELEASE_OECD$Date+1,
+                        SUMMARY = paste(RELEASE_OECD$Release),
+                        LOCATION = c("OECD"),
+                        transparent=TRUE)
+  
+  
+  }
+
+
+EVENTS_OECD <- EVENTS_OECD %>%
+  mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
+
+
+
+
+
+
+
+
+########
+
+
+#IMF Calendar Below
+
+IMF_RELEASE<-"https://www.imf.org/en/News/Seminars"
+IMF_URL_download<-read_html(IMF_RELEASE)
+IMF_Schedule_table<-IMF_URL_download %>% html_nodes(xpath='/html/body/div[3]/main/article/div/div[2]/div[5]')   %>% html_text()
+IMF_Schedule_table_2<-IMF_Schedule_table[[1]] %>% stringr::str_split("[\r\n]")   %>% data.frame()
+
+
+RELEASE_IMF<-data.frame(matrix(NA,nrow=nrow(IMF_Schedule_table_2),ncol=2))
+
+
+for(i in 1:nrow(IMF_Schedule_table_2)){
+  if(IMF_Schedule_table_2[i,1]==""){
+    IMF_Schedule_table_2[i,1]<-NA 
+  } else {
+    IMF_Schedule_table_2[i,1]<-IMF_Schedule_table_2[i,1]
+  }
+}
+
+
+for(i in 1:nrow(IMF_Schedule_table_2)){
+  if(IMF_Schedule_table_2[i,1] %like any% c("%World Economic Outlook Update%")){
+    RELEASE_IMF[i,1]<-IMF_Schedule_table_2[i,1]
+    RELEASE_IMF[i,2]<-IMF_Schedule_table_2[i-2,1]
+  } 
+}
+
+RELEASE_IMF<-na.omit(RELEASE_IMF)
+colnames(RELEASE_IMF)<-c("Release", "Date")
+RELEASE_IMF$Date<-parse_date_time2(RELEASE_IMF$Date, orders="%B %d, %Y")
+
+
+if(is.na(RELEASE_IMF$Release)){
+  EVENTS_IMF = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
+                           DTEND = c("2024-12-01 10:00:00 GMT"),
+                           SUMMARY = "NA",
+                           LOCATION = c("IMF"),
+                           transparent=TRUE)
+  
+  
+  
+  
+} else {
+  
+  EVENTS_IMF = data.frame(DTSTART = RELEASE_IMF$Date,
+                           DTEND = RELEASE_IMF$Date+1,
+                           SUMMARY = paste(RELEASE_IMF$Release),
+                           LOCATION = c("IMF"),
+                           transparent=TRUE)
+  
+  
+}
+
+
+EVENTS_IMF <- EVENTS_IMF %>%
+  mutate(UID = replicate(nrow(EVENTS_IMF), ic_guid()))
+
+
+########
+
+
+
+
+
+
+
+
+
+
+
+
 
 CENTRAL_BANK_SCHEDULE<-read_html("https://www.dailyfx.com/central-bank-calendar")
 CENTRAL_BANK_SCHEDULE_table<-CENTRAL_BANK_SCHEDULE %>% html_nodes("aside")
@@ -296,7 +434,7 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
   mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE)
+event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_OECD,EVENTS_IMF)
 
 event_all = subset(event_all, !(SUMMARY %like any% c("%Metered Electricity Generation%","%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
                                                      ,"%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
