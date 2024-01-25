@@ -183,7 +183,7 @@ event_CB <- event_CB %>%
 
 #OECD Calendar Below
 
-OECD_RELEASE<-"https://www.oecd.org/about/upcoming-events/"
+OECD_RELEASE<-"https://www.oecd.org/about/upcoming-events"
 OECD_URL_download<-read_html(OECD_RELEASE)
 OECD_Schedule_table<-OECD_URL_download %>% html_nodes(xpath='/html/body/section[3]')   %>% html_text()
 OECD_Schedule_table_2<-OECD_Schedule_table[[1]] %>% stringr::str_split("\n") %>% data.frame()
