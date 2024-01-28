@@ -294,7 +294,7 @@ if(is.na(RELEASE_IMF$Release)){
   
   EVENTS_IMF = data.frame(DTSTART = RELEASE_IMF$Date,
                            DTEND = RELEASE_IMF$Date+1,
-                           SUMMARY = paste(gsub(" ", "",RELEASE_IMF$Release)),
+                           SUMMARY = paste(gsub("  ", " ",RELEASE_IMF$Release)),
                            LOCATION = c("IMF"),
                            transparent=TRUE)
   
