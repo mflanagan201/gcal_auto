@@ -186,7 +186,7 @@ event_CB <- event_CB %>%
 
 #OECD Calendar Below
 OECD_RELEASE<-"https://www.oecd.org/newsroom"
-OECD_RELEASE_v1<-GET(OECD_RELEASE, add_headers('user-agent' = 'Gov employment data scraper ([[mflanagan201@gmail.com]])'))
+OECD_RELEASE_v1<-GET(OECD_RELEASE, add_headers('user-agent' ='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36)')
 OECD_URL_download<-read_html(OECD_RELEASE_v1)
 OECD_Schedule_table<-OECD_URL_download %>% html_nodes(xpath='/html/body/div[2]/div[2]/div[2]/div[3]/div[1]')   %>% html_text()
 OECD_Schedule_table_2<-OECD_Schedule_table[[1]] %>% stringr::str_split("\n") %>% data.frame()
