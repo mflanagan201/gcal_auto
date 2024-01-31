@@ -18,6 +18,7 @@ library(stringr)
 library(rlang)
 library(purrr)
 library(httpuv)
+library(curl)
 
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
 google_client_secret <- Sys.getenv("GOOGLE_CLIENT_SECRET")
@@ -186,7 +187,9 @@ event_CB <- event_CB %>%
 
 #OECD Calendar Below
 OECD_RELEASE<-"https://www.oecd.org/newsroom"
-OECD_RELEASE_v1<-GET(OECD_RELEASE, add_headers('user-agent' ='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'))
+tmp <- tempfile()
+OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp)
+
 
 OECD_URL_download<-read_html(OECD_RELEASE_v1)
 OECD_Schedule_table<-OECD_URL_download %>% html_nodes(xpath='/html/body/div[2]/div[2]/div[2]/div[3]/div[1]')   %>% html_text()
@@ -244,6 +247,8 @@ EVENTS_OECD <- EVENTS_OECD %>%
 
 
 
+tmp <- tempfile()
+OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp)
 
 
 
