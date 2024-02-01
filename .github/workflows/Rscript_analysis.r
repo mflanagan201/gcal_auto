@@ -249,7 +249,7 @@ EVENTS_OECD = data.frame(DTSTART = c("2024-02-05 10:00:00 GMT"),
                         transparent=TRUE)
 
 EVENTS_OECD <- EVENTS_OECD %>%
- mutate(UID = replicate(nrow(EVENTS_OECD), #ic_guid()))
+ mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
 
 
 
