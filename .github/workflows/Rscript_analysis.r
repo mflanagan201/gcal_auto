@@ -211,15 +211,15 @@ event_CB <- event_CB %>%
 #for(i in 1:nrow(OECD_Schedule_table_2)){
 #  if(OECD_Schedule_table_2[i,1] %like any% c("OECD #Interim Economic Outlook")){
 #    RELEASE_OECD[i,1]<-OECD_Schedule_table_2[i,1]
-    #RELEASE_OECD[i,2]<-OECD_Schedule_table_2[i-1,1]
+#    #RELEASE_OECD[i,2]<-OECD_Schedule_table_2[i-1,1]
 #      } 
 #}
 
 #RELEASE_OECD<-na.omit(RELEASE_OECD)
 #colnames(RELEASE_OECD)<-c("Release", "Date")
 #RELEASE_OECD$Date<-parse_date_time2(paste0(RELEASE#_OECD$Date),orders="%d %B %Y")
-
-
+#
+#
 #if(is.na(RELEASE_OECD)){
 #  EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
 #                        DTEND = c("2024-12-01 #10:00:00 GMT"),
@@ -293,7 +293,7 @@ colnames(RELEASE_IMF)<-c("Release", "Date")
 if(is.na(RELEASE_IMF$Release)){
   EVENTS_IMF = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
                            DTEND = c("2024-12-01 10:00:00 GMT"),
-                           SUMMARY = "NA",
+                           SUMMARY = c("NA"),
                            LOCATION = c("IMF"),
                            transparent=TRUE)
   
@@ -302,6 +302,7 @@ if(is.na(RELEASE_IMF$Release)){
   
 } else {
   RELEASE_IMF$Date<-parse_date_time2(RELEASE_IMF$Date, orders="%B %d, %Y") 
+
   EVENTS_IMF = data.frame(DTSTART = RELEASE_IMF$Date,
                            DTEND = RELEASE_IMF$Date+1,
                            SUMMARY = paste(trimws(RELEASE_IMF$Release,"l")),
