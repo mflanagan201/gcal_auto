@@ -222,7 +222,7 @@ event_CB <- event_CB %>%
 
 #if(is.na(RELEASE_OECD)){
 #  EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-                        DTEND = c("2024-12-01 #10:00:00 GMT"),
+#                        DTEND = c("2024-12-01 #10:00:00 GMT"),
 #                        SUMMARY = "NA",
  #                       LOCATION = c("OECD"),
 #                        transparent=TRUE)
@@ -244,7 +244,8 @@ event_CB <- event_CB %>%
 
 #EVENTS_OECD <- EVENTS_OECD %>%
  # mutate(UID = replicate(nrow(EVENTS_OECD), #ic_guid()))
-
+
+
 
 
 
