@@ -254,14 +254,13 @@ EVENTS_OECD <- EVENTS_OECD %>%
 
 
 ########
-
-
+
 #IMF Calendar Below
 
-IMF_RELEASE<-c("https://www.imf.org/en/News/Seminars")
 
-
-IMF_URL_download<-read_html(IMF_RELEASE)
+IMF_URL_download<-read_html(
+c("https://www.imf.org/en/News/Seminars")
+)
 
 
 IMF_Schedule_table<-IMF_URL_download %>% html_nodes(xpath='/html/body/div[3]/main/article/div/div[2]/div[5]')   %>% html_text()
