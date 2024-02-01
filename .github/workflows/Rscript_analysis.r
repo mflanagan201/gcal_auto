@@ -186,70 +186,65 @@ event_CB <- event_CB %>%
 
 
 #OECD Calendar Below
-OECD_RELEASE<-"https://www.oecd.org/newsroom"
-tmp <- tempfile()
-OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp)
+#OECD_RELEASE<-"https://www.oecd.org/newsroom"
+#tmp <- tempfile()
+#OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, #tmp)
 
 
-OECD_URL_download<-read_html(OECD_RELEASE_v1)
-OECD_Schedule_table<-OECD_URL_download %>% html_nodes(xpath='/html/body/div[2]/div[2]/div[2]/div[3]/div[1]')   %>% html_text()
-OECD_Schedule_table_2<-OECD_Schedule_table[[1]] %>% stringr::str_split("\n") %>% data.frame()
+#OECD_URL_download<-read_html(OECD_RELEASE_v1)
+#OECD_Schedule_table<-OECD_URL_download %>% #html_nodes(xpath='/html/body/div[2]/div[2]/div[2]/#div[3]/div[1]')   %>% html_text()
+#OECD_Schedule_table_2<-OECD_Schedule_table[[1]] #%>% stringr::str_split("\n") %>% data.frame()
 
 
-RELEASE_OECD<-data.frame(matrix(NA,nrow=nrow(OECD_Schedule_table_2),ncol=2))
+#RELEASE_OECD<-data.frame(matrix(NA,nrow=nrow(OECD_#Schedule_table_2),ncol=2))
 
 
-for(i in 1:nrow(OECD_Schedule_table_2)){
-if(OECD_Schedule_table_2[i,1]==""){
-  OECD_Schedule_table_2[i,1]<-NA 
-} else {
-  OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[i,1]
-}
-}
+#for(i in 1:nrow(OECD_Schedule_table_2)){
+#if(OECD_Schedule_table_2[i,1]==""){
+#  OECD_Schedule_table_2[i,1]<-NA 
+#} else {
+  #OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[#i,1]
+#}
+#}
 
 
-for(i in 1:nrow(OECD_Schedule_table_2)){
-  if(OECD_Schedule_table_2[i,1] %like any% c("OECD Interim Economic Outlook")){
-    RELEASE_OECD[i,1]<-OECD_Schedule_table_2[i,1]
-    RELEASE_OECD[i,2]<-OECD_Schedule_table_2[i-1,1]
-      } 
-}
+#for(i in 1:nrow(OECD_Schedule_table_2)){
+#  if(OECD_Schedule_table_2[i,1] %like any% c("OECD #Interim Economic Outlook")){
+#    RELEASE_OECD[i,1]<-OECD_Schedule_table_2[i,1]
+    #RELEASE_OECD[i,2]<-OECD_Schedule_table_2[i-1,1]
+#      } 
+#}
 
-RELEASE_OECD<-na.omit(RELEASE_OECD)
-colnames(RELEASE_OECD)<-c("Release", "Date")
-RELEASE_OECD$Date<-parse_date_time2(paste0(RELEASE_OECD$Date),orders="%d %B %Y")
+#RELEASE_OECD<-na.omit(RELEASE_OECD)
+#colnames(RELEASE_OECD)<-c("Release", "Date")
+#RELEASE_OECD$Date<-parse_date_time2(paste0(RELEASE#_OECD$Date),orders="%d %B %Y")
 
 
-if(is.na(RELEASE_OECD)){
-  EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-                        DTEND = c("2024-12-01 10:00:00 GMT"),
-                        SUMMARY = "NA",
-                        LOCATION = c("OECD"),
-                        transparent=TRUE)
+#if(is.na(RELEASE_OECD)){
+#  EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
+                        DTEND = c("2024-12-01 #10:00:00 GMT"),
+#                        SUMMARY = "NA",
+ #                       LOCATION = c("OECD"),
+#                        transparent=TRUE)
   
   
   
   
-} else {
+#} else {
   
-  EVENTS_OECD = data.frame(DTSTART = RELEASE_OECD$Date,
-                        DTEND = RELEASE_OECD$Date+1,
-                        SUMMARY = paste(RELEASE_OECD$Release),
-                        LOCATION = c("OECD"),
-                        transparent=TRUE)
+#  EVENTS_OECD = data.frame(DTSTART = #RELEASE_OECD$Date,
+#                        DTEND = #RELEASE_OECD$Date+1,
+#                        SUMMARY = #paste(RELEASE_OECD$Release),
+#                        LOCATION = c("OECD"),
+#                        transparent=TRUE)
+#  
   
-  
-  }
+#  }
 
 
-EVENTS_OECD <- EVENTS_OECD %>%
-  mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
-
-
-
-tmp <- tempfile()
-OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp)
-
+#EVENTS_OECD <- EVENTS_OECD %>%
+ # mutate(UID = replicate(nrow(EVENTS_OECD), #ic_guid()))
+
 
 
 
@@ -442,7 +437,7 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
   mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD)
+event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF)
 
 event_all = subset(event_all, !(SUMMARY %like any% c("%Metered Electricity Generation%","%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
                                                      ,"%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
