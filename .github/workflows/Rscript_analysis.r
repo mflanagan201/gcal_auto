@@ -251,17 +251,19 @@ EVENTS_OECD = data.frame(DTSTART = c("2024-02-05 10:00:00 GMT"),
 
 EVENTS_OECD <- EVENTS_OECD %>%
  mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
-
+
+
 
 
 ########
-
+
+
 #IMF Calendar Below
 
 cat("IMF begins")
 
 IMF_URL_download<-read_html(
-c("https://www.imf.org/en/News/Seminars")
+  c("https://www.imf.org/en/News/Seminars")
 )
 
 
@@ -290,30 +292,29 @@ for(i in 1:nrow(IMF_Schedule_table_2)){
   } 
 }
 
-RELEASE_IMF<-na.omit(RELEASE_IMF)
 colnames(RELEASE_IMF)<-c("Release", "Date")
 
 cat("IMF BLANK event created")
 
 
-if(is.na(RELEASE_IMF$Release)){
+if(is.na(RELEASE_IMF$Release[1])){
   EVENTS_IMF = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-                           DTEND = c("2024-12-01 10:00:00 GMT"),
-                           SUMMARY = c("NA"),
-                           LOCATION = c("IMF"),
-                           transparent=TRUE)
+                          DTEND = c("2024-12-01 10:00:00 GMT"),
+                          SUMMARY = c("NA"),
+                          LOCATION = c("IMF"),
+                          transparent=TRUE)
   
   
   
   
 } else {
   RELEASE_IMF$Date<-parse_date_time2(RELEASE_IMF$Date, orders="%B %d, %Y") 
-
+  
   EVENTS_IMF = data.frame(DTSTART = RELEASE_IMF$Date,
-                           DTEND = RELEASE_IMF$Date+1,
-                           SUMMARY = paste(trimws(RELEASE_IMF$Release,"l")),
-                           LOCATION = c("IMF"),
-                           transparent=TRUE)
+                          DTEND = RELEASE_IMF$Date+1,
+                          SUMMARY = paste(trimws(RELEASE_IMF$Release,"l")),
+                          LOCATION = c("IMF"),
+                          transparent=TRUE)
   
 }
 
