@@ -241,6 +241,7 @@ event_CB <- event_CB %>%
   
 #  }
 
+cat("OECD EVENT CREATED")
 
 EVENTS_OECD = data.frame(DTSTART = c("2024-02-05 10:00:00 GMT"),
                      DTEND = c("2024-02-05 10:00:01 GMT"),
@@ -250,13 +251,14 @@ EVENTS_OECD = data.frame(DTSTART = c("2024-02-05 10:00:00 GMT"),
 
 EVENTS_OECD <- EVENTS_OECD %>%
  mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
-
+
 
 
 ########
 
 #IMF Calendar Below
 
+cat("IMF begins")
 
 IMF_URL_download<-read_html(
 c("https://www.imf.org/en/News/Seminars")
@@ -269,6 +271,8 @@ IMF_Schedule_table_2<-IMF_Schedule_table[[1]] %>% stringr::str_split("[\r\n]")  
 
 RELEASE_IMF<-data.frame(matrix(NA,nrow=nrow(IMF_Schedule_table_2),ncol=2))
 
+
+cat("IMF begins FIRST FOR LOOP BLANKS")
 
 for(i in 1:nrow(IMF_Schedule_table_2)){
   if(IMF_Schedule_table_2[i,1]==""){
@@ -288,6 +292,8 @@ for(i in 1:nrow(IMF_Schedule_table_2)){
 
 RELEASE_IMF<-na.omit(RELEASE_IMF)
 colnames(RELEASE_IMF)<-c("Release", "Date")
+
+cat("IMF BLANK event created")
 
 
 if(is.na(RELEASE_IMF$Release)){
