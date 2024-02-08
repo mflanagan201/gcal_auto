@@ -324,12 +324,22 @@ EVENTS_IMF <- EVENTS_IMF %>%
 
 
 ########
+cat("EC EVENT CREATED")
+
+EVENTS_EC = data.frame(DTSTART = c("2024-02-15 10:00:00 GMT"),
+                     DTEND = c("2024-02-15 10:00:01 GMT"),
+                        SUMMARY = c("EC Economic Forecast, Winter 2024"),
+                       LOCATION = c("European Commission"),
+                        transparent=TRUE)
+
+EVENTS_EC <- EVENTS_EC %>%
+ mutate(UID = replicate(nrow(EVENTS_EC), ic_guid()))
 
 
 
 
 
-
+#######################
 
 
 
@@ -451,7 +461,7 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
   mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD)
+event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
 
 event_all = subset(event_all, !(SUMMARY %like any% c("%Pension%","%Inbound Tourism%","%Freight%","%Babie%","%Livestock Survey%","%Pancakes%" ,"%County Incomes and Regional%" ,"%Metered Electricity Generation%","%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%"
                                                      ,"%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
