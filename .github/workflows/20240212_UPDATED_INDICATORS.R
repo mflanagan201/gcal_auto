@@ -2,6 +2,7 @@
 library(rvest)
 library(readxl)
 library(emayili)
+library(openxlsx)
 
 URL_COMMENCEMENTS<-"https://www.gov.ie/en/publication/a5cb1-construction-activity-starts/"
 HREF<-read_html(URL_COMMENCEMENTS)  %>% html_nodes(xpath='//*[@id="download_link_245151"]')  %>% html_attr('href')
@@ -11,7 +12,7 @@ download.file(HREF, destfile = temp_xls, mode = "wb")
 NEW_DATA <- read_excel(temp_xls)       
 
 
-Current_Comm<-read.csv("Commencements_Current.csv")
+Current_Comm<-read_excel("Commencements_Current.xlsx")
 
 
 
@@ -32,7 +33,7 @@ UPDATED_release<-na.omit(UPDATED_INDEX)
 UPDATED_release_1<-if(paste(UPDATED_release[1])== "NA"){
   paste0("")
 } else {
-  paste0(UPDATED_release[1])
+  paste0(UPDATED_release)
 }
 
 
@@ -64,6 +65,4 @@ if(UPDATED_release_1!=""){
   smtp(UPDATED_EMAIL)  
 }
 
-write.csv(NEW_DATA, file="Commencements_Current.csv")
-
-
+write.xlsx(NEW_DATA, file='Commencements_Current.xlsx')
