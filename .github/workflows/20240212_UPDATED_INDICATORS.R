@@ -11,7 +11,7 @@ download.file(HREF, destfile = temp_xls, mode = "wb")
 NEW_DATA <- read_excel(temp_xls)       
 
 
-Current_Comm<-read_excel("Commencements_Current.xlsx")
+Current_Comm<-read.csv("Commencements_Current.csv")
 
 
 
@@ -63,3 +63,7 @@ UPDATED_EMAIL<-emayili::envelope(
 if(UPDATED_release_1!=""){
   smtp(UPDATED_EMAIL)  
 }
+
+write.csv(NEW_DATA, file="Commencements_Current.csv")
+
+
