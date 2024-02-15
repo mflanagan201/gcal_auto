@@ -44,7 +44,10 @@ for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
     smtp(Body_INFLATION)  
     
     
-  } else if (Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
+  }
+
+
+if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
     
     Body_EXTERNAL_TRADE<-emayili::envelope(
       from = "mflanagan201@gmail.com",
