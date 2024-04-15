@@ -1486,19 +1486,7 @@ graph_data_2023<-data.frame(index(graph_data["2018/"]),graph_data["2018/"])
 colnames(graph_data_2023)<-c("Date", "Trimmed Inflation","Overall Inflation", "Core Inflation")
 
 
-
-
-Inflation_Excel_20230117 <- createWorkbook()
-addWorksheet(Inflation_Excel_20230117,"Aggregate Index")
-addWorksheet(Inflation_Excel_20230117,"Composition of Inflation")
-addWorksheet(Inflation_Excel_20230117, "Trimmed Mean Inflation")
-
-
-writeData(Inflation_Excel_20230117,"Aggregate Index",inflation_excel)
-writeData(Inflation_Excel_20230117,"Composition of Inflation",inflationbreakdown)
-writeData(Inflation_Excel_20230117,"Trimmed Mean Inflation",graph_data_2023)
-
-saveWorkbook(Inflation_Excel_20230117, "Inflation_R_Output.xlsx", overwrite = TRUE)
+
 
 infl_CONTR<-data.frame(inflationbreakdown[13:nrow(inflationbreakdown),],over_five_12_Months_SUM)
 colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
@@ -1506,18 +1494,7 @@ colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Mon
 
 
 write.xlsx(infl_CONTR, file='INFLATIONCONTRIBUTIONWEIGHTS.xlsx')
-
-
-
-
-COMPO_INFLATION_EXCEL <- createWorkbook()
-addWorksheet(COMPO_INFLATION_EXCEL,"OVERALL")
-addWorksheet(COMPO_INFLATION_EXCEL,"EXCL. ENERGY")
-
-writeData(COMPO_INFLATION_EXCEL,"OVERALL",infl_CONTR)
-writeData(COMPO_INFLATION_EXCEL,"EXCL. ENERGY",EX_ENERGY_COMPO)
-
-saveWorkbook(COMPO_INFLATION_EXCEL, "COMPO_INFLATION_EXCEL.xlsx", overwrite = TRUE)
+
 
 
 
