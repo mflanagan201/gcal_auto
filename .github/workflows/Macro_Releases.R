@@ -28,18 +28,17 @@ smtp <- server(host = "smtp.gmail.com",
                port = 465,
                username = "mflanagan201@gmail.com",
                password = "ddauvuifpknvsobo")
-
+ 
 
 for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
-  if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%","%Flash Estimate of Harmonised Index of Consumer Prices%")){
-    
+  if(Sys.Date()==Sys.Date()){
     Body_INFLATION<-emayili::envelope(
       from = "mflanagan201@gmail.com",
       to=c("michael.flanagan@finance.gov.ie"),
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
       # Render R Markdown from a file.
-      emayili::render(".github/workflows/Inflation_Breakdown_v4.Rmd")
+      emayili::render(".github/workflows/2024_March_Inflation_efficent_v2.Rmd")
     
     smtp(Body_INFLATION)  
     
