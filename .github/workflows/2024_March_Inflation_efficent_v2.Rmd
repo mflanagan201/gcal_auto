@@ -32,8 +32,6 @@ library(lubridate)
 library(readxl)
 library(waterfalls)
 library(stringr)
-library(tidyquant)
-library(quantmod)
 
 
 
