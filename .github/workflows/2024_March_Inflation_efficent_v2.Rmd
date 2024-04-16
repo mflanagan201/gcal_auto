@@ -1,4 +1,5 @@
-dataset_names <- list('Annual Export -Country'=Contribution_annual_growth_DF,' Annual Export -Product' =Contribution_Prod_CON_DF,'Annual Import -Country'=Contribution_annual__IMPORT_growth_DF)="color:#A3915E"> <center> <font size="6">  **Inflation Chartpack**  </font> </center> </span>
+---
+title: <span class="text-center" style="color:#A3915E"> <center> <font size="6">  **Inflation Release**  </font> </center> </span>
 output: 
   
   html_document: default
@@ -2111,7 +2112,7 @@ colnames(Graph_Data_EA)<-c("Core Services","NEIG","Rent","Food","Energy")
 
 
 
-DELTA_EA_IRE_CON_plot<-ggplot(data=delta_EA_IRE, aes(y=value*-1, x=index.EA_INFLATION_CONTRIBUTION..2017...., fill=variable)) + 
+DELTA_EA_IRE_CON_plot<-ggplot(data=delta_EA_IRE, aes(y=value*-1, x=index.EA_INFLATION_CONTRIBUTION.FOOD_EA_XTS..2019.....2019...., fill=variable)) + 
   geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
   labs(x="",
        title=" Ireland V's Euro Area Inflation",
