@@ -2103,7 +2103,7 @@ delta_EA_IRE_ONE<-data.frame(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS-IRE_
 ) 
 
 
-delta_EA_IRE<-delta_EA_IRE_ONE %>% .[37:nrow(delta_EA_IRE_ONE),] %>% melt(id=c("index.EA_INFLATION_CONTRIBUTION..2017....")) %>% na.omit() %>%  mutate(variable = recode(.$variable,  "RENT_EA_XTS..2019..." = "Rent","NEIG_EA_XTS..2019..." ="NEIG","FOOD_EA_XTS..2019..." ="Food","CORE_SERVICES_EA_XTS..2019..." ="Core Services","ENERGY_EA_XTS..2019..." ="Energy"))
+delta_EA_IRE<-delta_EA_IRE_ONE %>% .[37:nrow(delta_EA_IRE_ONE),] %>% melt(id=c("index.EA_INFLATION_CONTRIBUTION.FOOD_EA_XTS..2019.....2019....")) %>% na.omit() %>%  mutate(variable = recode(.$variable,  "RENT_EA_XTS..2019..." = "Rent","NEIG_EA_XTS..2019..." ="NEIG","FOOD_EA_XTS..2019..." ="Food","CORE_SERVICES_EA_XTS..2019..." ="Core Services","ENERGY_EA_XTS..2019..." ="Energy"))
 
 Graph_Data_EA<-delta_EA_IRE_ONE %>% na.omit() %>% .[1:5] %>% round(3)
 Graph_Data_EA<-Graph_Data_EA*-1
