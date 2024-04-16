@@ -1485,7 +1485,8 @@ graph_data_2023<-data.frame(index(graph_data["2018/"]),graph_data["2018/"])
 colnames(graph_data_2023)<-c("Date", "Trimmed Inflation","Overall Inflation", "Core Inflation")
 
 
-
+
+
 
 infl_CONTR<-data.frame(inflationbreakdown[13:nrow(inflationbreakdown),],over_five_12_Months_SUM)
 colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
@@ -1495,7 +1496,8 @@ dataset_names <- list('inflationbreakdown'=infl_CONTR)
 
 
 write.xlsx(dataset_names, file='INFLATIONCONTRIBUTIONWEIGHTS.xlsx')
-
+
+
 
 
 
@@ -1941,10 +1943,6 @@ compare_high_weight_text<-conditional_alt2(text_high_basket-text_high_basket_pri
 
 
 text_low_basket<-round(last(graph_data_inflation_basket$`0%-2%`+graph_data_inflation_basket$`<0%`)*100,1) %>% paste0(sep="%") 
-
-
-INFLATIONCONTRIBUTIONWEIGHTS.xlsx
-
 
 
 ```
