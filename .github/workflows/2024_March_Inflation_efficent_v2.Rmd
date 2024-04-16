@@ -1,5 +1,4 @@
----
-title: <span class="text-center" style="color:#A3915E"> <center> <font size="6">  **Inflation Chartpack**  </font> </center> </span>
+dataset_names <- list('Annual Export -Country'=Contribution_annual_growth_DF,' Annual Export -Product' =Contribution_Prod_CON_DF,'Annual Import -Country'=Contribution_annual__IMPORT_growth_DF)="color:#A3915E"> <center> <font size="6">  **Inflation Chartpack**  </font> </center> </span>
 output: 
   
   html_document: default
@@ -1492,8 +1491,10 @@ infl_CONTR<-data.frame(inflationbreakdown[13:nrow(inflationbreakdown),],over_fiv
 colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
 
 
+dataset_names <- list('inflationbreakdown'=infl_CONTR)
 
-write.xlsx(infl_CONTR, file='INFLATIONCONTRIBUTIONWEIGHTS.xlsx')
+
+write.xlsx(dataset_names, file='INFLATIONCONTRIBUTIONWEIGHTS.xlsx')
 
 
 
