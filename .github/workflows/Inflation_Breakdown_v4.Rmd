@@ -7447,7 +7447,8 @@ DELTA_EA_IRE_CON_plot<-ggplot(data=delta_EA_IRE, aes(y=value*-1, x=index.EA_INFL
   
 
 
-IRE_EA_DIFF<-data.frame(index(EA_INFLATION["2020/"]), LINE_DATA$Growth[1:length(EA_INFLATION["2020/"])]-EA_INFLATION["2020/"]) 
+IRE_EA_DIFF<-data.frame(index(EA_INFLATION["2022/"]), LINE_DATA$Growth[25:length(EA_INFLATION["2020/"])]-EA_INFLATION["2022/"])
+
 colnames(IRE_EA_DIFF)<-c("Date","IRE_EA_DIFF")
 IRE_EA_DIFF<-melt(IRE_EA_DIFF, id=c("Date"))
        
