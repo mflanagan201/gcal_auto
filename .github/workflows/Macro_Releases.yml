@@ -59,8 +59,8 @@ jobs:
         git config --local user.email "mflanagan202@gmail.com"
         git config --local user.name "mflanagan201"
         git add .
-        git commit -m "Add Inflation_contributions_graph_data..XLSX"
-        git commit -m "Add Waterfall_graph_data..XLSX"
-        git commit -m "Add trimmed_graph_data..XLSX"
+        git commit -m "Add Inflation_contributions_graph_data.XLSX"
+        git commit -m "Add Waterfall_graph_data.XLSX"
+        git commit -m "Add trimmed_graph_data.XLSX"
         git push
 
