@@ -42,7 +42,7 @@ Body_INFLATION<-emayili::envelope(
     
 
 
-
+for(i in 1:nrow(CALENDAR_ALL_short){
 if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
     
     Body_EXTERNAL_TRADE<-emayili::envelope(
