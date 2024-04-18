@@ -30,9 +30,7 @@ smtp <- server(host = "smtp.gmail.com",
                password = "ddauvuifpknvsobo")
  
 
-for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
-  if(Sys.Date()==Sys.Date()){
-    Body_INFLATION<-emayili::envelope(
+Body_INFLATION<-emayili::envelope(
       from = "mflanagan201@gmail.com",
       to=c("michael.flanagan@finance.gov.ie"),
       subject = "[Auto-Email] Inflation Chartpack"
@@ -42,8 +40,7 @@ for(i in 1:length(CALENDAR_ALL_short$DTSTART)){
     
     smtp(Body_INFLATION)  
     
-    
-  }
+
 
 
 if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
