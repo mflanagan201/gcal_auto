@@ -1742,7 +1742,7 @@ write.xlsx(Inflation_contributions_graph_data_XTS, file="Inflation_contributions
 
 ```
 
-[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/Inflation_contributions_graph_data.XLSX)
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/Inflation_contributions_graph_data.xlsx)
 
 
 <br>
@@ -1815,7 +1815,7 @@ write.xlsx(Waterfall_graph_data, file="Waterfall_graph_data.xlsx")
 
 ```
 
-[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/Waterfall_graph_data.XLSX)
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/Waterfall_graph_data.xlsx)
 
  
 ***
@@ -1908,7 +1908,7 @@ exclusion_list_min<-exclusion_min[,1:9] %>% names() %>% gsub(
 write.xlsx(trimmed_graph_data,file ="trimmed_graph_data.xlsx")
 
 ```
-[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/trimmed_graph_data.XLSX)
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/trimmed_graph_data.xlsx)
 <br>
 
 ***
@@ -1947,7 +1947,7 @@ text_low_basket<-round(last(graph_data_inflation_basket$`0%-2%`+graph_data_infla
 
 
 ```
-[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/INFLATIONCONTRIBUTIONWEIGHTS.XLSX)
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/INFLATIONCONTRIBUTIONWEIGHTS.xlsx)
 
 ***
 
