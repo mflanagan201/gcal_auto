@@ -765,7 +765,7 @@ smtp <- emayili::server(host = "smtp.gmail.com",
 
 Body_weekly_email<-emayili::envelope(
   to=c("michael.flanagan@finance.gov.ie"
-  ),bcc=c("colm.roche@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Brendan.O'Connor@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie"),
+  ),bcc=c("Eamonn.Sweeney@finance.gov.ie","colm.roche@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Brendan.O'Connor@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie"),
   
   from="mflanagan201@gmail.com",
   subject = "Weekly Economic Calendar"
