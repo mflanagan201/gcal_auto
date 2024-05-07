@@ -36,7 +36,7 @@ Body_INFLATION<-emayili::envelope(
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
       # Render R Markdown from a file.
-      emayili::render(".github/workflows/2024_March_Inflation_efficent_v2.Rmd")
+      emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")
     
     smtp(Body_INFLATION)  
     
