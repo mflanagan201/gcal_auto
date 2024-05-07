@@ -1,0 +1,2310 @@
+---
+title: <span class="text-center" style="color:#A3915E"> <center> <font size="6">  **Inflation Chartpack**  </font> </center> </span>
+output: 
+  
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    cache       = TRUE,     # if TRUE knitr will cache the results to reuse in future knits
+    fig.width   = 10,       # the width for plots created by code chunk
+    fig.height  = 5,       # the height for plots created by code chunk
+    fig.align   = 'center', # how to align graphics in the final doc. 'left', 'right', 'center'
+tidy.opts=list(width.cutoff=10))
+
+
+
+#inflation weight
+library('tidyverse')
+library(reshape)
+library('xts')
+
+library('openxlsx')
+library("dplyr")
+library(xts)
+library(rdbnomics)
+library(csodata)
+library(units)
+library(lubridate)
+library(readxl)
+library(waterfalls)
+library(stringr)
+
+
+
+
+DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
+
+cty_by_var <- function(var) {
+  ggplot(mpg, aes(cty, colour = factor({{var}}), fill = factor({{var}}))) +
+    geom_density(alpha = 0.2)
+}
+
+
+withr::with_options(
+  list(ggplot2.discrete.colour = DOF_colours),
+  print(cty_by_var(class))
+)
+
+
+growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
+
+
+Chainlinking <- function(x){
+  as.numeric(x["2016/"][,1])/as.numeric(x[paste0(year(x["2016/"])-1, "-12-01")]) %>% as.xts(order.by=index(x["2016/"]))
+}
+
+
+RE_Chainlinking <- function(x){
+  ((as.numeric(x[,1]))/100)*as.numeric(x[paste0(year(x)-1, "-12-01")]) 
+}
+
+
+HICP_BASE_INDEX<-function(INDEX){
+data.frame(as.numeric(INDEX["2003/"])/mean(as.numeric(INDEX["2015"]))) %>% as.xts(as.Date(Date[85:length(Date)])) *100
+}
+
+
+
+
+
+
+
+
+
+cso_clear_cache()
+
+
+#
+CSO_HICP_INDEX<-subset(cso_get_data("CPM15"),Statistic=="EU HICP")
+Date <-seq(as.Date("1996-01-01"), length.out=length(unique(colnames(CSO_HICP_INDEX[,])))-2,by="month")
+CSO_HICP_INDEX_XTS<-t(CSO_HICP_INDEX) %>% .[3:nrow(.),] %>% as.xts(order.by=Date) 
+colnames(CSO_HICP_INDEX_XTS)<-(unique((CSO_HICP_INDEX[,2]))) 
+
+
+
+CSO_CPI_INDEX<-subset(cso_get_data("CPM18"),Statistic=="Consumer Price Index")
+Date_CPI <-seq(as.Date("2003-01-01"), length.out=length(unique(colnames(CSO_CPI_INDEX[,])))-2,by="month")
+CSO_CPI_INDEX_XTS<-t(CSO_CPI_INDEX) %>% .[3:nrow(.),] %>% as.xts(order.by=Date_CPI) 
+colnames(CSO_CPI_INDEX_XTS)<-(unique((CSO_CPI_INDEX[,2]))) 
+
+
+
+
+ENERGY_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.NRG.IE")%>% .$value %>% as.numeric()
+ENERGY_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.NRG.IE") %>% .$period %>% as.Date()
+ENERGY_OVERALL_INDEX_XTS<-as.xts(ENERGY_INDEX,order.by=ENERGY_HICP_DATE)
+
+
+NEIG_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.IGD_NNRG.IE")%>% .$value %>% as.numeric()
+NEIG_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.IGD_NNRG.IE") %>% .$period %>% as.Date()
+NEIG_OVERALL_INDEX_XTS<-as.xts(NEIG_INDEX,order.by=NEIG_HICP_DATE)
+
+
+SERVICES_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE")%>% .$value %>% as.numeric()
+SERVICES_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE") %>% .$period %>% as.Date()
+SERVICES_OVERALL_INDEX_XTS<-as.xts(SERVICES_INDEX,order.by=SERVICES_HICP_DATE)
+
+
+PROCESSED_FOOD_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE")%>% .$value %>% as.numeric()
+PROCESSED_FOOD_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE") %>% .$period %>% as.Date()
+PROCESSED_FOOD_INDEX_XTS<-as.xts(PROCESSED_FOOD_INDEX,order.by=PROCESSED_FOOD_DATE)
+
+
+
+
+CSO_HICP_INDEX_NAMES<-c("Bread	and	cereals	(COICOP	01.1.1)",										
+"Meat	(COICOP	01.1.2)",												
+"Fish	and	seafood	(COICOP	01.1.3)",										
+"Milk,	cheese	and	eggs	(COICOP	01.1.4)",									
+"Oils	and	fats	(COICOP	01.1.5)",										
+"Fruit	(COICOP	01.1.6)",												
+"Vegetables	(COICOP	01.1.7)",												
+"Sugar,	jam,	honey,	chocolate	and	confectionery	(COICOP	01.1.8)",							
+"Food	products	n.e.c.	(COICOP	01.1.9)",										
+"Coffee,	tea	and	cocoa	(COICOP	01.2.1)",									
+"Mineral	waters,	soft	drinks,	fruit	and	vegetable	juices	(COICOP	01.2.2)",					
+"Spirits	(COICOP	02.1.1)",												
+"Wine	(COICOP	02.1.2)",												
+"Beer	(COICOP	02.1.3)",												
+"Tobacco	(COICOP	02.2)",												
+"Clothing	materials	(COICOP	03.1.1)",											
+"Garments	(COICOP	03.1.2)",												
+"Other	articles	of	clothing	and	clothing	accessories	(COICOP	03.1.3)",						
+"Footwear	(COICOP	03.2)",												
+"Materials	for	the	maintenance	and	repair	of	the	dwelling	(COICOP	04.3.1)",				
+"Water	supply	(COICOP	04.4.1)",											
+"Electricity	(COICOP	04.5.1)",												
+"Gas	(COICOP	04.5.2)",												
+"Liquid	fuels	(COICOP	04.5.3)",											
+"Solid	fuels	(COICOP	04.5.4)",											
+"Heat	energy	(COICOP	04.5.5)",											
+"Furniture	and	furnishings	(COICOP	05.1.1)",										
+"Carpets	and	other	floor	coverings	(COICOP	05.1.2)",								
+"Household	textiles	(COICOP	05.2)",											
+"Major	household	appliances	whether	electric	or	not	and	small	electric	household	appliances	(COICOP	05.3.1_2)",	
+"Glassware,	tableware	and	household	utensils	(COICOP	05.4)",								
+"Tools	and	equipment	for	house	and	garden	(COICOP	05.5)",						
+"Non-durable	household	goods	(COICOP	05.6.1)",										
+"Pharmaceutical	products	(COICOP	06.1.1)",											
+"Other	medical	products,	therapeutic	appliances	and	equipment	(COICOP	06.1.2_3)",						
+"Motor	cars	(COICOP	07.1.1)",											
+"Motor	cycles,	bicycles	and	animal	drawn	vehicles	(COICOP	07.1.2_3_4)",						
+"Spare	parts	and	accessories	for	personal	transport	equipment	(COICOP	07.2.1)",					
+"Fuels	and	lubricants	for	personal	transport	equipment	(COICOP	07.2.2)",						
+"Equipment	for	the	reception,	recording	and	reproduction	of	sound	and	picture	(COICOP	09.1.1)",		
+"Photographic	and	cinematographic	equipment	and	optical	instruments	(COICOP	09.1.2)",						
+"Information	processing	equipment	(COICOP	09.1.3)",										
+"Recording	media	(COICOP	09.1.4)",											
+"Major	durables	for	indoor	and	outdoor	recreation	including	musical	instruments	(COICOP	09.2.1_2)",			
+"Games,	toys	and	hobbies	(COICOP	09.3.1)",									
+"Equipment	for	sport,	camping	and	open-air	recreation	(COICOP	09.3.2)",						
+"Gardens,	plants	and	flowers	(COICOP	09.3.3)",									
+"Pets	and	related	products;	veterinary	and	other	services	for	pets	(COICOP	09.3.4_5)",			
+"Books	(COICOP	09.5.1)",												
+"Newspapers	and	periodicals	(COICOP	09.5.2)",										
+"Miscellaneous	printed	matter;	stationery	and	drawing	materials	(COICOP	09.5.3_4)",						
+"Electrical	appliances	for	personal	care;	other	appliances,	articles	and	products	for	personal	care	(COICOP	12.1.2_3)",
+"Jewellery,	clocks	and	watches	(COICOP	12.3.1)",									
+"Other	personal	effects	(COICOP	12.3.2)",										
+"Actual	rentals	for	housing	(COICOP	04.1)",									
+"Services	for	the	maintenance	and	repair	of	the	dwelling	(COICOP	04.3.2)",				
+"Repair	of	household	appliances	(COICOP	05.3.3)",									
+"Domestic	services	and	household	services	(COICOP	05.6.2)",								
+"Insurance	connected	with	the	dwelling	(COICOP	12.5.2)",								
+"Cleaning,	repair	and	hire	of	clothing	(COICOP	03.1.4)",							
+"Repair	of	audio-visual,	photographic	and	information	processing	equipment	(COICOP	09.1.5)",					
+"Recreational	and	sporting	services	(COICOP	09.4.1)",									
+"Cultural	services	(COICOP	09.4.2)",											
+"Restaurants,	cafes	and	the	like	(COICOP	11.1.1)",								
+"Canteens	(COICOP	11.1.2)",												
+"Hairdressing	salons	and	personal	grooming	establishments	(COICOP	12.1.1)",							
+"Maintenance	and	repair	of	personal	transport	equipment	(COICOP	07.2.3)",						
+"Other	services	in	respect	of	personal	transport	equipment	(COICOP	07.2.4)",					
+"Passenger	transport	by	railway	(COICOP	07.3.1)",									
+"Passenger	transport	by	road	(COICOP	07.3.2)",									
+"Passenger	transport	by	air	(COICOP	07.3.3)",									
+"Passenger	transport	by	sea	and	inland	waterway	(COICOP	07.3.4)",						
+"Combined	passenger	transport	(COICOP	07.3.5)",										
+"Other	purchased	transport	services	(COICOP	07.3.6)",									
+"Package	holidays	(COICOP	09.6)",											
+"Accommodation	services	(COICOP	11.2)",											
+"Medical	services	and	paramedical	services	(COICOP	06.2.1_3)",								
+"Dental	services	(COICOP	06.2.2)",											
+"Hospital	services	(COICOP	06.3)",											
+"Education	(COICOP	10)",												
+"Social	protection	(COICOP	12.4)",											
+"Insurance	connected	with	health	(COICOP	12.5.3)",									
+"Insurance	connected	with	transport	(COICOP	12.5.4)",									
+"Financial	services	n.e.c.	(COICOP	12.6)",										
+"Other	services	n.e.c.	(COICOP	12.7)",										
+"Postal	services	(COICOP	08.1)",											
+"Telephone	and	telefax	equipment	and	services	(COICOP	08.2_3)",							
+"Refuse	collection	(COICOP	04.4.2)",											
+"Sewerage	collection	(COICOP	04.4.3)",											
+"Other	services	relating	to	the	dwelling	n.e.c.	(COICOP	04.4.4)") %>% stringr::str_replace_all("\t"," ")  
+						
+
+
+HICP_INDEX_XTS<-matrix(NA,nrow=length(Date),ncol=length(CSO_HICP_INDEX_NAMES)) %>% as.xts(order.by=Date)
+
+
+for(i in 1:length(CSO_HICP_INDEX_NAMES)){
+  HICP_INDEX_XTS[,i]<-CSO_HICP_INDEX_XTS[,paste(CSO_HICP_INDEX_NAMES[i])]
+}
+
+
+
+HICP_INDEX_NAMES<-c("CP0111",
+"CP0112",
+"CP0113",
+"CP0114",
+"CP0115",
+"CP0116",
+"CP0117",
+"CP0118",
+"CP0119",
+"CP0121",
+"CP0122",
+"CP0211",
+"CP0212",
+"CP0213",
+"CP0220",
+"CP0311",
+"CP0312",
+"CP0313",
+"CP032",
+"CP0431",
+"CP0441",
+"CP0451",
+"CP0452",
+"CP0453",
+"CP0454",
+"CP0455",
+"CP0511",
+"CP0512",
+"CP0520",
+"CP0531_2",
+"CP0540",
+"CP055",
+"CP0561",
+"CP0611",
+"CP0612_3",
+"CP0711",
+"CP0712_3_4",
+"CP0721",
+"CP0722",
+"CP0911",
+"CP0912",
+"CP0913",
+"CP0914",
+"CP0921_2",
+"CP0931",
+"CP0932",
+"CP0933",
+"CP0934_5",
+"CP0951",
+"CP0952",
+"CP0953_4",
+"CP1212_3",
+"CP1231",
+"CP1232",
+"CP0411",
+"CP0432",
+"CP0533",
+"CP0562",
+"CP1252",
+"CP0314",
+"CP0915",
+"CP0941",
+"CP0942",
+"CP1111",
+"CP1112",
+"CP1211",
+"CP0723",
+"CP0724",
+"CP0731",
+"CP0732",
+"CP0733",
+"CP0734",
+"CP0735",
+"CP0736",
+"CP096",
+"CP112",
+"CP0621_3",
+"CP0622",
+"CP063",
+"CP10",
+"CP124",
+"CP1253",
+"CP1254",
+"CP126",
+"CP127",
+"CP081",
+"CP082_3",
+"CP0442",
+"CP0443",
+"CP0444")
+
+colnames(HICP_INDEX_XTS)<-c(HICP_INDEX_NAMES)
+
+GOOD_SERVICES_INDEX<-HICP_INDEX_XTS
+```
+
+
+
+```{r Weights , include=FALSE}
+HICP_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(HICP_INDEX_NAMES)) %>% as.xts(order.by=Date)
+
+HICP_WEIGHT_NAMES<-c("A.CP0111.IE",
+"A.CP0112.IE",
+"A.CP0113.IE",
+"A.CP0114.IE",
+"A.CP0115.IE",
+"A.CP0116.IE",
+"A.CP0117.IE",
+"A.CP0118.IE",
+"A.CP0119.IE",
+"A.CP0121.IE",
+"A.CP0122.IE",
+"A.CP0211.IE",
+"A.CP0212.IE",
+"A.CP0213.IE",
+"A.CP022.IE",
+"A.CP0311.IE",
+"A.CP0312.IE",
+"A.CP0313.IE",
+"A.CP032.IE",
+"A.CP0431.IE",
+"A.CP0441.IE",
+"A.CP0451.IE",
+"A.CP0452.IE",
+"A.CP0453.IE",
+"A.CP0454.IE",
+"A.CP0455.IE",
+"A.CP0511.IE",
+"A.CP0512.IE",
+"A.CP052.IE",
+"A.CP0531_0532.IE",
+"A.CP054.IE",
+"A.CP055.IE",
+"A.CP0561.IE",
+"A.CP0611.IE",
+"A.CP0612_0613.IE",
+"A.CP0711.IE",
+"A.CP0712-0714.IE",
+"A.CP0721.IE",
+"A.CP0722.IE",
+"A.CP0911.IE",
+"A.CP0912.IE",
+"A.CP0913.IE",
+"A.CP0914.IE",
+"A.CP0921_0922.IE",
+"A.CP0931.IE",
+"A.CP0932.IE",
+"A.CP0933.IE",
+"A.CP0934_0935.IE",
+"A.CP0951.IE",
+"A.CP0952.IE",
+"A.CP0953_0954.IE",
+"A.CP1212_1213.IE",
+"A.CP1231.IE",
+"A.CP1232.IE",
+"A.CP0411.IE",
+"A.CP0432.IE",
+"A.CP0533.IE",
+"A.CP0562.IE",
+"A.CP1252.IE",
+"A.CP0314.IE",
+"A.CP0915.IE",
+"A.CP0941.IE",
+"A.CP0942.IE",
+"A.CP1111.IE",
+"A.CP1112.IE",
+"A.CP1211.IE",
+"A.CP0723.IE",
+"A.CP0724.IE",
+"A.CP0731.IE",
+"A.CP0732.IE",
+"A.CP0733.IE",
+"A.CP0734.IE",
+"A.CP0735.IE",
+"A.CP0736.IE",
+"A.CP096.IE",
+"A.CP112.IE",
+"A.CP0621_0623.IE",
+"A.CP0622.IE",
+"A.CP063.IE",
+"A.CP10.IE",
+"A.CP124.IE",
+"A.CP1253.IE",
+"A.CP1254.IE",
+"A.CP126.IE",
+"A.CP127.IE",
+"A.CP081.IE",
+"A.CP082_083.IE",
+"A.CP0442.IE",
+"A.CP0443.IE",
+"A.CP0444.IE")
+
+
+
+
+for(i in 1:length(HICP_WEIGHT_NAMES)){
+  HICP_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(HICP_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+    (rdb(paste0("Eurostat/prc_hicp_inw/",(HICP_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+      rdb(paste0("Eurostat/prc_hicp_inw/",(HICP_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+} 
+
+HICP_WEIGHT_df<-as.data.frame(HICP_WEIGHT_XTS["2017/"])
+
+````
+
+
+```{r weights2, include=FALSE}
+for (i in 1:nrow(HICP_WEIGHT_df)){
+  for (j in 1:ncol(HICP_WEIGHT_df)){
+    if(is.na(HICP_WEIGHT_df[i,j])){
+      HICP_WEIGHT_df[i,j]<-HICP_WEIGHT_df[i-1,j]
+    }
+  }
+}
+  
+
+colnames(HICP_WEIGHT_df)<-c(HICP_INDEX_NAMES)
+HICP_WEIGHT_XTS<-as.xts(HICP_WEIGHT_df)
+
+
+CHAIN_INDEX_CONTRIBUTION<-matrix(NA,nrow=length(Date[253:length(Date)]),ncol=ncol(HICP_INDEX_XTS)) %>% as.xts(order.by=Date[253:length(Date)])
+
+for(i in 1:ncol(HICP_INDEX_XTS)){
+CHAIN_INDEX_CONTRIBUTION[,i]<-as.numeric(Chainlinking(HICP_INDEX_XTS[,i])["2017/"])*(HICP_WEIGHT_XTS[,i]/1000)["2017/"]
+}
+
+CHAIN_INDEX_CONTRIBUTION[is.nan(CHAIN_INDEX_CONTRIBUTION)]<-0
+CHAIN_INDEX_CONTRIBUTION[is.na(CHAIN_INDEX_CONTRIBUTION)]<-0
+##########################################################################################################################
+
+#OVEREALL HICP INDEX BELOW
+CSO_HICP_INDEX<- CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00`
+OVERALL_HICP_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.CP00.IE")%>% .$value %>% as.numeric()
+OVERALL_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.CP00.IE") %>% .$period %>% as.Date()
+OVERALL_HICP_XTS_ONE<-as.xts(OVERALL_HICP_INDEX,order.by=OVERALL_HICP_DATE)
+
+
+if(length(CSO_HICP_INDEX)>=length(OVERALL_HICP_XTS_ONE)){
+  OVERALL_HICP_XTS<-CSO_HICP_INDEX
+} else {
+  OVERALL_HICP_XTS<-OVERALL_HICP_XTS_ONE
+}
+
+
+DEC_BASE_OVERALL<-(as.numeric(OVERALL_HICP_XTS[paste0(year(OVERALL_HICP_XTS["2016/"]), "-12-01")])) 
+
+
+
+
+################################################################################################################
+
+#Overall Contribution  
+
+
+
+Contribution<- function(Overall,Weight,Indo){
+
+CONTRIBUTION<-data.frame(matrix(ncol=ncol(Indo["2019/"]),nrow=length(index(Indo["2019/"]))))
+CONTRIBUTION[is.na(CONTRIBUTION)]<-0
+    
+  for(i in 1:ncol(Indo)){
+        
+  Overall_DEC_1_YEAR_AGO<-((Overall["2016/"][paste0(year(Overall["2016/"])-1, "-12-01")])) %>% as.numeric()  %>%as.xts(order.by=index(Overall["2017/"]))
+  Overall_DEC_2_YEAR_AGO<-lag(Overall_DEC_1_YEAR_AGO,12) %>% as.numeric()  %>%as.xts(order.by=index(Overall["2017/"]))
+  Overall_INDEX_1_YEAR_AGO<-lag(Overall["2016/"],12) %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Overall["2017/"]))
+  INDO_WEIGHT_2_YEAR_AGO<-lag.xts(Weight[,i],12) %>% .[13:length(.)] %>% as.numeric()   %>%as.xts(order.by=index(Overall["2018/"]))/1000
+  INDO_DEC_1_YEAR_AGO<-((Indo["2017/"][paste0(year(Indo["2017/",i])-1, "-12-01"),i])) %>% as.numeric()  %>%as.xts(order.by=index(Overall["2018/"]))
+  INDO_INDEX_1_YEAR_AGO<-lag.xts(Indo["2017/",i],12)  %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Overall["2018/"]))
+  INDO_DEC_2_YEAR_AGO<-lag(INDO_DEC_1_YEAR_AGO,12)   %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Overall["2019/"]))
+    
+  EQ1<-((as.numeric(Overall_DEC_1_YEAR_AGO["2019/"])/as.numeric(Overall_INDEX_1_YEAR_AGO["2019/"]))*as.numeric(Weight[,i]["2019/"])/1000) #
+  EQ2<-((as.numeric(Indo["2019/",i])-as.numeric(INDO_DEC_1_YEAR_AGO["2019/"]))/as.numeric(INDO_DEC_1_YEAR_AGO["2019/"])) #individual index change 
+  EQ3<-((as.numeric(Overall_DEC_2_YEAR_AGO["2019/"])/as.numeric(Overall_INDEX_1_YEAR_AGO["2019/"]))*as.numeric(INDO_WEIGHT_2_YEAR_AGO["2019/"]))
+  EQ3[is.na(EQ3)]<-0
+  EQ4<-((as.numeric(INDO_DEC_1_YEAR_AGO["2019/"])-as.numeric(INDO_INDEX_1_YEAR_AGO["2019/"]))/as.numeric(INDO_DEC_2_YEAR_AGO["2019/"]))
+  EQ4[is.na(EQ4)]<-0
+
+CONTRIBUTION[,i]<-as.numeric(((EQ1*EQ2)+(EQ3*EQ4))*100)
+
+    }
+
+ return(CONTRIBUTION) 
+}
+
+
+
+CONTRIBUTION<-(Contribution(OVERALL_HICP_XTS["2016/"],HICP_WEIGHT_XTS["2017/"],HICP_INDEX_XTS["2017/"])) 
+
+
+CONTRIBUTION[is.na(CONTRIBUTION)]<-0
+
+
+CONTRIBUTION<-as.xts(CONTRIBUTION,order.by=index(HICP_INDEX_XTS["2019/"]))
+
+
+Index_names<-c("Bread & Cereals","Meat","Fish","Milk, Cheese,eggs","Oil & Fats","Fruit","Vegetables","Sugar,Jam, Honey, Chocolate","Food Products","Coffee, tea, Cocoa","Mineral Water, Soft Drinks, Vegetable Juices","Spirits","Wine","Beer","Tobacco","Clothing Materials","Garments","Other Clothing","Footwear","Material for the maintenance of dwellings","Water Supply","Electricity","Gas","Liquid Fuel","Solid Fuels","Heat Energy","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils","House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products", "Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Fuels & Lubricants for personal transport", "Recording Equipment", "Photographic equipment", "Information processing equipment", "Recording Media", "Musical Instruments", "Games, Toys, hobbies", "Sports & outdoor Equipment","Gardens, plants and flowers", "Pets Products", "Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects","Actual Rent", "Repair of Dwelling","Repair of Household Appliances", "Domestic Services and Household Services","Insurance for Dwellings","Cleaning & Repair Clothing","Repair of audio-visual","Recreational & Sporting Services","Cultural Services", "Restaurant, Cafes etc.","Canteens","Hairdressing Salons","Repair Personal Transport","Other services for Personal Transport","Passenger transport by railway","Passenger transport by road","Passenger transport by air","Passenger transport by sea","Combined Passenger transport","Other purchased transport services","Package Holidays","Accomdation Services","Medical Services", "Dental Services","Hospital Services","Education","Social Protection","Healthcare Insurance","Transport Insurance","Financial Services","Other Services","Postal Services","Telephone equipment and services","Refuse Collection","Sewerage Collection", "Other Services for Dwellings")
+
+
+colnames(CONTRIBUTION)<-c(Index_names)
+
+
+
+
+#ENERGY<-CONTRIBUTION$Electricity+CONTRIBUTION$Gas+CONTRIBUTION$`Liquid Fuel`+CONTRIBUTION$`Solid Fuels`+CONTRIBUTION$`Fuels & Lubricants for personal transport` 
+
+
+Energy_INDEX_XTS<-merge(HICP_INDEX_XTS$CP0451,
+HICP_INDEX_XTS$CP0452,
+HICP_INDEX_XTS$CP0453,
+HICP_INDEX_XTS$CP0454,
+HICP_INDEX_XTS$CP0722)
+
+
+Energy_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP0451,
+HICP_WEIGHT_XTS$CP0452,
+HICP_WEIGHT_XTS$CP0453,
+HICP_WEIGHT_XTS$CP0454,
+HICP_WEIGHT_XTS$CP0722)
+
+
+Energy_WEIGHT_XTS<-Energy_WEIGHT_XTS/rowSums(Energy_WEIGHT_XTS)
+
+CHAIN_INDEX_ENERGY_CONTRIBUTION<-matrix(NA,nrow=length(Date[253:length(Date)]),ncol=ncol(Energy_INDEX_XTS)) %>% as.xts(order.by=Date[253:length(Date)])
+
+for(i in 1:ncol(Energy_INDEX_XTS)){
+CHAIN_INDEX_ENERGY_CONTRIBUTION[,i]<-as.numeric(Chainlinking(Energy_INDEX_XTS[,i])["2017/"])*(Energy_WEIGHT_XTS[,i])["2017/"]
+}
+
+CHAIN_INDEX_ENERGY_CONTRIBUTION[is.nan(CHAIN_INDEX_ENERGY_CONTRIBUTION)]<-0
+CHAIN_INDEX_ENERGY_CONTRIBUTION[is.na(CHAIN_INDEX_ENERGY_CONTRIBUTION)]<-0
+
+
+
+DEC_BASE_ENERGY<-(as.numeric(ENERGY_OVERALL_INDEX_XTS[paste0(year(ENERGY_OVERALL_INDEX_XTS["2016/"]), "-12-01")])) 
+ENERGY_INDEX_CONTRIBUTION<-rowSums(CHAIN_INDEX_ENERGY_CONTRIBUTION)*DEC_BASE_ENERGY[1:length(ENERGY_OVERALL_INDEX_XTS["2017/"])] 
+ENERGY_INDEX_XTS<-as.xts((ENERGY_INDEX_CONTRIBUTION),order.by=(Date[253:length(Date)]))
+
+ENERGY_INDEX_OVERALL<-as.xts(matrix(NA,length(Date[1:length(Date)]),ncol=1),order.by=Date[1:length(Date)])
+ENERGY_INDEX_OVERALL["2016"]<-ENERGY_OVERALL_INDEX_XTS["1996/2017"]
+ENERGY_INDEX_OVERALL["2017/"]<-ENERGY_INDEX_XTS["2017/"]
+
+ENERGY<-Contribution(ENERGY_INDEX_OVERALL["2016/"],Energy_WEIGHT_XTS,Energy_INDEX_XTS)*1000
+colnames(ENERGY)<-c("Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lubricants for personal transport") 
+
+ENergy_CONTRIBUTIONS<-data.frame(index(ENERGY_INDEX_OVERALL["2019/"]),ENERGY)  
+colnames(ENergy_CONTRIBUTIONS)<- c("Date","Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lubricants for personal transport")
+ENergy_CONTRIBUTIONS %>%  write.csv("ENERGY.csv")
+
+#NEIG 
+#CP0722 has been removed but could be replace is lubricants (CP07224) can be isolated. 
+
+NEIG_INDEX_XTS<-merge(HICP_INDEX_XTS$CP0311
+,HICP_INDEX_XTS$CP0312
+,HICP_INDEX_XTS$CP0313
+,HICP_INDEX_XTS$CP032
+,HICP_INDEX_XTS$CP0431
+,HICP_INDEX_XTS$CP0441
+,HICP_INDEX_XTS$CP0511
+,HICP_INDEX_XTS$CP0512
+,HICP_INDEX_XTS$CP0520
+,HICP_INDEX_XTS$CP0531_2
+,HICP_INDEX_XTS$CP0540
+,HICP_INDEX_XTS$CP055
+,HICP_INDEX_XTS$CP0561
+,HICP_INDEX_XTS$CP0611
+,HICP_INDEX_XTS$CP0612_3
+,HICP_INDEX_XTS$CP0711
+,HICP_INDEX_XTS$CP0712_3_4
+,HICP_INDEX_XTS$CP0721
+,HICP_INDEX_XTS$CP0911
+,HICP_INDEX_XTS$CP0912
+,HICP_INDEX_XTS$CP0913
+,HICP_INDEX_XTS$CP0914
+,HICP_INDEX_XTS$CP0921_2
+,HICP_INDEX_XTS$CP0931
+,HICP_INDEX_XTS$CP0932
+,HICP_INDEX_XTS$CP0933
+,HICP_INDEX_XTS$CP0934_5
+,HICP_INDEX_XTS$CP0951
+,HICP_INDEX_XTS$CP0952
+,HICP_INDEX_XTS$CP0953_4
+,HICP_INDEX_XTS$CP1212_3
+,HICP_INDEX_XTS$CP1231
+,HICP_INDEX_XTS$CP1232)
+
+
+
+#the weights need adjustment to account for the components not included 
+NEIG_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP0311
+,HICP_WEIGHT_XTS$CP0312
+,HICP_WEIGHT_XTS$CP0313
+,HICP_WEIGHT_XTS$CP032
+,HICP_WEIGHT_XTS$CP0431
+,HICP_WEIGHT_XTS$CP0441
+,HICP_WEIGHT_XTS$CP0511
+,HICP_WEIGHT_XTS$CP0512
+,HICP_WEIGHT_XTS$CP0520
+,HICP_WEIGHT_XTS$CP0531_2
+,HICP_WEIGHT_XTS$CP0540
+,HICP_WEIGHT_XTS$CP055
+,HICP_WEIGHT_XTS$CP0561
+,HICP_WEIGHT_XTS$CP0611
+,HICP_WEIGHT_XTS$CP0612_3
+,HICP_WEIGHT_XTS$CP0711
+,HICP_WEIGHT_XTS$CP0712_3_4
+,HICP_WEIGHT_XTS$CP0721
+,HICP_WEIGHT_XTS$CP0911
+,HICP_WEIGHT_XTS$CP0912
+,HICP_WEIGHT_XTS$CP0913
+,HICP_WEIGHT_XTS$CP0914
+,HICP_WEIGHT_XTS$CP0921_2
+,HICP_WEIGHT_XTS$CP0931
+,HICP_WEIGHT_XTS$CP0932
+,HICP_WEIGHT_XTS$CP0933
+,HICP_WEIGHT_XTS$CP0934_5
+,HICP_WEIGHT_XTS$CP0951
+,HICP_WEIGHT_XTS$CP0952
+,HICP_WEIGHT_XTS$CP0953_4
+,HICP_WEIGHT_XTS$CP1212_3
+,HICP_WEIGHT_XTS$CP1231
+,HICP_WEIGHT_XTS$CP1232)
+
+
+
+````
+
+
+```{r NEIGWEIGHT, include=FALSE}
+NEIG_WEIGHT_OVERALL<-c("A.IGD_NNRG.IE")
+NEIG_WEIGHT_OVERALL_XTS<-matrix(NA,nrow=length(Date),ncol=length(NEIG_WEIGHT_OVERALL)) %>% as.xts(order.by=Date)
+
+
+for(i in 1:length(NEIG_WEIGHT_OVERALL)){
+  NEIG_WEIGHT_OVERALL_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$period %>% as.Date()),i]<-
+    (rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+      rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$period %>% as.Date())
+} 
+
+NEIG_WEIGHT_OVERALL_df<-as.data.frame(NEIG_WEIGHT_OVERALL_XTS["2017/"])
+
+
+for (i in 1:nrow(NEIG_WEIGHT_OVERALL_df)){
+  for (j in 1:ncol(NEIG_WEIGHT_OVERALL_df)){
+    if(is.na(NEIG_WEIGHT_OVERALL_df[i,j])){
+      NEIG_WEIGHT_OVERALL_df[i,j]<-NEIG_WEIGHT_OVERALL_df[i-1,j]
+    }
+  }
+}
+
+NEIG_WEIGHT_OVERALL_XTS<-as.xts(NEIG_WEIGHT_OVERALL_df)
+
+EXCLUDE_NEIG_WEIGHT_NAMES<-c("A.CP05512.IE","A.CP0931.IE","A.CP0935.IE","A.CP0322.IE")
+EXCLUDE_NEIG_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(EXCLUDE_NEIG_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
+
+
+for(i in 1:length(EXCLUDE_NEIG_WEIGHT_NAMES)){
+  EXCLUDE_NEIG_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+    (rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+      rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+} 
+
+EXCLUDE_NEIG_WEIGHT_df<-as.data.frame(EXCLUDE_NEIG_WEIGHT_XTS["2017/"])
+
+
+for (i in 1:nrow(EXCLUDE_NEIG_WEIGHT_df)){
+  for (j in 1:ncol(EXCLUDE_NEIG_WEIGHT_df)){
+    if(is.na(EXCLUDE_NEIG_WEIGHT_df[i,j])){
+      EXCLUDE_NEIG_WEIGHT_df[i,j]<-EXCLUDE_NEIG_WEIGHT_df[i-1,j]
+    }
+  }
+  
+}
+
+colnames(EXCLUDE_NEIG_WEIGHT_df)<-c(EXCLUDE_NEIG_WEIGHT_NAMES)
+
+NEIG_WEIGHT_XTS$CP055<-NEIG_WEIGHT_XTS$CP055-EXCLUDE_NEIG_WEIGHT_df$A.CP05512.IE
+NEIG_WEIGHT_XTS$CP0934_5<-NEIG_WEIGHT_XTS$CP0934_5-EXCLUDE_NEIG_WEIGHT_df$A.CP0935.IE
+NEIG_WEIGHT_XTS$CP0934_5 <-NEIG_WEIGHT_XTS$CP032-EXCLUDE_NEIG_WEIGHT_df$A.CP0322.IE
+
+
+NEIG_WEIGHT_XTS<-NEIG_WEIGHT_XTS/rowSums(NEIG_WEIGHT_XTS)
+
+CHAIN_INDEX_NEIG_CONTRIBUTION<-matrix(NA,nrow=length(Date[253:length(Date)]),ncol=ncol(NEIG_INDEX_XTS)) %>% as.xts(order.by=Date[253:length(Date)])
+
+for(i in 1:ncol(NEIG_INDEX_XTS)){
+CHAIN_INDEX_NEIG_CONTRIBUTION[,i]<-as.numeric(Chainlinking(NEIG_INDEX_XTS[,i])["2017/"])*(NEIG_WEIGHT_XTS[,i])["2017/"]
+}
+
+CHAIN_INDEX_NEIG_CONTRIBUTION[is.nan(CHAIN_INDEX_NEIG_CONTRIBUTION)]<-0
+CHAIN_INDEX_NEIG_CONTRIBUTION[is.na(CHAIN_INDEX_NEIG_CONTRIBUTION)]<-0
+
+DEC_BASE_NEIG<-(as.numeric(NEIG_OVERALL_INDEX_XTS[paste0(year(NEIG_OVERALL_INDEX_XTS["2016/"]), "-12-01")])) 
+NEIG_INDEX_CONTRIBUTION<-rowSums(CHAIN_INDEX_NEIG_CONTRIBUTION)*DEC_BASE_NEIG[1:length(NEIG_OVERALL_INDEX_XTS["2017/"])] 
+
+NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(NEIG_INDEX_CONTRIBUTION,order.by=index(NEIG_INDEX_XTS["2017/"]))
+NEIG_INDEX_XTS[is.na(NEIG_INDEX_XTS)]<-0
+
+NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(as.numeric(NEIG_INDEX_CONTRIBUTION_XTS),order.by=index(NEIG_INDEX_CONTRIBUTION_XTS["2017/"]))
+
+
+#NEIG_INDEX_CONTRIBUTION_XTS_LONG<-matrix(NA,nrow=length(Date[241:length(Date)]), ncol=1) %>% #as.xts(order.by=Date[241:length(Date)])
+
+#NEIG_INDEX_CONTRIBUTION_XTS_LONG["2016"]<-NEIG_OVERALL_INDEX_XTS["2016"]
+#NEIG_INDEX_CONTRIBUTION_XTS_LONG["2017/"]<-NEIG_INDEX_CONTRIBUTION_XTS["2017/"]
+  
+#NEIG_CONTRIBUTIONS<-Contribution(NEIG_INDEX_CONTRIBUTION_XTS_LONG["/2023"],NEIG_WEIGHT_XTS["/2023"],NEIG_INDEX_XTS["/2023"])
+
+
+
+#Unprocessed food index below 
+
+FOOD_INDEX<-CSO_HICP_INDEX_XTS$`Food and non-alcoholic beverages (COICOP 01`
+UNPROCESSED_FOOD_INDEX<-CSO_HICP_INDEX_XTS$`Unprocessed food`
+
+
+
+
+
+````
+
+```{r food weight, include=FALSE}
+FOOD_WEIGHT_NAMES<-c("A.FOOD_NP.IE","A.FOOD_P_X_ALC_TBC.IE","A.CP011.IE","A.CP01.IE","A.CP02.IE")
+FOOD_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(FOOD_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
+
+
+for(i in 1:length(FOOD_WEIGHT_NAMES)){
+  FOOD_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+    (rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+      rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+} 
+
+FOOD_WEIGHT_df<-as.data.frame(FOOD_WEIGHT_XTS["2017/"])
+
+
+for (i in 1:nrow(FOOD_WEIGHT_df)){
+  for (j in 1:ncol(FOOD_WEIGHT_df)){
+    if(is.na(FOOD_WEIGHT_df[i,j])){
+      FOOD_WEIGHT_df[i,j]<-FOOD_WEIGHT_df[i-1,j]
+    }
+  }
+}
+
+colnames(FOOD_WEIGHT_df)<-c(FOOD_WEIGHT_NAMES)
+FOOD_WEIGHT_xTS<-as.xts(FOOD_WEIGHT_df)
+
+UNPROCESSED_FOOD_CONTRIBUTION<-Chainlinking(UNPROCESSED_FOOD_INDEX)*(FOOD_WEIGHT_xTS$A.FOOD_NP.IE["2017/"]/FOOD_WEIGHT_xTS$A.CP01.IE["2017/"])*100
+PROCESSED_FOOD_CONTRIBUTION<-(FOOD_INDEX-UNPROCESSED_FOOD_CONTRIBUTION)/(FOOD_WEIGHT_xTS$A.FOOD_P_X_ALC_TBC.IE["2017/"]/FOOD_WEIGHT_xTS$A.CP01.IE["2017/"])*100
+
+PROCESSED_FOOD<-(as.numeric(FOOD_INDEX["2017/"])-((Chainlinking(UNPROCESSED_FOOD_INDEX)["2017/"])*as.numeric(FOOD_WEIGHT_xTS$A.FOOD_NP.IE["2017/"]/FOOD_WEIGHT_xTS$A.CP01.IE["2017/"])))
+
+CSO_ALCHOL<-CSO_HICP_INDEX_XTS$`Alcoholic beverages, tobacco and narcotics (COICOP 02`
+CSO_NEIG<-CSO_HICP_INDEX_XTS$`Non-energy industrial goods`
+CSO_RENT<-CSO_HICP_INDEX_XTS$`Actual rentals for housing (COICOP 04.1`
+
+
+HICP_INDEX_XTS$CP01127<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Dried, salted or smoked meat`)
+HICP_INDEX_XTS$CP01128<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Other meat preparations`)
+HICP_INDEX_XTS$CP01132<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Frozen fish`)
+HICP_INDEX_XTS$CP01135<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Dried, smoked or salted fish and seafood`)
+HICP_INDEX_XTS$CP01136<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Other preserved or processed fish and seafood-based preparations`)
+HICP_INDEX_XTS$CP01141<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Fresh whole milk`)
+HICP_INDEX_XTS$CP01142<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Fresh low fat milk`)
+HICP_INDEX_XTS$CP01144<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$Yoghurt)
+HICP_INDEX_XTS$CP01145<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Cheese and curd`)
+HICP_INDEX_XTS$CP01146<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Other milk products`)
+HICP_INDEX_XTS$CP01163<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Dried fruit and nuts`)
+HICP_INDEX_XTS$CP01164<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Preserved fruit and fruit-based products`)
+HICP_INDEX_XTS$CP01172<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Frozen vegetables other than potatoes and other tubers`)
+HICP_INDEX_XTS$CP01173<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$`Dried vegetables, other preserved or processed vegetables`)
+HICP_INDEX_XTS$CP01174<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$Potatoes)
+HICP_INDEX_XTS$CP01175<-HICP_BASE_INDEX(CSO_CPI_INDEX_XTS$Crisps)
+
+#1134 is missing
+#1143 is missing
+#1162 is missing
+#1176 is missing 
+
+Processed_FOOD_INDEX_XTS<-merge(HICP_INDEX_XTS$CP0111,HICP_INDEX_XTS$CP01127,
+HICP_INDEX_XTS$CP01128,
+HICP_INDEX_XTS$CP01132,
+HICP_INDEX_XTS$CP01135,
+HICP_INDEX_XTS$CP01136,
+HICP_INDEX_XTS$CP01141,
+HICP_INDEX_XTS$CP01142,
+HICP_INDEX_XTS$CP01144,
+HICP_INDEX_XTS$CP01145,
+HICP_INDEX_XTS$CP01146,
+HICP_INDEX_XTS$CP0115,
+HICP_INDEX_XTS$CP01163,
+HICP_INDEX_XTS$CP01164,
+HICP_INDEX_XTS$CP01172,
+HICP_INDEX_XTS$CP01173,
+HICP_INDEX_XTS$CP01174,
+HICP_INDEX_XTS$CP01175,HICP_INDEX_XTS$CP0118,HICP_INDEX_XTS$CP0119,HICP_INDEX_XTS$CP0121,HICP_INDEX_XTS$CP0122,HICP_INDEX_XTS$CP0211,HICP_INDEX_XTS$CP0212,HICP_INDEX_XTS$CP0213,HICP_INDEX_XTS$CP0220)
+
+PROCESSED_FOOD_WEIGHT_NAMES<-c("A.CP0111.IE","A.CP01127.IE","A.CP01128.IE","A.CP01132.IE","A.CP01135.IE","A.CP01136.IE","A.CP01141.IE","A.CP01142.IE","A.CP01144.IE","A.CP01145.IE","A.CP01146.IE","A.CP0115.IE","A.CP01163.IE","A.CP01164.IE","A.CP01172.IE","A.CP01173.IE","A.CP01174.IE","A.CP01175.IE","A.CP0118.IE","A.CP0119.IE","A.CP0121.IE","A.CP0122.IE","A.CP0211.IE","A.CP0212.IE","A.CP0213.IE","A.CP022.IE")
+
+PROCESSED_FOOD_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(PROCESSED_FOOD_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
+
+
+for(i in 1:length(PROCESSED_FOOD_WEIGHT_NAMES)){
+  PROCESSED_FOOD_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+    (rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+      rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+} 
+
+PROCESSED_FOOD_WEIGHT_XTS_df<-as.data.frame(PROCESSED_FOOD_WEIGHT_XTS["2017/"])
+
+
+for (i in 1:nrow(PROCESSED_FOOD_WEIGHT_XTS_df)){
+  for (j in 1:ncol(PROCESSED_FOOD_WEIGHT_XTS_df)){
+    if(is.na(PROCESSED_FOOD_WEIGHT_XTS_df[i,j])){
+      PROCESSED_FOOD_WEIGHT_XTS_df[i,j]<-PROCESSED_FOOD_WEIGHT_XTS_df[i-1,j]
+    }
+  }
+}
+
+colnames(PROCESSED_FOOD_WEIGHT_XTS_df)<-c(PROCESSED_FOOD_WEIGHT_NAMES)
+PROCESSED_FOOD_WEIGHT_XTS<-as.xts(PROCESSED_FOOD_WEIGHT_XTS_df)
+
+
+Processed_FOOD_WEIGHT_XTS<-merge(PROCESSED_FOOD_WEIGHT_XTS$A.CP0111.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01127.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01128.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01132.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01135.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01136.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01141.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01142.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01144.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01145.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01146.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0115.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01163.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01164.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01172.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01173.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01174.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01175.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0118.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0119.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0121.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0122.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0211.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0212.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0213.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP022.IE)
+
+
+
+Processed_FOOD_WEIGHT_XTS<-Processed_FOOD_WEIGHT_XTS/rowSums(Processed_FOOD_WEIGHT_XTS)
+
+CHAIN_PROCESSED_FOOD_CONTRIBUTION<-matrix(NA,nrow=length(Date[253:length(Date)]),ncol=ncol(Processed_FOOD_INDEX_XTS)) %>% as.xts(order.by=Date[253:length(Date)])
+
+for(i in 1:ncol(Processed_FOOD_INDEX_XTS)){
+CHAIN_PROCESSED_FOOD_CONTRIBUTION[,i]<-as.numeric(Chainlinking(Processed_FOOD_INDEX_XTS[,i])["2017/"])*(Processed_FOOD_WEIGHT_XTS[,i])["2017/"]
+}
+
+CHAIN_PROCESSED_FOOD_CONTRIBUTION[is.nan(CHAIN_PROCESSED_FOOD_CONTRIBUTION)]<-0
+DEC_BASE_Processed_FOOD<-(as.numeric(PROCESSED_FOOD_INDEX_XTS[paste0(year(PROCESSED_FOOD_INDEX_XTS["2016/"]), "-12-01")])) 
+
+PROCESSED_FOOD_INDEX_CONTRIBUTION_OVERALL_XTS<-matrix(NA,nrow=length(Date[241:length(Date)]),ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
+PROCESSED_FOOD_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]<-rowSums(CHAIN_PROCESSED_FOOD_CONTRIBUTION)*DEC_BASE_Processed_FOOD[1:nrow(Processed_FOOD_INDEX_XTS["2017/"])]   
+PROCESSED_FOOD_INDEX_CONTRIBUTION_OVERALL_XTS["2016"]<-Processed_FOOD_INDEX_XTS["2016"]
+
+
+
+
+
+
+`````
+
+
+```{r services weight, include=FALSE}
+#SERVICES INDEX START BELOW. 
+
+SERVICES_WEIGHT_NAMES<-c("A.CP0322.IE","A.CP0830.IE")
+SERVICES_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(SERVICES_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
+
+
+for(i in 1:length(SERVICES_WEIGHT_NAMES)){
+  SERVICES_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+    (rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+      rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+} 
+
+SERVICES_WEIGHT_XTS_df<-as.data.frame(SERVICES_WEIGHT_XTS["2017/"])
+
+
+for (i in 1:nrow(SERVICES_WEIGHT_XTS_df)){
+  for (j in 1:ncol(SERVICES_WEIGHT_XTS_df)){
+    if(is.na(SERVICES_WEIGHT_XTS_df[i,j])){
+      SERVICES_WEIGHT_XTS_df[i,j]<-SERVICES_WEIGHT_XTS_df[i-1,j]
+    }
+  }
+}
+
+colnames(SERVICES_WEIGHT_XTS_df)<-c(SERVICES_WEIGHT_NAMES)
+SERVICES_WEIGHT_XTS_df<-as.xts(SERVICES_WEIGHT_XTS_df)
+
+
+
+
+
+
+CORE_SERVICES_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP081,SERVICES_WEIGHT_XTS_df$A.CP0830.IE
+,HICP_WEIGHT_XTS$CP0411,HICP_WEIGHT_XTS$CP0432,HICP_WEIGHT_XTS$CP0442,HICP_WEIGHT_XTS$CP0443,HICP_WEIGHT_XTS$CP0444,HICP_WEIGHT_XTS$CP0533,HICP_WEIGHT_XTS$CP0562,HICP_WEIGHT_XTS$CP1252,HICP_WEIGHT_XTS$CP0621_3,HICP_WEIGHT_XTS$CP0622,HICP_WEIGHT_XTS$CP063,HICP_WEIGHT_XTS$CP10,HICP_WEIGHT_XTS$CP124,HICP_WEIGHT_XTS$CP1253,HICP_WEIGHT_XTS$CP126,HICP_WEIGHT_XTS$CP127,HICP_WEIGHT_XTS$CP096,HICP_WEIGHT_XTS$CP112,HICP_WEIGHT_XTS$CP0314,SERVICES_WEIGHT_XTS_df$A.CP0322.IE,HICP_WEIGHT_XTS$CP0915,HICP_WEIGHT_XTS$CP0941,HICP_WEIGHT_XTS$CP0942,HICP_WEIGHT_XTS$CP1111,HICP_WEIGHT_XTS$CP1112,HICP_WEIGHT_XTS$CP1211,HICP_WEIGHT_XTS$CP0723,HICP_WEIGHT_XTS$CP0724,HICP_WEIGHT_XTS$CP0731,HICP_WEIGHT_XTS$CP0732,HICP_WEIGHT_XTS$CP0733,HICP_WEIGHT_XTS$CP0734,HICP_WEIGHT_XTS$CP0735,HICP_WEIGHT_XTS$CP0736,HICP_WEIGHT_XTS$CP1254)
+
+
+HICP_INDEX_XTS$CP0322a<-data.frame(as.numeric(CSO_CPI_INDEX_XTS$`Repair and hire of footwear`["2003/"])/mean(as.numeric(CSO_CPI_INDEX_XTS$`Repair and hire of footwear`["2015"])))    %>%  as.xts(as.Date(Date[85:length(Date)])) *100
+
+CORE_SERVICES_INDEX_XTS<-merge(HICP_INDEX_XTS$CP081,HICP_INDEX_XTS$CP082_3
+,HICP_INDEX_XTS$CP0411,HICP_INDEX_XTS$CP0432,HICP_INDEX_XTS$CP0442,HICP_INDEX_XTS$CP0443,HICP_INDEX_XTS$CP0444,HICP_INDEX_XTS$CP0533,HICP_INDEX_XTS$CP0562,HICP_INDEX_XTS$CP1252,HICP_INDEX_XTS$CP0621_3,HICP_INDEX_XTS$CP0622,HICP_INDEX_XTS$CP063,HICP_INDEX_XTS$CP10,HICP_INDEX_XTS$CP124,HICP_INDEX_XTS$CP1253,HICP_INDEX_XTS$CP126,HICP_INDEX_XTS$CP127,HICP_INDEX_XTS$CP096,HICP_INDEX_XTS$CP112,HICP_INDEX_XTS$CP0314,HICP_INDEX_XTS$CP0322a,HICP_INDEX_XTS$CP0915,HICP_INDEX_XTS$CP0941,HICP_INDEX_XTS$CP0942,HICP_INDEX_XTS$CP1111,HICP_INDEX_XTS$CP1112,HICP_INDEX_XTS$CP1211,HICP_INDEX_XTS$CP0723,HICP_INDEX_XTS$CP0724,HICP_INDEX_XTS$CP0731,HICP_INDEX_XTS$CP0732,HICP_INDEX_XTS$CP0733,HICP_INDEX_XTS$CP0734,HICP_INDEX_XTS$CP0735,HICP_INDEX_XTS$CP0736,HICP_INDEX_XTS$CP1254)
+
+
+CORE_SERVICES_WEIGHT_XTS<-CORE_SERVICES_WEIGHT_XTS/rowSums(CORE_SERVICES_WEIGHT_XTS)
+
+CHAIN_CORE_SERVICES_CONTRIBUTION<-matrix(NA,nrow=length(Date[253:length(Date)]),ncol=ncol(CORE_SERVICES_INDEX_XTS)) %>% as.xts(order.by=Date[253:length(Date)])
+
+CORE_SERVICES_INDEX_XTS[is.na(CORE_SERVICES_INDEX_XTS)]<-0
+
+for(i in 1:ncol(CORE_SERVICES_INDEX_XTS)){
+CHAIN_CORE_SERVICES_CONTRIBUTION[,i]<-as.numeric(Chainlinking(CORE_SERVICES_INDEX_XTS[,i])["2017/"])*(CORE_SERVICES_WEIGHT_XTS[,i])["2017/"]
+}
+
+CHAIN_CORE_SERVICES_CONTRIBUTION[is.nan(CHAIN_CORE_SERVICES_CONTRIBUTION)]<-0
+
+
+DEC_BASE_SERVICES<-(as.numeric(SERVICES_OVERALL_INDEX_XTS[paste0(year(SERVICES_OVERALL_INDEX_XTS["2016/"]), "-12-01")])) 
+
+SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS<-matrix(NA,nrow=length(Date[241:length(Date)]),ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
+SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]<-rowSums(CHAIN_CORE_SERVICES_CONTRIBUTION)*DEC_BASE_SERVICES[1:length(SERVICES_OVERALL_INDEX_XTS["2017/"])]   
+SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2016"]<-SERVICES_OVERALL_INDEX_XTS["2016"]
+
+SERVICES_CONTRIBUTION<-Contribution(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS,CORE_SERVICES_WEIGHT_XTS["2017/"],CORE_SERVICES_INDEX_XTS["2017/"])
+
+
+
+SERVICES_CONTRIBUTION[is.na(SERVICES_CONTRIBUTION)]<-0
+SERVICES_CONTRIBUTION<-as.xts(SERVICES_CONTRIBUTION,order.by=index(HICP_INDEX_XTS["2019/"]))
+
+
+
+SERVICES_NAMES<-c("Postal services","Telephone services","Rent","maintenance of dwelling", "Refuse Collection","sewerage collection","Other dwelling services","repair of household appliances", "Domestic services", "housing insurance", "Medical Services", "Dental services", "hospital services", "Education", "Social protection", "health insurance", "Financial services", "other services", "package holidays", "accomodation services", "clothes cleaning/repair", "repair/hire of footwear","repair of ICT","Recreational and sporting services", "cultural services", "Restaurant, Cafes etc.","Canteen","Hairdressing", "repair of personal transport","other personal transport services", "rail transport", "road transport","air fares", "sea transport","combined passenger transport","other transport", "motor insurance")      
+
+colnames(SERVICES_CONTRIBUTION)<-c(SERVICES_NAMES)
+write.xlsx(SERVICES_CONTRIBUTION,"SERVICES_CONTRIBUTION.xlsx")
+
+
+INDEX_VALUES<-data.frame(index(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]),SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"],PROCESSED_FOOD_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"],UNPROCESSED_FOOD_INDEX["2017/"],FOOD_INDEX["2017/"],CSO_NEIG["2017/"],CSO_RENT["2017/"])
+
+colnames(INDEX_VALUES)<-c("Date","Services","Processed Food", "Unprocessed Food", "Food","Non-energy industrial goods","Rent")
+
+write.xlsx(INDEX_VALUES,"INDEX_VALUES.XLSX")
+
+
+
+#Core_SERVICES_INDEX_DEC_2016<-c(101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.5,101.2,101.8,103.0,104.1,103.5,104.3,105.8,105.9,104.0,103.4,102.9,103.3,102.6,103.7,104.6,104.0,104.7,105.0,106.4,106.3,105.1,104.6,103.7,104.4,104.2,105.4,106.6,107.0,106.3,107.3,108.0,108.1,107.4,106.8,106.3,107.0,106.0,107.0,108.1,108.5,107.7,109.0,108.2,108.2,107.9,106.8,107.3,108.9,108.5,108.9,109.0,109.4,109.4,110.0,110.6,111.3,110.7,111.1,111.1,112.2,110.8,111.3,112.6,114.5,113.9,114.8) %>% as.numeric() 
+
+#CORE_SERVICES_DATE<-seq(as.Date("2016-01-01"),as.Date("2022-06-01") , by="month")
+#CORE_SERVICES_INDEX_XTS<-as.xts(Core_SERVICES_INDEX_DEC_2016,order.by=CORE_SERVICES_DATE)
+
+
+
+
+
+
+
+
+
+#CORE SERVICES
+
+
+#####################################################
+
+
+
+
+
+
+
+
+
+
+#Contribution energy annual growth
+ENERGY<-CONTRIBUTION$Electricity+CONTRIBUTION$Gas+CONTRIBUTION$`Liquid Fuel`+CONTRIBUTION$`Solid Fuels`+CONTRIBUTION$`Fuels & Lubricants for personal transport` 
+
+#Contribution food annual growth
+FOOD<-CONTRIBUTION$`Bread & Cereals`+CONTRIBUTION$Meat+CONTRIBUTION$Fish+CONTRIBUTION$`Milk, Cheese,eggs`+CONTRIBUTION$`Oil & Fats` +CONTRIBUTION$Fruit+CONTRIBUTION$Vegetables+CONTRIBUTION$`Sugar,Jam, Honey, Chocolate`+CONTRIBUTION$`Food Products`+CONTRIBUTION$`Coffee, tea, Cocoa`+CONTRIBUTION$`Mineral Water, Soft Drinks, Vegetable Juices`+CONTRIBUTION$Spirits+CONTRIBUTION$Wine+CONTRIBUTION$Beer+CONTRIBUTION$Tobacco
+
+
+#Contribution NEIG annual growth
+NEIG<-CONTRIBUTION$Garments+
+  CONTRIBUTION$`Other Clothing`+
+  CONTRIBUTION$Footwear+
+  CONTRIBUTION$`Repair of Dwelling`+
+  CONTRIBUTION$Furniture+
+  CONTRIBUTION$Carpets+
+  CONTRIBUTION$`Household textiles`+
+  CONTRIBUTION$`Major Household Appliances`+
+  CONTRIBUTION$`Glassware,tableware and Utensils`+
+  CONTRIBUTION$`Non-durable househld goods`+CONTRIBUTION$`Pharma Products`+CONTRIBUTION$`Other medical products`+CONTRIBUTION$`Motor Cars`+CONTRIBUTION$`Motor Cycles, Bicycles`+CONTRIBUTION$`Spare parts personal transport`+CONTRIBUTION$`Recording Equipment`+CONTRIBUTION$`Information processing equipment`+CONTRIBUTION$`Recording Media`+CONTRIBUTION$`Musical Instruments`+CONTRIBUTION$`Games, Toys, hobbies`+CONTRIBUTION$`Sports & outdoor Equipment`+CONTRIBUTION$`Gardens, plants and flowers`+CONTRIBUTION$`Pets Products`+CONTRIBUTION$Books+CONTRIBUTION$Newspapers+CONTRIBUTION$`Misc. Print`+CONTRIBUTION$`Electrical Appliances for personal care`+CONTRIBUTION$`Jewellery, clocks, watches`+CONTRIBUTION$`Other Personal effects`
+  
+
+#Contribution RENT annual growth
+Rent<-CONTRIBUTION$`Actual Rent`
+  
+
+
+#Contribution CORE SERVICES annual growth
+CORE_SERVICES<-CONTRIBUTION$`Cleaning & Repair Clothing`+
+  CONTRIBUTION$`Repair of Dwelling`+
+  CONTRIBUTION$`Refuse Collection`+
+  CONTRIBUTION$`Other Services for Dwellings`+
+  CONTRIBUTION$`Repair of Household Appliances`+
+  CONTRIBUTION$`Domestic Services and Household Services`+
+  CONTRIBUTION$`Medical Services`+
+  CONTRIBUTION$`Dental Services`+
+  CONTRIBUTION$`Hospital Services`+
+  CONTRIBUTION$`Repair Personal Transport`+
+  CONTRIBUTION$`Other services for Personal Transport`+
+  CONTRIBUTION$`Passenger transport by railway`+
+  CONTRIBUTION$`Passenger transport by road`+
+  CONTRIBUTION$`Passenger transport by air`+
+  CONTRIBUTION$`Passenger transport by sea`+
+  CONTRIBUTION$`Combined Passenger transport`+
+  CONTRIBUTION$`Other purchased transport services`+
+  CONTRIBUTION$`Postal Services`+
+  CONTRIBUTION$`Telephone equipment and services`+
+  CONTRIBUTION$`Repair of audio-visual`+
+  CONTRIBUTION$`Recreational & Sporting Services`+
+  CONTRIBUTION$`Cultural Services`+
+  CONTRIBUTION$`Package Holidays`+
+  CONTRIBUTION$Education+
+  CONTRIBUTION$`Restaurant, Cafes etc.`+
+  CONTRIBUTION$Canteens+
+  CONTRIBUTION$`Accomdation Services`+
+  CONTRIBUTION$`Hairdressing Salons`+
+  CONTRIBUTION$`Social Protection`+
+  CONTRIBUTION$`Insurance for Dwellings`+
+  CONTRIBUTION$`Healthcare Insurance`+
+  CONTRIBUTION$`Transport Insurance`+
+  CONTRIBUTION$`Financial Services`+
+  CONTRIBUTION$`Other Services`
+  
+  
+  
+summary_contribution<-data.frame(merge(NEIG["2020/"],FOOD["2020/"],ENERGY["2020/"],Rent["2020/"],CORE_SERVICES["2020/"]))
+summary_contribution<-data.frame(summary_contribution,index(ENERGY["2020/"]))
+
+colnames(summary_contribution)<-c("NEIG","Food","Energy","Rent","Core Services","Date")
+summary_contribution_melt<-melt(summary_contribution,id=c("Date"))
+
+
+
+
+
+INFLATION_CON_plot<-ggplot(data=summary_contribution_melt, aes(y=value, x=Date, fill=variable)) + 
+  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
+  labs(x="",
+       title="Contribution of Inflation",
+       caption="Source: CSO, DOF, Eurostat",
+       y="contribution to annual growth (%)")+
+  scale_fill_manual(name = "", values  = c("NEIG" = DOF_colours[4],"Food" = DOF_colours[2],"Energy" = DOF_colours[3],"Rent" = DOF_colours[5],"Core Services" = DOF_colours[1]))+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
+  
+
+
+
+#Change in annual contribution M-o-M
+Contribution_CHANGE<-CONTRIBUTION-lag(CONTRIBUTION)
+LATEST_Contribution_CHANGE<-Contribution_CHANGE[nrow(Contribution_CHANGE),]
+
+
+ENERGY_CHANGE_CONTRIBUTION<-Contribution_CHANGE$Electricity+Contribution_CHANGE$Gas+Contribution_CHANGE$`Liquid Fuel`+Contribution_CHANGE$`Solid Fuels`+Contribution_CHANGE$`Fuels & Lubricants for personal transport` 
+
+
+
+#Contribution food annual growth
+FOOD_CHANGE_CONTRIBUTION<-Contribution_CHANGE$`Bread & Cereals`+Contribution_CHANGE$Meat+Contribution_CHANGE$Fish+Contribution_CHANGE$`Milk, Cheese,eggs`+Contribution_CHANGE$`Oil & Fats` +Contribution_CHANGE$Fruit+Contribution_CHANGE$Vegetables+Contribution_CHANGE$`Sugar,Jam, Honey, Chocolate`+Contribution_CHANGE$`Food Products`+Contribution_CHANGE$`Coffee, tea, Cocoa`+Contribution_CHANGE$`Mineral Water, Soft Drinks, Vegetable Juices`+Contribution_CHANGE$Spirits+Contribution_CHANGE$Wine+Contribution_CHANGE$Beer+Contribution_CHANGE$Tobacco
+
+
+#Contribution NEIG annual growth
+NEIG_CHANGE_CONTRIBUTION<-Contribution_CHANGE$Garments+
+  Contribution_CHANGE$`Other Clothing`+
+  Contribution_CHANGE$Footwear+
+  Contribution_CHANGE$`Repair of Dwelling`+
+  Contribution_CHANGE$Furniture+
+  Contribution_CHANGE$Carpets+
+  Contribution_CHANGE$`Household textiles`+
+  Contribution_CHANGE$`Major Household Appliances`+
+  Contribution_CHANGE$`Glassware,tableware and Utensils`+
+  Contribution_CHANGE$`Non-durable househld goods`+Contribution_CHANGE$`Pharma Products`+Contribution_CHANGE$`Other medical products`+Contribution_CHANGE$`Motor Cars`+Contribution_CHANGE$`Motor Cycles, Bicycles`+Contribution_CHANGE$`Spare parts personal transport`+Contribution_CHANGE$`Recording Equipment`+Contribution_CHANGE$`Photographic equipment`+Contribution_CHANGE$`Information processing equipment`+Contribution_CHANGE$`Recording Media`+Contribution_CHANGE$`Musical Instruments`+Contribution_CHANGE$`Games, Toys, hobbies`+Contribution_CHANGE$`Sports & outdoor Equipment`+Contribution_CHANGE$`Gardens, plants and flowers`+Contribution_CHANGE$`Pets Products`+Contribution_CHANGE$Books+Contribution_CHANGE$Newspapers+Contribution_CHANGE$`Misc. Print`+Contribution_CHANGE$`Electrical Appliances for personal care`+Contribution_CHANGE$`Jewellery, clocks, watches`+Contribution_CHANGE$`Other Personal effects`
+  
+
+#Contribution RENT annual growth
+Rent_CHANGE_CONTRIBUTION<-Contribution_CHANGE$`Actual Rent`
+  
+
+
+#Contribution RENT annual growth
+CORE_SERVICES_CHANGE_CONTRIBUTION<-Contribution_CHANGE$`Cleaning & Repair Clothing`+
+  Contribution_CHANGE$`Repair of Dwelling`+
+  Contribution_CHANGE$`Refuse Collection`+
+  Contribution_CHANGE$`Other Services for Dwellings`+
+  Contribution_CHANGE$`Repair of Household Appliances`+
+  Contribution_CHANGE$`Domestic Services and Household Services`+
+  Contribution_CHANGE$`Medical Services`+
+  Contribution_CHANGE$`Dental Services`+
+  Contribution_CHANGE$`Hospital Services`+
+  Contribution_CHANGE$`Repair Personal Transport`+
+  Contribution_CHANGE$`Other services for Personal Transport`+
+  Contribution_CHANGE$`Passenger transport by railway`+
+  Contribution_CHANGE$`Passenger transport by road`+
+  Contribution_CHANGE$`Passenger transport by air`+
+  Contribution_CHANGE$`Passenger transport by sea`+
+  Contribution_CHANGE$`Combined Passenger transport`+
+  Contribution_CHANGE$`Other purchased transport services`+
+  Contribution_CHANGE$`Postal Services`+
+  Contribution_CHANGE$`Telephone equipment and services`+
+  Contribution_CHANGE$`Repair of audio-visual`+
+  Contribution_CHANGE$`Recreational & Sporting Services`+
+  Contribution_CHANGE$`Cultural Services`+
+  Contribution_CHANGE$`Package Holidays`+
+  Contribution_CHANGE$Education+
+  Contribution_CHANGE$`Restaurant, Cafes etc.`+
+  Contribution_CHANGE$Canteens+
+  Contribution_CHANGE$`Accomdation Services`+
+  Contribution_CHANGE$`Hairdressing Salons`+
+  Contribution_CHANGE$`Social Protection`+
+  Contribution_CHANGE$`Insurance for Dwellings`+
+  Contribution_CHANGE$`Healthcare Insurance`+
+  Contribution_CHANGE$`Transport Insurance`+
+  Contribution_CHANGE$`Financial Services`+
+  Contribution_CHANGE$`Other Services`
+
+
+
+Inflation_Contributions<-(rowSums(CONTRIBUTION,na.rm =TRUE)) %>% data.frame()  
+
+latest_annual_Change_contributions<-data.frame(Inflation_Contributions[nrow(Inflation_Contributions)-1,],ENERGY_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],FOOD_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],NEIG_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],Rent_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],CORE_SERVICES_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)]) %>% round(2) 
+
+
+Previous<-format((summary_contribution$Date)[length((summary_contribution$Date))-1],format="%B %Y")
+CURRENT<-format((summary_contribution$Date)[length((summary_contribution$Date))],format="%B %Y")
+
+colnames(latest_annual_Change_contributions)<-c(Previous,"Energy","Food","NEIG","Rent", "Core Services")
+
+
+latest_annual_Change_contributions<-melt(latest_annual_Change_contributions)
+latest_annual_Change_contributions$colour <- ifelse(latest_annual_Change_contributions$value < 0, DOF_colours[1],DOF_colours[2])
+
+
+min_waterfall<-latest_annual_Change_contributions$value[1]-abs(latest_annual_Change_contributions$value[2]+latest_annual_Change_contributions$value[3]+latest_annual_Change_contributions$value[4]+latest_annual_Change_contributions$value[5]+latest_annual_Change_contributions$value[6])
+max_waterfall<-latest_annual_Change_contributions$value[1]+abs(latest_annual_Change_contributions$value[2]+latest_annual_Change_contributions$value[3]+latest_annual_Change_contributions$value[4]+latest_annual_Change_contributions$value[5]+latest_annual_Change_contributions$value[6])
+
+
+waterfall_graph_change_annual_inflation<-latest_annual_Change_contributions  %>% waterfall(calc_total=TRUE, fill_by_sign =FALSE,  fill_colours = latest_annual_Change_contributions$colour,  total_rect_color = DOF_colours[2], total_axis_text=CURRENT,scale_y_to_waterfall=TRUE)+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme_bw()+coord_cartesian(ylim=c(min_waterfall, max_waterfall))+scale_fill_manual(values=c(positive="firebrick1",negative="steelblue"))
+
+
+
+
+#trimmed mean calculation 
+
+
+GOOD_SERVICES_INDEX<-select(data.frame(GOOD_SERVICES_INDEX),-(c(CP0912,CP0455,CP0311,CP0443,CP0441))) %>% as.xts()
+
+
+
+
+for(i in 1:ncol(GOOD_SERVICES_INDEX)){
+  GOOD_SERVICES_INDEX[,i]<-growth(as.numeric(GOOD_SERVICES_INDEX[,i]),12) 
+}
+
+GOOD_SERVICES_INDEX_GROWTH<- GOOD_SERVICES_INDEX["2017/"] %>% as.xts(as.Date(Date[253:length(Date)]))
+
+
+GOOD_SERVICES_INDEX_GROWTH[is.na(GOOD_SERVICES_INDEX_GROWTH)]<-0 
+GOOD_SERVICES_INDEX_GROWTH[is.nan(GOOD_SERVICES_INDEX_GROWTH)]<-0 
+
+GOOD_SERVICES_INDEX_GROWTH_DF<-GOOD_SERVICES_INDEX_GROWTH %>% as.data.frame()
+
+growth_index<-GOOD_SERVICES_INDEX_GROWTH["2017/"] 
+
+length<-round(ncol(GOOD_SERVICES_INDEX_GROWTH_DF)*0.3) 
+
+
+
+EXCLUSION_HIGH<-data.frame(matrix(nrow = nrow(GOOD_SERVICES_INDEX), ncol = round((length)/2))) 
+
+EXCLUSION_LOW<-data.frame(matrix(nrow = nrow(GOOD_SERVICES_INDEX), ncol = round((length)/2)))
+
+
+
+for(i in 1:(nrow(GOOD_SERVICES_INDEX_GROWTH_DF))){
+  EXCLUSION_HIGH[i,]<-GOOD_SERVICES_INDEX_GROWTH_DF[i,order( as.numeric(as.character(GOOD_SERVICES_INDEX_GROWTH_DF[i,])), decreasing=TRUE )] %>% .[1:(length/2)] %>% names() %>% paste()
+  
+  EXCLUSION_LOW[i,]<-GOOD_SERVICES_INDEX_GROWTH_DF[i,order( as.numeric(as.character(GOOD_SERVICES_INDEX_GROWTH_DF[i,])), decreasing=FALSE )] %>% .[1:(length/2)] %>% names() %>% paste()
+  
+}
+
+exclusion_list<-cbind(EXCLUSION_HIGH,EXCLUSION_LOW) %>% data.frame()
+
+TRIMMED_INDEX_GROWTH<-data.frame(matrix(nrow = nrow(GOOD_SERVICES_INDEX_GROWTH_DF), ncol = ncol(GOOD_SERVICES_INDEX_GROWTH_DF)-length))
+
+
+for(i in 1:(nrow(TRIMMED_INDEX_GROWTH))){
+  TRIMMED_INDEX_GROWTH[i,]<-select(data.frame(GOOD_SERVICES_INDEX_GROWTH_DF[i,]),-((paste(exclusion_list[i,])))) %>% colnames() 
+  
+}
+
+TRIMMED_INDEX_GROWTH<-na.omit(TRIMMED_INDEX_GROWTH)
+
+ADJUSTED_WEIGHTS<-data.frame(matrix(nrow = nrow(TRIMMED_INDEX_GROWTH),ncol=ncol(TRIMMED_INDEX_GROWTH)))
+
+for(i in 1:(nrow(TRIMMED_INDEX_GROWTH))){
+  ADJUSTED_WEIGHTS[i,]<- HICP_WEIGHT_XTS[i,paste(TRIMMED_INDEX_GROWTH[i,])]/ sum(as.numeric(HICP_WEIGHT_XTS[i,paste(TRIMMED_INDEX_GROWTH[i,])])) 
+}
+
+
+Trimmed_growth<-data.frame(matrix(nrow = nrow(GOOD_SERVICES_INDEX_GROWTH_DF))) %>% as.xts(order.by=index(GOOD_SERVICES_INDEX_GROWTH)) 
+
+
+
+GOOD_SERVICES_INDEX_GROWTH_DF[is.nan(GOOD_SERVICES_INDEX_GROWTH_DF$CP0442)]<-0
+GOOD_SERVICES_INDEX_GROWTH_XTS<-as.xts(GOOD_SERVICES_INDEX_GROWTH_DF)
+
+for(i in 1:nrow(GOOD_SERVICES_INDEX_GROWTH_XTS)){
+  for(j in 1:ncol(GOOD_SERVICES_INDEX_GROWTH_XTS)){
+    Trimmed_growth[i]<-  (as.numeric(GOOD_SERVICES_INDEX_GROWTH_XTS[i,paste(TRIMMED_INDEX_GROWTH[i,])])*as.numeric(ADJUSTED_WEIGHTS[i,])) %>% sum()   
+  }
+}
+
+colnames(Trimmed_growth)<-c("Trimmed")
+
+Trimmed_growth_xts<-as.xts(Trimmed_growth$Trimmed)
+
+
+
+
+
+
+
+
+```
+
+
+```{r Block 2, echo=FALSE, warning=FALSE}
+
+Trimmed_growth_xts<-as.xts(as.numeric(Trimmed_growth_xts),order.by=index(OVERALL_HICP_XTS["2017/"]))
+
+growth_OVERALL_HICP<-(OVERALL_HICP_XTS["2016/"]) %>% as.numeric() %>% growth(freq=12) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2017/"]))
+
+
+growth_CORE_HICP<-(CSO_HICP_INDEX_XTS$`HICP All items excluding energy and unprocessed food`["2016/"]) %>% as.numeric() %>% growth(freq=12) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2017/"]))
+
+
+graph_data<-merge(Trimmed_growth_xts,growth_OVERALL_HICP,growth_CORE_HICP)
+colnames(graph_data)<-c("trim","GROWTH_OVERALL_XTS","GROWTH_CORE_XTS")
+
+y1<-ggplot()+geom_line(data=graph_data["2017/"],aes(x=index(graph_data["2017/"]),y=graph_data$trim["2017/"], colour="DOF Trimmed Inflation"),size=1)+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+
+  theme(legend.position=c(0.8,0.2),plot.caption = element_text(hjust=0),legend.background=element_blank())+
+    geom_line(data=graph_data["2017/"],aes(x=index(graph_data["2017/"]),y=graph_data$GROWTH_CORE_XTS["2017/"], colour="Core Inflation"),size=1)+
+
+  
+  labs(x="",
+       title="Annual percentage change in inflation",
+       caption="Source: CSO, Eurostat, DOF calculations",
+       y="Percentage change (%)")+
+  scale_color_manual(name = "", values = c("DOF Trimmed Inflation" = DOF_colours[2],"Core Inflation" = DOF_colours[3]))+
+  theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
+
+trim_graph<-y1+theme(legend.position=c(0.3,0.6),plot.title = element_text(hjust = 0.5))
+
+
+
+
+
+GOOD_SERVICES_INDEX_GROWTH[is.na(GOOD_SERVICES_INDEX_GROWTH)]<-0 
+
+below_zero<-matrix(NA,ncol=ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"]) ,nrow=nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"]))
+betweeen_zero_two<-matrix(NA,ncol=ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"]) ,nrow=nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"]))
+betweeen_two_five<-matrix(NA,ncol=ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"]) ,nrow=nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"]))
+over_five<-matrix(NA,ncol=ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"]) ,nrow=nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"])) 
+zero<-0
+two<-2
+five<-5
+
+TOTAL_WEIGHT<-HICP_WEIGHT_XTS/1000
+
+for(i in 1:nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+for(j in 1:ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+  if(as.numeric(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j])< zero){
+    below_zero[i,j]<-(TOTAL_WEIGHT[i,colnames(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+below_zero<-data.frame(below_zero)
+below_zero[is.na(below_zero)]<-0 
+below_zero_xts<-below_zero %>% as.xts(order.by=index(GOOD_SERVICES_INDEX_GROWTH))
+below_zero_xts_sum<-rowSums(below_zero_xts,na.rm=TRUE)
+
+
+for(i in 1:nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+  for(j in 1:ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+    if(between(as.numeric(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j]),zero,two)){
+      betweeen_zero_two[i,j]<-(TOTAL_WEIGHT[i,colnames(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+
+betweeen_zero_two<-data.frame(betweeen_zero_two)
+betweeen_zero_two[is.na(betweeen_zero_two)]<-0 
+betweeen_zero_two_xts<-betweeen_zero_two %>% as.xts(order.by=index(GOOD_SERVICES_INDEX_GROWTH))
+betweeen_zero_two_xts_sum<-rowSums(betweeen_zero_two_xts,na.rm=TRUE)
+
+
+
+
+for(i in 1:nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+  for(j in 1:ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+    if(between(as.numeric(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j]),two,five)){
+      betweeen_two_five[i,j]<-(TOTAL_WEIGHT[i,colnames(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+betweeen_two_five<-data.frame(betweeen_two_five)
+betweeen_two_five[is.na(betweeen_two_five)]<-0 
+betweeen_two_five_xts<-betweeen_two_five %>% as.xts(order.by=index(GOOD_SERVICES_INDEX_GROWTH))
+betweeen_two_five_xts_sum<-rowSums(betweeen_two_five_xts,na.rm=TRUE)
+
+
+
+
+    for(i in 1:nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+      for(j in 1:ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"])){
+          if(as.numeric(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j])>five){
+      over_five[i,j]<-(TOTAL_WEIGHT[i,colnames(GOOD_SERVICES_INDEX_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+
+over_five<-data.frame(over_five)
+over_five[is.na(over_five)]<-0 
+over_five_xts<-over_five %>% as.xts(order.by=index(GOOD_SERVICES_INDEX_GROWTH))
+
+over_five_xts_sum<-rowSums(over_five_xts,na.rm=TRUE)
+
+
+
+below_zero_xts<-as.xts(below_zero_xts_sum, order.by = index(below_zero_xts))
+betweeen_zero_two_xts<-as.xts(betweeen_zero_two_xts_sum, order.by = index(below_zero_xts))
+betweeen_two_five_xts<-as.xts(betweeen_two_five_xts_sum, order.by = index(below_zero_xts))
+over_five_xts<-as.xts(over_five_xts_sum, order.by = index(below_zero_xts))
+
+inflationbreakdown<-data.frame(index(below_zero_xts),below_zero_xts,betweeen_zero_two_xts,betweeen_two_five_xts,over_five_xts)
+colnames(inflationbreakdown)<-c("Date","<0%","0%-2%","2%-5%",">5%")
+
+summary_df_graph_melt<-melt(inflationbreakdown,id=c("Date"))
+
+
+CONTRIBUTION_INFLATION<-ggplot(data=summary_df_graph_melt, aes(y=value*100, x=Date, fill=variable)) + 
+  geom_bar(position="stack", stat="identity")+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"),legend.background=element_blank())+
+scale_fill_manual(name = "", values  = c("<0%" = DOF_colours[4],"0%-2%" = DOF_colours[2],"2%-5%" = DOF_colours[3],">5%"=DOF_colours[1]))+
+  labs(x="",
+       title="Proportion of Inflation Basket",
+       caption="Source: CSO, DOF, Eurostat",
+       y="")
+  
+  
+
+
+
+over_five_12_Months<-matrix(NA,ncol=ncol(GOOD_SERVICES_INDEX_GROWTH["2017/"]) ,nrow=nrow(GOOD_SERVICES_INDEX_GROWTH["2017/"])) 
+
+    for(i in 13:nrow(over_five)){
+      for(j in 1:ncol(over_five)){
+          if((as.numeric(over_five[i,j])>0)  && (as.numeric(over_five[i-1,j])>0)  && (as.numeric(over_five[i-2,j])>0) && (as.numeric(over_five[i-3,j])>0) && (as.numeric(over_five[i-4,j])>0) && (as.numeric(over_five[i-5,j])>0) && (as.numeric(over_five[i-6,j])>0) && (as.numeric(over_five[i-7,j])>0) && (as.numeric(over_five[i-8,j])>0) && (as.numeric(over_five[i-9,j])>0) && (as.numeric(over_five[i-10,j])>0) && (as.numeric(over_five[i-11,j])>0) ){
+      over_five_12_Months[i,j]<-over_five[i,j]
+          } else {
+      over_five_12_Months[i,j]<-as.numeric(0)
+
+    } 
+  }
+}
+
+
+over_five_12_Months_SUM<-na.omit(over_five_12_Months) %>% rowSums() %>% as.xts(order.by=index(GOOD_SERVICES_INDEX_GROWTH["2018-01-01/"]))
+
+
+
+
+#compoisiton weight inflation exclduing energy 
+
+TOTAL_WEIGHT_EX_ENERGY<-subset(TOTAL_WEIGHT, select=-c(CP0451,CP0452,CP0453,CP0454,CP0455,CP0722))
+TOTAL_WEIGHT_EX_ENERGY_ADJ<-(TOTAL_WEIGHT_EX_ENERGY/rowSums(TOTAL_WEIGHT_EX_ENERGY)) 
+
+
+
+
+GOOD_SERVICES_INDEX_GROWTH[is.na(GOOD_SERVICES_INDEX_GROWTH)]<-0 
+
+growth_SERVICES_GOODS_EX_ENERGY<-subset(GOOD_SERVICES_INDEX_GROWTH, select=-c(CP0451,CP0452,CP0453,CP0454,CP0722))
+
+
+
+below_zero_EX_ENERGY<-matrix(NA,ncol=ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"]) ,nrow=nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"]))
+betweeen_zero_two_EX_ENERGY<-matrix(NA,ncol=ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"]) ,nrow=nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"]))
+betweeen_two_five_EX_ENERGY<-matrix(NA,ncol=ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"]) ,nrow=nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"]))
+over_five_EX_ENERGY<-matrix(NA,ncol=ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"]) ,nrow=nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"])) 
+zero<-0
+two<-2
+five<-5
+
+
+
+for(i in 1:nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+for(j in 1:ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+  if(as.numeric(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j])< zero){
+    below_zero_EX_ENERGY[i,j]<-(TOTAL_WEIGHT_EX_ENERGY_ADJ[i,colnames(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j])])
+    }
+  }
+}
+
+below_zero_EX_ENERGY<-data.frame(below_zero_EX_ENERGY)
+below_zero_EX_ENERGY[is.na(below_zero_EX_ENERGY)]<-0 
+below_zero_EX_ENERGY_xts<-below_zero_EX_ENERGY %>% as.xts(order.by=index(growth_SERVICES_GOODS_EX_ENERGY))
+below_zero_EX_ENERGY_xts_sum<-rowSums(below_zero_EX_ENERGY_xts,na.rm=TRUE)
+
+
+for(i in 1:nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+  for(j in 1:ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+    if(between(as.numeric(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j]),zero,two)){
+      betweeen_zero_two_EX_ENERGY[i,j]<-(TOTAL_WEIGHT_EX_ENERGY_ADJ[i,colnames(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j])])
+    }
+  }
+}
+
+
+betweeen_zero_two_EX_ENERGY<-data.frame(betweeen_zero_two_EX_ENERGY)
+betweeen_zero_two_EX_ENERGY[is.na(betweeen_zero_two_EX_ENERGY)]<-0 
+betweeen_zero_two_EX_ENERGY_xts<-betweeen_zero_two_EX_ENERGY %>% as.xts(order.by=index(growth_SERVICES_GOODS_EX_ENERGY))
+betweeen_zero_two_EX_ENERGY_xts_sum<-rowSums(betweeen_zero_two_EX_ENERGY_xts,na.rm=TRUE)
+
+
+
+
+for(i in 1:nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+  for(j in 1:ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+    if(between(as.numeric(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j]),two,five)){
+      betweeen_two_five_EX_ENERGY[i,j]<-(TOTAL_WEIGHT_EX_ENERGY_ADJ[i,colnames(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j])])
+    }
+  }
+}
+
+betweeen_two_five_EX_ENERGY<-data.frame(betweeen_two_five_EX_ENERGY)
+betweeen_two_five_EX_ENERGY[is.na(betweeen_two_five_EX_ENERGY)]<-0 
+betweeen_two_five_EX_ENERGY_xts<-betweeen_two_five_EX_ENERGY %>% as.xts(order.by=index(growth_SERVICES_GOODS_EX_ENERGY))
+betweeen_two_five_EX_ENERGY_xts_sum<-rowSums(betweeen_two_five_EX_ENERGY_xts,na.rm=TRUE)
+
+
+
+
+    for(i in 1:nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+      for(j in 1:ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"])){
+          if(as.numeric(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j])>five){
+      over_five_EX_ENERGY[i,j]<-(TOTAL_WEIGHT_EX_ENERGY_ADJ[i,colnames(growth_SERVICES_GOODS_EX_ENERGY["2017/"][i,j])])
+    }
+  }
+}
+
+
+over_five_EX_ENERGY<-data.frame(over_five_EX_ENERGY)
+over_five_EX_ENERGY[is.na(over_five_EX_ENERGY)]<-0 
+over_five_EX_ENERGY_xts<-over_five_EX_ENERGY %>% as.xts(order.by=index(growth_SERVICES_GOODS_EX_ENERGY))
+
+over_five_EX_ENERGY_xts_sum<-rowSums(over_five_EX_ENERGY_xts,na.rm=TRUE)
+
+
+
+
+over_five_12_Months_EX_ENERGY<-matrix(NA,ncol=ncol(growth_SERVICES_GOODS_EX_ENERGY["2017/"]) ,nrow=nrow(growth_SERVICES_GOODS_EX_ENERGY["2017/"])) 
+
+    for(i in 13:nrow(over_five_EX_ENERGY)){
+      for(j in 1:ncol(over_five_EX_ENERGY)){
+          if((as.numeric(over_five_EX_ENERGY[i,j])>0)  && (as.numeric(over_five_EX_ENERGY[i-1,j])>0)  && (as.numeric(over_five_EX_ENERGY[i-2,j])>0) && (as.numeric(over_five_EX_ENERGY[i-3,j])>0) && (as.numeric(over_five_EX_ENERGY[i-4,j])>0) && (as.numeric(over_five_EX_ENERGY[i-5,j])>0) && (as.numeric(over_five_EX_ENERGY[i-6,j])>0) && (as.numeric(over_five_EX_ENERGY[i-7,j])>0) && (as.numeric(over_five_EX_ENERGY[i-8,j])>0) && (as.numeric(over_five_EX_ENERGY[i-9,j])>0) && (as.numeric(over_five_EX_ENERGY[i-10,j])>0) && (as.numeric(over_five_EX_ENERGY[i-11,j])>0)) {
+      over_five_12_Months_EX_ENERGY[i,j]<-over_five_EX_ENERGY[i,j]
+          } else {
+      over_five_12_Months_EX_ENERGY[i,j]<-as.numeric(0)
+
+    } 
+  }
+}
+
+
+over_five_12_Months_EX_ENERGY_SUM<-na.omit(over_five_12_Months_EX_ENERGY) %>% rowSums() %>% as.xts(order.by=index(growth_SERVICES_GOODS_EX_ENERGY["2018-01-01/"]))
+
+
+over_five_12_Months<-merge(over_five_12_Months_EX_ENERGY_SUM,over_five_12_Months_SUM)
+colnames(over_five_12_Months)<-c("Over_5_ex_energy","Over_5")
+
+##starting point new graph 
+
+
+over_five_12_Months_graph<-ggplot(data=over_five_12_Months,aes(x=index(over_five_12_Months)))+
+      geom_line(aes(y=100*(Over_5_ex_energy), color="> 5% 12 months or more (Excl. Energy)"),size=1)+
+      geom_line(aes(y=100*(Over_5), color="> 5% 12 months or more"),size=1)+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+
+  theme(legend.position="none",plot.caption = element_text(hjust=0))+
+  labs(x="",
+       title="Composition of Inflation Basket >5%",
+       caption="Date Source: CSO, DOF",
+       y="")+
+    scale_color_manual(name = "", values = c("> 5% 12 months or more (Excl. Energy)" = DOF_colours[1],"> 5% 12 months or more" = DOF_colours[2]))+
+  theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
+
+over_five_12_Months_graph<-over_five_12_Months_graph+ theme(legend.position=c(0.4, 0.5))
+
+
+
+
+EX_ENERGY_COMPO<-data.frame(index(over_five_12_Months_EX_ENERGY_SUM),below_zero_EX_ENERGY_xts_sum[13:length(below_zero_EX_ENERGY_xts_sum)],betweeen_zero_two_EX_ENERGY_xts_sum[13:length(below_zero_EX_ENERGY_xts_sum)],betweeen_two_five_EX_ENERGY_xts_sum[13:length(below_zero_EX_ENERGY_xts_sum)],over_five_EX_ENERGY_xts_sum[13:length(below_zero_EX_ENERGY_xts_sum)],na.omit(over_five_12_Months_EX_ENERGY_SUM))
+
+colnames(EX_ENERGY_COMPO)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
+
+
+
+
+
+
+graph_data<-as.xts(graph_data)
+
+graph_data_2023<-data.frame(index(graph_data["2018/"]),graph_data["2018/"])
+colnames(graph_data_2023)<-c("Date", "Trimmed Inflation","Overall Inflation", "Core Inflation")
+
+
+
+
+
+infl_CONTR<-data.frame(inflationbreakdown[13:nrow(inflationbreakdown),],over_five_12_Months_SUM)
+colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
+
+
+dataset_names <- list('inflationbreakdown'=infl_CONTR)
+
+
+write.xlsx(dataset_names, file='INFLATIONCONTRIBUTIONWEIGHTS.xlsx')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#print(waterfall_graph_change_annual_inflation)
+
+```
+
+
+
+```{r inflation text for markdown, warning=FALSE, include=FALSE}
+
+
+#download data ggplot
+embed_data= function(x= infl_CONTR, filename= "file.csv", label= "Download Graph Data"){
+
+  # Create encoded Base64 datastream 
+  encode_data= function(x){
+    write.csv(x, "./file.csv")
+    enc= sprintf('data:text/csv;base64,%s', openssl::base64_encode(paste0(readLines("./file.csv"), collapse="\n")) )
+    unlink("./file.csv")
+    return(enc)
+  }
+
+  # String result ready to be placed in rmarkdown
+  paste0("<a download='", filename, "' href=", encode_data(x), ">", label, "</a>")
+
+}
+
+
+
+
+
+
+
+
+
+conditional <- function(x){
+  if (x > 0) {
+    print(paste0("increased by ", round((x), digits = 1),sep="%"))
+  } else if (x < 0){
+    print(paste0("decreased by ", round((x), digits = 1),sep="%"))
+  } else {
+    print(paste0("was flat at ", round((x), digits = 1),sep="%"))
+  }
+}
+
+conditional_alt <- function(x){
+  if (x > x) {
+    print(paste("pace of growth has increased", round((x), digits = 1,sep="%")))
+  } else if (x < 0){
+    print(paste("decreasing by", round((x), digits = 1,sep="%")))
+  } else {
+    print(paste("flat at", round((x), digits = 1,sep="%")))
+  }
+}
+
+conditional_alt2 <- function(x){
+  if (x > 0) {
+    (paste(round((x), digits = 1)," higher than ",sep="%"))
+  } else if (x < 0){
+    (paste(round((x), digits = 1), " lower than ",sep="%"))
+  } else {
+    (paste("remains flat at ", round(abs(x), digits = 1,sep="%")))
+  }
+}
+
+conditional_alt3 <- function(x){
+  if (x < lag.xts(x,k=1)) {
+    print(paste("a slower pace of growth compared to the previous month"))
+  } else if (x >lag.xts(x,k=1)){
+    print(paste("a faster pace of growth compared to the previous month"))
+  } else {
+    print(paste("a consistent pace of growth compared to the previous month"))
+  }
+}
+
+
+conditional_alt4 <- function(x){
+  if (x < 0) {
+    print(paste(round(x,1), "percentage points below what was forecast at the time of SPU 2024"))
+  } else if (x >0){
+    print(paste(round(x,1), "percentage points above what was forecast at the time of SPU 2024"))
+  } else {
+    print(paste("inline with the SPU 2024 forecast"))
+  }
+}
+
+conditional_alt5 <- function(x){
+  if (x < 0) {
+    print(paste("made a negative contribution of", round(x,1), "percentage points to overall export growth"))
+  } else if (x >0){
+    print(paste("made a positive contribution of", round(x,1), "percentage points to overall export growth"))
+  } else {
+    print(paste("made a broadly balanced contribution to overall export growth"))
+  }
+}
+
+
+growth_OVERALL_HICP<-(OVERALL_HICP_XTS["2016/"]) %>% as.numeric() %>% growth(freq=12) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2017/"]))
+
+
+CURRENT_DATE<-format(index(OVERALL_HICP_XTS)[length(OVERALL_HICP_XTS)],format="%B %Y")
+Monthly_INFLATION<-growth(as.numeric(OVERALL_HICP_XTS), 1) %>% round(1)  
+Monthly_INFLATION_TEXT<-conditional(Monthly_INFLATION[length(Monthly_INFLATION)])
+
+
+ANNUAL_INFLATION<-growth_OVERALL_HICP<-(OVERALL_HICP_XTS["2016/"]) %>% as.numeric() %>% growth(freq=12) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2017/"])) %>% round(1)  
+ANNUAL_INFLATION_TEXT<-conditional(ANNUAL_INFLATION[length(ANNUAL_INFLATION)])
+
+Monthly_INFLATION<-growth_OVERALL_HICP<-(OVERALL_HICP_XTS["2016/"]) %>% as.numeric() %>% growth(freq=1) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2016-02-01/"])) %>% round(1)  
+Monthly_INFLATION_TEXT<-conditional(Monthly_INFLATION[length(Monthly_INFLATION)])
+
+
+
+ANNUAL_CORE_INFLATION<-(CSO_HICP_INDEX_XTS$`HICP All items excluding energy and unprocessed food`["2016/"]) %>% as.numeric() %>% growth(freq=12) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2017/"])) %>% round(1)  
+ANNUAL_CORE_INFLATION_TEXT<-conditional(ANNUAL_CORE_INFLATION[length(ANNUAL_CORE_INFLATION)])
+
+Monthly_CORE_INFLATION<-(CSO_HICP_INDEX_XTS$`HICP All items excluding energy and unprocessed food`["2016/"]) %>% as.numeric() %>% growth(freq=1) %>% na.omit() %>% as.xts(order.by=index(OVERALL_HICP_XTS["2016-02-01/"])) %>% round(1)   
+Monthly_CORE_INFLATION_TEXT<-conditional(Monthly_CORE_INFLATION[length(Monthly_CORE_INFLATION)])
+
+
+
+YTD_2024_annual<-ANNUAL_INFLATION["2024/"] %>% mean()  %>% round(1)
+
+FORECAST_KPI<-YTD_2024_annual-2.1
+FORECAST_KPI_TEXT<-conditional_alt4(FORECAST_KPI)
+
+
+carryover_weight<-(length(OVERALL_HICP_XTS["2024/"])/12)
+Carryover<-((((as.numeric(OVERALL_HICP_XTS[length(OVERALL_HICP_XTS)])*(1-carryover_weight))+(mean(as.numeric(OVERALL_HICP_XTS["2024"]))*carryover_weight))-mean(as.numeric(OVERALL_HICP_XTS["2023"])))/mean(as.numeric(OVERALL_HICP_XTS["2023"])))*100 %>% as.numeric() 
+Carryover_TEXT<-paste0(round(Carryover,1),sep="%")
+
+
+
+
+     
+
+Contribution_highest_name<-last(summary_contribution[1:5])[order(as.numeric(as.character(last(summary_contribution[1:5]))), decreasing=TRUE)][1] %>% names()
+
+Contribution_highest_number<-last(summary_contribution[1:5])[order(as.numeric(as.character(last(summary_contribution[1:5]))), decreasing=TRUE)][1]  %>% round(2) %>% as.numeric()
+
+#Contribution_highest_percent<-(Contribution_highest_number/rowSums(last(summary_contribution)[1:5]))*100 %>% round(1)
+#Contribution_highest_percent<-paste0(round(as.numeric(Contribution_highest_percent[,1]),1), sep="%")
+
+
+CURRENT_DATE_COMPONENTS<-format((summary_contribution$index.ENERGY..2020....)[length(summary_contribution$index.ENERGY..2020....)],format="%B %Y")
+
+
+sub_compon_max<-CONTRIBUTION[nrow(CONTRIBUTION),order(CONTRIBUTION[nrow(CONTRIBUTION)], decreasing=TRUE)] %>% .[,1] %>% round(2)
+
+sub_compon_min<-CONTRIBUTION[nrow(CONTRIBUTION),order(CONTRIBUTION[nrow(CONTRIBUTION)], decreasing=TRUE)] %>% .[,ncol(.)] %>% round(2)
+
+
+
+GROWTH_COMPONENTS<-data.frame(GOOD_SERVICES_INDEX_GROWTH,index(GOOD_SERVICES_INDEX_GROWTH))
+names(GROWTH_COMPONENTS)<-c("Bread & Cereals","Meat","Fish","Milk, Cheese,eggs","Oil & Fats","Fruit","Vegetables","Sugar,Jam, Honey, Chocolate","Food Products","Coffee, tea, Cocoa","Mineral Water, Soft Drinks, Vegetable Juices","Spirits","Wine","Beer","Tobacco","Garments","Other Clothing","Footwear","Material for the maintenance of dwellings","Electricity","Gas","Liquid Fuel","Solid Fuels","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils","House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products", "Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Fuels & Lubricants for personal transport", "Recording Equipment",  "Information processing equipment", "Recording Media", "Musical Instruments", "Games, Toys, hobbies", "Sports & outdoor Equipment","Gardens, plants and flowers", "Pets Products", "Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects","Actual Rent", "Repair of Dwelling","Repair of Household Appliances", "Domestic Services and Household Services","Insurance for Dwellings","Cleaning & Repair Clothing","Repair of audio-visual","Recreational & Sporting Services","Cultural Services", "Restaurant, Cafes etc.","Canteens","Hairdressing Salons","Repair Personal Transport","Other services for Personal Transport","Passenger transport by railway","Passenger transport by road","Passenger transport by air","Passenger transport by sea","Combined Passenger transport","Other purchased transport services","Package Holidays","Accomdation Services","Medical Services", "Dental Services","Hospital Services","Education","Social Protection","Healthcare Insurance","Transport Insurance","Financial Services","Other Services","Postal Services","Telephone equipment and services","Refuse Collection", "Other Services for Dwellings") 
+
+names(GROWTH_COMPONENTS)<-GROWTH_COMPONENTS %>% names() %>% gsub(
+                        pattern = "\\,",
+                        replacement = " ") %>%  gsub(
+                        pattern = "\\.",
+                        replacement = " ")    %>% str_squish()
+
+
+
+
+#GROWTH_RATE_SERVICES_MAX_CONTRIBUTION<-GROWTH_COMPONENTS[names(ORDER_SERVICES_CONTRIBUTION[1:3])]
+
+
+
+#FIRST_ORDER_SERVICES_CONTRIBUTION<-names(ORDER_SERVICES_CONTRIBUTION[1])
+#SECOND_ORDER_SERVICES_CONTRIBUTION<-names(ORDER_SERVICES_CONTRIBUTION[2])
+#THIRD_ORDER_SERVICES_CONTRIBUTION<-names(ORDER_SERVICES_CONTRIBUTION[3])
+
+#FIRST_ORDER_SERVICES_CONTRIBUTION_YOY<-paste0(GROWTH_RATE_SERVICES_MAX_CONTRIBUTION[nrow(GROWTH_RATE_SERVICES_MAX_CONTRIBUTION),1], sep="%")
+#SECOND_ORDER_SERVICES_CONTRIBUTION_YOY<-paste0(GROWTH_RATE_SERVICES_MAX_CONTRIBUTION[nrow(GROWTH_RATE_SERVICES_MAX_CONTRIBUTION),2], sep="%")
+#THIRD_ORDER_SERVICES_CONTRIBUTION_YOY<-paste0(GROWTH_RATE_SERVICES_MAX_CONTRIBUTION[nrow(GROWTH_RATE_SERVICES_MAX_CONTRIBUTION),3], sep="%")
+
+
+
+```
+
+***
+
+#### **Overall Inflation Trends** ####
+
+* According to the latest data,  inflation in `r CURRENT_DATE`  `r Monthly_INFLATION_TEXT` over the month. On an annual basis, inflation `r ANNUAL_INFLATION_TEXT` in `r CURRENT_DATE`. 
+<br>
+<br>
+
+* Core inflation in `r CURRENT_DATE`  `r Monthly_CORE_INFLATION_TEXT` over the month. On an annual basis, inflation `r ANNUAL_CORE_INFLATION_TEXT` in `r CURRENT_DATE`. 
+<br>
+<br>
+
+* As part of SPU 2024, the Department forecast Inflation growth of 2.1% in 2024. Year to date, annual inflation is averaging `r YTD_2024_annual`% in `r CURRENT_DATE`. As a result inflation is currently running `r FORECAST_KPI_TEXT`. 
+<br>
+<br>
+
+* On a carryover only basis, annual inflation is currently running at `r Carryover_TEXT` for 2024.  
+<br>
+<br>
+
+***
+
+
+
+```{r inflatin contributon graph, echo=FALSE, warning=FALSE}
+
+INFLATION_CON_plot<-INFLATION_CON_plot+theme(legend.position=c(0.2,0.6),plot.title = element_text(hjust = 0.5))
+
+
+LINE_DATA<-data.frame(index(ANNUAL_INFLATION["2020/"]),ANNUAL_INFLATION["2020/"])
+colnames(LINE_DATA)<-c("Date","Growth")
+
+LINE_DATA_2<-melt(LINE_DATA, id=c("Date"))
+
+INFLATION_CON_plot_WITH_LINE<-INFLATION_CON_plot+geom_line(data=LINE_DATA_2,aes(x=Date, y=value),size = 1.2)
+
+INFLATION_CON_plot_WITH_LINE
+
+Inflation_contributions_graph_data<-summary_contribution[1:5] %>% round(3)
+
+Inflation_contributions_graph_data_XTS<-data.frame(index(ANNUAL_INFLATION["2020/"]),Inflation_contributions_graph_data) 
+colnames(Inflation_contributions_graph_data_XTS)<-c("Date","Energy","Food","NEIG","Rent","Core Services")
+
+write.xlsx(Inflation_contributions_graph_data_XTS, file="Inflation_contributions_graph_data.xlsx")
+
+```
+
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/Inflation_contributions_graph_data.xlsx)
+
+
+<br>
+<br>
+
+* `r Contribution_highest_name` made the largest contribution to inflation on an annual basis contributing `r Contribution_highest_number` percentage points to overall inflation in `r CURRENT`.
+<br>
+<br>
+
+* At a sub-component level, `r names(sub_compon_max)` made the largest contribution to inflation, contributing `r paste(sub_compon_max)` percentage points to overall inflation growth. 
+<br>
+<br>
+
+
+* At a sub-component level, `r names(sub_compon_min)` was the largest the most susbtantive drag on inflation, contributing `r paste(sub_compon_min)` percentage points to overall inflation growth. 
+<br>
+<br>
+
+
+***
+
+
+
+```{r Inflation waterfall, echo=FALSE, warning=FALSE}
+
+waterfall_graph_change_annual_inflation<-waterfall_graph_change_annual_inflation+ labs(x="",
+       title="waterfall change annual inflation",
+       caption="Source: CSO, Eurostat, DOF calculations",
+       y="Percentage change (%)")+theme(plot.title = element_text(hjust = 0.5))+scale_y_continuous(labels=function(x) paste0(x,"%"))
+
+
+(waterfall_graph_change_annual_inflation)
+
+
+colnames(LATEST_Contribution_CHANGE)<-LATEST_Contribution_CHANGE %>% names() %>% gsub(
+                        pattern = "\\,",
+                        replacement = " ") %>%  gsub(
+                        pattern = "\\.",
+                        replacement = " ")    %>% str_squish()
+
+
+
+Last_month_decreasing_component<-lag(CONTRIBUTION[,names(LATEST_Contribution_CHANGE[,order(as.numeric(as.character(LATEST_Contribution_CHANGE)))])[1]],1) %>% last() %>% as.numeric() %>% round(2) %>% paste0(sep="%") 
+
+Current_month_decreasing_component<-CONTRIBUTION[,names(LATEST_Contribution_CHANGE[,order(as.numeric(as.character(LATEST_Contribution_CHANGE)))])[1]] %>% last() %>% as.numeric() %>% round(2) %>% paste0(.,sep="%")  
+
+Last_month_increasing_component<-lag(CONTRIBUTION[,names(LATEST_Contribution_CHANGE[,order(as.numeric(as.character(LATEST_Contribution_CHANGE)),decreasing = TRUE)])[1]],1) %>% last() %>% as.numeric() %>% round(2) %>% paste0(.,sep="%")
+
+Current_month_increasing_component<-CONTRIBUTION[,names(LATEST_Contribution_CHANGE[,order(as.numeric(as.character(LATEST_Contribution_CHANGE)),decreasing = TRUE)])[1]] %>% last() %>% as.numeric() %>% round(2) %>% paste0(.,sep="%")
+
+Waterfall_graph_data<-data.frame(Inflation_Contributions[nrow(Inflation_Contributions)-1,],ENERGY_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],FOOD_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],NEIG_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],Rent_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],CORE_SERVICES_CHANGE_CONTRIBUTION[length(CORE_SERVICES_CHANGE_CONTRIBUTION)],Inflation_Contributions[nrow(Inflation_Contributions),]) %>% round(3)
+
+
+
+colnames(Waterfall_graph_data)<-c(Previous,"Energy","Food","NEIG","Rent","Core Services", CURRENT)
+
+overall_waterfall_text<-conditional_alt2(last(Inflation_Contributions)-as.numeric(last(lag(Inflation_Contributions,1))))
+
+
+text1<-paste0(as.numeric(round(last(Inflation_Contributions),1)),sep="%")
+text2<-paste0(as.numeric(round(last(lag(Inflation_Contributions,1)),1)),sep="%")
+text3<-names(LATEST_Contribution_CHANGE[,order(LATEST_Contribution_CHANGE)])[1]
+text4<-names(LATEST_Contribution_CHANGE[,order(LATEST_Contribution_CHANGE,decreasing=TRUE)])[1]
+
+
+write.xlsx(Waterfall_graph_data, file="Waterfall_graph_data.xlsx")
+
+
+
+
+```
+
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/Waterfall_graph_data.xlsx)
+
+ 
+***
+
+* In `r CURRENT` annual inflation (`r text1`) was `r overall_waterfall_text` `r Previous`  (`r text2`).
+<br>
+<br>
+* `r text3` was the most substantive drag on annual inflation over the month, falling from `r Last_month_decreasing_component` in  `r Previous` to `r Current_month_decreasing_component` in `r CURRENT`
+<br>
+<br>
+* `r text4` was the most substantive contribution to the change in annual inflation over the month, rising from `r Last_month_increasing_component` in  `r Previous` to `r Current_month_increasing_component` in `r CURRENT`
+<br>
+<br>
+
+***
+```{r trim_graph, echo=FALSE, warning=FALSE}
+
+(trim_graph)
+```
+
+```{r trim_graph_2, echo=FALSE, warning=FALSE}
+
+trimmed_graph_data<-graph_data["2017/"] %>% round(3)
+colnames(trimmed_graph_data)<-c("Trimmed DOF Inflation", "Overall HICP", "Core Inflation")
+
+```
+
+
+```{r trim_graph_2_1, echo=FALSE, warning=FALSE}
+Compare_TRIM_CORE<-na.omit(trimmed_graph_data$`Trimmed DOF Inflation`,na.rm=TRUE)-na.omit(trimmed_graph_data$`Core Inflation`,na.rm=TRUE)
+Compare_TRIM_CORE_TEXT<-conditional_alt2(Compare_TRIM_CORE[length(Compare_TRIM_CORE)])
+trim_date<-index(Compare_TRIM_CORE)[length(Compare_TRIM_CORE)] %>% format("%B %Y")
+```
+
+
+```{r trim_graph_3, echo=FALSE, warning=FALSE}
+
+current_trimmed_mean<-trimmed_graph_data$`Trimmed DOF Inflation`[nrow(trimmed_graph_data)] %>% round(1) %>% paste0(sep="%")
+
+```
+
+
+
+```{r trim_graph_3.1, echo=FALSE, warning=FALSE}
+
+current_core_inflation<-trimmed_graph_data$`Core Inflation`[nrow(trimmed_graph_data)] %>% round(1) %>% paste0(sep="%")
+
+```
+
+
+
+
+
+
+```{r trim_graph_4, echo=FALSE, warning=FALSE}
+trimming_series<-as.xts(GROWTH_COMPONENTS)["2017/"] 
+colnames(trimming_series)<-names(GROWTH_COMPONENTS)
+exclusion_max<-trimming_series[nrow(trimming_series)] %>% as.character() %>% as.numeric() %>% order(decreasing = TRUE) %>% round(1) %>% trimming_series[,.] 
+
+
+```
+
+```{r trim_graph_5, echo=FALSE, warning=FALSE}
+
+exclusion_list<-exclusion_max[,1:9] %>% names() %>% gsub(
+                        pattern = "\\,",
+                        replacement = " ") %>%  gsub(
+                       pattern = "\\.",
+                       replacement = " ")    %>% str_squish() 
+```
+
+
+
+```{r trim_graph_6, echo=FALSE, warning=FALSE}
+
+exclusion_min<-trimming_series[nrow(trimming_series)] %>% as.character() %>% as.numeric() %>% order(decreasing = FALSE) %>% round(1) %>% trimming_series[,.]
+```
+
+
+
+```{r trim_graph_7, echo=FALSE, warning=FALSE}
+
+exclusion_list_min<-exclusion_min[,1:9] %>% names() %>% gsub(
+                       pattern = "\\,",
+                      replacement = " ") %>%  gsub(
+                     pattern = "\\.",
+                 replacement = " ")    %>% str_squish() 
+
+
+write.xlsx(trimmed_graph_data,file ="trimmed_graph_data.xlsx")
+
+```
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/trimmed_graph_data.xlsx)
+<br>
+
+***
+* The trimmed mean inflation is an internal DOF calculation based on excluding the series with highest and lowest rates of annual growth. 
+<br>
+<br>
+* Among high growth components removed include `r exclusion_list[1]` (`r paste0(round(as.numeric(last(exclusion_max[,1])),2), sep="%")` y-o-y), `r  exclusion_list[2]`(`r paste0(round(as.numeric(last(exclusion_max[,2])),2), sep="%")` y-o-y) and  `r  exclusion_list[3]` (`r paste0(round(as.numeric(last(exclusion_max[,3])),2), sep="%")` y-o-y)
+<br>
+<br>
+* Among the low growth components removed include `r exclusion_list_min[1]` (`r paste0(round(as.numeric(last(exclusion_min[,1])),2), sep="%")` y-o-y), `r  exclusion_list_min[2]` (`r paste0(round(as.numeric(last(exclusion_min[,2])),2),sep="%")` y-o-y) and `r  exclusion_list_min[3]` (`r paste0(round(as.numeric(last(exclusion_min[,3])),2), sep="%")` y-o-y).  
+<br>
+<br>
+* In `r trim_date`, the trimmed inflation rate (`r current_trimmed_mean` y-o-y) was `r Compare_TRIM_CORE_TEXT` Core inflation (`r current_core_inflation` y-o-y).
+<br>
+<br>
+
+***
+```{r proporation of inflation basket, echo=FALSE, warning=FALSE}
+
+
+CONTRIBUTION_INFLATION<-CONTRIBUTION_INFLATION+theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))
+CONTRIBUTION_INFLATION
+
+graph_data_inflation_basket<-inflationbreakdown[2:5]
+
+basket_weight_date<-last(unique(index(as.xts(graph_data_inflation_basket)))) %>% format("%B %Y")  
+text_high_basket<-round(last(graph_data_inflation_basket$`>5%`)*100,1) 
+
+basket_weight_date_prior_month<-last(unique(index(as.xts(graph_data_inflation_basket))-1)) %>% format("%B %Y")  
+text_high_basket_prior<-round((graph_data_inflation_basket[nrow(graph_data_inflation_basket)-1,][4])*100,1) 
+
+compare_high_weight_text<-conditional_alt2(text_high_basket-text_high_basket_prior)
+
+
+text_low_basket<-round(last(graph_data_inflation_basket$`0%-2%`+graph_data_inflation_basket$`<0%`)*100,1) %>% paste0(sep="%") 
+
+
+```
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/INFLATIONCONTRIBUTIONWEIGHTS.xlsx)
+
+***
+
+* As inflation becomes broad based in nature a greater proportion of the inflation basket records higher rates of inflation. 
+<br>
+<br>
+* In `r basket_weight_date`, `r paste0(text_high_basket,sep="%")` of the inflation basket reported inflation in excess of 5%. This is `r compare_high_weight_text` in  `r basket_weight_date_prior_month`.
+<br>
+<br>
+* Approximately `r text_low_basket` of the inflation basket reported inflation less than or equal to 2%. This compares to over 50% prior to the pandemic.  
+<br>
+<br>
+
+*** 
+
+
+```{r OVER 5 FOR 12 proporation of inflation basket, echo=FALSE, warning=FALSE}
+
+
+over_five_12_Months_graph
+Latest_over_5_over_12<-round(last(over_five_12_Months_graph$data$Over_5*100),1) 
+Latest_over_5_over_12_TEXT<-paste0(Latest_over_5_over_12,"%")
+Latest_over_5_over_12_DATE<-last(over_five_12_Months_graph$data$Index)  %>% format("%B %Y")
+
+
+Latest_over_5_over_12_ex_energy<-round(last(over_five_12_Months_graph$data$Over_5_ex_energy*100),1) 
+Latest_over_5_over_12_ex_energy_TEXT<-paste0(Latest_over_5_over_12_ex_energy,"%")
+
+
+
+```
+
+
+***
+
+* Reflecting both the broad based and the persistent nature of inflation, `r Latest_over_5_over_12_TEXT` of the components in the inflation basket had an inflation rate in excess of 5% for at least the last 12 months  in `r Latest_over_5_over_12_DATE`. 
+<br>
+<br>
+
+* Exclduing the energy components from the basket, `r Latest_over_5_over_12_ex_energy_TEXT` of the remaining components in the inflation basket had an inflation rate in excess of 5% for at least the last 12 months  in `r Latest_over_5_over_12_DATE`.
+<br>
+<br>
+
+
+*** 
+
+
+
+
+```{r heatmap, echo=FALSE, warning=FALSE}
+
+
+SERVICES_GOODS_XTS_INDEX_GROWTH<-as.xts(growth_index)  %>%.["2021/"]
+DF<-data.frame(SERVICES_GOODS_XTS_INDEX_GROWTH)
+
+
+
+
+colnames(DF)<-c("Bread & Cereals","Meat","Fish","Milk, Cheese,eggs","Oil & Fats","Fruit","Vegetables","Sugar,Jam, Honey, Chocolate","Food Products","Coffee, tea, Cocoa","Mineral Water, Soft Drinks, Vegetable Juices","Spirits","Wine","Beer","Tobacco","Garments","Other Clothing","Footwear","Material for the maintenance of dwellings","Electricity","Gas","Liquid Fuel","Solid Fuels","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils","House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products", "Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Fuels & Lubricants for personal transport", "Recording Equipment",  "Information processing equipment", "Recording Media", "Musical Instruments", "Games, Toys, hobbies", "Sports & outdoor Equipment","Gardens, plants and flowers", "Pets Products", "Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects","Actual Rent", "Repair of Dwelling","Repair of Household Appliances", "Domestic Services and Household Services","Insurance for Dwellings","Cleaning & Repair Clothing","Repair of audio-visual","Recreational & Sporting Services","Cultural Services", "Restaurant, Cafes etc.","Canteens","Hairdressing Salons","Repair Personal Transport","Other services for Personal Transport","Passenger transport by railway","Passenger transport by road","Passenger transport by air","Passenger transport by sea","Combined Passenger transport","Other purchased transport services","Package Holidays","Accomdation Services","Medical Services", "Dental Services","Hospital Services","Education","Social Protection","Healthcare Insurance","Transport Insurance","Financial Services","Other Services","Postal Services","Telephone equipment and services","Refuse Collection", "Other Services for Dwellings")
+
+
+
+DFF<-DF[names(last(CONTRIBUTION[,order(as.numeric(as.character(CONTRIBUTION[nrow(CONTRIBUTION),])),decreasing = TRUE)]))[1:20]] 
+DFF[is.na(DFF)]<-0
+
+
+
+Graph_Data_Heatmap<-data.frame(index(as.xts(DFF)),DFF)
+
+colnames(Graph_Data_Heatmap)<-Graph_Data_Heatmap %>% names() %>% gsub(
+                        pattern = "\\,",
+                        replacement = " ") %>%  gsub(
+                        pattern = "\\.",
+                        replacement = " ")    %>% str_squish()
+
+
+
+DFFF<-melt(Graph_Data_Heatmap,id=c("index as xts DFF"))
+DFFF$value<-round(as.numeric(DFFF$value),1)
+
+DFFF<-DFFF %>% mutate(variable = recode(.$variable,  "Mineral.Water..Soft.Drinks..Vegetable.Juices" = "Soft drinks","Non.durable.househld.goods" ="Non-durable","Electrical.Appliances.for.personal.care"="Personal care app","Accomdation.Services"="Hotel,etc."))
+
+
+GG_heatmap<-ggplot(data=DFFF, aes(y=variable,x=`index as xts DFF`,fill=value, label=value))+
+                   geom_tile(color="black",size=1.1, lwd = 0,
+            linetype = 0)+geom_text(aes(label = value), color = "black", size = 2)+scale_fill_gradient(limit=c(min(0),max(15)),low = "green", high = "red")+  theme(legend.position = "none")
+
+       
+GG_heatmap<-GG_heatmap+labs(title="Heatmap of the highest contribution to annual inflation", caption="Source: CSO, DOF calculations",
+       y="")+theme(plot.title = element_text(hjust = 0.5),axis.title.x = element_blank())
+GG_heatmap
+
+
+
+NAMES_HIGH_HEATMAP<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[20] %>% names()
+heatmap_date<-last(unique(DFFF$`index as xts DFF`))
+
+text_heatmap_growth_rate<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[20]  %>% as.numeric() %>% round(2) %>% paste0(sep="%")
+
+NAMES_HIGH_HEATMAP_2<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[19] %>% names()
+text_heatmap_growth_rate_2<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[19]  %>% as.numeric() %>% round(2) %>% paste0(sep="%")
+
+NAMES_HIGH_HEATMAP_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[18] %>% names()
+text_heatmap_growth_rate_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[18]  %>% as.numeric() %>% round(2) %>% paste0(sep="%")
+
+       
+```
+
+
+***
+* The heatmap above focuses on the top 20 series contributing most to annual inflation in the current month. 
+<br>
+<br>
+
+* `r NAMES_HIGH_HEATMAP` recorded particularly strong inflation in `r format(heatmap_date, "%B %Y")`, increasing by `r text_heatmap_growth_rate` on an annual basis. 
+<br>
+<br>
+
+* `r NAMES_HIGH_HEATMAP_2` and `r NAMES_HIGH_HEATMAP_3` also recorded strong annual inflation in `r format(heatmap_date, "%B %Y")`, increasing by `r text_heatmap_growth_rate_2` and `r text_heatmap_growth_rate_3` respectively. 
+<br>
+<br>
+
+***
+
+
+```{r contribution EA inflation, echo=FALSE, message=FALSE, warning=FALSE}
+
+FOOD_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP011.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP011.EA") %>% .$period)
+
+RENT_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$period)
+
+NEIG_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$period)
+
+
+ENERGY_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$period)
+
+
+CORE_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$period) - RENT_EA_XTS
+
+
+MISC_GOOD_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$period) 
+
+
+EA_INFLATION<-CORE_SERVICES_EA_XTS+ENERGY_EA_XTS+NEIG_EA_XTS+RENT_EA_XTS+FOOD_EA_XTS+MISC_GOOD_SERVICES_EA_XTS
+EA_INFLATION_CONTRIBUTION<-merge(CORE_SERVICES_EA_XTS["2019/"],ENERGY_EA_XTS["2019/"],NEIG_EA_XTS["2019/"],RENT_EA_XTS["2019/"],FOOD_EA_XTS["2019/"],MISC_GOOD_SERVICES_EA_XTS["2019/"])
+IRE_INFLATION_CONTRIBUTION<-merge(NEIG,FOOD,ENERGY,Rent,CORE_SERVICES) %>% .[index(EA_INFLATION_CONTRIBUTION)]
+colnames(IRE_INFLATION_CONTRIBUTION)<-c("NEIG","FOOD","ENERGY","Rent","CORE_SERVICES")
+
+delta_EA_IRE_ONE<-data.frame(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS-IRE_INFLATION_CONTRIBUTION$CORE_SERVICES[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
+  EA_INFLATION_CONTRIBUTION$NEIG_EA_XTS-IRE_INFLATION_CONTRIBUTION$NEIG[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
+  EA_INFLATION_CONTRIBUTION$RENT_EA_XTS-IRE_INFLATION_CONTRIBUTION$Rent[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
+  EA_INFLATION_CONTRIBUTION$FOOD_EA_XTS-IRE_INFLATION_CONTRIBUTION$FOOD[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
+  EA_INFLATION_CONTRIBUTION$ENERGY_EA_XTS-IRE_INFLATION_CONTRIBUTION$ENERGY[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)], index(EA_INFLATION_CONTRIBUTION$FOOD_EA_XTS..2019...["2019/"])
+) 
+
+
+delta_EA_IRE<-delta_EA_IRE_ONE %>% .[37:nrow(delta_EA_IRE_ONE),] %>% melt(id=c("index.EA_INFLATION_CONTRIBUTION.FOOD_EA_XTS..2019.....2019....")) %>% na.omit() %>%  mutate(variable = recode(.$variable,  "RENT_EA_XTS..2019..." = "Rent","NEIG_EA_XTS..2019..." ="NEIG","FOOD_EA_XTS..2019..." ="Food","CORE_SERVICES_EA_XTS..2019..." ="Core Services","ENERGY_EA_XTS..2019..." ="Energy"))
+
+Graph_Data_EA<-delta_EA_IRE_ONE %>% na.omit() %>% .[1:5] %>% round(3)
+Graph_Data_EA<-Graph_Data_EA*-1
+colnames(Graph_Data_EA)<-c("Core Services","NEIG","Rent","Food","Energy")
+
+
+
+DELTA_EA_IRE_CON_plot<-ggplot(data=delta_EA_IRE, aes(y=value*-1, x=index.EA_INFLATION_CONTRIBUTION.FOOD_EA_XTS..2019.....2019...., fill=variable)) + 
+  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
+  labs(x="",
+       title=" Ireland V's Euro Area Inflation",
+       caption="Source: CSO, Eurostat, DOF calculations",
+       y="percentage point difference")+
+  scale_fill_manual(name = "", values  = c("NEIG" = DOF_colours[1],"Food" = DOF_colours[2],"Energy" = DOF_colours[3],"Rent" = DOF_colours[5],"Core Services" = DOF_colours[4]))+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme(legend.position=c(0.9,0.2),plot.title = element_text(hjust = 0.5),legend.background=element_blank())
+
+  
+
+
+IRE_EA_DIFF<-data.frame(index(EA_INFLATION["2022/"]), LINE_DATA$Growth[25:length(EA_INFLATION["2020/"])]-EA_INFLATION["2022/"])
+  
+colnames(IRE_EA_DIFF)<-c("Date","IRE_EA_DIFF")
+IRE_EA_DIFF<-melt(IRE_EA_DIFF, id=c("Date"))
+       
+DELTA_EA_IRE_CON_plot_2<-DELTA_EA_IRE_CON_plot+geom_line(data=IRE_EA_DIFF,aes(x=Date, y=value),size = 1)
+
+DELTA_EA_IRE_CON_plot_2
+
+IRELAND_HIGHER_VAL<-Graph_Data_EA[nrow(Graph_Data_EA),][which(Graph_Data_EA[nrow(Graph_Data_EA),]>=0)]
+
+IRELAND_LOWER_VAL<-Graph_Data_EA[nrow(Graph_Data_EA),][which(Graph_Data_EA[nrow(Graph_Data_EA),]<=0)]
+
+
+Text_IRELAND_higher<-paste0(colnames(IRELAND_HIGHER_VAL[1:length(IRELAND_HIGHER_VAL)-1]),sep=",")
+Text_IRELAND_higher_last<-paste0(((colnames(IRELAND_HIGHER_VAL[length(IRELAND_HIGHER_VAL)]))))
+
+
+Text_IRELAND_Lower<-paste0(((colnames(IRELAND_LOWER_VAL[1:length(IRELAND_LOWER_VAL)-1]))),sep=",")
+
+Text_IRELAND_Lower_Last<-paste0(((colnames(IRELAND_LOWER_VAL[length(IRELAND_LOWER_VAL)]))))
+
+
+```
+
+
+```{r EA TEXT ONLY, warning=FALSE, include=FALSE}
+
+text_IRE_EA_DIFF<-conditional_alt2(IRE_EA_DIFF$value[nrow(IRE_EA_DIFF)])
+
+```
+
+***
+
+* The graph above illustrates the difference between Ireland and Euro Area inflation. 
+<br>
+<br>
+
+* In `r format(index(EA_INFLATION), "%B %Y")[nrow(EA_INFLATION)]` inflation in Ireland was `r text_IRE_EA_DIFF` than in the Euro Area. 
+<br>
+<br>
+
+* `r Text_IRELAND_Lower` `r Text_IRELAND_Lower_Last` in Ireland recorded lower annual inflation than the same components in the Euro Area as a whole. 
+<br>
+<br>
+
+* `r Text_IRELAND_higher` `r Text_IRELAND_higher_last` in Ireland recorded higher annual inflation than the same components in the Euro Area as a whole. 
+<br>
+<br>
+
+***
+
+```{r services index, echo=FALSE, warning=FALSE}
+
+names(GOOD_SERVICES_INDEX)<-c("Bread & Cereals","Meat","Fish","Milk, Cheese,eggs","Oil & Fats","Fruit","Vegetables","Sugar,Jam, Honey, Chocolate","Food Products","Coffee, tea, Cocoa","Mineral Water, Soft Drinks, Vegetable Juices","Spirits","Wine","Beer","Tobacco","Garments","Other Clothing","Footwear","Material for the maintenance of dwellings","Electricity","Gas","Liquid Fuel","Solid Fuels","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils","House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products", "Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Fuels & Lubricants for personal transport", "Recording Equipment",  "Information processing equipment", "Recording Media", "Musical Instruments", "Games, Toys, hobbies", "Sports & outdoor Equipment","Gardens, plants and flowers", "Pets Products", "Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects","Actual Rent", "Repair of Dwelling","Repair of Household Appliances", "Domestic Services and Household Services","Insurance for Dwellings","Cleaning & Repair Clothing","Repair of audio-visual","Recreational & Sporting Services","Cultural Services", "Restaurant, Cafes etc.","Canteens","Hairdressing Salons","Repair Personal Transport","Other services for Personal Transport","Passenger transport by railway","Passenger transport by road","Passenger transport by air","Passenger transport by sea","Combined Passenger transport","Other purchased transport services","Package Holidays","Accomdation Services","Medical Services", "Dental Services","Hospital Services","Education","Social Protection","Healthcare Insurance","Transport Insurance","Financial Services","Other Services","Postal Services","Telephone equipment and services","Refuse Collection", "Other Services for Dwellings") 
+
+names(GOOD_SERVICES_INDEX)<-GOOD_SERVICES_INDEX %>% names() %>% gsub(
+                        pattern = "\\,",
+                        replacement = ".") %>%  gsub(
+                        pattern = " .",
+                        replacement = ".")    %>% str_squish()
+
+
+SERVICES_MAIN_COMPONENTS<-last(SERVICES_CONTRIBUTION)[,order(as.numeric(as.character(last(SERVICES_CONTRIBUTION))),decreasing = TRUE)][,1:4]
+
+SERVICES_OTHER_COMPONENTS<-rowSums(SERVICES_CONTRIBUTION)-rowSums(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])
+
+Services_graph_data<-data.frame(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)][30:nrow(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)]),],SERVICES_OTHER_COMPONENTS[30:nrow(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])],index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"]))
+
+colnames(Services_graph_data)<-c(names(SERVICES_MAIN_COMPONENTS),"Other","Date")
+Services_graph_data<-melt(Services_graph_data,id=c("Date"))
+
+NAMEING_SERVICE_CON<-as.data.frame(paste(unique(Services_graph_data$variable)[1:5]))
+
+
+INFLATION_SERVICES_CON_plot<-ggplot(data=Services_graph_data, aes(y=value, x=Date, fill=variable)) + 
+  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
+  labs(x="",
+       title="Contribution to Services Inflation",
+       caption="Source: CSO",
+       y="contribution to annual growth (%)")+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
+
+
+
+
+LINE_DATA_SERVICES<-data.frame(index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"]),rowSums(SERVICES_CONTRIBUTION)[30:nrow(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])])
+colnames(LINE_DATA_SERVICES)<-c("Date","Services")
+
+LINE_DATA_SERVICES<-melt(LINE_DATA_SERVICES, id=c("Date"))
+
+INFLATION_SERVICES_CON_plot_WITH_LINE<-INFLATION_SERVICES_CON_plot+geom_line(data=LINE_DATA_SERVICES,aes(x=Date, y=value),size = 1.2)+
+  scale_fill_manual(name = "",values=c("#01A685", 
+                             "#A3915E",
+                             "#0190D4",
+                             "#dbac00",
+                             "#afb6bd",
+                             "#4473c4"
+                             ),    limits = c(unique(Services_graph_data$variable))
+  
+)+theme(legend.position=c(0.2,0.9),plot.title = element_text(hjust = 0.5),legend.background=element_blank())
+
+GROWTH_COMPONENTS_XTS<-as.xts(GROWTH_COMPONENTS)
+
+INFLATION_SERVICES_CON_plot_WITH_LINE
+
+SERVICES_TEXT_1<-round(last(rowSums(SERVICES_CONTRIBUTION)*1000),1) %>% paste0("% on an annual basis")
+SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
+                        pattern = "\\,",
+                        replacement = " ") %>%  gsub(
+                        pattern = "\\.",
+                        replacement = " ")    %>% str_squish()
+
+
+```
+
+***
+
+* The graph above illustrates the contribution of the various components to services inflation. 
+<br>
+<br>
+
+* In `r CURRENT` Services inflation increased by `r SERVICES_TEXT_1`. 
+<br>
+<br>
+
+* The growth in service prices was driven by `r SERVICES_TEXT_2_NAME` which `r conditional(as.numeric(GROWTH_COMPONENTS_XTS[nrow(GROWTH_COMPONENTS_XTS),SERVICES_TEXT_2_NAME]))`  
+<br>
+<br>
+
+*  
+<br>
+<br>
+
+***
