@@ -727,7 +727,7 @@ UNPROCESSED_FOOD_INDEX<-CSO_HICP_INDEX_XTS$`Unprocessed food`
 
 
 
-````
+```
 
 ```{r food weight, include=FALSE}
 FOOD_WEIGHT_NAMES<-c("A.FOOD_NP.IE","A.FOOD_P_X_ALC_TBC.IE","A.CP011.IE","A.CP01.IE","A.CP02.IE")
