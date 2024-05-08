@@ -38,16 +38,7 @@ library(stringr)
 
 DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
 
-cty_by_var <- function(var) {
-  ggplot(mpg, aes(cty, colour = factor({{var}}), fill = factor({{var}}))) +
-    geom_density(alpha = 0.2)
-}
 
-
-withr::with_options(
-  list(ggplot2.discrete.colour = DOF_colours),
-  print(cty_by_var(class))
-)
 
 
 growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
