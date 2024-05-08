@@ -633,7 +633,7 @@ NEIG_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP0311
 
 
 
-````
+```
 
 
 ```{r NEIGWEIGHT, include=FALSE}
