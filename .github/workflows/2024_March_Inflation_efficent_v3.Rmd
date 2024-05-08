@@ -412,7 +412,7 @@ for(i in 1:length(HICP_WEIGHT_NAMES)){
 
 HICP_WEIGHT_df<-as.data.frame(HICP_WEIGHT_XTS["2017/"])
 
-````
+```
 
 
 ```{r weights2, include=FALSE}
