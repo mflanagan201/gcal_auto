@@ -33,7 +33,7 @@ smtp <- server(host = "smtp.gmail.com",
 Body_INFLATION<-emayili::envelope(
       from = "mflanagan201@gmail.com",
       to=c("michael.flanagan@finance.gov.ie"),
-bcc=c("Brendan.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie")
+bcc=c("Brendan.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie"),
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
       # Render R Markdown from a file.
