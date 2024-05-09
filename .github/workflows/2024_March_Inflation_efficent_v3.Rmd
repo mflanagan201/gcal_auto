@@ -2274,7 +2274,7 @@ SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
                         pattern = "\\.",
                         replacement = " ")    %>% str_squish()
 
- name_text_services<-conditional(as.numeric(GROWTH_COMPONENTS_XTS[nrow(GROWTH_COMPONENTS_XTS),SERVICES_TEXT_2_NAME]))`  
+ name_text_services<-conditional(as.numeric(GROWTH_COMPONENTS_XTS[nrow(GROWTH_COMPONENTS_XTS),SERVICES_TEXT_2_NAME]))
 
 
 
