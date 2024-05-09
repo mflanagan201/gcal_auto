@@ -2224,7 +2224,7 @@ names(GOOD_SERVICES_INDEX)<-GOOD_SERVICES_INDEX %>% names() %>% gsub(
                         replacement = ".")    %>% str_squish()
 
 
-SERVICES_MAIN_COMPONENTS<-last(SERVICES_CONTRIBUTION)[,order(as.numeric(as.character(last(SERVICES_CONTRIBUTION))),decreasing = TRUE)][,1:4]
+SERVICES_MAIN_COMPONENTS<-last(SERVICES_CONTRIBUTION)[,order(as.numeric(as.character(last(SERVICES_CONTRIBUTION))),decreasing = TRUE)][1:4]
 
 SERVICES_OTHER_COMPONENTS<-rowSums(SERVICES_CONTRIBUTION)-rowSums(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])
 
@@ -2274,6 +2274,9 @@ SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
                         pattern = "\\.",
                         replacement = " ")    %>% str_squish()
 
+ name_text_services<-conditional(as.numeric(GROWTH_COMPONENTS_XTS[nrow(GROWTH_COMPONENTS_XTS),SERVICES_TEXT_2_NAME]))`  
+
+
 
 ```
 
@@ -2287,7 +2290,7 @@ SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
 <br>
 <br>
 
-* The growth in service prices was driven by `r SERVICES_TEXT_2_NAME` which `r conditional(as.numeric(GROWTH_COMPONENTS_XTS[nrow(GROWTH_COMPONENTS_XTS),SERVICES_TEXT_2_NAME]))`  
+* The growth in service prices was driven by `r SERVICES_TEXT_2_NAME` which `r name_text_services`  
 <br>
 <br>
 
