@@ -440,17 +440,11 @@ CHAIN_INDEX_CONTRIBUTION[is.na(CHAIN_INDEX_CONTRIBUTION)]<-0
 ##########################################################################################################################
 
 #OVEREALL HICP INDEX BELOW
-CSO_HICP_INDEX<- CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00`
-OVERALL_HICP_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.CP00.IE")%>% .$value %>% as.numeric()
-OVERALL_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.CP00.IE") %>% .$period %>% as.Date()
-OVERALL_HICP_XTS_ONE<-as.xts(OVERALL_HICP_INDEX,order.by=OVERALL_HICP_DATE)
+CSO_HICP_INDEX<- CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00`
 
 
-if(length(CSO_HICP_INDEX)>=length(OVERALL_HICP_XTS_ONE)){
-  OVERALL_HICP_XTS<-CSO_HICP_INDEX
-} else {
-  OVERALL_HICP_XTS<-OVERALL_HICP_XTS_ONE
-}
+
+OVERALL_HICP_XTS<-CSO_HICP_INDEX
 
 
 DEC_BASE_OVERALL<-(as.numeric(OVERALL_HICP_XTS[paste0(year(OVERALL_HICP_XTS["2016/"]), "-12-01")])) 
@@ -474,12 +468,14 @@ CONTRIBUTION[is.na(CONTRIBUTION)]<-0
   Overall_DEC_1_YEAR_AGO<-((Overall["2016/"][paste0(year(Overall["2016/"])-1, "-12-01")])) %>% as.numeric()  %>%as.xts(order.by=index(Overall["2017/"]))
   Overall_DEC_2_YEAR_AGO<-lag(Overall_DEC_1_YEAR_AGO,12) %>% as.numeric()  %>%as.xts(order.by=index(Overall["2017/"]))
   Overall_INDEX_1_YEAR_AGO<-lag(Overall["2016/"],12) %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Overall["2017/"]))
-  INDO_WEIGHT_2_YEAR_AGO<-lag.xts(Weight[,i],12) %>% .[13:length(.)] %>% as.numeric()   %>%as.xts(order.by=index(Overall["2018/"]))/1000
-  INDO_DEC_1_YEAR_AGO<-((Indo["2017/"][paste0(year(Indo["2017/",i])-1, "-12-01"),i])) %>% as.numeric()  %>%as.xts(order.by=index(Overall["2018/"]))
-  INDO_INDEX_1_YEAR_AGO<-lag.xts(Indo["2017/",i],12)  %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Overall["2018/"]))
-  INDO_DEC_2_YEAR_AGO<-lag(INDO_DEC_1_YEAR_AGO,12)   %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Overall["2019/"]))
+
+
+INDO_WEIGHT_2_YEAR_AGO<-lag.xts(Weight[,i],12) %>% .[13:length(.)] %>% as.numeric()   %>%as.xts(order.by=index(Indo["2018/"]))/1000
+  INDO_DEC_1_YEAR_AGO<-((Indo["2017/"][paste0(year(Indo["2017/",i])-1, "-12-01"),i])) %>% as.numeric()  %>%as.xts(order.by=index(Indo["2018/"]))
+  INDO_INDEX_1_YEAR_AGO<-lag.xts(Indo["2017/",i],12)  %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Indo["2018/"]))
+  INDO_DEC_2_YEAR_AGO<-lag(INDO_DEC_1_YEAR_AGO,12)   %>% .[13:length(.)] %>% as.numeric()  %>%as.xts(order.by=index(Indo["2019/"]))
     
-  EQ1<-((as.numeric(Overall_DEC_1_YEAR_AGO["2019/"])/as.numeric(Overall_INDEX_1_YEAR_AGO["2019/"]))*as.numeric(Weight[,i]["2019/"])/1000) #
+ EQ1<-((as.numeric(Overall_DEC_1_YEAR_AGO["2019/"])/as.numeric(Overall_INDEX_1_YEAR_AGO["2019/"]))*as.numeric(Weight[,i]["2019/"])/1000) #
   EQ2<-((as.numeric(Indo["2019/",i])-as.numeric(INDO_DEC_1_YEAR_AGO["2019/"]))/as.numeric(INDO_DEC_1_YEAR_AGO["2019/"])) #individual index change 
   EQ3<-((as.numeric(Overall_DEC_2_YEAR_AGO["2019/"])/as.numeric(Overall_INDEX_1_YEAR_AGO["2019/"]))*as.numeric(INDO_WEIGHT_2_YEAR_AGO["2019/"]))
   EQ3[is.na(EQ3)]<-0
