@@ -90,9 +90,9 @@ conditional_alt3 <- function(x){
 
 conditional_alt4 <- function(x){
   if (x < 0) {
-    print(paste(round(x,1), "percentage points below what was forecast at the time of the SPU"))
+    print(paste(round(x,1), "percentage points below what was forecast at the time of the Budget"))
   } else if (x >0){
-    print(paste(round(x,1), "percentage points above what was forecast at the time of the SPU"))
+    print(paste(round(x,1), "percentage points above what was forecast at the time of the Budget"))
   } else {
     print(paste("inline with the Budget forecast"))
   }
@@ -141,19 +141,20 @@ Date_value<-seq(as.Date("1969-11-01"), by="month",length.out=NROW(Ire_Exports_SA
 current_date<-format(max(Date_value), "%B %Y")
 current_date_vol<-format(max(Date_vol), "%B %Y")
 
+Date_vol_export<-seq(as.Date("1970-01-01"), by="month",length.out=NROW(Ire_Exports_vol))
+
 
 #Volume data seasonally adjusted for monthly/Quarterly analysis 
-Ireland_Exports_SA_vol_xts<-na.locf(as.xts(Ire_Exports_SA_vol, order.by = Date_vol),na.rm=TRUE)
+Ireland_Exports_SA_vol_xts<-na.locf(as.xts(Ire_Exports_SA_vol, order.by = Date_vol_export),na.rm=TRUE)
 Ireland_Exports_SA_vol_xts<-as.numeric(Ireland_Exports_SA_vol_xts["2015/"],na.rm = TRUE)
 Date_vol_2015<-seq(as.Date("2015-01-01"), by="month",length.out=NROW(Ireland_Exports_SA_vol_xts))
 Ireland_Exports_SA_vol_xts<-as.xts((Ireland_Exports_SA_vol_xts), order.by = Date_vol_2015)
 
 #Volume data  Not seasonally adjusted for annual analysis 
-Ireland_Exports_vol_xts<-na.locf(as.xts(Ire_Exports_vol, order.by = Date_vol),na.rm=TRUE)
+Ireland_Exports_vol_xts<-na.locf(as.xts(Ire_Exports_vol, order.by = Date_vol_export),na.rm=TRUE)
 Ireland_Exports_vol_xts<-as.numeric(Ireland_Exports_vol_xts["2015/"],na.rm = TRUE)
 Date_vol_NASA_2015<-seq(as.Date("2015-01-01"), by="month",length.out=NROW(Ireland_Exports_vol_xts))
 Ireland_Exports_vol_xts<-as.xts((Ireland_Exports_vol_xts), order.by = Date_vol_NASA_2015)
-
 
 #Value data   seasonally adjusted for monthly/Quarterly analysis 
 Ire_Exports_SA_xts<-na.locf(as.xts(Ire_Exports_SA, order.by = Date_value),na.rm=TRUE)
@@ -161,15 +162,11 @@ Ireland_Exports_val_xts<-as.numeric(Ire_Exports_SA_xts["2015/"],na.rm = TRUE)
 Date_val_SA_2015<-seq(as.Date("2015-01-01"), by="month",length.out=NROW(Ireland_Exports_val_xts))
 Ireland_Exports_val_xts<-as.xts((Ireland_Exports_val_xts), order.by = Date_val_SA_2015)
 
-
 #Value data NOT  seasonally adjusted for monthly/Quarterly analysis 
 Ire_Exports_val_xts<-na.locf(as.xts(Ire_Exports_val, order.by = Date_value),na.rm=TRUE)
 Ireland_Exports_val_NAsA_xts<-as.numeric(Ire_Exports_val_xts["2015/"],na.rm = TRUE)
 Date_val_Export<-seq(as.Date("2015-01-01"), by="month",length.out=NROW(Ireland_Exports_val_NAsA_xts))
 Ireland_Exports_val_NAsA_xts<-as.xts((Ireland_Exports_val_NAsA_xts), order.by = Date_val_Export)
-
-
-
 
 Ire_Imports<- t(data.frame(subset(cso_get_data("TSM10"),Statistic=="Value of Imports")))
 Ire_Imports_SA<- t(data.frame(subset(cso_get_data("TSM01"),Statistic=="Total Imports (Seasonally Adjusted)")))
@@ -244,7 +241,7 @@ annual_growth_imports_val<-round(growth(Ireland_Imports_val_NASA_xts,freq=12),2)
 annual_growth_imports_val_text<-conditional(annual_growth_imports_val[length(annual_growth_imports_val)])
 
 #Year to Date calculation
-YTD_2022_annual_IMPORT<- 100*(sum(Ireland_Imports_val_NASA_xts["2023"])-sum(Ireland_Imports_val_NASA_xts["2022"][1:length(Ireland_Imports_val_NASA_xts["2023"])]))/sum(Ireland_Imports_val_NASA_xts["2022"][1:length(Ireland_Imports_val_NASA_xts["2023"])])
+YTD_2022_annual_IMPORT<- 100*(sum(Ireland_Imports_val_NASA_xts["2024"])-sum(Ireland_Imports_val_NASA_xts["2023"][1:length(Ireland_Imports_val_NASA_xts["2024"])]))/sum(Ireland_Imports_val_NASA_xts["2023"][1:length(Ireland_Imports_val_NASA_xts["2024"])])
 YTD_2022_annual_IMPORT_text<-conditional(YTD_2022_annual_IMPORT)
 
 
@@ -1394,10 +1391,10 @@ annual_growth_exports_val<-round(growth(Total_Export_Country$TOTAL,freq=12),2)
 annual_growth_exports_val_text<-conditional(annual_growth_exports_val$TOTAL[length(annual_growth_exports_val$TOTAL)])
 
 #Year to Date calculation
-YTD_2022_annual<- 100*(sum(Total_Export_Country$TOTAL["2023"])-sum(Total_Export_Country$TOTAL["2022"][1:length(Total_Export_Country$TOTAL["2023"])]))/sum(Total_Export_Country$TOTAL["2022"][1:length(Total_Export_Country$TOTAL["2023"])])
+YTD_2022_annual<- 100*(sum(Total_Export_Country$TOTAL["2024"])-sum(Total_Export_Country$TOTAL["2023"][1:length(Total_Export_Country$TOTAL["2024"])]))/sum(Total_Export_Country$TOTAL["2023"][1:length(Total_Export_Country$TOTAL["2024"])])
 YTD_2022_annual_text<-conditional(YTD_2022_annual)
 
-delta_Budget_2022<-(YTD_2022_annual-1.4)
+delta_Budget_2022<-(YTD_2022_annual+2.3)
 export_nominal_budget<-conditional_alt4(delta_Budget_2022)
 
 
@@ -1412,7 +1409,7 @@ Pre_Covid_export_text_vol<-conditional(Pre_Covid_export_vol)
 
 
 
-summary_table<-data.frame((merge(monthly_growth_exports_vol["2023-03-01/"],monthly_growth_exports_val["2023-03-01/"],monthly_growth_imports_val["2023-03-01/"],annual_growth_exports_vol["2023-03-01/"],annual_growth_exports_val["2023-03-01/"],annual_growth_imports_val["2023-03-01/"])))
+summary_table<-data.frame((merge(monthly_growth_exports_vol["2023-11-01/"],monthly_growth_exports_val["2023-11-01/"],monthly_growth_imports_val["2023-11-01/"],annual_growth_exports_vol["2023-11-01/"],annual_growth_exports_val["2023-11-01/"],annual_growth_imports_val["2023-11-01/"])))
 r<-as.Date(rownames(summary_table))
 rt<-format(r,"%b-%Y")
 
@@ -1558,7 +1555,7 @@ webshot(html_print(as.htmlwidget(format_table1)),zoom = 3)
 -  Compared to Pre-Covid levels, the seasonally adjusted value and  volume of exports have `r Pre_Covid_export_text` and `r Pre_Covid_export_text_vol` respectively. 
 <br>
 <br>
--  As part of Budget, the Department forecast nominal goods export growth of 1.4% in 2023. Year to date, exports have `r YTD_2022_annual_text` in `r current_date`. As a result exports are currently running `r export_nominal_budget`.  
+-  As part of Budget 2024, the Department forecast nominal goods export growth of -2.3% in 2024. Year to date, exports have `r YTD_2022_annual_text` in `r current_date`. As a result exports are currently running `r export_nominal_budget`.  
 <br>
 <br>
 
@@ -1621,14 +1618,14 @@ annual_text_NI_EXPORT<-conditional(Exports_NI_growth$NI[length(Exports_NI_growth
 
 
 #Year to Date calculation
-YTD_2022_annual_UK_EXPORT<- 100*(sum(Exports_UK$GB["2023"])-sum(Exports_UK$GB["2022"][1:length(Exports_UK$GB["2023"])]))/sum(Exports_UK$GB["2022"][1:length(Exports_UK$GB["2023"])])
+YTD_2022_annual_UK_EXPORT<- 100*(sum(Exports_UK$GB["2024"])-sum(Exports_UK$GB["2022"][1:length(Exports_UK$GB["2024"])]))/sum(Exports_UK$GB["2023"][1:length(Exports_UK$GB["2024"])])
 YTD_2022_annual_text_UK_EXPORT<-conditional(YTD_2022_annual_UK_EXPORT)
 
-YTD_2022_annual_GB_EXPORT<- 100*(sum(Total_Export_Country$GB["2023"])-sum(Total_Export_Country$GB["2022"][1:length(Total_Export_Country$GB["2023"])]))/sum(Total_Export_Country$GB["2022"][1:length(Total_Export_Country$GB["2023"])])
+YTD_2022_annual_GB_EXPORT<- 100*(sum(Total_Export_Country$GB["2024"])-sum(Total_Export_Country$GB["2023"][1:length(Total_Export_Country$GB["2024"])]))/sum(Total_Export_Country$GB["2023"][1:length(Total_Export_Country$GB["2024"])])
 YTD_2022_annual_text_GB_EXPORT<-conditional(YTD_2022_annual_GB_EXPORT)
 
 
-YTD_2022_annual_NI_EXPORT<- 100*(sum(Total_Export_Country$NI["2023"])-sum(Total_Export_Country$NI["2022"][1:length(Total_Export_Country$NI["2023"])]))/sum(Total_Export_Country$NI["2022"][1:length(Total_Export_Country$NI["2023"])])
+YTD_2022_annual_NI_EXPORT<- 100*(sum(Total_Export_Country$NI["2024"])-sum(Total_Export_Country$NI["2023"][1:length(Total_Export_Country$NI["2024"])]))/sum(Total_Export_Country$NI["2023"][1:length(Total_Export_Country$NI["2024"])])
 YTD_2022_annual_text_NI_EXPORT<-conditional(YTD_2022_annual_NI_EXPORT)
 
 
@@ -1652,7 +1649,7 @@ colnames(FB_UK_EXPORTS)<-c("FB_UK_EXPORTS")
 
 
 
-YTD_2022_FB_UK_EXPORTS<- 100*(sum(FB_UK_EXPORTS$FB_UK_EXPORTS["2023"])-sum(FB_UK_EXPORTS$FB_UK_EXPORTS["2022"][1:length(FB_UK_EXPORTS$FB_UK_EXPORTS["2023"])]))/sum(FB_UK_EXPORTS$FB_UK_EXPORTS["2022"][1:length(FB_UK_EXPORTS$FB_UK_EXPORTS["2023"])])
+YTD_2022_FB_UK_EXPORTS<- 100*(sum(FB_UK_EXPORTS$FB_UK_EXPORTS["2024"])-sum(FB_UK_EXPORTS$FB_UK_EXPORTS["2023"][1:length(FB_UK_EXPORTS$FB_UK_EXPORTS["2024"])]))/sum(FB_UK_EXPORTS$FB_UK_EXPORTS["2023"][1:length(FB_UK_EXPORTS$FB_UK_EXPORTS["2024"])])
 
 
 YTD_2022_annual_text_UK_FB_EXPORT<-conditional(YTD_2022_FB_UK_EXPORTS)
@@ -1669,7 +1666,7 @@ Pharma_UK_EXPORTS<-as.xts(Pharma_UK_EXPORTS,order.by =index(GB_exports_xts))
 colnames(Pharma_UK_EXPORTS)<-c("Pharma_UK_EXPORTS")
 
 
-YTD_2022_PHARMA_UK_EXPORTS<- 100*(sum(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2023"])-sum(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2022"][1:length(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2023"])]))/sum(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2022"][1:length(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2023"])])
+YTD_2022_PHARMA_UK_EXPORTS<- 100*(sum(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2024"])-sum(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2023"][1:length(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2024"])]))/sum(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2023"][1:length(Pharma_UK_EXPORTS$Pharma_UK_EXPORTS["2024"])])
 
 
 YTD_2022_annual_text_UK_PHARMA_EXPORT<-conditional(YTD_2022_PHARMA_UK_EXPORTS)
@@ -3124,10 +3121,10 @@ monthly_growth_FB<-growth(FOOD_and_Beverage,1)
 text_monthly_growth_FB<-conditional(monthly_growth_FB[length(monthly_growth_FB)])
 text_annual_growth_FB<-conditional(annual_growth_FB[length(annual_growth_FB)])
 
-YTD_Food_Beverage<- 100*(sum(FOOD_and_Beverage["2023"])-sum(FOOD_and_Beverage["2022/"][1:length(FOOD_and_Beverage["2023/"])]))/sum(FOOD_and_Beverage["2022/"][1:length(FOOD_and_Beverage["2023/"])])
+YTD_Food_Beverage<- 100*(sum(FOOD_and_Beverage["2024"])-sum(FOOD_and_Beverage["2023/"][1:length(FOOD_and_Beverage["2024/"])]))/sum(FOOD_and_Beverage["2023/"][1:length(FOOD_and_Beverage["2024/"])])
 YTD_Food_Beverage_text<-conditional(YTD_Food_Beverage)
 
-length_current_year<-length(FOOD_and_Beverage["2023/"])
+length_current_year<-length(FOOD_and_Beverage["2024/"])
 
 
 
@@ -3143,12 +3140,12 @@ annual_growth_Pharma_text<-conditional(annual_growth_Pharma$Chemicals_and_relate
 monthly_growth_Pharma_text<-conditional(monthly_growth_Pharma$Chemicals_and_related_products[length(monthly_growth_Pharma)])
 
 
-YTD_Pharma<- 100*(sum(Chemicals_and_related_products["2023"])-sum(Chemicals_and_related_products["2022/"][1:length(Chemicals_and_related_products["2023/"])]))/sum(Chemicals_and_related_products["2022/"][1:length(Chemicals_and_related_products["2023/"])])
+YTD_Pharma<- 100*(sum(Chemicals_and_related_products["2024"])-sum(Chemicals_and_related_products["2023/"][1:length(Chemicals_and_related_products["2024/"])]))/sum(Chemicals_and_related_products["2023/"][1:length(Chemicals_and_related_products["2024/"])])
 YTD_Pharma_text<-conditional(YTD_Pharma)
 
 
 
-Pharma_Share_2021<- sum(Chemicals_and_related_products["2022"][1:length(Total_Export_Country$TOTAL["2023"])])/(sum(Total_Export_Country$TOTAL["2022"][1:length(Total_Export_Country$TOTAL["2023"])]))
+Pharma_Share_2021<- sum(Chemicals_and_related_products["2023"][1:length(Total_Export_Country$TOTAL["2024"])])/(sum(Total_Export_Country$TOTAL["2023"][1:length(Total_Export_Country$TOTAL["2024"])]))
 
 YTD_Contribution_Pharma_Growth<-YTD_Pharma*Pharma_Share_2021
                                                               
@@ -5627,10 +5624,10 @@ monthly_growth_FB<-growth(FOOD_and_Beverage,1)
 text_monthly_growth_FB<-conditional(monthly_growth_FB[length(monthly_growth_FB)])
 text_annual_growth_FB<-conditional(annual_growth_FB[length(annual_growth_FB)])
 
-YTD_Food_Beverage<- 100*(sum(FOOD_and_Beverage["2023"])-sum(FOOD_and_Beverage["2022/"][1:length(FOOD_and_Beverage["2023/"])]))/sum(FOOD_and_Beverage["2022/"][1:length(FOOD_and_Beverage["2023/"])])
+YTD_Food_Beverage<- 100*(sum(FOOD_and_Beverage["2024"])-sum(FOOD_and_Beverage["2023/"][1:length(FOOD_and_Beverage["2024/"])]))/sum(FOOD_and_Beverage["2023/"][1:length(FOOD_and_Beverage["2024/"])])
 YTD_Food_Beverage_text<-conditional(YTD_Food_Beverage)
 
-length_current_year<-length(FOOD_and_Beverage["2023/"])
+length_current_year<-length(FOOD_and_Beverage["2024/"])
 
 
 
@@ -5646,12 +5643,12 @@ annual_growth_Pharma_text<-conditional(annual_growth_Pharma$Chemicals_and_relate
 monthly_growth_Pharma_text<-conditional(monthly_growth_Pharma$Chemicals_and_related_products[length(monthly_growth_Pharma)])
 
 
-YTD_Pharma<- 100*(sum(Chemicals_and_related_products["2023"])-sum(Chemicals_and_related_products["2022/"][1:length(Chemicals_and_related_products["2022/"])]))/sum(Chemicals_and_related_products["2022/"][1:length(Chemicals_and_related_products["2023/"])])
+YTD_Pharma<- 100*(sum(Chemicals_and_related_products["2024"])-sum(Chemicals_and_related_products["2023/"][1:length(Chemicals_and_related_products["2023/"])]))/sum(Chemicals_and_related_products["2023/"][1:length(Chemicals_and_related_products["2024/"])])
 YTD_Pharma_text<-conditional(YTD_Pharma)
 
 
 
-Pharma_Share_2020<- sum(Chemicals_and_related_products["2022"][1:length(Total_Export_Country$TOTAL["2023"])])/(sum(Total_Export_Country$TOTAL["2022"][1:length(Total_Export_Country$TOTAL["2023"])]))
+Pharma_Share_2020<- sum(Chemicals_and_related_products["2023"][1:length(Total_Export_Country$TOTAL["2024"])])/(sum(Total_Export_Country$TOTAL["2023"][1:length(Total_Export_Country$TOTAL["2024"])]))
 
 YTD_Contribution_Pharma_Growth<-YTD_Pharma*Pharma_Share_2020
                                                               
@@ -5813,7 +5810,7 @@ write.xlsx(dataset_names, file = 'external_trade_excel2.xlsx')
 
 
 
-Ireland_72821 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72821.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_72821 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72821.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 Ireland_72821_EXPORT<-t(data.frame(Ireland_72821[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72821[9,])))) 
 
@@ -6046,7 +6043,7 @@ SEMI_NET_IMPORTS_XTS<-as.xts(SEMI_NET_IMPORTS)
 
 
 
-YTD_SEMI_NET_IMPORTS<- 100*((sum(as.numeric(na.omit(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2023"])))-(sum(as.numeric(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2022"])[1:length(na.omit(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2023"]))])))/(sum(as.numeric(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2022"])[1:length(na.omit(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2023"]))]))) 
+YTD_SEMI_NET_IMPORTS<- 100*((sum(as.numeric(na.omit(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2024"])))-(sum(as.numeric(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2023"])[1:length(na.omit(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2024"]))])))/(sum(as.numeric(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2023"])[1:length(na.omit(SEMI_NET_IMPORTS_XTS$SEMI_NET_IMPORTS.SEMI_NET_IMPORTS["2024"]))]))) 
                             
                             
                             
@@ -6094,7 +6091,7 @@ DOMESTIC_ME_IMPORTS[length(DOMESTIC_ME_IMPORTS)]
 
 DOMESTIC_ME_IMPORTS_SUM_XTS<-as.xts(DOMESTIC_ME_IMPORTS_SUM)
 
-YTD_DOMESTIC_ME_NET_IMPORTS<- 100*((sum(as.numeric(na.omit(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2023"])))-(sum(as.numeric(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2022"])[1:length(na.omit(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2023"]))])))/(sum(as.numeric(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2022"])[1:length(na.omit(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2023"]))]))) 
+YTD_DOMESTIC_ME_NET_IMPORTS<- 100*((sum(as.numeric(na.omit(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2024"])))-(sum(as.numeric(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2023"])[1:length(na.omit(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2024"]))])))/(sum(as.numeric(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2023"])[1:length(na.omit(DOMESTIC_ME_IMPORTS_SUM_XTS$.["2024"]))]))) 
                             
                             
                             
