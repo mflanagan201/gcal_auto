@@ -42,8 +42,6 @@ Body_INFLATION<-emayili::envelope(
     
 
 
-for(i in 1:nrow(CALENDAR_ALL_short)){
-if(Sys.Date()==Sys.Date()){
     
     Body_EXTERNAL_TRADE<-emayili::envelope(
       from = "mflanagan201@gmail.com",
@@ -56,15 +54,15 @@ if(Sys.Date()==Sys.Date()){
     smtp(Body_EXTERNAL_TRADE)  
     
     
-  } else { 
-    
-    print("Don't run code")
-  }
-}
 
 
 
-
-#as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")
+#for(i in 1:nrow(CALENDAR_ALL_short)){
+#if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%"))
+#  } else { 
+#    
+#    print("Don't run code")
+#  }
+#}
 
 
