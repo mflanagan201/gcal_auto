@@ -5820,7 +5820,7 @@ Ireland_72821_NET_TRADE<-Ireland_72821_EXPORT-Ireland_72821_IMPORT
 
 
 
-Ireland_72822 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72822.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_72822 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72822.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 Ireland_72822_EXPORT<-t(data.frame(Ireland_72822[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72822[9,])))) 
 
@@ -5831,7 +5831,7 @@ Ireland_72822_NET_TRADE<-Ireland_72822_EXPORT-Ireland_72822_IMPORT
 
 
 
-Ireland_72829 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72822.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_72829 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72822.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 Ireland_72829_EXPORT<-t(data.frame(Ireland_72829[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
 
@@ -5841,7 +5841,7 @@ Ireland_72829_NET_TRADE<-Ireland_72829_EXPORT-Ireland_72829_IMPORT
 
 
 #Commercial Vehicles 
-Ireland_782 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+782.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_782 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+782.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_782_EXPORT<-t(data.frame(Ireland_782[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5851,7 +5851,7 @@ Ireland_782_IMPORT<-t(data.frame(Ireland_782[9,])) %>% as.numeric() %>% as.xts(o
 Ireland_782_NET_TRADE<-Ireland_782_EXPORT-Ireland_782_IMPORT 
 
 #Road Vehicles NES
-Ireland_783 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+783.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_783 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+783.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_783_EXPORT<-t(data.frame(Ireland_783[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5862,7 +5862,7 @@ Ireland_783_NET_TRADE<-Ireland_783_EXPORT-Ireland_783_IMPORT
 
 
 #Railway Vehicles NES
-Ireland_791 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+791.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_791 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+791.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_791_EXPORT<-t(data.frame(Ireland_791[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5874,7 +5874,7 @@ Ireland_791_NET_TRADE<-Ireland_791_EXPORT-Ireland_791_IMPORT
 
 
 #SHIPS/BOATS
-Ireland_793 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+793.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_793 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+793.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_793_EXPORT<-t(data.frame(Ireland_793[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5887,7 +5887,7 @@ Ireland_793_NET_TRADE<-Ireland_793_EXPORT-Ireland_793_IMPORT
 
 
 #TELECOMS, Sound Recording 
-Ireland_76 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+76.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_76 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+76.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_76_EXPORT<-t(data.frame(Ireland_76[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5898,7 +5898,7 @@ Ireland_76_NET_TRADE<-Ireland_76_EXPORT-Ireland_76_IMPORT
 
 
 #LAPTOP 
-Ireland_7522 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7522.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_7522 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7522.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_7522_EXPORT<-t(data.frame(Ireland_7522[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5913,7 +5913,7 @@ Ireland_7522_NET_TRADE<-Ireland_7522_EXPORT-Ireland_7522_IMPORT
 
 
 #AGRI Machinery 
-Ireland_721 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+721.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_721 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+721.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_721_EXPORT<-t(data.frame(Ireland_721[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5927,7 +5927,7 @@ Ireland_721_NET_TRADE<-Ireland_721_EXPORT-Ireland_721_IMPORT
 
 
 #TRACTORS 
-Ireland_722 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+722.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_722 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+722.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_722_EXPORT<-t(data.frame(Ireland_722[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5939,7 +5939,7 @@ Ireland_722_NET_TRADE<-Ireland_722_EXPORT-Ireland_722_IMPORT
 
 
 #FOOD PROCESSING MACHINES 
-Ireland_727 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+727.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_727 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+727.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_727_EXPORT<-t(data.frame(Ireland_727[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5951,7 +5951,7 @@ Ireland_727_NET_TRADE<-Ireland_727_EXPORT-Ireland_727_IMPORT
 
 
 #METALWORKING MACHINERY 
-Ireland_73 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+73.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_73 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+73.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_73_EXPORT<-t(data.frame(Ireland_73[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5963,7 +5963,7 @@ Ireland_73_NET_TRADE<-Ireland_73_EXPORT-Ireland_73_IMPORT
 
 
 #POWER GENERATING M&E 
-Ireland_71 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+71.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_71 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+71.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_71_EXPORT<-t(data.frame(Ireland_71[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5974,7 +5974,7 @@ Ireland_71_NET_TRADE<-Ireland_71_EXPORT-Ireland_71_IMPORT
 
 
 #TURBOJET  ETC 
-Ireland_7144 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7144.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_7144 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7144.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_7144_EXPORT<-t(data.frame(Ireland_7144[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
@@ -5986,7 +5986,7 @@ Ireland_7144_NET_TRADE<-Ireland_7144_EXPORT-Ireland_7144_IMPORT
 
 
 #PARTS OF ENGINES  
-Ireland_7149 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7149.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2023-12")
+Ireland_7149 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7149.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
 
 
 Ireland_7149_EXPORT<-t(data.frame(Ireland_7149[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
