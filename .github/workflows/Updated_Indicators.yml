@@ -57,7 +57,10 @@ jobs:
 
     - name: Commit and Push Changes
       run: |
-        git config --local user.email "mflanagan202@gmail.com"
-        git config --local user.name "mflanagan201"
-        git add .
-        git push
+       git config --local user.email "mflanagan202@gmail.com"
+       git config --local user.name "mflanagan201"
+       git add .
+       git commit -m "Add ALL_INDICATORS.CSV"
+       git pull --rebase origin main # Use rebase to avoid a merge commit
+       # Resolve any conflicts that may arise during the pull
+       git push
