@@ -42,7 +42,7 @@ for(i in 1: nrow(URL_DAFT_TEXT)){
 
 
 DAFT_DATE<-data.frame(na.omit(t(DAFT_DATE)))[1,] %>% as.Date()
-DAFT_df<-data.frame("Daft research report", as.character(DAFT_DATE),"https://ww1.daft.ie/report?d_rd=1",("mflanagan201@gmail.com mflanagan202@gmail.com"))
+DAFT_df<-data.frame("Daft research report", as.character(DAFT_DATE),"https://ww1.daft.ie/report?d_rd=1",c("mflanagan201@gmail.com mflanagan202@gmail.com"))
 colnames(DAFT_df)<-c("varaible", "Date","URL","TO")
 
 Sentiment<-read_html("https://www.creditunion.ie/news/consumer-sentiment-index/consumer-sentiment-index-roi/") 
