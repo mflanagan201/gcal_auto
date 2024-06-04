@@ -133,7 +133,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
     CB_Schedule_table3$Date[i]<-NA
   }
   
-  if(CB_Schedule_table3$Releases[i] %like any% c("Activity: Statistics: %","%Publication: Quarterly Bulletin%")){
+  if(CB_Schedule_table3$Releases[i] %like any% c("Activity: %","%Publication: Quarterly Bulletin%")){
     RELEASE_CB[i,1]<-CB_Schedule_table3$Date[i]
     RELEASE_CB[i,2]<-CB_Schedule_table3$Releases[i]
     
@@ -142,7 +142,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
     RELEASE_CB[i,2]<-NA
   }
   
-  if(RELEASE_CB[i,2] %like any% c("%Monthly Card Payment Statistics%" ,"%Activity: Statistics: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%")){
+  if(RELEASE_CB[i,2] %like any% c("%Monthly Card Payment Statistics%" ,"%Activity: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%")){
     RELEASE_CB[i,1]<-RELEASE_CB[i,1]
     RELEASE_CB[i,2]<-RELEASE_CB[i,2]
   } else {
@@ -156,7 +156,7 @@ colnames(RELEASE_CB)<-(c("Date","Release"))
 
 
 Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity: Statistics:", " ")
+RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity:", " ")
 
 if(is.na(Date_CB[1])){
   event_CB = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
