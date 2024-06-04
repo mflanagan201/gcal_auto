@@ -75,7 +75,7 @@ for(i in 1:length(ALL_INDICATORS$varaible)){
   if(ALL_INDICATORS_EXISTING$Date[i]==ALL_INDICATORS$Date[i]){
       UPDATED_release<-paste0("* ",ALL_INDICATORS$varaible[i], " availble:  ",ALL_INDICATORS$URL[i])
       UPDATED_EMAIL<-emayili::envelope(
-        to="michael.flanagan@finance.gov.ie",
+        to="michael.flanagan@finance.gov.ie",
         from="mflanagan201@gmail.com",
         subject = "Updated Indicator!"
       ) %>%
@@ -91,6 +91,7 @@ for(i in 1:length(ALL_INDICATORS$varaible)){
       
       
       if(UPDATED_release!=""){
+              {Sys.sleep(60)}
         smtp(UPDATED_EMAIL)  
       }      
       
