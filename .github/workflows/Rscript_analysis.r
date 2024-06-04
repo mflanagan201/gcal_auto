@@ -466,7 +466,11 @@ event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS
 event_all = subset(event_all, !(SUMMARY %like any% c("%Material Flow Accounts%","%Waste Water%" ,"%Fertiliser%","%Adult%","%Agricultural%","%HSE%","%Men Hub%","%Full Irish Breakfast%","%Census 1911%","%Stories from Census 1911%","%Further Education Outcomes%","%Futher Education%","%Higher Education%","%PxStat%","%Pension%","%Inbound Tourism%","%Freight%","%Babie%","%Livestock Survey%","%Pancakes%" ,"%County Incomes and Regional%" ,"%Metered Electricity Generation%","%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%","%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
 
 exch_days<-seq(from=as.Date(c("2024-01-01")),to=as.Date(c("2024-12-31")), by="day")
-exch_weekdays<-exch_days[format(exch_days,"%a") != c("Sun","Sat")]
+exch_weekdays<-exch_days[format(exch_days,"%a") %like any% c("Mon", "Tue", "Wed", "Thu", "Fri")]
+
+
+
+
 
 for(i in seq_along(exch_weekdays)){
   if (format(exch_weekdays[i],"%Y-%m-%d") %like any% c("2024-01-01","2024-02-05","2024-03-18","2024-04-01","2024-05-06","2024-06-03","2024-08-05","2024-10-28","2024-12-25","2024-12-26")){
