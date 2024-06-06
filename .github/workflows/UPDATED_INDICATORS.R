@@ -25,8 +25,8 @@ COMMENCEMENT_DATE<-substr(na.omit(COMMENCEMENT_DATE),17,200) %>% as.Date("%d %B 
 
 
 
-Commencements_df<-data.frame("Monthly dwelling commencement notices", as.character(COMMENCEMENT_DATE),"https://www.gov.ie/en/publication/a5cb1-construction-activity-starts/",c("mflanagan201@gmail.com mflanagan202@gmail.com")) 
-colnames(Commencements_df)<-c("varaible", "Date","URL","TO")
+Commencements_df<-data.frame("Monthly dwelling commencement notices", as.character(COMMENCEMENT_DATE),"https://www.gov.ie/en/publication/a5cb1-construction-activity-starts/",c("mflanagan201@gmail.com mflanagan202@gmail.com"),Sys.Date()) 
+colnames(Commencements_df)<-c("varaible", "Date","URL","TO","TIME_STAMP")
 
 
 URL_DAFT<-read_html("https://ww1.daft.ie/report?d_rd=1")
@@ -42,15 +42,15 @@ for(i in 1: nrow(URL_DAFT_TEXT)){
 
 
 DAFT_DATE<-data.frame(na.omit(t(DAFT_DATE)))[1,] %>% as.Date()
-DAFT_df<-data.frame("Daft research report", as.character(DAFT_DATE),"https://ww1.daft.ie/report?d_rd=1",c("mflanagan201@gmail.com mflanagan202@gmail.com"))
-colnames(DAFT_df)<-c("varaible", "Date","URL","TO")
+DAFT_df<-data.frame("Daft research report", as.character(DAFT_DATE),"https://ww1.daft.ie/report?d_rd=1",c("mflanagan201@gmail.com mflanagan202@gmail.com"),Sys.Date())
+colnames(DAFT_df)<-c("varaible", "Date","URL","TO","TIME_STAMP")
 
 Sentiment<-read_html("https://www.creditunion.ie/news/consumer-sentiment-index/consumer-sentiment-index-roi/") 
 sentiment_text<-Sentiment %>% html_nodes("li.active-item.parent-active") %>% html_children() %>% .[2] %>%.[[1]] %>% html_children() %>% html_text() %>% data.frame()
 SENTIMENT_DATE<-sentiment_text[1,1]
 
-SENTIMENT_df<-data.frame("Credit union consumer sentiment", SENTIMENT_DATE,"https://www.creditunion.ie/news/consumer-sentiment-index/consumer-sentiment-index-roi/",c("mflanagan201@gmail.com mflanagan202@gmail.com"))
-colnames(SENTIMENT_df)<-c("varaible", "Date","URL","TO")
+SENTIMENT_df<-data.frame("Credit union consumer sentiment", SENTIMENT_DATE,"https://www.creditunion.ie/news/consumer-sentiment-index/consumer-sentiment-index-roi/",c("mflanagan201@gmail.com mflanagan202@gmail.com"),Sys.Date())
+colnames(SENTIMENT_df)<-c("varaible", "Date","URL","TO","TIME_STAMP")
 
 
 mortgage_approval<-read_html("https://bpfi.ie/search-resources/?_sft_category=bpfi-mortgage-approvals-report&post_types=publications")
@@ -60,8 +60,8 @@ colnames(mortgage_approval_TEXT_DF)<-c("Date")
 
 mortgage_approval_df_DATE<-as.Date(mortgage_approval_TEXT_DF$Date, format=c('%d %B, %Y')) %>% na.omit() %>% .[1]  
 
-mortgage_approval_df<-data.frame("BPFI mortgage approvals report", as.character(mortgage_approval_df_DATE),"https://bpfi.ie/search-resources/?_sft_category=bpfi-mortgage-approvals-report&post_types=publications",c("mflanagan201@gmail.com niamhmmcd@gmail.com")) 
-colnames(mortgage_approval_df)<-c("varaible", "Date","URL","TO")
+mortgage_approval_df<-data.frame("BPFI mortgage approvals report", as.character(mortgage_approval_df_DATE),"https://bpfi.ie/search-resources/?_sft_category=bpfi-mortgage-approvals-report&post_types=publications",c("mflanagan201@gmail.com niamhmmcd@gmail.com"),Sys.Date()) 
+colnames(mortgage_approval_df)<-c("varaible", "Date","URL","TO","TIME_STAMP")
 
 
 
