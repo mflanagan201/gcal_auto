@@ -2425,6 +2425,7 @@ Energy_contribution_TEXT <- paste0(Energy_contribution, "%")
 Energy_contribution_DATE <- last(Overall_energy_contribution_line$Date) %>% format("%B %Y")
 
 
+
 names(GOOD_SERVICES_INDEX)<-c("Bread & Cereals","Meat","Fish","Milk, Cheese,eggs","Oil & Fats","Fruit","Vegetables","Sugar,Jam, Honey, Chocolate","Food Products","Coffee, tea, Cocoa","Mineral Water, Soft Drinks, Vegetable Juices","Spirits","Wine","Beer","Tobacco","Garments","Other Clothing","Footwear","Material for the maintenance of dwellings","Electricity","Gas","Liquid Fuel","Solid Fuels","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils","House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products", "Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Fuels & Lubricants for personal transport", "Recording Equipment",  "Information processing equipment", "Recording Media", "Musical Instruments", "Games, Toys, hobbies", "Sports & outdoor Equipment","Gardens, plants and flowers", "Pets Products", "Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects","Actual Rent", "Repair of Dwelling","Repair of Household Appliances", "Domestic Services and Household Services","Insurance for Dwellings","Cleaning & Repair Clothing","Repair of audio-visual","Recreational & Sporting Services","Cultural Services", "Restaurant, Cafes etc.","Canteens","Hairdressing Salons","Repair Personal Transport","Other services for Personal Transport","Passenger transport by railway","Passenger transport by road","Passenger transport by air","Passenger transport by sea","Combined Passenger transport","Other purchased transport services","Package Holidays","Accomdation Services","Medical Services", "Dental Services","Hospital Services","Education","Social Protection","Healthcare Insurance","Transport Insurance","Financial Services","Other Services","Postal Services","Telephone equipment and services","Refuse Collection", "Other Services for Dwellings") 
 
 names(GOOD_SERVICES_INDEX)<-GOOD_SERVICES_INDEX %>% names() %>% gsub(
@@ -2436,9 +2437,17 @@ names(GOOD_SERVICES_INDEX)<-GOOD_SERVICES_INDEX %>% names() %>% gsub(
 
 SERVICES_MAIN_COMPONENTS<-last(data.frame(SERVICES_CONTRIBUTION))[,order(as.numeric(as.character(last(data.frame(SERVICES_CONTRIBUTION)))),decreasing = TRUE)][,1:4]
 
+
+names(SERVICES_MAIN_COMPONENTS)<-names(SERVICES_MAIN_COMPONENTS) %>%   gsub(
+                        pattern = "\\,",
+                        replacement = ".") %>%  gsub(
+                        pattern = " .",
+                        replacement = ".")%>% str_squish()
+
+
 SERVICES_OTHER_COMPONENTS<-rowSums(SERVICES_CONTRIBUTION)-rowSums(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])
 
-Services_graph_data<-data.frame(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)][30:nrow(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)]),],SERVICES_OTHER_COMPONENTS[30:nrow(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])],index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"]))
+Services_graph_data<-data.frame(SERVICES_CONTRIBUTION[names(SERVICES_MAIN_COMPONENTS)][1:length(index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"])),],SERVICES_OTHER_COMPONENTS[30:length(SERVICES_OTHER_COMPONENTS)],index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"]))
 
 colnames(Services_graph_data)<-c(names(SERVICES_MAIN_COMPONENTS),"Other","Date")
 Services_graph_data<-melt(Services_graph_data,id=c("Date"))
@@ -2446,41 +2455,21 @@ Services_graph_data<-melt(Services_graph_data,id=c("Date"))
 NAMEING_SERVICE_CON<-as.data.frame(paste(unique(Services_graph_data$variable)[1:5]))
 
 
-INFLATION_SERVICES_CON_plot<-ggplot(data=Services_graph_data, aes(y=value, x=Date, fill=variable)) + 
+INFLATION_SERVICES_CON_plot<-ggplot(data=Services_graph_data, aes(y=value*100, x=Date, fill=variable)) + 
   geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
   labs(x="",
        title="Contribution to Services Inflation",
        caption="Source: CSO",
        y="contribution to annual growth (%)")+
-  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
-
-
-LINE_DATA_SERVICES<-data.frame(index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"]),rowSums(SERVICES_CONTRIBUTION)[30:nrow(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])])
-colnames(LINE_DATA_SERVICES)<-c("Date","Services")
-
-LINE_DATA_SERVICES<-melt(LINE_DATA_SERVICES, id=c("Date"))
-
-INFLATION_SERVICES_CON_plot_WITH_LINE<-INFLATION_SERVICES_CON_plot+geom_line(data=LINE_DATA_SERVICES,aes(x=Date, y=value),size = 1.2)+
+  scale_y_continuous(labels=function(x) paste0(x*10,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+
   scale_fill_manual(name = "",values=c("#01A685", 
                              "#A3915E",
                              "#0190D4",
                              "#dbac00",
                              "#afb6bd",
                              "#4473c4"
-                             ),    limits = c(unique(Services_graph_data$variable))
-  
-)+theme(legend.position=c(0.2,0.9),plot.title = element_text(hjust = 0.5),legend.background=element_blank())
-
-GROWTH_COMPONENTS_XTS<-as.xts(GROWTH_COMPONENTS)
-
-INFLATION_SERVICES_CON_plot_WITH_LINE
-
-#SERVICES_TEXT_1<-round(last(rowSums(SERVICES_CONTRIBUTION)*1000),1) %>% paste0("% on an annual basis")
-#SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
-#                        pattern = "\\,",
-#                        replacement = " ") %>%  gsub(
-#                        pattern = "\\.",
-#                        replacement = " ")    %>% str_squish()
+                             ))
+INFLATION_SERVICES_CON_plot
 
 ```
 
