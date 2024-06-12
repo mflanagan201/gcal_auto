@@ -32,26 +32,28 @@ smtp <- server(host = "smtp.gmail.com",
 
 Body_INFLATION<-emayili::envelope(
       from = "mflanagan201@gmail.com",
-      to=c("michael.flanagan@finance.gov.ie"),
+      to=c("michael.flanagan@finance.gov.ie","harry.morris@finance.gov.ie"),
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
       # Render R Markdown from a file.
       emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")
     
     smtp(Body_INFLATION)  
-    
 
 
+
+
+
     
-    Body_EXTERNAL_TRADE<-emayili::envelope(
-      from = "mflanagan201@gmail.com",
-      to=c("michael.flanagan@finance.gov.ie"),
-      subject = "External Trade Release!"
-    ) %>%
-      # Render R Markdown from a file.
-      emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
+#    Body_EXTERNAL_TRADE<-emayili::envelope(
+#      from = "mflanagan201@gmail.com",
+ #     to=c("michael.flanagan@finance.gov.ie"),
+  #    subject = "External Trade Release!"
+  #  ) %>%
+  #    # Render R Markdown from a file.
+  #    emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
     
-    smtp(Body_EXTERNAL_TRADE)  
+  #  smtp(Body_EXTERNAL_TRADE)  
     
     
 
