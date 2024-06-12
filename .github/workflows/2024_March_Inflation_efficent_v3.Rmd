@@ -2383,7 +2383,7 @@ Energy_contributions_chart
 ```
 
 
-```{r Text_calculations, echo=FALSE, warning=FALSE}
+```{r Text_calculations, echo=FALSE, warning=FALSE, include=FALSE}
 
 #figures for text 
 #Highest inflation rate
@@ -2416,7 +2416,7 @@ for (i in 1:ncol(ENERGY_OVERALL_INDEX_XTS)){
   Energy_inflation[,]<-growth(as.numeric(ENERGY_OVERALL_INDEX_XTS[,]),12)
 }
 
-Energy_inflation_text <- conditional(Energy_inflation[length(Energy_inflation)])
+Energy_inflation_text<-conditional(Energy_inflation[length(Energy_inflation)])
 
 
 #overall energy contribution to inflation
@@ -2432,7 +2432,7 @@ Energy_contribution_DATE <- last(Overall_energy_contribution_line$Date) %>% form
 
 According to the latest data in `r CURRENT_DATE`, overall energy inflation  `r Energy_inflation_text`. The highest energy product inflation rate was `r max_variable` with an inflation rate of `r Latest_inflation_TEXT`. The lowest energy product inflation rate was `r min_variable` with an inflation rate of `r Latest_inflation_low_TEXT`.
 
-Overall, energy contributed `r Energy_contribution` to overall inflation in `r Energy_contribution_DATE`.
+Overall, energy contributed `r Energy_contribution` percentage points to overall inflation in `r Energy_contribution_DATE`.
 
 
 
