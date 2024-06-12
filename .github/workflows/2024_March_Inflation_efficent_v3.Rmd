@@ -2400,7 +2400,7 @@ most_recent_data <- Energy_data %>% filter(Date == most_recent_date)
 Latest_inflation_low <- round(min(most_recent_data$value))
 
 Latest_inflation_low_TEXT <- paste0(Latest_inflation_low, "%")
-Latest_inflation_low_DATE <- last(Energy_inflation_chart$Date) %>% format("%B %Y")
+Latest_inflation_low_DATE <- last(Energy_data$Date) %>% format("%B %Y")
 
 
 #variable names
