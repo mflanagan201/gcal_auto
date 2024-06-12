@@ -1134,8 +1134,8 @@ latest_annual_Change_contributions<-melt(latest_annual_Change_contributions)
 latest_annual_Change_contributions$colour <- ifelse(latest_annual_Change_contributions$value < 0, DOF_colours[1],DOF_colours[2])
 
 
-min_waterfall<-latest_annual_Change_contributions$value[1]-abs(latest_annual_Change_contributions$value[2]+latest_annual_Change_contributions$value[3]+latest_annual_Change_contributions$value[4]+latest_annual_Change_contributions$value[5]+latest_annual_Change_contributions$value[6])
-max_waterfall<-latest_annual_Change_contributions$value[1]+abs(latest_annual_Change_contributions$value[2]+latest_annual_Change_contributions$value[3]+latest_annual_Change_contributions$value[4]+latest_annual_Change_contributions$value[5]+latest_annual_Change_contributions$value[6])
+min_waterfall<-latest_annual_Change_contributions$value[1]-abs(latest_annual_Change_contributions$value[2]+latest_annual_Change_contributions$value[3]+latest_annual_Change_contributions$value[4]+latest_annual_Change_contributions$value[5]+latest_annual_Change_contributions$value[6])-0.2
+max_waterfall<-latest_annual_Change_contributions$value[1]+abs(latest_annual_Change_contributions$value[2]+latest_annual_Change_contributions$value[3]+latest_annual_Change_contributions$value[4]+latest_annual_Change_contributions$value[5]+latest_annual_Change_contributions$value[6])+0.2
 
 
 waterfall_graph_change_annual_inflation<-latest_annual_Change_contributions  %>% waterfall(calc_total=TRUE, fill_by_sign =FALSE,  fill_colours = latest_annual_Change_contributions$colour,  total_rect_color = DOF_colours[2], total_axis_text=CURRENT,scale_y_to_waterfall=TRUE)+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme_bw()+coord_cartesian(ylim=c(min_waterfall, max_waterfall))+scale_fill_manual(values=c(positive="firebrick1",negative="steelblue"))
