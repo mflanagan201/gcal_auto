@@ -2434,7 +2434,7 @@ names(GOOD_SERVICES_INDEX)<-GOOD_SERVICES_INDEX %>% names() %>% gsub(
                         replacement = ".")    %>% str_squish()
 
 
-SERVICES_MAIN_COMPONENTS<-last(SERVICES_CONTRIBUTION)[,order(as.numeric(as.character(last(SERVICES_CONTRIBUTION))),decreasing = TRUE)][,1:4]
+SERVICES_MAIN_COMPONENTS<-last(data.frame(SERVICES_CONTRIBUTION))[,order(as.numeric(as.character(last(data.frame(SERVICES_CONTRIBUTION)))),decreasing = TRUE)][,1:4]
 
 SERVICES_OTHER_COMPONENTS<-rowSums(SERVICES_CONTRIBUTION)-rowSums(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])
 
