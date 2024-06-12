@@ -1,5 +1,5 @@
 ---
-title: <span class="text-center" style="color:#A3915E"> <center> <font size="6">  **Inflation Chartpack**  </font> </center> </span>
+title: <span class="text-center" style="color:#A3915E"> <center> <font size="6">  **Inflation Release**  </font> </center> </span>
 output: 
   
   html_document: default
@@ -440,7 +440,7 @@ CHAIN_INDEX_CONTRIBUTION[is.na(CHAIN_INDEX_CONTRIBUTION)]<-0
 ##########################################################################################################################
 
 #OVEREALL HICP INDEX BELOW
-CSO_HICP_INDEX<- CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00`
+CSO_HICP_INDEX<- CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00`
 
 
 
@@ -2212,4 +2212,236 @@ text_IRE_EA_DIFF<-conditional_alt2(IRE_EA_DIFF$value[nrow(IRE_EA_DIFF)])
 <br>
 
 ***
-
+
+```{r Energy inflation, echo=FALSE, warning=FALSE}
+
+
+library(dplyr)
+
+```
+
+
+```{r calculations, echo=FALSE, warning=FALSE}
+#chart data
+Energy_data <- DF %>% select('Electricity', 'Gas', `Liquid Fuel`, 'Solid Fuels', `Fuels & Lubricants for personal transport`)
+
+
+Energy_data$Date <- rownames(Energy_data)
+rownames(Energy_data) <- NULL
+
+Energy_data <- melt(Energy_data, id="Date")
+
+Energy_data$value <- as.numeric(Energy_data$value)
+Energy_data$Date <- as.Date(Energy_data$Date)
+
+#chart one #chart of rates of each component
+Energy_inflation_chart <- ggplot(Energy_data,
+aes(x=Date, y=value, group=variable, color=variable)) +
+  geom_line(size=1.2) +
+  scale_color_manual(values=DOF_colours)+
+  labs(x="",
+       title="Energy inflation",
+       caption="Source: CSO, DOF, Eurostat",
+       y="Inflation rate (%)")+
+  theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"), legend.position=c(0.85, 0.8),
+                   legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
+
+
+#chart two 
+#contributions to energy inflation chart
+
+Energy_contributions_melt <- melt(ENergy_CONTRIBUTIONS, id="Date")
+
+Energy_inflation_contributions_chart <- ggplot(Energy_contributions_melt,
+  aes(x=Date, y=value, group=variable, color=variable)) +
+  geom_line(size=1.2) +
+  scale_color_manual(values=DOF_colours)+
+  labs(x="",
+       title="Contribution to energy inflation rate",
+       caption="Source: CSO, DOF, Eurostat",
+       y="Contribution to energy inflation rate (%)")+
+  theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"), legend.position=c(0.2, 0.8),
+                   legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
+
+#chart three
+#contribution to overall inflation rate 
+
+
+CONTRIBUTION_df <- data.frame(CONTRIBUTION)
+Energy_overall_contributions_data <- CONTRIBUTION_df %>% select('Electricity', 'Gas', 'Liquid.Fuel', 'Solid.Fuels', 'Fuels...Lubricants.for.personal.transport')
+
+Energy_overall_contributions_data$Date <- rownames(Energy_overall_contributions_data)
+rownames(Energy_overall_contributions_data) <- NULL
+
+Energy_overall_contributions_data <- Energy_overall_contributions_data %>% 
+  dplyr::rename("Liquid Fuel" = "Liquid.Fuel",
+    "Solid Fuels" = "Solid.Fuels",
+    "Fuels & Lubricants for personal transport" = "Fuels...Lubricants.for.personal.transport"
+  )
+
+Energy_overall_contributions_data_melt <- melt(Energy_overall_contributions_data, id="Date")
+
+Energy_overall_contributions_data_melt$value <- as.numeric(Energy_overall_contributions_data_melt$value)
+Energy_overall_contributions_data_melt$Date <- as.Date(Energy_overall_contributions_data_melt$Date)
+
+Energy_overall_contributions_chart <- ggplot(Energy_overall_contributions_data_melt,
+                                     aes(x=Date, y=value, group=variable, color=variable)) +
+  geom_line(size=1.2) +
+  scale_color_manual(values=DOF_colours)+
+  labs(x="",
+       title="Contribution to overall inflation rate",
+       caption="Source: CSO, DOF, Eurostat",
+       y="Contribution to overall inflation rate (%)")+
+  theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"), legend.position=c(0.2, 0.8),
+                   legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
+
+
+
+
+
+
+
+
+#chart four
+#contribution to overall inflation rate bar chart
+CONTRIBUTION_df <- data.frame(CONTRIBUTION)
+Energy_overall_contributions_data <- CONTRIBUTION_df %>% select('Electricity', 'Gas', 'Liquid.Fuel', 'Solid.Fuels', 'Fuels...Lubricants.for.personal.transport')
+Energy_overall_contributions_data$Date <- rownames(Energy_overall_contributions_data)
+rownames(Energy_overall_contributions_data) <- NULL
+
+Energy_overall_contributions_data <- Energy_overall_contributions_data %>% 
+  dplyr::rename("Liquid Fuel" = "Liquid.Fuel",
+                "Solid Fuels" = "Solid.Fuels",
+                "Fuels & Lubricants for personal transport" = "Fuels...Lubricants.for.personal.transport"
+  )
+
+Energy_overall_contributions_data_melt <- melt(Energy_overall_contributions_data, id="Date")
+
+Energy_overall_contributions_data_melt$value <- as.numeric(Energy_overall_contributions_data_melt$value)
+Energy_overall_contributions_data_melt$Date <- as.Date(Energy_overall_contributions_data_melt$Date)
+
+Energy_overall_contributions_bar_chart <- ggplot(Energy_overall_contributions_data_melt,
+                                                 aes(x=Date, y=value, group=variable, fill=variable)) +
+  geom_bar(size=1.2, stat="identity") +
+  scale_fill_manual(values=DOF_colours)+
+  labs(x="",
+       title="Contribution to overall inflation rate",
+       caption="Source: CSO, DOF, Eurostat",
+       y="Contribution to overall inflation rate (pp)")+
+  theme_bw()+ theme(panel.border = element_blank(), legend.position=c(0.2, 0.8),
+                   legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
+
+
+#chart five
+#adding in overall contribution line
+#contribution to overall inflation rate bar chart
+CONTRIBUTION_df <- data.frame(CONTRIBUTION)
+Energy_overall_contributions_data <- CONTRIBUTION_df %>% select('Electricity', 'Gas', 'Liquid.Fuel', 'Solid.Fuels', 'Fuels...Lubricants.for.personal.transport')
+Energy_overall_contributions_data$Date <- rownames(Energy_overall_contributions_data)
+rownames(Energy_overall_contributions_data) <- NULL
+
+Energy_overall_contributions_data <- Energy_overall_contributions_data %>% 
+  dplyr::rename("Liquid Fuel" = "Liquid.Fuel",
+                "Solid Fuels" = "Solid.Fuels",
+                "Fuels & Lubricants for personal transport" = "Fuels...Lubricants.for.personal.transport"
+  )
+
+Energy_overall_contributions_data_melt <- melt(Energy_overall_contributions_data, id="Date")
+
+Energy_overall_contributions_data_melt$value <- as.numeric(Energy_overall_contributions_data_melt$value)
+Energy_overall_contributions_data_melt$Date <- as.Date(Energy_overall_contributions_data_melt$Date)
+
+Energy_overall_contributions_bar_chart <- ggplot(Energy_overall_contributions_data_melt,
+                                                 aes(x=Date, y=value, group=variable, fill=variable)) +
+  geom_bar(size=1.2, stat="identity") +
+  scale_fill_manual(values=DOF_colours)+
+  labs(x="",
+       title="Contribution to overall inflation rate",
+       caption="Source: CSO, DOF, Eurostat",
+       y="Contribution to overall inflation rate (pp)")+
+  theme_bw()+ theme(panel.border = element_blank(), legend.position=c(0.2, 0.8),
+                    legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
+
+Overall_energy_contribution_line<- data.frame(index(ENERGY["2019/"]), ENERGY["2019/"])
+colnames(Overall_energy_contribution_line) <- c("Date", "Growth")
+Overall_energy_contribution_line<- melt(Overall_energy_contribution_line, id=c("Date"))
+
+Energy_contributions_chart <- Energy_overall_contributions_bar_chart+geom_line(data=Overall_energy_contribution_line, aes(x=Date, y=value))
+
+                                                                               
+                                                                               
+```
+
+
+```{r charts, echo=FALSE, warning=FALSE}
+#chart one
+Energy_inflation_chart
+
+#chart five
+Energy_contributions_chart
+
+```
+
+
+```{r Text_calculations, echo=FALSE, warning=FALSE}
+
+#figures for text 
+#Highest inflation rate
+Latest_inflation <- round(last(Energy_data$value),1)
+Latest_inflation_TEXT <- paste0(Latest_inflation, "%")
+Latest_inflation_DATE <- last(Energy_data$Date) %>% format("%B %Y")
+
+
+#Lowest inflation rate
+#this is taking first month, not lowest value
+Energy_data$Date <- as.Date(Energy_data$Date)
+most_recent_date <- as.Date(max(Energy_data$Date))
+most_recent_data <- Energy_data %>% filter(Date == most_recent_date)
+Latest_inflation_low <- round(min(most_recent_data$value))
+
+Latest_inflation_low_TEXT <- paste0(Latest_inflation_low, "%")
+Latest_inflation_low_DATE <- last(Energy_inflation_chart$Date) %>% format("%B %Y")
+
+
+#variable names
+min_row <- most_recent_data %>% filter(value == min(value, na.rm= TRUE))
+max_row <- most_recent_data %>% filter(value == max(value, na.rm= TRUE))
+min_variable <- min_row$variable
+max_variable <- max_row$variable
+
+#energy inflation rate 
+Energy_inflation <- as.data.frame(ENERGY_OVERALL_INDEX_XTS) %>% as.xts()
+
+for (i in 1:ncol(ENERGY_OVERALL_INDEX_XTS)){
+  Energy_inflation[,]<-growth(as.numeric(ENERGY_OVERALL_INDEX_XTS[,]),12)
+}
+
+Energy_inflation_text <- conditional(Energy_inflation[length(Energy_inflation)])
+
+
+#overall energy contribution to inflation
+Energy_contribution <- round(last(Overall_energy_contribution_line$value), 1)
+Energy_contribution_TEXT <- paste0(Energy_contribution, "%")
+Energy_contribution_DATE <- last(Overall_energy_contribution_line$Date) %>% format("%B %Y")
+
+```
+
+
+***
+
+
+According to the latest data in `r CURRENT_DATE`, overall energy inflation  `r Energy_inflation_text`. The highest energy product inflation rate was `r max_variable` with an inflation rate of `r Latest_inflation_TEXT`. The lowest energy product inflation rate was `r min_variable` with an inflation rate of `r Latest_inflation_low_TEXT`.
+
+Overall, energy contributed `r Energy_contribution` to overall inflation in `r Energy_contribution_DATE`.
+
+
+
+
+
+***
+
+
+
+
+
+
