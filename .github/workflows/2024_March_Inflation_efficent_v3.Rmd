@@ -2475,12 +2475,12 @@ GROWTH_COMPONENTS_XTS<-as.xts(GROWTH_COMPONENTS)
 
 INFLATION_SERVICES_CON_plot_WITH_LINE
 
-SERVICES_TEXT_1<-round(last(rowSums(SERVICES_CONTRIBUTION)*1000),1) %>% paste0("% on an annual basis")
-SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
-                        pattern = "\\,",
-                        replacement = " ") %>%  gsub(
-                        pattern = "\\.",
-                        replacement = " ")    %>% str_squish()
+#SERVICES_TEXT_1<-round(last(rowSums(SERVICES_CONTRIBUTION)*1000),1) %>% paste0("% on an annual basis")
+#SERVICES_TEXT_2_NAME<-names(SERVICES_MAIN_COMPONENTS[,1]) %>% gsub(
+#                        pattern = "\\,",
+#                        replacement = " ") %>%  gsub(
+#                        pattern = "\\.",
+#                        replacement = " ")    %>% str_squish()
 
 ```
 
