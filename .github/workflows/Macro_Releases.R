@@ -28,8 +28,10 @@ smtp <- server(host = "smtp.gmail.com",
                port = 465,
                username = "mflanagan201@gmail.com",
                password = "ddauvuifpknvsobo")
- 
 
+
+for(i in 1:nrow(CALENDAR_ALL_short)){
+if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%"))
 Body_INFLATION<-emayili::envelope(
       from = "mflanagan201@gmail.com",
       to=c("michael.flanagan@finance.gov.ie","harry.morris@finance.gov.ie"),
@@ -39,6 +41,14 @@ Body_INFLATION<-emayili::envelope(
       emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")
     
     smtp(Body_INFLATION)  
+
+  } else { 
+    
+    print("Don't run code")
+  }
+}
+
+
 
 
 
