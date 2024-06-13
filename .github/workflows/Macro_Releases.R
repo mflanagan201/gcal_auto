@@ -37,14 +37,14 @@ Body_INFLATION<-emayili::envelope(
       to=c("michael.flanagan@finance.gov.ie","harry.morris@finance.gov.ie"),
       subject = "[Auto-Email] Inflation Chartpack"
     ) %>%
-      # Render R Markdown from a file.
-      emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")
-    
-    smtp(Body_INFLATION)  
+      emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
+
   }
 }
 
-
+if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
+smtp(Body_INFLATION)
+  }
 
 
 
