@@ -2426,51 +2426,6 @@ Energy_contribution_DATE <- last(Overall_energy_contribution_line$Date) %>% form
 
 
 
-names(GOOD_SERVICES_INDEX)<-c("Bread & Cereals","Meat","Fish","Milk, Cheese,eggs","Oil & Fats","Fruit","Vegetables","Sugar,Jam, Honey, Chocolate","Food Products","Coffee, tea, Cocoa","Mineral Water, Soft Drinks, Vegetable Juices","Spirits","Wine","Beer","Tobacco","Garments","Other Clothing","Footwear","Material for the maintenance of dwellings","Electricity","Gas","Liquid Fuel","Solid Fuels","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils","House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products", "Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Fuels & Lubricants for personal transport", "Recording Equipment",  "Information processing equipment", "Recording Media", "Musical Instruments", "Games, Toys, hobbies", "Sports & outdoor Equipment","Gardens, plants and flowers", "Pets Products", "Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects","Actual Rent", "Repair of Dwelling","Repair of Household Appliances", "Domestic Services and Household Services","Insurance for Dwellings","Cleaning & Repair Clothing","Repair of audio-visual","Recreational & Sporting Services","Cultural Services", "Restaurant, Cafes etc.","Canteens","Hairdressing Salons","Repair Personal Transport","Other services for Personal Transport","Passenger transport by railway","Passenger transport by road","Passenger transport by air","Passenger transport by sea","Combined Passenger transport","Other purchased transport services","Package Holidays","Accomdation Services","Medical Services", "Dental Services","Hospital Services","Education","Social Protection","Healthcare Insurance","Transport Insurance","Financial Services","Other Services","Postal Services","Telephone equipment and services","Refuse Collection", "Other Services for Dwellings") 
-
-names(GOOD_SERVICES_INDEX)<-GOOD_SERVICES_INDEX %>% names() %>% gsub(
-                        pattern = "\\,",
-                        replacement = ".") %>%  gsub(
-                        pattern = " .",
-                        replacement = ".")    %>% str_squish()
-
-
-SERVICES_MAIN_COMPONENTS<-last(data.frame(SERVICES_CONTRIBUTION))[,order(as.numeric(as.character(last(data.frame(SERVICES_CONTRIBUTION)))),decreasing = TRUE)][,1:4]
-
-
-names(SERVICES_MAIN_COMPONENTS)<-names(SERVICES_MAIN_COMPONENTS) %>%   gsub(
-                        pattern = "\\,",
-                        replacement = ".") %>%  gsub(
-                        pattern = " .",
-                        replacement = ".")%>% str_squish()
-
-
-SERVICES_OTHER_COMPONENTS<-rowSums(SERVICES_CONTRIBUTION)-rowSums(SERVICES_CONTRIBUTION[,names(SERVICES_MAIN_COMPONENTS)])
-
-Services_graph_data<-data.frame(SERVICES_CONTRIBUTION[names(SERVICES_MAIN_COMPONENTS)][1:length(index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"])),],SERVICES_OTHER_COMPONENTS[30:length(SERVICES_OTHER_COMPONENTS)],index(CHAIN_CORE_SERVICES_CONTRIBUTION["2021-06-01/"]))
-
-colnames(Services_graph_data)<-c(names(SERVICES_MAIN_COMPONENTS),"Other","Date")
-Services_graph_data<-melt(Services_graph_data,id=c("Date"))
-
-NAMEING_SERVICE_CON<-as.data.frame(paste(unique(Services_graph_data$variable)[1:5]))
-
-
-INFLATION_SERVICES_CON_plot<-ggplot(data=Services_graph_data, aes(y=value*100, x=Date, fill=variable)) + 
-  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
-  labs(x="",
-       title="Contribution to Services Inflation",
-       caption="Source: CSO",
-       y="contribution to annual growth (%)")+
-  scale_y_continuous(labels=function(x) paste0(x*10,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+
-  scale_fill_manual(name = "",values=c("#01A685", 
-                             "#A3915E",
-                             "#0190D4",
-                             "#dbac00",
-                             "#afb6bd",
-                             "#4473c4"
-                             ))
-INFLATION_SERVICES_CON_plot
-
 ```
 
 
