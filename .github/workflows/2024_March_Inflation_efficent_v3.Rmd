@@ -1557,7 +1557,241 @@ write.xlsx(dataset_names, file='INFLATIONCONTRIBUTIONWEIGHTS.xlsx')
 
 ```
 
+```{r basket, echo=FALSE, warning=FALSE, include=FALSE}
+#creating growth core services index
+CORE_SERVICES_INDEX_XTS 
 
+
+for(i in 1:ncol(CORE_SERVICES_INDEX_XTS)){
+  CORE_SERVICES_INDEX_XTS[,i]<-growth(as.numeric(CORE_SERVICES_INDEX_XTS[,i]),12) 
+}
+
+CORE_SERVICES_GROWTH<- CORE_SERVICES_INDEX_XTS["2017/"] %>% as.xts(as.Date(Date[253:length(Date)]))
+
+
+CORE_SERVICES_GROWTH[is.na(CORE_SERVICES_GROWTH)]<-0 
+CORE_SERVICES_GROWTH[is.nan(CORE_SERVICES_GROWTH)]<-0 
+
+#issue with -100
+CORE_SERVICES_GROWTH[CORE_SERVICES_GROWTH==-100]<-0
+
+
+#weight matrix needed 
+CORE_SERVICES_WEIGHT <- as.data.frame(CORE_SERVICES_WEIGHT_XTS)
+
+
+#rename column 
+names(CORE_SERVICES_WEIGHT)[names(CORE_SERVICES_WEIGHT) == 'A.CP0830.IE'] <- 'CP082_3'
+names(CORE_SERVICES_WEIGHT_XTS)[names(CORE_SERVICES_WEIGHT_XTS) == 'A.CP0830.IE'] <- 'CP082_3'
+
+names(CORE_SERVICES_WEIGHT)[names(CORE_SERVICES_WEIGHT) == 'A.CP0322.IE'] <- 'CP0322a'
+names(CORE_SERVICES_WEIGHT_XTS)[names(CORE_SERVICES_WEIGHT_XTS) == 'A.CP0322.IE'] <- 'CP0322a'
+
+rowSums(CORE_SERVICES_WEIGHT_XTS,na.rm=TRUE)
+
+
+#calculate basket proportions 
+
+below_zero_services<-matrix(NA,ncol=ncol(CORE_SERVICES_GROWTH["2017/"]) ,nrow=nrow(CORE_SERVICES_GROWTH["2017/"]))
+between_zero_two_services<-matrix(NA,ncol=ncol(CORE_SERVICES_GROWTH["2017/"]) ,nrow=nrow(CORE_SERVICES_GROWTH["2017/"]))
+between_two_five_services<-matrix(NA,ncol=ncol(CORE_SERVICES_GROWTH["2017/"]) ,nrow=nrow(CORE_SERVICES_GROWTH["2017/"]))
+over_five_services<-matrix(NA,ncol=ncol(CORE_SERVICES_GROWTH["2017/"]) ,nrow=nrow(CORE_SERVICES_GROWTH["2017/"])) 
+zero<-0
+two<-2
+five<-5
+
+#below zero 
+
+for(i in 1:nrow(CORE_SERVICES_GROWTH["2017/"])){
+  for(j in 1:ncol(CORE_SERVICES_GROWTH["2017/"])){
+    if(as.numeric(CORE_SERVICES_GROWTH["2017/"][i,j])< zero){
+      below_zero_services[i,j]<-(CORE_SERVICES_WEIGHT_XTS[i,colnames(CORE_SERVICES_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+below_zero_services<-data.frame(below_zero_services)
+below_zero_services[is.na(below_zero_services)]<-0 
+below_zero_services_xts<-below_zero_services %>% as.xts(order.by=index(CORE_SERVICES_GROWTH))
+below_zero_services_xts_sum<-rowSums(below_zero_services_xts,na.rm=TRUE)
+below_zero_services_xts_sum
+
+
+
+#zero and two
+for(i in 1:nrow(CORE_SERVICES_GROWTH["2017/"])){
+  for(j in 1:ncol(CORE_SERVICES_GROWTH["2017/"])){
+    if(between(as.numeric(CORE_SERVICES_GROWTH["2017/"][i,j]),zero,two)){
+      between_zero_two_services[i,j]<-(CORE_SERVICES_WEIGHT_XTS[i,colnames(CORE_SERVICES_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+
+between_zero_two_services<-data.frame(between_zero_two_services)
+between_zero_two_services[is.na(between_zero_two_services)]<-0 
+between_zero_two_services_xts<-between_zero_two_services %>% as.xts(order.by=index(CORE_SERVICES_GROWTH))
+between_zero_two_services_xts_sum<-rowSums(between_zero_two_services_xts,na.rm=TRUE)
+
+
+#two and five
+
+
+for(i in 1:nrow(CORE_SERVICES_GROWTH["2017/"])){
+  for(j in 1:ncol(CORE_SERVICES_GROWTH["2017/"])){
+    if(between(as.numeric(CORE_SERVICES_GROWTH["2017/"][i,j]),two,five)){
+      between_two_five_services[i,j]<-(CORE_SERVICES_WEIGHT_XTS[i,colnames(CORE_SERVICES_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+between_two_five_services<-data.frame(between_two_five_services)
+between_two_five_services[is.na(between_two_five_services)]<-0 
+between_two_five_services_xts<-between_two_five_services %>% as.xts(order.by=index(CORE_SERVICES_GROWTH))
+between_two_five_services_xts_sum<-rowSums(between_two_five_services_xts,na.rm=TRUE)
+
+#over five
+
+
+for(i in 1:nrow(CORE_SERVICES_GROWTH["2017/"])){
+  for(j in 1:ncol(CORE_SERVICES_GROWTH["2017/"])){
+    if(as.numeric(CORE_SERVICES_GROWTH["2017/"][i,j])>five){
+      over_five_services[i,j]<-(CORE_SERVICES_WEIGHT_XTS[i,colnames(CORE_SERVICES_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+
+over_five_services<-data.frame(over_five_services)
+over_five_services[is.na(over_five_services)]<-0 
+over_five_services_xts<-over_five_services %>% as.xts(order.by=index(CORE_SERVICES_GROWTH))
+over_five_services_xts_sum<-rowSums(over_five_services_xts,na.rm=TRUE)
+
+#combining categories
+below_zero_services_xts<-as.xts(below_zero_services_xts_sum, order.by = index(below_zero_services_xts))
+between_zero_two_services_xts<-as.xts(between_zero_two_services_xts_sum, order.by = index(below_zero_services_xts))
+between_two_five_services_xts<-as.xts(between_two_five_services_xts_sum, order.by = index(below_zero_services_xts))
+over_five_services_xts<-as.xts(over_five_services_xts_sum, order.by = index(below_zero_services_xts))
+
+
+#only need over five 
+over_five_services_df<-data.frame(index(over_five_services_xts), over_five_services_xts)
+colnames(over_five_services_df)<-c("Date", ">5%")
+
+#goods only
+GOODS_HICP_WEIGHT_XTS<-HICP_WEIGHT_XTS[,colnames(HICP_WEIGHT_XTS[,1:54])]/rowSums(HICP_WEIGHT_XTS[,colnames(HICP_WEIGHT_XTS[,1:54])])
+GOODS_HICP_INDEX_XTS<-HICP_INDEX_XTS[,colnames(GOODS_HICP_WEIGHT_XTS)]
+
+GOODS_HICP_INDEX_XTS_GROWTH<-growth(GOODS_HICP_INDEX_XTS,12)
+
+
+below_zero_GOODS<-matrix(NA,ncol=ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]) ,nrow=nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+between_zero_two_GOODS<-matrix(NA,ncol=ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]) ,nrow=nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+between_two_five_GOODS<-matrix(NA,ncol=ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]) ,nrow=nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+over_five_GOODS<-matrix(NA,ncol=ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]) ,nrow=nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])) 
+
+
+zero<-0
+two<-2
+five<-5
+
+
+#below zero
+GOODS_HICP_INDEX_XTS_GROWTH[is.na(GOODS_HICP_INDEX_XTS_GROWTH)]<-0
+for(i in 1:nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+  for(j in 1:ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+    if(as.numeric(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j])< zero){
+      below_zero_GOODS[i,j]<-(GOODS_HICP_WEIGHT_XTS[i,colnames(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+below_zero_GOODS<-data.frame(below_zero_GOODS)
+below_zero_GOODS[is.na(below_zero_GOODS)]<-0 
+below_zero_GOODS_xts<-below_zero_GOODS %>% as.xts(order.by=index(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+below_zero_GOODS_xts_sum<-rowSums(below_zero_GOODS_xts,na.rm=TRUE)
+
+#zero and two 
+for(i in 1:nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+  for(j in 1:ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+    if(between(as.numeric(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j]),zero,two)){
+      between_zero_two_GOODS[i,j]<-(GOODS_HICP_WEIGHT_XTS[i,colnames(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+
+between_zero_two_GOODS<-data.frame(between_zero_two_GOODS)
+between_zero_two_GOODS[is.na(between_zero_two_GOODS)]<-0 
+between_zero_two_GOODS_xts<-between_zero_two_GOODS %>% as.xts(order.by=index(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+between_zero_two_GOODS_xts_sum<-rowSums(between_zero_two_GOODS_xts,na.rm=TRUE)
+
+#two and five
+for(i in 1:nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+  for(j in 1:ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+    if(between(as.numeric(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j]),two,five)){
+      between_two_five_GOODS[i,j]<-(GOODS_HICP_WEIGHT_XTS[i,colnames(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+between_two_five_GOODS<-data.frame(between_two_five_GOODS)
+between_two_five_GOODS[is.na(between_two_five_GOODS)]<-0 
+between_two_five_GOODS_xts<-between_two_five_GOODS %>% as.xts(order.by=index(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+between_two_five_GOODS_xts_sum<-rowSums(between_two_five_GOODS_xts,na.rm=TRUE)
+
+#over five
+for(i in 1:nrow(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+  for(j in 1:ncol(GOODS_HICP_INDEX_XTS_GROWTH["2017/"])){
+    if(as.numeric(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j])>five){
+      over_five_GOODS[i,j]<-(GOODS_HICP_WEIGHT_XTS[i,colnames(GOODS_HICP_INDEX_XTS_GROWTH["2017/"][i,j])])
+    }
+  }
+}
+
+
+over_five_GOODS<-data.frame(over_five_GOODS)
+over_five_GOODS[is.na(over_five_GOODS)]<-0 
+over_five_GOODS_xts<-over_five_GOODS %>% as.xts(order.by=index(GOODS_HICP_INDEX_XTS_GROWTH["2017/"]))
+over_five_GOODS_xts_sum<-rowSums(over_five_GOODS_xts,na.rm=TRUE)
+
+
+
+#combining categories
+below_zero_GOODS_xts<-as.xts(below_zero_GOODS_xts_sum, order.by = index(below_zero_GOODS_xts))
+between_zero_two_GOODS_xts<-as.xts(between_zero_two_GOODS_xts_sum, order.by = index(below_zero_GOODS_xts))
+between_two_five_GOODS_xts<-as.xts(between_two_five_GOODS_xts_sum, order.by = index(below_zero_GOODS_xts))
+over_five_GOODS_xts<-as.xts(over_five_GOODS_xts_sum, order.by = index(below_zero_GOODS_xts))
+
+
+#only need over five 
+over_five_GOODS_df<-data.frame(index(over_five_GOODS_xts), over_five_GOODS_xts)
+colnames(over_five_GOODS_df)<-c("Date", ">5%")
+
+
+#combine data
+over_five_combo <- cbind(over_five_services_df, over_five_GOODS_df)
+over_five_combo <- over_five_combo[-c(3)] 
+names(over_five_combo)[2] <- "Services"
+names(over_five_combo)[3] <- "Goods"
+
+over_five_combo_graph_melt <- melt(over_five_combo, id=c("Date"))
+
+
+#graph 
+Combo_over_five <- ggplot(data=over_five_combo_graph_melt, aes(y=value*100, x=Date, color=variable)) +
+  geom_line(size=1.2)+
+  scale_color_manual(values=DOF_colours)+
+  labs(x="",
+       title="Share of basket over 5% inflation",
+       caption="Source : CSO, DOF, Eurostat",
+       y="")+
+  theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"), legend.position=c(0.25, 0.85),
+                   legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
+
+
+
+``` 
 
 ```{r inflation text for markdown, warning=FALSE, include=FALSE}
 
@@ -1773,7 +2007,7 @@ INFLATION_CON_plot_WITH_LINE
 Inflation_contributions_graph_data<-summary_contribution[1:5] %>% round(3)
 
 Inflation_contributions_graph_data_XTS<-data.frame(index(ANNUAL_INFLATION["2020/"]),Inflation_contributions_graph_data) 
-colnames(Inflation_contributions_graph_data_XTS)<-c("Date","Energy","Food","NEIG","Rent","Core Services")
+colnames(Inflation_contributions_graph_data_XTS)<-c("Date","NEIG","Food","Energy","Rent","Core Services")
 
 write.xlsx(Inflation_contributions_graph_data_XTS, file="Inflation_contributions_graph_data.xlsx")
 
@@ -1999,37 +2233,60 @@ text_low_basket<-round(last(graph_data_inflation_basket$`0%-2%`+graph_data_infla
 <br>
 
 *** 
+```{r inflation basket, echo=FALSE, warning=FALSE}
+
+Combo_over_five
 
 
-```{r OVER 5 FOR 12 proporation of inflation basket, echo=FALSE, warning=FALSE}
+#Text for goods/services over 5 per cent graph 
+Latest_over_five_services <- round(last(over_five_combo$Services*100),1)
+Latest_over_five_services_TEXT <-paste0(Latest_over_five_services, "%")
+Latest_over_five_GOODS <- round(last(over_five_combo$Goods*100),1)
+Latest_over_five_GOODS_TEXT <-paste0(Latest_over_five_GOODS, "%")
+Latest_over_five_DATE <- last(over_five_combo$Date) %>%format("%B %Y")
 
-
-over_five_12_Months_graph
-Latest_over_5_over_12<-round(last(over_five_12_Months_graph$data$Over_5*100),1) 
-Latest_over_5_over_12_TEXT<-paste0(Latest_over_5_over_12,"%")
-Latest_over_5_over_12_DATE<-last(over_five_12_Months_graph$data$Index)  %>% format("%B %Y")
-
-
-Latest_over_5_over_12_ex_energy<-round(last(over_five_12_Months_graph$data$Over_5_ex_energy*100),1) 
-Latest_over_5_over_12_ex_energy_TEXT<-paste0(Latest_over_5_over_12_ex_energy,"%")
-
+ 
 
 
 ```
 
 
 ***
-
-* Reflecting both the broad based and the persistent nature of inflation, `r Latest_over_5_over_12_TEXT` of the components in the inflation basket had an inflation rate in excess of 5% for at least the last 12 months  in `r Latest_over_5_over_12_DATE`. 
+* Reflecting the importance of services in driving inflation, `r Latest_over_five_services_TEXT` of the services basket experienced
+inflation of over 5% in `r Latest_over_five_DATE`. 
 <br>
 <br>
 
-* Exclduing the energy components from the basket, `r Latest_over_5_over_12_ex_energy_TEXT` of the remaining components in the inflation basket had an inflation rate in excess of 5% for at least the last 12 months  in `r Latest_over_5_over_12_DATE`.
+* This compared with `r Latest_over_five_GOODS_TEXT` of the goods basket.
 <br>
 <br>
 
 
-*** 
+
+***
+
+
+
+
+
+```{r OVER 5 FOR 12 proporation of inflation basket, echo=FALSE, warning=FALSE}
+
+
+#over_five_12_Months_graph
+#Latest_over_5_over_12<-round(last(over_five_12_Months_graph$data$Over_5*100),1) 
+#Latest_over_5_over_12_TEXT<-paste0(Latest_over_5_over_12,"%")
+#Latest_over_5_over_12_DATE<-last(over_five_12_Months_graph$data$Index)  %>% format("%B %Y")
+
+
+#Latest_over_5_over_12_ex_energy<-round(last(over_five_12_Months_graph$data$Over_5_ex_energy*100),1) 
+#Latest_over_5_over_12_ex_energy_TEXT<-paste0(Latest_over_5_over_12_ex_energy,"%")
+
+
+
+```
+
+
+
 
 
 
@@ -2410,13 +2667,9 @@ min_variable <- min_row$variable
 max_variable <- max_row$variable
 
 #energy inflation rate 
-Energy_inflation <- as.data.frame(ENERGY_OVERALL_INDEX_XTS) %>% as.xts()
-
-for (i in 1:ncol(ENERGY_OVERALL_INDEX_XTS)){
-  Energy_inflation[,]<-growth(as.numeric(ENERGY_OVERALL_INDEX_XTS[,]),12)
-}
-
-Energy_inflation_text<-conditional(Energy_inflation[length(Energy_inflation)])
+Energy_HICP <- CSO_HICP_INDEX_XTS$Energy
+Energy_HICP_growth <- as.data.frame(growth(as.numeric(Energy_HICP), 12))
+Energy_inflation_text <- conditional(tail(Energy_HICP_growth, n=1))
 
 
 #overall energy contribution to inflation
@@ -2441,6 +2694,8 @@ Overall, energy contributed `r Energy_contribution` percentage points to overall
 
 
 ***
+
+
 
 
 
