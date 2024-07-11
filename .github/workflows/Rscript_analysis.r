@@ -313,7 +313,7 @@ if(is.na(RELEASE_IMF$Release[1])){
   
   EVENTS_IMF = data.frame(DTSTART = RELEASE_IMF$Date,
                           DTEND = RELEASE_IMF$Date+1,
-                          SUMMARY = paste(trimws(RELEASE_IMF$Release,"l")),
+                          SUMMARY = c("World Economic Outlook"),
                           LOCATION = c("IMF"),
                           transparent=TRUE)
   
