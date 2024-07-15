@@ -3,6 +3,7 @@ library(rvest)
 library(readxl)
 library(emayili)
 library(openxlsx)
+library(lubridate)
 
 
 smtp <- server(host = "smtp.gmail.com",
@@ -63,9 +64,23 @@ mortgage_approval_df_DATE<-as.Date(mortgage_approval_TEXT_DF$Date, format=c('%d 
 mortgage_approval_df<-data.frame("BPFI mortgage approvals report", as.character(mortgage_approval_df_DATE),"https://bpfi.ie/search-resources/?_sft_category=bpfi-mortgage-approvals-report&post_types=publications",c("mflanagan201@gmail.com niamhmmcd@gmail.com"),Sys.Date()) 
 colnames(mortgage_approval_df)<-c("varaible", "Date","URL","TO","TIME_STAMP")
 
+EMPLOYMENT_PERMITS<-read_html("https://enterprise.gov.ie/en/publications/employment-permit-statistics-2024.html")
+EMPLOYMENT_PERMITS_text<-EMPLOYMENT_PERMITS %>% html_nodes("p.article-date.article-date--larger") %>% html_text() %>% stringr::str_split("[|\r\n]") 
+EMPLOYMENT_PERMITS_text_DF<-(data.frame(EMPLOYMENT_PERMITS_text)) 
+colnames(EMPLOYMENT_PERMITS_text_DF)<-c("Date")
+
+EMPLOYMENT_PERMITS_text_DF_DATE<-(trimws(gsub("th|nd|st|rd", "", EMPLOYMENT_PERMITS_text_DF$Date[1]))) %>% dmy() 
+EMPLOYMENT_PERMITS_text_df<-data.frame("Employment Permit Statistics", as.character(EMPLOYMENT_PERMITS_text_DF_DATE),"https://enterprise.gov.ie/en/publications/employment-permit-statistics-2024.html",c("mflanagan201@gmail.com niamhmmcd@gmail.com"),Sys.Date()) 
+colnames(EMPLOYMENT_PERMITS_text_df)<-c("varaible", "Date","URL","TO","TIME_STAMP")
 
 
-ALL_INDICATORS<-rbind(Commencements_df,DAFT_df,SENTIMENT_df,mortgage_approval_df)
+
+
+
+
+
+
+ALL_INDICATORS<-rbind(EMPLOYMENT_PERMITS_text_df,Commencements_df,DAFT_df,SENTIMENT_df,mortgage_approval_df)
 
 ALL_INDICATORS_EXISTING<-read.csv("ALL_INDICATORS.csv")
 
