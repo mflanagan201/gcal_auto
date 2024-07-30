@@ -103,7 +103,7 @@ SERVICES_OVERALL_INDEX_XTS<-as.xts(SERVICES_INDEX,order.by=SERVICES_HICP_DATE)
 PROCESSED_FOOD_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE")%>% .$value %>% as.numeric()
 PROCESSED_FOOD_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE") %>% .$period %>% as.Date()
 PROCESSED_FOOD_INDEX_XTS<-as.xts(PROCESSED_FOOD_INDEX,order.by=PROCESSED_FOOD_DATE)
-
+f
 
 
 
@@ -550,8 +550,8 @@ ENERGY_INDEX_OVERALL["2017/"]<-ENERGY_INDEX_XTS["2017/"]
 ENERGY<-Contribution(ENERGY_INDEX_OVERALL["2016/"],Energy_WEIGHT_XTS,Energy_INDEX_XTS)*1000
 colnames(ENERGY)<-c("Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lubricants for personal transport") 
 
-ENergy_CONTRIBUTIONS<-data.frame(index(ENERGY_INDEX_OVERALL["2019/"]),ENERGY)  
-colnames(ENergy_CONTRIBUTIONS)<- c("Date","Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lubricants for personal transport")
+ENergy_CONTRIBUTIONS<-data.frame(index(ENERGY_INDEX_OVERALL["2019/"]),na.omit(growth(ENERGY_INDEX_OVERALL["2018/"],12)),ENERGY)  
+colnames(ENergy_CONTRIBUTIONS)<- c("Date","Energy Growth","Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lubricants for personal transport")
 ENergy_CONTRIBUTIONS %>%  write.csv("ENERGY.csv")
 
 #NEIG 
@@ -915,7 +915,7 @@ SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS<-matrix(NA,nrow=length(Date[241:length(D
 SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]<-rowSums(CHAIN_CORE_SERVICES_CONTRIBUTION)*DEC_BASE_SERVICES[1:length(SERVICES_OVERALL_INDEX_XTS["2017/"])]   
 SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2016"]<-SERVICES_OVERALL_INDEX_XTS["2016"]
 
-SERVICES_CONTRIBUTION<-Contribution(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS,CORE_SERVICES_WEIGHT_XTS["2017/"],CORE_SERVICES_INDEX_XTS["2017/"])
+SERVICES_CONTRIBUTION<-Contribution(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS,CORE_SERVICES_WEIGHT_XTS,CORE_SERVICES_INDEX_XTS)
 
 
 
@@ -927,7 +927,12 @@ SERVICES_CONTRIBUTION<-as.xts(SERVICES_CONTRIBUTION,order.by=index(HICP_INDEX_XT
 SERVICES_NAMES<-c("Postal services","Telephone services","Rent","maintenance of dwelling", "Refuse Collection","sewerage collection","Other dwelling services","repair of household appliances", "Domestic services", "housing insurance", "Medical Services", "Dental services", "hospital services", "Education", "Social protection", "health insurance", "Financial services", "other services", "package holidays", "accomodation services", "clothes cleaning/repair", "repair/hire of footwear","repair of ICT","Recreational and sporting services", "cultural services", "Restaurant, Cafes etc.","Canteen","Hairdressing", "repair of personal transport","other personal transport services", "rail transport", "road transport","air fares", "sea transport","combined passenger transport","other transport", "motor insurance")      
 
 colnames(SERVICES_CONTRIBUTION)<-c(SERVICES_NAMES)
-write.xlsx(SERVICES_CONTRIBUTION,"SERVICES_CONTRIBUTION.xlsx")
+
+SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS_growth<-growth(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS,12)
+
+SERVICES_CONTRIBUTION_OUTPUT<-data.frame(index(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS_growth["2019/"]),SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS_growth["2019/"],1000*SERVICES_CONTRIBUTION)
+
+names(SERVICES_CONTRIBUTION_OUTPUT)<-c("Date","Annual Services Growth",SERVICES_NAMES)
 
 
 INDEX_VALUES<-data.frame(index(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]),SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"],PROCESSED_FOOD_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"],UNPROCESSED_FOOD_INDEX["2017/"],FOOD_INDEX["2017/"],CSO_NEIG["2017/"],CSO_RENT["2017/"])
@@ -1341,7 +1346,7 @@ betweeen_zero_two_xts<-as.xts(betweeen_zero_two_xts_sum, order.by = index(below_
 betweeen_two_five_xts<-as.xts(betweeen_two_five_xts_sum, order.by = index(below_zero_xts))
 over_five_xts<-as.xts(over_five_xts_sum, order.by = index(below_zero_xts))
 
-inflationbreakdown<-data.frame(index(below_zero_xts),below_zero_xts,betweeen_zero_two_xts,betweeen_two_five_xts,over_five_xts)
+inflationbreakdown<-data.frame(index(below_zero_xts["2022/"]),below_zero_xts["2022/"],betweeen_zero_two_xts["2022/"],betweeen_two_five_xts["2022/"],over_five_xts["2022/"])
 colnames(inflationbreakdown)<-c("Date","<0%","0%-2%","2%-5%",">5%")
 
 summary_df_graph_melt<-melt(inflationbreakdown,id=c("Date"))
@@ -1526,7 +1531,7 @@ colnames(graph_data_2023)<-c("Date", "Trimmed Inflation","Overall Inflation", "C
 
 
 
-infl_CONTR<-data.frame(inflationbreakdown[13:nrow(inflationbreakdown),],over_five_12_Months_SUM)
+infl_CONTR<-data.frame(inflationbreakdown[14:nrow(inflationbreakdown),],over_five_12_Months_SUM["2023-02-01/"])
 colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
 
 
@@ -1790,7 +1795,7 @@ Combo_over_five <- ggplot(data=over_five_combo_graph_melt, aes(y=value*100, x=Da
                    legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
 
 
-
+write.xlsx(over_five_combo,file="over_five_combo.xlsx")
 ``` 
 
 ```{r inflation text for markdown, warning=FALSE, include=FALSE}
@@ -2222,7 +2227,7 @@ text_low_basket<-round(last(graph_data_inflation_basket$`0%-2%`+graph_data_infla
 
 ***
 
-* As inflation becomes broad based in nature a greater proportion of the inflation basket records higher rates of inflation. 
+* The proportion of the inflation basket with higher rates of inflation the more broad based inflation has become. 
 <br>
 <br>
 * In `r basket_weight_date`, `r paste0(text_high_basket,sep="%")` of the inflation basket reported inflation in excess of 5%. This is `r compare_high_weight_text` in  `r basket_weight_date_prior_month`.
@@ -2249,7 +2254,7 @@ Latest_over_five_DATE <- last(over_five_combo$Date) %>%format("%B %Y")
 
 
 ```
-
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/over_five_combo.xlsx)
 
 ***
 * Reflecting the importance of services in driving inflation, `r Latest_over_five_services_TEXT` of the services basket experienced
@@ -2319,7 +2324,7 @@ colnames(Graph_Data_Heatmap)<-Graph_Data_Heatmap %>% names() %>% gsub(
 
 
 
-DFFF<-melt(Graph_Data_Heatmap,id=c("index as xts DFF"))
+DFFF<-melt(Graph_Data_Heatmap[18:nrow(Graph_Data_Heatmap),],id=c("index as xts DFF"))
 DFFF$value<-round(as.numeric(DFFF$value),1)
 
 DFFF<-DFFF %>% mutate(variable = recode(.$variable,  "Mineral.Water..Soft.Drinks..Vegetable.Juices" = "Soft drinks","Non.durable.househld.goods" ="Non-durable","Electrical.Appliances.for.personal.care"="Personal care app","Accomdation.Services"="Hotel,etc."))
@@ -2367,9 +2372,13 @@ text_heatmap_growth_rate_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.charact
 ***
 
 
-```{r contribution EA inflation, echo=FALSE, message=FALSE, warning=FALSE}
+```{r contribution EA inflation, echo=FALSE, mess0age=FALSE, warning=FALSE}
+#EURO AREA 
 
-FOOD_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP011.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP011.EA") %>% .$period)
+EA_INFLATION_XTS<-rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$period)
+
+
+FOOD_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$period)
 
 RENT_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$period)
 
@@ -2385,20 +2394,51 @@ CORE_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$value
 MISC_GOOD_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$period) 
 
 
+
+#NEIG
+CP1212_1213_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1212_1213.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1212_1213.EA") %>% .$period) 
+
+CP123_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP123.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP123.EA") %>% .$period) 
+
+
+
+#CORE SERVICES 
+#CP1211_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1211.EA") %>% .$value %>% as.numeric() #%>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1211.EA") %>% .$period) 
+
+#CP124_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP124.EA") %>% .$value %>% as.numeric() %>% #as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP124.EA") %>% .$period) 
+
+#CP125_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP125.EA") %>% .$value %>% as.numeric() %>% #as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP125.EA") %>% .$period) 
+
+#CP126_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP126.EA") %>% .$value %>% as.numeric() %>% #as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP126.EA") %>% .$period) 
+
+#CP127_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP127.EA") %>% .$value %>% as.numeric() %>% #as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP127.EA") %>% .$period) 
+
+
+
+
+#NEIG=CP1212_1213,CP123, Core_services=CP1211,CP124,CP125,CP126,CP127
+NEW_CORE_SERVICES_EA<-CORE_SERVICES_EA_XTS["2019/"]
+
+NEW_NEIG_EA<-NEIG_EA_XTS["2019/"]
+
+
 EA_INFLATION<-CORE_SERVICES_EA_XTS+ENERGY_EA_XTS+NEIG_EA_XTS+RENT_EA_XTS+FOOD_EA_XTS+MISC_GOOD_SERVICES_EA_XTS
-EA_INFLATION_CONTRIBUTION<-merge(CORE_SERVICES_EA_XTS["2019/"],ENERGY_EA_XTS["2019/"],NEIG_EA_XTS["2019/"],RENT_EA_XTS["2019/"],FOOD_EA_XTS["2019/"],MISC_GOOD_SERVICES_EA_XTS["2019/"])
+
+EA_INFLATION_CONTRIBUTION<-merge(NEW_CORE_SERVICES_EA["2019/"],ENERGY_EA_XTS["2019/"],NEW_NEIG_EA["2019/"],RENT_EA_XTS["2019/"],FOOD_EA_XTS["2019/"])
+
+
 IRE_INFLATION_CONTRIBUTION<-merge(NEIG,FOOD,ENERGY,Rent,CORE_SERVICES) %>% .[index(EA_INFLATION_CONTRIBUTION)]
 colnames(IRE_INFLATION_CONTRIBUTION)<-c("NEIG","FOOD","ENERGY","Rent","CORE_SERVICES")
 
-delta_EA_IRE_ONE<-data.frame(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS-IRE_INFLATION_CONTRIBUTION$CORE_SERVICES[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
-  EA_INFLATION_CONTRIBUTION$NEIG_EA_XTS-IRE_INFLATION_CONTRIBUTION$NEIG[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
-  EA_INFLATION_CONTRIBUTION$RENT_EA_XTS-IRE_INFLATION_CONTRIBUTION$Rent[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
-  EA_INFLATION_CONTRIBUTION$FOOD_EA_XTS-IRE_INFLATION_CONTRIBUTION$FOOD[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)],
-  EA_INFLATION_CONTRIBUTION$ENERGY_EA_XTS-IRE_INFLATION_CONTRIBUTION$ENERGY[1:length(EA_INFLATION_CONTRIBUTION$CORE_SERVICES_EA_XTS)], index(EA_INFLATION_CONTRIBUTION$FOOD_EA_XTS..2019...["2019/"])
+delta_EA_IRE_ONE<-data.frame(NEW_CORE_SERVICES_EA["2019/"]  -IRE_INFLATION_CONTRIBUTION$CORE_SERVICES[1:nrow(EA_INFLATION_CONTRIBUTION)],
+  NEW_NEIG_EA["2019/"]-IRE_INFLATION_CONTRIBUTION$NEIG[1:nrow(EA_INFLATION_CONTRIBUTION)],
+  EA_INFLATION_CONTRIBUTION$RENT_EA_XTS-IRE_INFLATION_CONTRIBUTION$Rent[1:nrow(EA_INFLATION_CONTRIBUTION)],
+  EA_INFLATION_CONTRIBUTION$FOOD_EA_XTS-IRE_INFLATION_CONTRIBUTION$FOOD[1:nrow(EA_INFLATION_CONTRIBUTION)],
+  EA_INFLATION_CONTRIBUTION$ENERGY_EA_XTS-IRE_INFLATION_CONTRIBUTION$ENERGY[1:nrow(EA_INFLATION_CONTRIBUTION)], index(EA_INFLATION_CONTRIBUTION$FOOD_EA_XTS..2019...["2019/"])
 ) 
 
 
-delta_EA_IRE<-delta_EA_IRE_ONE %>% .[37:nrow(delta_EA_IRE_ONE),] %>% melt(id=c("index.EA_INFLATION_CONTRIBUTION.FOOD_EA_XTS..2019.....2019....")) %>% na.omit() %>%  mutate(variable = recode(.$variable,  "RENT_EA_XTS..2019..." = "Rent","NEIG_EA_XTS..2019..." ="NEIG","FOOD_EA_XTS..2019..." ="Food","CORE_SERVICES_EA_XTS..2019..." ="Core Services","ENERGY_EA_XTS..2019..." ="Energy"))
+delta_EA_IRE<-delta_EA_IRE_ONE %>% .[50:nrow(delta_EA_IRE_ONE),] %>% melt(id=c("index.EA_INFLATION_CONTRIBUTION.FOOD_EA_XTS..2019.....2019....")) %>% na.omit() %>%  mutate(variable = recode(.$variable,  "RENT_EA_XTS..2019..." = "Rent","e1.1" ="NEIG","FOOD_EA_XTS..2019..." ="Food","CORE_SERVICES" ="Core Services","ENERGY_EA_XTS..2019..." ="Energy"))
 
 Graph_Data_EA<-delta_EA_IRE_ONE %>% na.omit() %>% .[1:5] %>% round(3)
 Graph_Data_EA<-Graph_Data_EA*-1
@@ -2413,17 +2453,17 @@ DELTA_EA_IRE_CON_plot<-ggplot(data=delta_EA_IRE, aes(y=value*-1, x=index.EA_INFL
        caption="Source: CSO, Eurostat, DOF calculations",
        y="percentage point difference")+
   scale_fill_manual(name = "", values  = c("NEIG" = DOF_colours[1],"Food" = DOF_colours[2],"Energy" = DOF_colours[3],"Rent" = DOF_colours[5],"Core Services" = DOF_colours[4]))+
-  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme(legend.position=c(0.9,0.2),plot.title = element_text(hjust = 0.5),legend.background=element_blank())
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))+theme(legend.position="bottom",plot.title = element_text(hjust = 0.5),legend.background=element_blank())
 
   
+DIFF_EURO_AREA<-delta_EA_IRE_ONE %>% .[50:nrow(delta_EA_IRE_ONE),] %>% .[,1:5] %>% rowSums()
 
-
-IRE_EA_DIFF<-data.frame(index(EA_INFLATION["2022/"]), LINE_DATA$Growth[25:length(EA_INFLATION["2020/"])]-EA_INFLATION["2022/"])
+IRE_EA_DIFF<-data.frame(index(EA_INFLATION["2023-02-01/"]),(DIFF_EURO_AREA)*-1) 
   
 colnames(IRE_EA_DIFF)<-c("Date","IRE_EA_DIFF")
 IRE_EA_DIFF<-melt(IRE_EA_DIFF, id=c("Date"))
        
-DELTA_EA_IRE_CON_plot_2<-DELTA_EA_IRE_CON_plot+geom_line(data=IRE_EA_DIFF,aes(x=Date, y=value),size = 1)
+DELTA_EA_IRE_CON_plot_2<-DELTA_EA_IRE_CON_plot+geom_line(data=(IRE_EA_DIFF),aes(x=Date, y=value),size = 1)
 
 DELTA_EA_IRE_CON_plot_2
 
@@ -2439,8 +2479,9 @@ Text_IRELAND_higher_last<-paste0(((colnames(IRELAND_HIGHER_VAL[length(IRELAND_HI
 Text_IRELAND_Lower<-paste0(((colnames(IRELAND_LOWER_VAL[1:length(IRELAND_LOWER_VAL)-1]))),sep=",")
 
 Text_IRELAND_Lower_Last<-paste0(((colnames(IRELAND_LOWER_VAL[length(IRELAND_LOWER_VAL)]))))
-
-
+EA_DIFFERENCE<-data.frame(index(NEW_CORE_SERVICES_EA["2019/"]),Graph_Data_EA,EA_INFLATION_XTS["2019/"])
+names(EA_DIFFERENCE)<-c("Date",names(Graph_Data_EA),"Euro Area Annual Inflation Rate")
+write.xlsx(EA_DIFFERENCE,file="EA_DIFFERENCE.xlsx")
 ```
 
 
@@ -2449,6 +2490,7 @@ Text_IRELAND_Lower_Last<-paste0(((colnames(IRELAND_LOWER_VAL[length(IRELAND_LOWE
 text_IRE_EA_DIFF<-conditional_alt2(IRE_EA_DIFF$value[nrow(IRE_EA_DIFF)])
 
 ```
+[Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/EA_DIFFERENCE.xlsx)
 
 ***
 
@@ -2701,4 +2743,18 @@ Overall, energy contributed `r Energy_contribution` percentage points to overall
 
 
 
+```{r MEGA DOWNLOAD, echo=FALSE, warning=FALSE, include=FALSE}
 
+CONTRIBUTION<-data.frame(ANNUAL_INFLATION["2019/"],CONTRIBUTION)
+
+
+ANNUAL_GROWTH<-data.frame(DF)
+MEGA_DATA_DOWNLOAD <- list('HICP_INDEX_LEVEL' =data.frame(INDEX_VALUES),'ANNUAL GROWTH'=data.frame(ANNUAL_GROWTH),'CONTRIBUTION' =data.frame(index(HICP_INDEX_XTS["2019/"]),CONTRIBUTION),'Contribution Services'=SERVICES_CONTRIBUTION_OUTPUT,'Contribution Energy'=ENergy_CONTRIBUTIONS)
+
+names(MEGA_DATA_DOWNLOAD$CONTRIBUTION)<-c("Date","Headline Inflation",(Index_names))
+
+write.xlsx(MEGA_DATA_DOWNLOAD, file = 'MEGA_DATA_DOWNLOAD.xlsx')
+
+```
+
+<span class="text-center" style="color:#A3915E"> <center> <font size="4"> The answer to life the universe and everything...[Download Everything! ](https://github.com/mflanagan201/gcal_auto/raw/main/MEGA_DATA_DOWNLOAD.xlsx) </font> </center>
