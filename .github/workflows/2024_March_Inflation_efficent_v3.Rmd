@@ -2372,7 +2372,7 @@ text_heatmap_growth_rate_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.charact
 ***
 
 
-```{r contribution EA inflation, echo=FALSE, mess0age=FALSE, warning=FALSE}
+```{r contribution EA inflation, echo=FALSE, message=FALSE, warning=FALSE}
 #EURO AREA 
 
 EA_INFLATION_XTS<-rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$period)
