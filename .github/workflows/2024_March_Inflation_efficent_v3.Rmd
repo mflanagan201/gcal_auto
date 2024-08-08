@@ -103,7 +103,7 @@ SERVICES_OVERALL_INDEX_XTS<-as.xts(SERVICES_INDEX,order.by=SERVICES_HICP_DATE)
 PROCESSED_FOOD_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE")%>% .$value %>% as.numeric()
 PROCESSED_FOOD_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE") %>% .$period %>% as.Date()
 PROCESSED_FOOD_INDEX_XTS<-as.xts(PROCESSED_FOOD_INDEX,order.by=PROCESSED_FOOD_DATE)
-f
+
 
 
 
