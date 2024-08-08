@@ -38,8 +38,9 @@ if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALEN
 
     Body_INFLATION<-emayili::envelope(
     from = "mflanagan201@gmail.com",
-    to=c("michael.flanagan@finance.gov.ie","harry.morris@finance.gov.ie"),
-    subject = "[Auto-Email] Inflation Chartpack"
+    to=c("michael.flanagan@finance.gov.ie"),
+bcc=c("ian.power@finance.gov.ie","harry.morris@finance.gov.ie"),
+    subject = "[Auto-Email] Inflation Release"
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
