@@ -2479,7 +2479,7 @@ Text_IRELAND_higher_last<-paste0(((colnames(IRELAND_HIGHER_VAL[length(IRELAND_HI
 Text_IRELAND_Lower<-paste0(((colnames(IRELAND_LOWER_VAL[1:length(IRELAND_LOWER_VAL)-1]))),sep=",")
 
 Text_IRELAND_Lower_Last<-paste0(((colnames(IRELAND_LOWER_VAL[length(IRELAND_LOWER_VAL)]))))
-EA_DIFFERENCE<-data.frame(index(NEW_CORE_SERVICES_EA["2019/"]),Graph_Data_EA,EA_INFLATION_XTS["2019/"])
+EA_DIFFERENCE<-data.frame(index(NEW_CORE_SERVICES_EA["2019/"]),Graph_Data_EA,EA_INFLATION_XTS[index(Graph_Data_EA)])
 names(EA_DIFFERENCE)<-c("Date",names(Graph_Data_EA),"Euro Area Annual Inflation Rate")
 write.xlsx(EA_DIFFERENCE,file="EA_DIFFERENCE.xlsx")
 ```
