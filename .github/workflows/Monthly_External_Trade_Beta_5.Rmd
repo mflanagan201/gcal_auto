@@ -7,7 +7,6 @@ output:
 text-align:  justify
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
     cache       = TRUE,     # if TRUE knitr will cache the results to reuse in future knits
@@ -1235,7 +1234,7 @@ Other_contribution_export<-Contribution_annual_growth$TOTAL-((Contribution_annua
 Other_contribution<-as.xts(Other_contribution_export$TOTAL)
 colnames(Other_contribution)<-c("OTHER")
 
-summary_contribution<-data.frame(merge(Contribution_annual_growth$USA["2020/"],EURO_AREA_CONTRIBUTION_ANNUAL_GROWTH$EA["2020/"],Contribution_annual_growth$China["2020/"],Contribution_annual_growth$GB["2020/"],Contribution_annual_growth$NI["2020/"],Other_contribution$OTHER["2020/"]),index(Contribution_annual_growth["2020/"]))
+summary_contribution<-data.frame(merge(Contribution_annual_growth$USA["2023-01-01/"],EURO_AREA_CONTRIBUTION_ANNUAL_GROWTH$EA["2023/"],Contribution_annual_growth$China["2023/"],Contribution_annual_growth$GB["2023/"],Contribution_annual_growth$NI["2023/"],Other_contribution$OTHER["2023/"]),index(Contribution_annual_growth["2023/"]))
 colnames(summary_contribution)<-c("USA","Euro Area","China","Great Britian","Northern Ireland","Other","Date")
 summary_contribution_melt<-melt(summary_contribution,id=c("Date"))
 
@@ -1244,7 +1243,7 @@ summary_contribution_melt<-melt(summary_contribution,id=c("Date"))
 
 
 destination_plot<-ggplot(data=summary_contribution_melt, aes(y=value, x=Date, fill=variable)) + 
-  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
+  geom_bar(position="stack", stat="identity")+theme(legend.position.inside='bottom',element_text(size=100))+
   labs(x="",
        title="Contribution of Ireland's Main Trading Partners to Export Growth",
        caption="Date Source: CSO monthly external trade data from 2020",
@@ -1276,7 +1275,7 @@ y1<-ggplot()+geom_line(data=Total_Share_3MA,aes(x=Date_3MA.Date,y=China, colour=
   geom_line(data=Total_Share_3MA,aes(x=Date_3MA.Date,y=GB, colour="Great Britian"),size=1)+  
   
   scale_y_continuous(labels=function(x) paste0(x,"%"))+
-  theme(legend.position='top',plot.caption = element_text(hjust=0))+
+  theme(legend.position.inside.inside='top',plot.caption = element_text(hjust=0))+
 
   
   labs(x="",
@@ -1348,7 +1347,7 @@ colnames(Export_Level)<-c("sum_6M_Total_LEVEL","Date")
 y3<-ggplot(data=short_annual_growth,aes(x=DATE))+
       geom_line(aes(y=TOTAL, colour="Export growth"),size=1)+
   scale_y_continuous(labels=function(x) paste0(x,"%"))+
-  theme(legend.position="none",plot.caption = element_text(hjust=0))+
+  theme(legend.position.inside="none",plot.caption = element_text(hjust=0))+
   labs(x="",
        title="Irelands Goods export growth: annual percentage change",
        caption="Date Source: CSO monthly external trade data from 2015",
@@ -1356,14 +1355,14 @@ y3<-ggplot(data=short_annual_growth,aes(x=DATE))+
   scale_color_manual(name = "", values = c("Export growth" = DOF_colours[2]))+
   theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
 
-y3<-y3+ theme(legend.position="none")
+y3<-y3+ theme(legend.position.inside="none")
 
 
 y4<-ggplot()+
   geom_line(data=Export_Level,aes(x=Date,y=sum_6M_Total_LEVEL, colour="Total"),size=1)+
 
   scale_y_continuous(labels=function(x) paste0(x))+
-  theme(legend.position='top',plot.caption = element_text(hjust=0))+
+  theme(legend.position.inside='top',plot.caption = element_text(hjust=0))+
   labs(x="",
        title="Irelands Goods Export level",
        caption="Date Source: CSO monthly external trade data from 2015",
@@ -1442,7 +1441,6 @@ Netherlands_exports<-Netherlands_exports[,-c(10)]
 
 ```
 
-
 ```{r plot, echo=FALSE}
 
 
@@ -1486,7 +1484,6 @@ Vol_annual<-conditional(annual_growth_exports_vol[length(annual_growth_exports_v
 
 
 ```
-
 
 ```{r tables, echo=FALSE, warning=FALSE}
 
@@ -1537,68 +1534,48 @@ webshot(html_print(as.htmlwidget(format_table1)),zoom = 3)
 
 ```
 
-***
+------------------------------------------------------------------------
 
-#### **Overall Key Trends** ####
+#### **Overall Key Trends**
 
+-   According to the latest data, the value of export growth in `r current_date` was `r Monthly_growth_exports_val_text` than the previous month. In `r current_date` imports were also `r Monthly_growth_imports_val_text` the previous month. <br> <br>
+-   On an annual basis, the value of goods exports `r annual_growth_exports_val_text` in `r current_date`.Over the same period, the value of imports `r annual_growth_imports_val_text`. <br> <br>
+-   On a volume basis, goods exports `r Vol_monthly_text` in `r current_date_vol` and `r Vol_annual` on an annual basis. <br> <br>
+-   Compared to Pre-Covid levels, the seasonally adjusted value and volume of exports have `r Pre_Covid_export_text` and `r Pre_Covid_export_text_vol` respectively. <br> <br>
+-   Year to date, nominal goods exports have `r YTD_2022_annual_text` in `r current_date`.\
+    <br> <br>
 
+------------------------------------------------------------------------
 
--  According to the latest data, the value of export growth in `r current_date` was `r Monthly_growth_exports_val_text` than the previous month. In `r current_date`  imports were also `r Monthly_growth_imports_val_text` the previous month.
-<br>
-<br>
--  On an annual basis, the value of goods exports `r annual_growth_exports_val_text` in `r current_date`.Over the same period, the value of imports `r annual_growth_imports_val_text`. 
-<br>
-<br>
--  On a volume basis, goods exports `r Vol_monthly_text` in `r current_date_vol` and `r Vol_annual` on an annual basis. 
-<br>
-<br>
--  Compared to Pre-Covid levels, the seasonally adjusted value and  volume of exports have `r Pre_Covid_export_text` and `r Pre_Covid_export_text_vol` respectively. 
-<br>
-<br>
--  As part of Budget 2024, the Department forecast nominal goods export growth of -2.3% in 2024. Year to date, exports have `r YTD_2022_annual_text` in `r current_date`. As a result exports are currently running `r export_nominal_budget`.  
-<br>
-<br>
+<span class="text-center" style="color:#A3915E">
 
+<center><font size="4"> **Goods Exports - Detailed Breakdown** </font></center>
 
+</span>
 
+------------------------------------------------------------------------
 
-***
-
-
- <span class="text-center" style="color:#A3915E"> <center> <font size="4">   **Goods Exports - Detailed Breakdown** </font>  </center> </span>
- 
-***
 ```{r country plots, echo=FALSE}
 library(htmltools)
 
-destination_plot2<-destination_plot+ theme(legend.position=c(0.5, 0.8))
+destination_plot2<-destination_plot+ theme(legend.position.inside=c(0.5, 0.8))
 destination_plot2
 ```
 
-***
+------------------------------------------------------------------------
 
-#### **Country Level Breakdown** ####
+#### **Country Level Breakdown**
 
-* Exports to the USA, `r text_annual_export_USA` on an annual basis and contributed `r round(Contribution_annual_growth$USA[length(Contribution_annual_growth$USA)],1)` percentage points (representing `r text_annual_contribution_export_USA_TOTAL` of the total) in `r current_date`.   
-<br>
-<br>
-* Exports to Great Britian, `r text_annual_export_GB` on an annual basis and contributed `r round(Contribution_annual_growth$GB[length(Contribution_annual_growth$GB)],1)` percentage points (representing `r text_annual_contribution_export_GB_TOTAL` of the total) in `r current_date`.   
-<br>
-<br>
-* Exports to Northern Ireland, `r text_annual_export_NI` on an annual basis and contributed `r round(Contribution_annual_growth$NI[length(Contribution_annual_growth$NI)],1)` percentage points (representing `r text_annual_contribution_export_NI_TOTAL` of the total) in `r current_date`.
-<br>
-<br>
-* Exports to the Euro Area, `r text_annual_export_Euro_Area` on an annual basis and contributed `r round(EURO_AREA_CONTRIBUTION_ANNUAL_GROWTH$EA[length(Contribution_annual_growth$Germany)],1)` percentage points (representing `r text_annual_contribution_export_EURO_AREA_TOTAL` of the total) in `r current_date`.
-<br>
-<br>
-* Exports to China, `r text_annual_export_China` on an annual basis and contributed `r round(Contribution_annual_growth$China[length(Contribution_annual_growth$China)],1)` percentage points (representing `r text_annual_contribution_export_China_TOTAL` of the total) in `r current_date`.
-<br>
-<br>
-* Outside of our main trading partners,exports `r text_annual_export_Other` on an annual basis and contributed `r round(Other_contribution_export$TOTAL[length(Other_contribution_export$TOTAL)],1)` percentage points (representing `r text_annual_contribution_export_Other_TOTAL` of the total) in `r current_date`.
-</br>
+-   Exports to the USA, `r text_annual_export_USA` on an annual basis and contributed `r round(Contribution_annual_growth$USA[length(Contribution_annual_growth$USA)],1)` percentage points (representing `r text_annual_contribution_export_USA_TOTAL` of the total) in `r current_date`.\
+    <br> <br>
+-   Exports to Great Britian, `r text_annual_export_GB` on an annual basis and contributed `r round(Contribution_annual_growth$GB[length(Contribution_annual_growth$GB)],1)` percentage points (representing `r text_annual_contribution_export_GB_TOTAL` of the total) in `r current_date`.\
+    <br> <br>
+-   Exports to Northern Ireland, `r text_annual_export_NI` on an annual basis and contributed `r round(Contribution_annual_growth$NI[length(Contribution_annual_growth$NI)],1)` percentage points (representing `r text_annual_contribution_export_NI_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Exports to the Euro Area, `r text_annual_export_Euro_Area` on an annual basis and contributed `r round(EURO_AREA_CONTRIBUTION_ANNUAL_GROWTH$EA[length(Contribution_annual_growth$Germany)],1)` percentage points (representing `r text_annual_contribution_export_EURO_AREA_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Exports to China, `r text_annual_export_China` on an annual basis and contributed `r round(Contribution_annual_growth$China[length(Contribution_annual_growth$China)],1)` percentage points (representing `r text_annual_contribution_export_China_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Outside of our main trading partners,exports `r text_annual_export_Other` on an annual basis and contributed `r round(Other_contribution_export$TOTAL[length(Other_contribution_export$TOTAL)],1)` percentage points (representing `r text_annual_contribution_export_Other_TOTAL` of the total) in `r current_date`. </br>
 
-
-***
+------------------------------------------------------------------------
 
 ```{r Brexit, include=FALSE}
 
@@ -1908,30 +1885,17 @@ high_contribution_value_NI<-round(as.numeric(latest_NI_prod_contribution[,paste0
 
 ```
 
+#### **Trade with United Kingdom**
 
-#### **Brexit Impact** ####
+-   In `r current_date` exports to the UK `r annual_text_UK_EXPORT` on an annual basis. Over the same period, exports to Great Britian `r annual_text_GB_EXPORT` and exports to Northern Ireland `r annual_text_NI_EXPORT` <br> <br>
+-   In the year to date, Exports to the UK `r YTD_2022_annual_text_UK_EXPORT`. Exports to mainland Great Britian `r YTD_2022_annual_text_GB_EXPORT` whilst exports to Northern Ireland `r YTD_2022_annual_text_NI_EXPORT` over the same period. <br> <br>
+-   In year to date terms, pharma exports to the UK `r YTD_2022_annual_text_UK_PHARMA_EXPORT` whilst Food & Beverage Exports to the UK `r YTD_2022_annual_text_UK_FB_EXPORT`. <br> <br>
+-   [**High Contribution Warning:**]{style="color:green"} At a subcomponent level, `r high_contribution_GB_PROD` reported the highest contribution to annual export growth to Great Britian, contributing `r high_contribution_value_GB` percentage points to growth, as annual export growth in `r high_contribution_GB_PROD` `r High_contribution_growth_rate_GB_text`.\
+    <br> <br>
+-   [**Big fall Warning:**]{style="color:darkred"} At a subcomponent level, `r Low_contribution_GB` reported the largest drag on annual export growth to Great Britian, contributing `r Low_contribution_GB_value` percentage points to growth, as annual exports in `r Low_contribution_GB` `r Low_contribution_growth_rate_text_GB`. <br> <br>
+-   [**High Contribution Warning:**]{style="color:green"} At a subcomponent level, `r high_contribution_NI_PROD` reported the highest contribution to annual export growth to Northern Ireland, contributing `r high_contribution_value_NI` percentage points to growth, as annual export growth in `r high_contribution_NI_PROD` `r High_contribution_growth_rate_NI_text`.
 
-* In `r current_date` exports to the UK `r annual_text_UK_EXPORT` on an annual basis. Over the same period, exports to Great Britian `r annual_text_GB_EXPORT` and exports to Northern Ireland `r annual_text_NI_EXPORT`
-<br>
-<br>
-* In the year to date, Exports to the UK `r YTD_2022_annual_text_UK_EXPORT`. Exports to mainland Great Britian `r YTD_2022_annual_text_GB_EXPORT` whilst exports to Northern Ireland `r YTD_2022_annual_text_NI_EXPORT` over the same period. 
-<br>
-<br>
-* In year to date terms, pharma exports to the UK `r YTD_2022_annual_text_UK_PHARMA_EXPORT` whilst Food & Beverage Exports to the UK `r YTD_2022_annual_text_UK_FB_EXPORT`. 
-<br>
-<br>
-* **<span style="color:green">High Contribution Warning:</span> ** At a subcomponent level, `r high_contribution_GB_PROD` reported the highest contribution to annual export growth to Great Britian, contributing  `r high_contribution_value_GB` percentage points to growth, as annual export growth in `r high_contribution_GB_PROD`  `r High_contribution_growth_rate_GB_text`.  
-<br>
-<br>
-* **<span style="color:darkred">Big fall Warning:</span> ** At a subcomponent level, `r Low_contribution_GB` reported the largest drag on annual export growth to Great Britian, contributing `r Low_contribution_GB_value` percentage points to growth, as annual exports in `r Low_contribution_GB` `r Low_contribution_growth_rate_text_GB`. 
-<br>
-<br>
-* **<span style="color:green">High Contribution Warning:</span> ** At a subcomponent level, `r high_contribution_NI_PROD` reported the highest contribution to annual export growth to Northern Ireland, contributing  `r high_contribution_value_NI` percentage points to growth, as annual export growth in `r high_contribution_NI_PROD`  `r High_contribution_growth_rate_NI_text`.  
-
-
-
-***
-
+------------------------------------------------------------------------
 
 ```{r product breakdown, include=FALSE}
 #Product level breakdown 
@@ -3184,13 +3148,13 @@ dataset_names <- list('Contribution_Annual_Growth' = Contribution_annual_growth_
 
 
 #create summary graph of products below
-summary_contribution_Product<-data.frame(merge(Contribution_annual_growth_product$`Food & Beverage`["2020/"],Contribution_annual_growth_product$`semi Conductors`["2020/"],Contribution_annual_growth_product$Pharma["2020/"],Contribution_annual_growth_product$`Other Core M&E`["2020/"],Contribution_annual_growth_product$`Miscellaneous Medical Devices`["2020/"],Contribution_annual_growth_product$Other["2020/"]),index(Contribution_annual_growth_product["2020/"]))
+summary_contribution_Product<-data.frame(merge(Contribution_annual_growth_product$`Food & Beverage`["2023/"],Contribution_annual_growth_product$`semi Conductors`["2023/"],Contribution_annual_growth_product$Pharma["2023/"],Contribution_annual_growth_product$`Other Core M&E`["2023/"],Contribution_annual_growth_product$`Miscellaneous Medical Devices`["2023/"],Contribution_annual_growth_product$Other["2023/"]),index(Contribution_annual_growth_product["2023/"]))
 colnames(summary_contribution_Product)<-c("Food & Beverage","Semi Conductors","Pharma","Other Core M&E","Miscellaneous Medical Devices","Other","Date")
 summary_contribution_melt_Product<-melt(summary_contribution_Product,id=c("Date"))
 
 
 product_contribution<-ggplot(data=summary_contribution_melt_Product, aes(y=value, x=Date, fill=variable)) + 
-  geom_bar(position="stack", stat="identity")+theme(legend.position=c(0.8, 0.2),plot.caption = element_text(hjust=0))+
+  geom_bar(position="stack", stat="identity")+theme(legend.position.inside=c(0.8, 0.2),plot.caption = element_text(hjust=0))+
   labs(x="",
        title="Ireland Export Contribution to Growth",
        caption="Date Source: CSO monthly external trade data. from 2020",
@@ -3202,16 +3166,12 @@ product_contribution<-ggplot(data=summary_contribution_melt_Product, aes(y=value
 
 ```
 
-
 ```{r Product Commodity Graph, echo=FALSE}
 
 
-product_contribution+theme(legend.position = c(0.2, 0.8))
+product_contribution+theme(legend.position.inside = c(0.2, 0.8))
 
 ```
-
-
-
 
 ```{r Product Warning, include=FALSE}
 
@@ -3258,23 +3218,17 @@ High_contribution_growth_rate_text<-conditional(High_contribution_growth_rate)
 
 ```
 
-***
+------------------------------------------------------------------------
 
-#### **Product Level Breakdown** ####
+#### **Product Level Breakdown**
 
-* Exports in the employment rich food and beverage sector in `r current_date` `r text_monthly_growth_FB` and `r text_annual_growth_FB` on an annual basis.In the first `r length_current_year` months of the year, food and beverage exports have `r YTD_Food_Beverage_text`.  
-<br>
-<br>
-* Pharma exports in `r current_date` `r monthly_growth_Pharma_text` over the month. Compared to the same period last year, pharma exports `r annual_growth_Pharma_text` in `r current_date`. Having `r YTD_Pharma_text`  in the year to date,  pharma exports  `r Pharma_Contribution_Overall_YTD` in 2023.  
-<br>
-<br>
-* **<span style="color:green">High Contribution Warning:</span> ** At a subcomponent level `r high_contribution` reported the highest contribution to annual growth over the month, contributing  `r high_contribution_value` percentage points to growth, as annual growth in `r current_date` `r High_contribution_growth_rate_text`.  
-<br>
-<br>
-* **<span style="color:darkred">Big fall Warning:</span> ** At a subcomponent level `r Low_contribution` reported the largest drag on annual growth over the month, contributing `r Low_contribution_value` percentage points to growth, as annual growth in `r current_date` `r Low_contribution_growth_rate_text`. 
-<br>
-<br>
-***
+-   Exports in the employment rich food and beverage sector in `r current_date` `r text_monthly_growth_FB` and `r text_annual_growth_FB` on an annual basis.In the first `r length_current_year` months of the year, food and beverage exports have `r YTD_Food_Beverage_text`.\
+    <br> <br>
+-   Pharma exports in `r current_date` `r monthly_growth_Pharma_text` over the month. Compared to the same period last year, pharma exports `r annual_growth_Pharma_text` in `r current_date`. Having `r YTD_Pharma_text` in the year to date, pharma exports `r Pharma_Contribution_Overall_YTD` in 2023.\
+    <br> <br>
+-   [**High Contribution Warning:**]{style="color:green"} At a subcomponent level `r high_contribution` reported the highest contribution to annual growth over the month, contributing `r high_contribution_value` percentage points to growth, as annual growth in `r current_date` `r High_contribution_growth_rate_text`.\
+    <br> <br>
+-   [**Big fall Warning:**]{style="color:darkred"} At a subcomponent level `r Low_contribution` reported the largest drag on annual growth over the month, contributing `r Low_contribution_value` percentage points to growth, as annual growth in `r current_date` `r Low_contribution_growth_rate_text`. <br> <br> \*\*\*
 
 ```{r Imports, include=FALSE}
 Ire_Imports<- t(data.frame(subset(cso_get_data("TSM10"),Statistic=="Value of Imports")))
@@ -4279,21 +4233,20 @@ Other_contribution_import<-Contribution_annual_growth_Import$TOTAL-((Contributio
 Other_contribution_Imports<-as.xts(Other_contribution_import$TOTAL)
 colnames(Other_contribution_Imports)<-c("OTHER")
 
-summary_contribution_Imports<-data.frame(merge(Contribution_annual_growth_Import$USA["2020/"],Contribution_annual_growth_Import$Germany["2020/"],Contribution_annual_growth_Import$GB["2020/"],Contribution_annual_growth_Import$NI["2020/"],Contribution_annual_growth_Import$Switzerland["2020/"],Contribution_annual_growth_Import$China["2020/"],Other_contribution_Imports$OTHER["2020/"]),index(Contribution_annual_growth_Import["2020/"]))
+summary_contribution_Imports<-data.frame(merge(Contribution_annual_growth_Import$USA["2023/"],Contribution_annual_growth_Import$Germany["2023/"],Contribution_annual_growth_Import$GB["2023/"],Contribution_annual_growth_Import$NI["2023/"],Contribution_annual_growth_Import$Switzerland["2023/"],Contribution_annual_growth_Import$China["2023/"],Other_contribution_Imports$OTHER["2023/"]),index(Contribution_annual_growth_Import["2023/"]))
 colnames(summary_contribution_Imports)<-c("USA","Germany","Great Britian","Northern Ireland","Switzerland","China","Other","Date")
 summary_contribution_melt_Imports<-melt(summary_contribution_Imports,id=c("Date"))
 
 
 destination_plot_imports<-ggplot(data=summary_contribution_melt_Imports, aes(y=value, x=Date, fill=variable)) + 
-  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
+  geom_bar(position="stack", stat="identity")+theme(legend.position.inside='bottom',element_text(size=100))+
   labs(x="",
        title="Contribution of Ireland's Main Trading Partners to Import Growth",
-       rcaption="Date Source: CSO monthly external trade data from 2020",
+       rcaption="Date Source: CSO monthly external trade data",
        y="contribution to annual growth (%)")+
   scale_fill_manual(name = "", values  = c("USA" = DOF_colours[1],"Germany" = DOF_colours[3],"Great Britian"=DOF_colours[2],"Northern Ireland"=DOF_colours[4],"Switzerland"=DOF_colours[5],"China"=DOF_colours[7],"Other"=DOF_colours[6]))+
   scale_y_continuous(labels=function(x) paste0(x,"%"))+theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
 ```
-
 
 ```{r country level write-up, include=FALSE}
 text_annual_import_USA<-conditional(annual_growth_imports$USA[length(annual_growth_imports$USA)])
@@ -5526,7 +5479,7 @@ Imports_excl_aircraft_growth<-growth(Imports_excl_aircraft,12)
 
 
 
-headline_indicator<-merge(Headline_Imports_growth["2021/"],Imports_excl_Mineral_fuels_growth["2021/"],Imports_excl_aircraft_growth["2021/"])
+headline_indicator<-merge(Headline_Imports_growth["2023/"],Imports_excl_Mineral_fuels_growth["2023/"],Imports_excl_aircraft_growth["2023/"])
 
 headline_indicator<-merge(headline_indicator,index(headline_indicator))
 
@@ -5544,7 +5497,7 @@ Imports_graph<-ggplot(data=headline_indicator,aes(x=index(headline_indicator)))+
       geom_line(aes(y=Imports_excl_Energy, color="Imports Excl. Energy"),size=1)+
       geom_line(aes(y=Imports_excl_Aircraft, color="Imports Excl. Aircraft"),size=1)+
   scale_y_continuous(labels=function(x) paste0(x,"%"))+
-  theme(legend.position="none",plot.caption = element_text(hjust=0))+
+  theme(legend.position.inside="none",plot.caption = element_text(hjust=0))+
   labs(x="",
        title="Decomposition of Goods Import Trends",
        caption="Date Source: CSO monthly external trade data",
@@ -5552,7 +5505,7 @@ Imports_graph<-ggplot(data=headline_indicator,aes(x=index(headline_indicator)))+
     scale_color_manual(name = "", values = c("Imports" = DOF_colours[1],"Imports Excl. Energy" = DOF_colours[2],"Imports Excl. Aircraft" = DOF_colours[3]))+
   theme_bw()+theme(panel.border = element_blank(),axis.line =element_line(colour = "black"))
 
-Imports_graph<-Imports_graph+ theme(legend.position=c(0.5, 0.2))
+Imports_graph<-Imports_graph+ theme(legend.position.inside=c(0.5, 0.2))
 
 
 
@@ -5683,13 +5636,13 @@ colnames(Contribution_annual_growth_product)<-c("Food & Beverage","semi Conducto
 
 
 #create summary graph of products below
-summary_contribution_Product<-data.frame(merge(Contribution_annual_growth_product$`Food & Beverage`["2020/"],Contribution_annual_growth_product$`semi Conductors`["2020/"],Contribution_annual_growth_product$Pharma["2020/"],Contribution_annual_growth_product$`Other Core M&E`["2020/"],Contribution_annual_growth_product$`Miscellaneous Medical Devices`["2020/"],Contribution_annual_growth_product$Other["2020/"]),index(Contribution_annual_growth_product["2020/"]))
+summary_contribution_Product<-data.frame(merge(Contribution_annual_growth_product$`Food & Beverage`["2023/"],Contribution_annual_growth_product$`semi Conductors`["2023/"],Contribution_annual_growth_product$Pharma["2023/"],Contribution_annual_growth_product$`Other Core M&E`["2023/"],Contribution_annual_growth_product$`Miscellaneous Medical Devices`["2023/"],Contribution_annual_growth_product$Other["2023/"]),index(Contribution_annual_growth_product["2023/"]))
 colnames(summary_contribution_Product)<-c("Food & Beverage","Semi Conductors","Pharma","Other Core M&E","Miscellaneous Medical Devices","Other","Date")
 summary_contribution_melt_Product<-melt(summary_contribution_Product,id=c("Date"))
 
 
 product_contribution<-ggplot(data=summary_contribution_melt_Product, aes(y=value, x=Date, fill=variable)) + 
-  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',plot.caption = element_text(hjust=0))+
+  geom_bar(position="stack", stat="identity")+theme(legend.position.inside='bottom',plot.caption = element_text(hjust=0))+
   labs(x="",
        title="Ireland Export Contribution to Growth",
        caption="Date Source: CSO monthly external trade data from 2020",
@@ -5705,12 +5658,11 @@ product_contribution<-ggplot(data=summary_contribution_melt_Product, aes(y=value
 
 ```
 
+<span class="text-center" style="color:#A3915E">
 
+<center><font size="4"> **Goods Imports -Detailed Breakdown** </font></center>
 
- <span class="text-center" style="color:#A3915E"> <center> <font size="4">   **Goods Imports -Detailed Breakdown** </font>  </center> </span>
-
-
-
+</span>
 
 ```{r import plot, echo=FALSE}
 
@@ -5718,67 +5670,25 @@ Imports_graph
 
 ```
 
+#### **Goods Import Trends**
 
-#### **Goods Import Trends** ####
+-   Energy imports `r text_annual_import_energy_growth` on an annual basis in `r current_date` and contributed `r round(Energy_Contribution_annual_growth_product[length(Energy_Contribution_annual_growth_product)],1)` percentage points to overall import growth.Excluding energy, imports `r  text_headline_excl_energy` on an annual basis. <br> <br>
+-   Aircraft imports `r text_annual_import_Aircraft_growth` on an annual basis in `r current_date` and contributed `r round(Aircraft_Contribution_annual_growth_product[length(Aircraft_Contribution_annual_growth_product)],1)` percentage points to overall import growth.Excluding aircrafts, imports `r  text_headline_excl_aircraft` on an annual basis. <br> <br>
 
-
-* Energy imports `r text_annual_import_energy_growth` on an annual basis in `r current_date` and contributed `r round(Energy_Contribution_annual_growth_product[length(Energy_Contribution_annual_growth_product)],1)` percentage points to overall import growth.Excluding energy, imports `r  text_headline_excl_energy` on an annual basis. 
-<br>
-<br>
-* Aircraft imports `r text_annual_import_Aircraft_growth` on an annual basis in `r current_date` and contributed `r round(Aircraft_Contribution_annual_growth_product[length(Aircraft_Contribution_annual_growth_product)],1)` percentage points to overall import growth.Excluding aircrafts, imports `r  text_headline_excl_aircraft` on an annual basis. 
-<br>
-<br>
-
-***
-
-
-
-
-
-
+------------------------------------------------------------------------
 
 ```{r Imports Plot, echo=FALSE}
-destination_plot_imports+theme(legend.position =c(0.2,0.8))
+destination_plot_imports+theme(legend.position.inside =c(0.2,0.8))
 ```
 
-#### **Country Level Breakdown** ####
+#### **Country Level Breakdown**
 
-* Imports from the USA, `r text_annual_import_USA` on an annual basis and
-contributed `r round(Contribution_annual_growth_Import$USA[length(Contribution_annual_growth_Import$USA)],1)`
-percentage points (representing `r text_annual_contribution_import_USA_TOTAL`
-of the total) in `r current_date`.
-<br>
-<br>
-* Imports from Great Britian, `r text_annual_import_GB` on an annual basis and
-contributed `r round(Contribution_annual_growth_Import$GB[length(Contribution_annual_growth_Import$GB)],1)`
-percentage points (representing `r text_annual_contribution_import_GB_TOTAL` of
-the total) in `r current_date`.
-<br>
-<br>
-* Imports from Northern Ireland, `r text_annual_import_NI` on an annual basis
-and contributed `r round(Contribution_annual_growth_Import$NI[length(Contribution_annual_growth_Import$NI)],1)`
-percentage points (representing `r text_annual_contribution_import_NI_TOTAL` of
-the total) in `r current_date`.
-<br>
-<br>
-* Imports from Germany, `r text_annual_import_Germany` on an annual basis and
-contributed `r round(Contribution_annual_growth_Import$Germany[length(Contribution_annual_growth_Import$Germany)],1)`
-percentage points (representing `r text_annual_contribution_import_Germany_TOTAL` of the total) in 
-`r current_date`.
-<br>
-<br>
-* Imports from Switzerland, `r text_annual_import_Switzerland` on an annual basis and contributed 
-`r round(Contribution_annual_growth_Import$Switzerland[length(Contribution_annual_growth_Import$Switzerland)],1)`
-percentage points (representing `r text_annual_contribution_import_Switzerland_TOTAL` of the total)
-in `r current_date`.
-<br>
-<br>
-* Outside of our main trading partners,imports `r text_annual_import_Other` on
-an annual basis and contributed `r round(Other_contribution_import$TOTAL[length(Other_contribution_import$TOTAL)],1)`
-percentage points (representing `r text_annual_contribution_import_Other_TOTAL`
-of the total) in `r current_date`.
-
-
+-   Imports from the USA, `r text_annual_import_USA` on an annual basis and contributed `r round(Contribution_annual_growth_Import$USA[length(Contribution_annual_growth_Import$USA)],1)` percentage points (representing `r text_annual_contribution_import_USA_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Imports from Great Britian, `r text_annual_import_GB` on an annual basis and contributed `r round(Contribution_annual_growth_Import$GB[length(Contribution_annual_growth_Import$GB)],1)` percentage points (representing `r text_annual_contribution_import_GB_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Imports from Northern Ireland, `r text_annual_import_NI` on an annual basis and contributed `r round(Contribution_annual_growth_Import$NI[length(Contribution_annual_growth_Import$NI)],1)` percentage points (representing `r text_annual_contribution_import_NI_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Imports from Germany, `r text_annual_import_Germany` on an annual basis and contributed `r round(Contribution_annual_growth_Import$Germany[length(Contribution_annual_growth_Import$Germany)],1)` percentage points (representing `r text_annual_contribution_import_Germany_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Imports from Switzerland, `r text_annual_import_Switzerland` on an annual basis and contributed `r round(Contribution_annual_growth_Import$Switzerland[length(Contribution_annual_growth_Import$Switzerland)],1)` percentage points (representing `r text_annual_contribution_import_Switzerland_TOTAL` of the total) in `r current_date`. <br> <br>
+-   Outside of our main trading partners,imports `r text_annual_import_Other` on an annual basis and contributed `r round(Other_contribution_import$TOTAL[length(Other_contribution_import$TOTAL)],1)` percentage points (representing `r text_annual_contribution_import_Other_TOTAL` of the total) in `r current_date`.
 
 ```{r excel export, echo=FALSE}
 
@@ -5803,8 +5713,6 @@ write.xlsx(dataset_names, file = 'external_trade_excel2.xlsx')
 
 
 ```
-
-
 
 ```{r net import semiconductors, warning=FALSE, include=FALSE}
 
@@ -6017,7 +5925,7 @@ SEMI_NET_IMPORTS<-data.frame((Ireland_72821_NET_TRADE+Ireland_72822_NET_TRADE+Ir
 colnames(SEMI_NET_IMPORTS)<-c("SEMI_NET_IMPORTS","Date")
 
 SEMICON_NET_IMPORT_GRAPH<-ggplot(SEMI_NET_IMPORTS[260:nrow(SEMI_NET_IMPORTS),],aes(Date,SEMI_NET_IMPORTS/1000000)) + 
-  geom_col(fill=DOF_colours[2],colour=DOF_colours[2])+theme(legend.position='bottom',element_text(size=100))+
+  geom_col(fill=DOF_colours[2],colour=DOF_colours[2])+theme(legend.position.inside='bottom',element_text(size=100))+
   labs(x="",
        title="Monthly net trade in machinery to develop semiconductors",
        caption="Date Source: Eurostat 
@@ -6055,7 +5963,7 @@ YTD_NET_SEMI_TEXT<-conditional(YTD_SEMI_NET_IMPORTS)
 
 
 DOMESTIC_ME_IMPORTS_GRAPH<-ggplot(DOMESTIC_ME_IMPORTS[260:nrow(SEMI_NET_IMPORTS),],aes(Date,SEMI_NET_IMPORTS/1000000)) + 
-  geom_col(fill=DOF_colours[2],colour=DOF_colours[2])+theme(legend.position='bottom',element_text(size=100))+
+  geom_col(fill=DOF_colours[2],colour=DOF_colours[2])+theme(legend.position.inside='bottom',element_text(size=100))+
   labs(x="",
        title="Monthly net trade in machinery to develop semiconductors",
        caption="Date Source: Eurostat 
@@ -6070,7 +5978,7 @@ DOMESTIC_ME_IMPORTS_SHORT<-melt(DOMESTIC_ME_IMPORTS_SHORT,id=c("Date"))
 
 
 DOMESTIC_ME_IMPORTS_plot<-ggplot(data=DOMESTIC_ME_IMPORTS_SHORT, aes(y=value, x=Date, fill=variable)) + 
-  geom_bar(position="stack", stat="identity")+theme(legend.position='bottom',element_text(size=100))+
+  geom_bar(position="stack", stat="identity")+theme(legend.position.inside='bottom',element_text(size=100))+
   labs(x="",
        title="Net imports domestic machinery & equipment",
        caption="Date Source: Eurostat",
@@ -6105,7 +6013,7 @@ DOMESTIC_ME_NET_IMPORTS_YTD_TEXT<-conditional(YTD_DOMESTIC_ME_NET_IMPORTS)
 
 ```
 
-***
+------------------------------------------------------------------------
 
 ```{r echo=FALSE, warning=FALSE}
 
@@ -6115,31 +6023,23 @@ SEMICON_NET_IMPORT_GRAPH
 
 ```
 
+#### **Semiconductor Imports**
 
-#### **Semiconductor Imports** ####
-
-* The net import of machinery used to develop semiconductors `r conditional(SEMI_TEXT_GROWTH)` on an annual basis in `r SEMI_TEXT_MONTH`, with net imports of `r SEMI_TEXT_VALUE` million. 
-<br>
-<br>
-* In year to date terms, the net import of machinery used to develop semiconductors `r YTD_NET_SEMI_TEXT`.  
-<br>
-<br>
-* Compared to the previous peak, the net import of machinery used to develop semiconductors has fallen by `r SEMI_TEXT_GROWTH_PEAK` million.  
-
-
+-   The net import of machinery used to develop semiconductors `r conditional(SEMI_TEXT_GROWTH)` on an annual basis in `r SEMI_TEXT_MONTH`, with net imports of `r SEMI_TEXT_VALUE` million. <br> <br>
+-   In year to date terms, the net import of machinery used to develop semiconductors `r YTD_NET_SEMI_TEXT`.\
+    <br> <br>
+-   Compared to the previous peak, the net import of machinery used to develop semiconductors has fallen by `r SEMI_TEXT_GROWTH_PEAK` million.
 
 ```{r echo=FALSE, warning=FALSE}
 
 
-DOMESTIC_ME_IMPORTS_plot+ theme(legend.position=c(0.2, 0.8))
+DOMESTIC_ME_IMPORTS_plot+ theme(legend.position.inside=c(0.2, 0.8))
 
 
 ```
 
+#### **Domestic M&E Imports**
 
-#### **Domestic M&E Imports** ####
-
-* The net imports of domestic M&E provides an indication of domestic investment by looking at a select grouping of imports.   
-<br>
-<br>
-* In `r SEMI_TEXT_MONTH`, domestic net M&E imports `r TEXT_DOMESTIC_ME_IMPORTS` on an annual basis. In year to date terms, net imports have `r DOMESTIC_ME_NET_IMPORTS_YTD_TEXT` compared to the same period in 2022.   
+-   The net imports of domestic M&E provides an indication of domestic investment by looking at a select grouping of imports.\
+    <br> <br>
+-   In `r SEMI_TEXT_MONTH`, domestic net M&E imports `r TEXT_DOMESTIC_ME_IMPORTS` on an annual basis. In year to date terms, net imports have `r DOMESTIC_ME_NET_IMPORTS_YTD_TEXT` compared to the same period in 2022.
