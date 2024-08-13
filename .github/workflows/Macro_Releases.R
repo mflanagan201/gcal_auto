@@ -61,7 +61,7 @@ for(i in 1:nrow(CALENDAR_ALL_short)){
         Body_EXTERNAL_TRADE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
          to=c("michael.flanagan@finance.gov.ie"),
-        subject = "External Trade Release!"
+bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@finance.gov.ie"), subject = "External Trade Release!"
       ) %>%
         # Render R Markdown from a file.
         emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
