@@ -33,7 +33,6 @@ library(knitr)
 library(htmlwidgets)
 library(kableExtra)
 library(tinytex)
-library(webshot2)
 library(readr)
 
 
@@ -1529,7 +1528,7 @@ kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-webshot(html_print(as.htmlwidget(format_table1)),zoom = 3)
+(html_print(as.htmlwidget(format_table1)),zoom = 3)
 
 
 ```
