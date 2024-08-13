@@ -77,7 +77,7 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
 
 
 for(i in 1:nrow(CALENDAR_ALL_short)){
-  if(Sys.Date()+2==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
+  if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
 
         Body_EXTERNAL_TRADE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
