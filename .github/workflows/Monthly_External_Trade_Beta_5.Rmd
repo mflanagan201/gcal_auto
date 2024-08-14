@@ -1484,7 +1484,7 @@ Vol_annual<-conditional(annual_growth_exports_vol[length(annual_growth_exports_v
 
 ```
 
-```{r tables, echo=FALSE, warning=FALSE}
+```{r tables, echo=FALSE, message=FALSE, warning=FALSE}
 
 
 d<-colnames(summary_table[length(summary_table)])
@@ -1525,7 +1525,8 @@ kabble_format_table_short<-format_table1 %>% kbl(caption = "<center><strong>Tabl
 
 kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_spec(ncol(summary_table)) %>%
   kableExtra::row_spec(nrow(summary_table)) %>%
-  as_image()
+  column_spec(ncol(summary_table),include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)-1]),"black",ifelse(summary_table[,ncol(summary_table)-1]<=0,"red",DOF_colours[1]))) %>%
+  column_spec(ncol(summary_table)+1,include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)]<=0), "black","red")) %>% as_image()
 
 ```
 
