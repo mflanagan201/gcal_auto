@@ -1521,7 +1521,7 @@ library(kableExtra)
 
 kabble_format_table_short<-format_table1 %>% kbl(caption = "<center><strong>Table 1: Latest Development </strong></center>" ,align = 'c'
 ) %>% 
-   kable_styling("striped", full_width = F)
+   kable_styling("striped", full_width = T)
 
 kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_spec(ncol(summary_table)) %>%
   kableExtra::row_spec(nrow(summary_table)) %>%
