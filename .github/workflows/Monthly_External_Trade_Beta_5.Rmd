@@ -1514,6 +1514,7 @@ format_table1<-formattable(x=(summary_table),list(area(col=ncol(summary_table)) 
 #SCREENSHOT<-export_formattable(format_table1,"format.png")
 
 
+#html_print(as.htmlwidget(format_table1))
 
 library(kableExtra)
 
@@ -1528,7 +1529,8 @@ kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-html_print(as.htmlwidget(format_table1))
+
+kabble_format_table_fix_email
 
 ```
 
