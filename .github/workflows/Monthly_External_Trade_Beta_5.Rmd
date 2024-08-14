@@ -1525,7 +1525,7 @@ kabble_format_table_short<-format_table1 %>% kbl(caption = "<center><strong>Tabl
 
 kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_spec(ncol(summary_table)) %>%
   kableExtra::row_spec(nrow(summary_table)) %>%
-  as_image(width = 3)
+  as_image()
 
 ```
 
