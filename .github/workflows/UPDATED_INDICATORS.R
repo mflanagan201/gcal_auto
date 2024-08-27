@@ -82,6 +82,8 @@ colnames(EMPLOYMENT_PERMITS_text_df)<-c("varaible", "Date","URL","TO","TIME_STAM
 
 ALL_INDICATORS<-rbind(EMPLOYMENT_PERMITS_text_df,Commencements_df,DAFT_df,SENTIMENT_df,mortgage_approval_df)
 
+ALL_INDICATORS$Date[is.na(ALL_INDICATORS$Date)]<-0
+
 ALL_INDICATORS_EXISTING<-read.csv("ALL_INDICATORS.csv")
 
 
