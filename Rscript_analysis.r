@@ -1,4 +1,4 @@
-CALENDAR_ALL_short
+
 library(httr)
 library(gargle)
 library(googleAuthR)
