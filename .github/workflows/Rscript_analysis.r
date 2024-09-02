@@ -143,7 +143,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
     RELEASE_CB[i,2]<-NA
   }
   
-  if(RELEASE_CB[i,2] %like any% c("%Monthly Card Payment Statistics%" ,"%Activity: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%")){
+  if(RELEASE_CB[i,2] %like any% c("%Activity: Statistics: Monthly Card Payment Statistics%","%Monthly Card Payment Statistics%" ,"%Activity: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%")){
     RELEASE_CB[i,1]<-RELEASE_CB[i,1]
     RELEASE_CB[i,2]<-RELEASE_CB[i,2]
   } else {
