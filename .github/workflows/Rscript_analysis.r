@@ -349,53 +349,53 @@ EVENTS_EC <- EVENTS_EC %>%
 
 
 
-CENTRAL_BANK_SCHEDULE<-read_html("https://www.dailyfx.com/central-bank-calendar")
-CENTRAL_BANK_SCHEDULE_table<-CENTRAL_BANK_SCHEDULE %>% html_nodes("aside")
-FED_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SCHEDULE_table[[1]])   %>% html_text() %>% stringr::str_split("\n") %>% .[[1]]   %>% as.data.frame()
-ECB_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SCHEDULE_table[[2]])   %>% html_text() %>% stringr::str_split("\n") %>% .[[1]] %>% data.frame()
-BOE_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SCHEDULE_table[[3]])   %>% html_text() %>% stringr::str_split("\n") %>% .[[1]] %>% data.frame()
+#CENTRAL_BANK_SCHEDULE<-read_html("https://www#.dailyfx.com/central-bank-calendar")
+#CENTRAL_BANK_SCHEDULE_table<-CENTRAL_BANK_SCHEDULE #%>% html_nodes("aside")
+#FED_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SC#HEDULE_table[[1]])   %>% html_text() %>% #stringr::str_split("\n") %>% .[[1]]   %>% #as.data.frame()
+#ECB_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SC#HEDULE_table[[2]])   %>% html_text() %>% #stringr::str_split("\n") %>% .[[1]] %>% #data.frame()
+#BOE_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SC#HEDULE_table[[3]])   %>% html_text() %>% #stringr::str_split("\n") %>% .[[1]] %>% #data.frame()
 
-FED_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matrix(NA,nrow=nrow(FED_CENTRAL_BANK_SCHEDULE_table2),ncol=1))
-ECB_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matrix(NA,nrow=nrow(ECB_CENTRAL_BANK_SCHEDULE_table2),ncol=1))
-BOE_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matrix(NA,nrow=nrow(BOE_CENTRAL_BANK_SCHEDULE_table2),ncol=1))
+#FED_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matri#x(NA,nrow=nrow(FED_CENTRAL_BANK_SCHEDULE_table2),n#col=1))
+#ECB_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matri#x(NA,nrow=nrow(ECB_CENTRAL_BANK_SCHEDULE_table2),n#col=1))
+#BOE_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matri#x(NA,nrow=nrow(BOE_CENTRAL_BANK_SCHEDULE_table2),n#col=1))
 
 
 
-for(i in 1:length(FED_CENTRAL_BANK_SCHEDULE_table2[[1]])){
-  if(FED_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!=""){
-    FED_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(FED_CENTRAL_BANK_SCHEDULE_table2[[1]][i])
-  }
+#for(i in #1:length(FED_CENTRAL_BANK_SCHEDULE_table2[[1]])){
+#  if(FED_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
+    #FED_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(FED_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
+#  }
   
-  if(ECB_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!=""){
-    ECB_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(ECB_CENTRAL_BANK_SCHEDULE_table2[[1]][i])
-  }
+#  if(ECB_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
+    #ECB_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(ECB_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
+#  }
   
-  if(BOE_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!=""){
-    BOE_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(BOE_CENTRAL_BANK_SCHEDULE_table2[[1]][i])
-  }
-}
+#  if(BOE_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
+    #BOE_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(BOE_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
+#  }
+#}
 
-Central_Banks_Schedules<-data.frame(na.omit(FED_CENTRAL_BANK_SCHEDULE_table3),na.omit(ECB_CENTRAL_BANK_SCHEDULE_table3),na.omit(BOE_CENTRAL_BANK_SCHEDULE_table3))
-colnames(Central_Banks_Schedules)<-c("FED","ECB","Bank of England")
+#Central_Banks_Schedules<-data.frame(na.omit(FED_CE#NTRAL_BANK_SCHEDULE_table3),na.omit(ECB_CENTRAL_BA#NK_SCHEDULE_table3),na.omit(BOE_CENTRAL_BANK_SCHED#ULE_table3))
+#colnames(Central_Banks_Schedules)<-c("FED","ECB","#Bank of England")
 
-for (i in 1:nrow(Central_Banks_Schedules)+1){
+#for (i in 1:nrow(Central_Banks_Schedules)+1){
   
-  Central_Banks_Schedules[i,1]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,1] ," ",Central_Banks_Schedules[i+1,1]," 2024"),orders="%d %m %Y"))
-  Central_Banks_Schedules[i,2]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,2] ," ",Central_Banks_Schedules[i+1,2]," 2024"),orders="%d %m %Y"))
-  Central_Banks_Schedules[i,3]<-paste(parse_date_time(paste0(Central_Banks_Schedules[i,3] ," ",Central_Banks_Schedules[i+1,3]," 2024"),orders="%d %m %Y"))
+  #Central_Banks_Schedules[i,1]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,1] ," #",Central_Banks_Schedules[i+1,1]," #2024"),orders="%d %m %Y"))
+  #Central_Banks_Schedules[i,2]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,2] ," #",Central_Banks_Schedules[i+1,2]," #2024"),orders="%d %m %Y"))
+  #Central_Banks_Schedules[i,3]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,3] ," #",Central_Banks_Schedules[i+1,3]," #2024"),orders="%d %m %Y"))
   
-}
+#}
 
-Central_Banks_Schedules$FED<- as.Date(Central_Banks_Schedules$FED,"%Y-%m-%d")
-Central_Banks_Schedules$ECB<- as.Date(Central_Banks_Schedules$ECB,"%Y-%m-%d")
-Central_Banks_Schedules$`Bank of England`<- as.Date(Central_Banks_Schedules$`Bank of England`,"%Y-%m-%d")
+#Central_Banks_Schedules$FED<- #as.Date(Central_Banks_Schedules$FED,"%Y-%m-%d")
+#Central_Banks_Schedules$ECB<- #as.Date(Central_Banks_Schedules$ECB,"%Y-%m-%d")
+#Central_Banks_Schedules$`Bank of England`<- #as.Date(Central_Banks_Schedules$`Bank of #England`,"%Y-%m-%d")
 
-Central_Banks_Schedules<-data.frame(na.omit(Central_Banks_Schedules))
-colnames(Central_Banks_Schedules)<-c("FED Monetary Decision (FOMC)","ECB Monetary Decision","BOE Monetary Decision")
+#Central_Banks_Schedules<-data.frame(na.omit(Central#_Banks_Schedules))
+#colnames(Central_Banks_Schedules)<-c("FED Monetary #Decision (FOMC)","ECB Monetary Decision","BOE #Monetary Decision")
 
-FED_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(Central_Banks_Schedules$`FED Monetary Decision (FOMC)`,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-ECB_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(Central_Banks_Schedules$`ECB Monetary Decision`,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-BOE_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(Central_Banks_Schedules$`BOE Monetary Decision`,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+FED_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(c("18/09/2024"),"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+ECB_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(c("12/09/2024"),"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+BOE_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(c("19/09/2024"),"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
 
 
 FED_Monetary_Decision = data.frame(DTSTARTv = FED_DECISIONS,
