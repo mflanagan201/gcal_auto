@@ -560,7 +560,25 @@ DOF_EVENTS_2024 <- DOF_EVENTS %>%
 
 
 
-CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024)
+
+Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-10-01"
+)), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT")),
+
+
+DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-10-01"
+)), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))+1
+
+,SUMMARY = paste("Budget 2025"),
+                       LOCATION = c("Department of Finance"),
+                       transparent=TRUE)
+
+DOF_EVENTS_2024 <- DOF_EVENTS %>%
+  mutate(UID = replicate(nrow(DOF_EVENTS), ic_guid()))
+
+
+
+
+CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024,Budget)
 CALENDAR_ALL_XTS<-as.xts(CALENDAR_ALL,order.by=as.Date(CALENDAR_ALL$DTSTART))
 CALENDAR_ALL_short<-CALENDAR_ALL_XTS[seq(from=Sys.Date(),length.out=50, by='days')] %>% data.frame() %>% ical()
 CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
