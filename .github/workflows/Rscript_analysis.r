@@ -1,5 +1,6 @@
 
 
+
 library(httr)
 library(gargle)
 library(googleAuthR)
@@ -91,8 +92,8 @@ RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_
 
 PMI_RELEASE = data.frame(DTSTART = RELEASE_PMI_DATE,
                          DTEND = RELEASE_PMI_DATE+1,
-                        SUMMARY =RELEASE_PMI$Release ,
-                        LOCATION = RELEASE_PMI$Location,
+                         SUMMARY =RELEASE_PMI$Release ,
+                         LOCATION = RELEASE_PMI$Location,
                          transparent=TRUE)
 
 
@@ -165,7 +166,7 @@ if(is.na(Date_CB[1])){
                         SUMMARY = "NA",
                         LOCATION = c("Central Bank of Ireland"),
                         transparent=TRUE)
-
+  
   
 } else {
   
@@ -204,7 +205,7 @@ event_CB <- event_CB %>%
 #if(OECD_Schedule_table_2[i,1]==""){
 #  OECD_Schedule_table_2[i,1]<-NA 
 #} else {
-  #OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[#i,1]
+#OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[#i,1]
 #}
 #}
 
@@ -225,33 +226,33 @@ event_CB <- event_CB %>%
 #  EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
 #                        DTEND = c("2024-12-01 #10:00:00 GMT"),
 #                        SUMMARY = "NA",
- #                       LOCATION = c("OECD"),
+#                       LOCATION = c("OECD"),
 #                        transparent=TRUE)
-  
-  
-  
-  
+
+
+
+
 #} else {
-  
+
 #  EVENTS_OECD = data.frame(DTSTART = #RELEASE_OECD$Date,
 #                        DTEND = #RELEASE_OECD$Date+1,
 #                        SUMMARY = #paste(RELEASE_OECD$Release),
 #                        LOCATION = c("OECD"),
 #                        transparent=TRUE)
 #  
-  
+
 #  }
 
 cat("OECD EVENT CREATED")
 
 EVENTS_OECD = data.frame(DTSTART = c("2024-02-05 10:00:00 GMT"),
-                     DTEND = c("2024-02-05 10:00:01 GMT"),
-                        SUMMARY = c("OECD Economic Outlook, Interim Report"),
-                       LOCATION = c("OECD"),
-                        transparent=TRUE)
+                         DTEND = c("2024-02-05 10:00:01 GMT"),
+                         SUMMARY = c("OECD Economic Outlook, Interim Report"),
+                         LOCATION = c("OECD"),
+                         transparent=TRUE)
 
 EVENTS_OECD <- EVENTS_OECD %>%
- mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
+  mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
 
 
 
@@ -329,13 +330,13 @@ EVENTS_IMF <- EVENTS_IMF %>%
 cat("EC EVENT CREATED")
 
 EVENTS_EC = data.frame(DTSTART = c("2024-02-15 10:00:00 GMT"),
-                     DTEND = c("2024-02-15 10:00:01 GMT"),
-                        SUMMARY = c("EC Economic Forecast, Winter 2024"),
+                       DTEND = c("2024-02-15 10:00:01 GMT"),
+                       SUMMARY = c("EC Economic Forecast, Winter 2024"),
                        LOCATION = c("European Commission"),
-                        transparent=TRUE)
+                       transparent=TRUE)
 
 EVENTS_EC <- EVENTS_EC %>%
- mutate(UID = replicate(nrow(EVENTS_EC), ic_guid()))
+  mutate(UID = replicate(nrow(EVENTS_EC), ic_guid()))
 
 
 
@@ -363,15 +364,15 @@ EVENTS_EC <- EVENTS_EC %>%
 
 #for(i in #1:length(FED_CENTRAL_BANK_SCHEDULE_table2[[1]])){
 #  if(FED_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
-    #FED_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(FED_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
+#FED_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(FED_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
 #  }
-  
+
 #  if(ECB_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
-    #ECB_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(ECB_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
+#ECB_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(ECB_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
 #  }
-  
+
 #  if(BOE_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
-    #BOE_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(BOE_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
+#BOE_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(BOE_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
 #  }
 #}
 
@@ -379,11 +380,11 @@ EVENTS_EC <- EVENTS_EC %>%
 #colnames(Central_Banks_Schedules)<-c("FED","ECB","#Bank of England")
 
 #for (i in 1:nrow(Central_Banks_Schedules)+1){
-  
-  #Central_Banks_Schedules[i,1]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,1] ," #",Central_Banks_Schedules[i+1,1]," #2024"),orders="%d %m %Y"))
-  #Central_Banks_Schedules[i,2]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,2] ," #",Central_Banks_Schedules[i+1,2]," #2024"),orders="%d %m %Y"))
-  #Central_Banks_Schedules[i,3]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,3] ," #",Central_Banks_Schedules[i+1,3]," #2024"),orders="%d %m %Y"))
-  
+
+#Central_Banks_Schedules[i,1]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,1] ," #",Central_Banks_Schedules[i+1,1]," #2024"),orders="%d %m %Y"))
+#Central_Banks_Schedules[i,2]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,2] ," #",Central_Banks_Schedules[i+1,2]," #2024"),orders="%d %m %Y"))
+#Central_Banks_Schedules[i,3]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,3] ," #",Central_Banks_Schedules[i+1,3]," #2024"),orders="%d %m %Y"))
+
 #}
 
 #Central_Banks_Schedules$FED<- #as.Date(Central_Banks_Schedules$FED,"%Y-%m-%d")
@@ -466,7 +467,7 @@ CSO_event <- CSO_event %>%
 event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
 
 event_all = subset(event_all, !(SUMMARY %like any% c("%Press Statement Older Persons Information Hub%","%Education and Other Outcomes for SUSI Support Recipients%","%Census Pilot Survey%",
-"%Networked Gas%","%Press Statement: Launch of Ireland’s Census Data Hub%","%Trust Survey%","%System of Health Accounts%","%Deaths%","%Deaths and Cause of Death%","%Material Flow Accounts%","%Waste Water%" ,"%Fertiliser%","%Adult%","%Agricultural%","%HSE%","%Men Hub%","%Full Irish Breakfast%","%Census 1911%","%Stories from Census 1911%","%Further Education Outcomes%","%Futher Education%","%Higher Education%","%PxStat%","%Pension%","%Inbound Tourism%","%Freight%","%Babie%","%Livestock Survey%","%Pancakes%" ,"%County Incomes and Regional%" ,"%Metered Electricity Generation%","%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%","%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
+                                                     "%Networked Gas%","%Press Statement: Launch of Ireland’s Census Data Hub%","%Trust Survey%","%System of Health Accounts%","%Deaths%","%Deaths and Cause of Death%","%Material Flow Accounts%","%Waste Water%" ,"%Fertiliser%","%Adult%","%Agricultural%","%HSE%","%Men Hub%","%Full Irish Breakfast%","%Census 1911%","%Stories from Census 1911%","%Further Education Outcomes%","%Futher Education%","%Higher Education%","%PxStat%","%Pension%","%Inbound Tourism%","%Freight%","%Babie%","%Livestock Survey%","%Pancakes%" ,"%County Incomes and Regional%" ,"%Metered Electricity Generation%","%Networked Gas Daily Supply and Demand%","%Wood and Paper Exports and Imports%","%Circumstances of People Linked to Justice Sanctions%","%Register of Public Sector Bodies in Ireland%","%Wood Input Purchases by Industry%","%Fish%","%Fossil Fuel Subsidies%","%Survey Response Index%","%Meat Supply Balance%","%Foreign Portfolio Securities%" ,"%Crops and Livestock Survey%" ,"%Environmental%","%Industrial Disputes%","%Ecosystem%","%Rivers and Lakes%","%Building Energy Ratings%","%Forest%","%agriculture%","%Agriculture%","%Children%","%Transport Bulletin%","%Prison%","%Marriages%","%Crime%","%Violence%","%Sexual%","%Vital Statistics%","%Vital%","%Decoupling Emissions from Economic Activity%","%Measuring Ireland's Progress%","%UN%","%SDGs%","%Vaccination%","%COVID-19 Vaccination Statistics%","%Milk Statistics%","%Fuel Excise Clearances%","%Agricultural Price Indices%","%Aviation Statistics%","%Statistics of Port Traffic%","%Livestock Slaughterings%","%Area, Yield and Production of Crops%","%Household Travel Survey%","%Household Survey Response Burden Index%")))
 
 exch_days<-seq(from=as.Date(c("2024-01-01")),to=as.Date(c("2024-12-31")), by="day")
 exch_weekdays<-exch_days[format(exch_days,"%a") %like any% c("Mon", "Tue", "Wed", "Thu", "Fri")]
@@ -497,31 +498,31 @@ December<-NA
 
 exch_weekdays<-na.omit(exch_weekdays)
 for(i in seq_along(exch_weekdays)){
-if(format(exch_weekdays[i],"%m")=="01"){
-  January[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="02"){
-  February[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="03"){
-  March[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="04"){
-  April[i]<-exch_weekdays[i] 
-} else if(format(exch_weekdays[i],"%m")=="05"){
-  May[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="06"){
-  June[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="07"){
-  July[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="08"){
-  August[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="09"){
-  September[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="10"){
-  October[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="11"){
-  November[i]<-exch_weekdays[i]
-} else if(format(exch_weekdays[i],"%m")=="12"){
-  December[i]<-exch_weekdays[i] 
-}
+  if(format(exch_weekdays[i],"%m")=="01"){
+    January[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="02"){
+    February[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="03"){
+    March[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="04"){
+    April[i]<-exch_weekdays[i] 
+  } else if(format(exch_weekdays[i],"%m")=="05"){
+    May[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="06"){
+    June[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="07"){
+    July[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="08"){
+    August[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="09"){
+    September[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="10"){
+    October[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="11"){
+    November[i]<-exch_weekdays[i]
+  } else if(format(exch_weekdays[i],"%m")=="12"){
+    December[i]<-exch_weekdays[i] 
+  }
 }
 
 Exch_Release<-as.Date(c(
@@ -569,16 +570,16 @@ DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-10-01"
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))+1
 
 ,SUMMARY = paste("Budget 2025"),
-                       LOCATION = c("Department of Finance"),
-                       transparent=TRUE)
+LOCATION = c("Department of Finance"),
+transparent=TRUE)
 
-DOF_EVENTS_2024 <- DOF_EVENTS %>%
-  mutate(UID = replicate(nrow(DOF_EVENTS), ic_guid()))
-
-
+Budget_2025 <- Budget %>%
+  mutate(UID = replicate(nrow(Budget), ic_guid()))
 
 
-CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024,Budget)
+
+
+CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024,Budget_2025)
 CALENDAR_ALL_XTS<-as.xts(CALENDAR_ALL,order.by=as.Date(CALENDAR_ALL$DTSTART))
 CALENDAR_ALL_short<-CALENDAR_ALL_XTS[seq(from=Sys.Date(),length.out=50, by='days')] %>% data.frame() %>% ical()
 CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
@@ -782,9 +783,9 @@ NEXT_WEEK_release_text_15<-if(paste(NEXT_WEEK_release[15])== "NA"){
 
 
 smtp <- emayili::server(host = "smtp.gmail.com",
-               port = 587,
-               username = "mflanagan201@gmail.com",
-               password = "ddauvuifpknvsobo")
+                        port = 587,
+                        username = "mflanagan201@gmail.com",
+                        password = "ddauvuifpknvsobo")
 
 
 
@@ -888,4 +889,4 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Fri"))){
 #"Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Brendan.O'Connor@finance.gov.ie","Shane.Dunne@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie", "Sarah.Hogan@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie"
 
 
-  
+
