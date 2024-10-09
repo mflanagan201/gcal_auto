@@ -1868,11 +1868,11 @@ conditional_alt3 <- function(x){
 
 conditional_alt4 <- function(x){
   if (x < 0) {
-    print(paste(round(x,1), "percentage points below what was forecast at the time of SPU 2024"))
+    print(paste(round(x,1), "percentage points below what was forecast at the time of Budget 2025"))
   } else if (x >0){
-    print(paste(round(x,1), "percentage points above what was forecast at the time of SPU 2024"))
+    print(paste(round(x,1), "percentage points above what was forecast at the time of Budget 2025"))
   } else {
-    print(paste("inline with the SPU 2024 forecast"))
+    print(paste("inline with the Budget 2025 forecast"))
   }
 }
 
@@ -1913,7 +1913,7 @@ Monthly_CORE_INFLATION_TEXT<-conditional(Monthly_CORE_INFLATION[length(Monthly_C
 
 YTD_2024_annual<-ANNUAL_INFLATION["2024/"] %>% mean()  %>% round(1)
 
-FORECAST_KPI<-YTD_2024_annual-2.1
+FORECAST_KPI<-YTD_2024_annual-1.7
 FORECAST_KPI_TEXT<-conditional_alt4(FORECAST_KPI)
 
 
@@ -1983,7 +1983,7 @@ names(GROWTH_COMPONENTS)<-GROWTH_COMPONENTS %>% names() %>% gsub(
 <br>
 <br>
 
-* As part of SPU 2024, the Department forecast Inflation growth of 2.1% in 2024. Year to date, annual inflation is averaging `r YTD_2024_annual`% in `r CURRENT_DATE`. As a result inflation is currently running `r FORECAST_KPI_TEXT`. 
+* As part of Budget 2025, the Department forecast Inflation growth of 1.7% in 2024. Year to date, annual inflation is averaging `r YTD_2024_annual`% in `r CURRENT_DATE`. As a result inflation is currently running `r FORECAST_KPI_TEXT`. 
 <br>
 <br>
 
@@ -2299,7 +2299,7 @@ inflation of over 5% in `r Latest_over_five_DATE`.
 ```{r heatmap, echo=FALSE, warning=FALSE}
 
 
-SERVICES_GOODS_XTS_INDEX_GROWTH<-as.xts(growth_index)  %>%.["2021/"]
+SERVICES_GOODS_XTS_INDEX_GROWTH<-as.xts(growth_index)  %>%.["2022/"]
 DF<-data.frame(SERVICES_GOODS_XTS_INDEX_GROWTH)
 
 
@@ -2352,12 +2352,55 @@ text_heatmap_growth_rate_2<-last(Graph_Data_Heatmap[,order(as.numeric(as.charact
 NAMES_HIGH_HEATMAP_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[18] %>% names()
 text_heatmap_growth_rate_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[18]  %>% as.numeric() %>% round(2) %>% paste0(sep="%")
 
+
+HEATMAP_DATA_DECREASING<-DF[names(last(CONTRIBUTION[,order(as.numeric(as.character(CONTRIBUTION[nrow(CONTRIBUTION),])),decreasing = FALSE)]))[1:20]] 
+HEATMAP_DATA_DECREASING[is.na(HEATMAP_DATA_DECREASING)]<-0
+
+
+Graph_DECREASING_Data_Heatmap<-data.frame(index(as.xts(HEATMAP_DATA_DECREASING)),HEATMAP_DATA_DECREASING)
+
+colnames(Graph_DECREASING_Data_Heatmap)<-Graph_DECREASING_Data_Heatmap %>% names() %>% gsub(
+                        pattern = "\\,",
+                        replacement = " ") %>%  gsub(
+                        pattern = "\\.",
+                        replacement = " ")    %>% str_squish()
+
+
+Graph_DECREASING_Data_Heatmap_DECREASING<-melt(Graph_DECREASING_Data_Heatmap[18:nrow(Graph_DECREASING_Data_Heatmap),],id=c("index as xts HEATMAP_DATA_DECREASING"))
+Graph_DECREASING_Data_Heatmap_DECREASING$value<-round(as.numeric(Graph_DECREASING_Data_Heatmap_DECREASING$value),1)
+
+Graph_DECREASING_Data_Heatmap_DECREASING<-Graph_DECREASING_Data_Heatmap_DECREASING %>% mutate(variable = recode(.$variable,  "Mineral.Water..Soft.Drinks..Vegetable.Juices" = "Soft drinks","Non.durable.househld.goods" ="Non-durable","Electrical.Appliances.for.personal.care"="Personal care app","Accomdation.Services"="Hotel,etc."))
+
+
+GG_heatmap_DECREASING<-ggplot(data=Graph_DECREASING_Data_Heatmap_DECREASING, aes(y=variable,x=`index as xts HEATMAP_DATA_DECREASING`,fill=value, label=value))+
+                   geom_tile(color="black",size=1.1, lwd = 0,
+            linetype = 0)+geom_text(aes(label = value), color = "black", size = 2)+scale_fill_gradient(limit=c(min(-30),max(2)),low = "blue", high = "green")+  theme(legend.position = "none")
+
+
+GG_heatmap_DECREASING<-GG_heatmap_DECREASING+labs(title="Heatmap of the Lowest contribution to inflation", caption="Source: CSO, DOF calculations",
+       y="")+theme(plot.title = element_text(hjust = 0.5),axis.title.x = element_blank())
+
+
+NAMES_LOW_HEATMAP<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[1] %>% names()
+heatmap_date<-last(unique(DFFF$`index as xts DFF`))
+
+text_heatmap_LOW_growth_rate<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[1]  %>% as.numeric() %>% round(1) %>% paste0(sep="%")
+
+NAMES_LOW_HEATMAP_2<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[2] %>% names()
+text_heatmap_LOW_growth_rate_2<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[2]  %>% as.numeric() %>% round(1) %>% paste0(sep="%")
+
+NAMES_LOW_HEATMAP_3<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[3] %>% names()
+text_heatmap_LOW_growth_rate_3<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[3]  %>% as.numeric() %>% round(1) %>% paste0(sep="%")
+
+
+
+
        
 ```
 
 
 ***
-* The heatmap above focuses on the top 20 series contributing most to annual inflation in the current month. 
+* The first heatmap  focuses on the top 20 series contributing most to annual inflation in the current month. 
 <br>
 <br>
 
@@ -2370,6 +2413,43 @@ text_heatmap_growth_rate_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.charact
 <br>
 
 ***
+
+```{r heatmap low, echo=FALSE, warning=FALSE}
+GG_heatmap_DECREASING
+
+NAMES_LOW_HEATMAP<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[1] %>% names()
+heatmap_date<-last(unique(DFFF$`index as xts DFF`))
+
+text_heatmap_LOW_growth_rate<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[1]  %>% as.numeric() %>% round(1) %>% paste0(sep="%")
+
+NAMES_LOW_HEATMAP_2<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[2] %>% names()
+text_heatmap_LOW_growth_rate_2<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[2]  %>% as.numeric() %>% round(1) %>% paste0(sep="%")
+
+NAMES_LOW_HEATMAP_3<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[3] %>% names()
+text_heatmap_LOW_growth_rate_3<-last(Graph_DECREASING_Data_Heatmap[,order(as.numeric(as.character(Graph_DECREASING_Data_Heatmap[nrow(Graph_DECREASING_Data_Heatmap),],decreasing = FALSE)))])[3]  %>% as.numeric() %>% round(1) %>% paste0(sep="%")
+
+
+
+
+```
+
+
+***
+* The second heatmap looks at the 20 series acting as a drag on  inflation. 
+<br>
+<br>
+
+* `r NAMES_LOW_HEATMAP` recorded particularly weak inflation in `r format(heatmap_date, "%B %Y")`, decreasing by `r text_heatmap_LOW_growth_rate` on an annual basis. 
+<br>
+<br>
+
+* `r NAMES_LOW_HEATMAP_2` and `r NAMES_LOW_HEATMAP_3` also acted as a significant drag on inflation in `r format(heatmap_date, "%B %Y")`, decreasing by `r text_heatmap_LOW_growth_rate_2` and `r text_heatmap_LOW_growth_rate_3` respectively. 
+<br>
+<br>
+
+***
+
+
 
 
 ```{r contribution EA inflation, echo=FALSE, message=FALSE, warning=FALSE}
@@ -2634,7 +2714,8 @@ Energy_overall_contributions_bar_chart <- ggplot(Energy_overall_contributions_da
 #chart five
 #adding in overall contribution line
 #contribution to overall inflation rate bar chart
-CONTRIBUTION_df <- data.frame(CONTRIBUTION)
+CONTRIBUTION_df <- data.frame(CONTRIBUTION["2022/"])
+
 Energy_overall_contributions_data <- CONTRIBUTION_df %>% select('Electricity', 'Gas', 'Liquid.Fuel', 'Solid.Fuels', 'Fuels...Lubricants.for.personal.transport')
 Energy_overall_contributions_data$Date <- rownames(Energy_overall_contributions_data)
 rownames(Energy_overall_contributions_data) <- NULL
@@ -2655,13 +2736,13 @@ Energy_overall_contributions_bar_chart <- ggplot(Energy_overall_contributions_da
   geom_bar(size=1.2, stat="identity") +
   scale_fill_manual(values=DOF_colours)+
   labs(x="",
-       title="Contribution to overall inflation rate",
-       caption="Source: CSO, DOF, Eurostat",
+       title="Energy contribution inflation ",
+       caption="Source: CSO, DOF",
        y="Contribution to overall inflation rate (pp)")+
-  theme_bw()+ theme(panel.border = element_blank(), legend.position=c(0.2, 0.8),
+  theme_bw()+ theme(panel.border = element_blank(), legend.position=c(0.8, 0.8),
                     legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
 
-Overall_energy_contribution_line<- data.frame(index(ENERGY["2019/"]), ENERGY["2019/"])
+Overall_energy_contribution_line<- data.frame(index(ENERGY["2022/"]), ENERGY["2022/"])
 colnames(Overall_energy_contribution_line) <- c("Date", "Growth")
 Overall_energy_contribution_line<- melt(Overall_energy_contribution_line, id=c("Date"))
 
@@ -2674,7 +2755,7 @@ Energy_contributions_chart <- Energy_overall_contributions_bar_chart+geom_line(d
 
 ```{r charts, echo=FALSE, warning=FALSE}
 #chart one
-Energy_inflation_chart
+#Energy_inflation_chart
 
 #chart five
 Energy_contributions_chart
@@ -2727,9 +2808,11 @@ Energy_contribution_DATE <- last(Overall_energy_contribution_line$Date) %>% form
 ***
 
 
-According to the latest data in `r CURRENT_DATE`, overall energy inflation  `r Energy_inflation_text`. The highest energy product inflation rate was `r max_variable` with an inflation rate of `r Latest_inflation_TEXT`. The lowest energy product inflation rate was `r min_variable` with an inflation rate of `r Latest_inflation_low_TEXT`.
+* According to the latest data in `r CURRENT_DATE`, overall energy inflation  `r Energy_inflation_text`. The highest energy product inflation rate was `r max_variable` with an inflation rate of `r Latest_inflation_TEXT`. The lowest energy product inflation rate was `r min_variable` with an inflation rate of `r Latest_inflation_low_TEXT`.
+<br>
+<br>
 
-Overall, energy contributed `r Energy_contribution` percentage points to overall inflation in `r Energy_contribution_DATE`.
+* Overall, energy contributed `r Energy_contribution` percentage points to overall inflation in `r Energy_contribution_DATE`.
 
 
 
