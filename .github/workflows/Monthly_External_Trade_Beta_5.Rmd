@@ -129,14 +129,13 @@ Three_month_yoy <- function(A){
   return(round(THREE_MONTH_GROWTH,2))
 }
 
-YTD_CURRENTYEAR<-NA
 
 YTD <- function(x){
   
   CURRENTYEAR_YTD<-x[paste0("",index((last(x))) %>% year(),"")]
   LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")]
-  
-  YTD_CURRENTYEAR <- CURRENTYEAR_YTD
+ 
+YTD_CURRENTYEAR<-NA
   
   for(i in 1:length(CURRENTYEAR_YTD)){
     YTD_CURRENTYEAR[i]<-((as.numeric(sum(CURRENTYEAR_YTD[1:i]))/as.numeric(sum(LASTYEAR[1:i])))-1)*100
