@@ -70,9 +70,7 @@ if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CAL
   }
 }
 
-for(i in 1:nrow(CALENDAR_ALL_short)){
-  if(CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
-    
+cat(just about to run code)
         Body_EXTERNAL_TRADE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
          to=c("michael.flanagan@finance.gov.ie"),
@@ -84,12 +82,6 @@ subject = "External Trade Release!"
       smtp(Body_EXTERNAL_TRADE)  
     
     
-  } else { 
-    
-    print("Don't run code")
-  }
-}
-
 
 
 
