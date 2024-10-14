@@ -70,7 +70,7 @@ if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CAL
   }
 }
 
-cat(just about to run code)
+print("running code from now")
         Body_EXTERNAL_TRADE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
          to=c("michael.flanagan@finance.gov.ie"),
