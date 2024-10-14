@@ -129,6 +129,7 @@ Three_month_yoy <- function(A){
   return(round(THREE_MONTH_GROWTH,2))
 }
 
+YTD_CURRENTYEAR<-NA
 
 YTD <- function(x){
   
@@ -1528,7 +1529,7 @@ kabble_format_table_short<-format_table1 %>% kbl(caption = "<center><strong>Tabl
 kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_spec(ncol(summary_table)) %>%
   kableExtra::row_spec(nrow(summary_table)) %>%
   column_spec(ncol(summary_table),include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)-1]),"black",ifelse(summary_table[,ncol(summary_table)-1]<=0,"red",DOF_colours[1]))) %>%
-  column_spec(ncol(summary_table)+1,include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)]<=0), "red",DOF_colours[1])) %>% as_image() 
+  column_spec(ncol(summary_table)+1,include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)]<=0), "red",DOF_colours[1]))  
 
 ```
 
@@ -1565,7 +1566,7 @@ kabble_format_table_MEDIUM_TERM<- kbl((MEDIUM_TERM_T),caption = "<center><strong
    kable_styling("striped", full_width = T)
 
 kabble_format_table_MEDIUM_TERM<-kabble_format_table_MEDIUM_TERM %>% kableExtra::column_spec(ncol(MEDIUM_TERM_T)) %>%
-  kableExtra::row_spec(nrow(MEDIUM_TERM_T)) %>% as_image() 
+  kableExtra::row_spec(nrow(MEDIUM_TERM_T))  
 
 
 
