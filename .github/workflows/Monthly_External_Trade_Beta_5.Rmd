@@ -38,7 +38,7 @@ library(lubridate)
 
 cso_clear_cache() 
 
-print("all pacakges are loaded)
+
 DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
 
 growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
@@ -129,19 +129,20 @@ Three_month_yoy <- function(A){
   return(round(THREE_MONTH_GROWTH,2))
 }
 
-print("YTD START")
-#YTD <- function(x){
+YTD_CURRENTYEAR<-NA
+
+YTD <- function(x){
   
- # CURRENTYEAR_YTD<-x[paste0("",index((last(x))) %>% year(),"")]
-  #LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")]
- 
-#YTD_CURRENTYEAR<-NA
+  CURRENTYEAR_YTD<-x[paste0("",index((last(x))) %>% year(),"")]
+  LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")]
   
- # for(i in 1:length(CURRENTYEAR_YTD)){
- #   YTD_CURRENTYEAR[i]<-((as.numeric(sum(CURRENTYEAR_YTD[1:i]))/as.numeric(sum(LASTYEAR[1:i])))-1)*100
- # } 
- # return(YTD_CURRENTYEAR)
-#}
+  YTD_CURRENTYEAR <- CURRENTYEAR_YTD
+  
+  for(i in 1:length(CURRENTYEAR_YTD)){
+    YTD_CURRENTYEAR[i]<-((as.numeric(sum(CURRENTYEAR_YTD[1:i]))/as.numeric(sum(LASTYEAR[1:i])))-1)*100
+  } 
+  return(YTD_CURRENTYEAR)
+}
 
 
 
@@ -316,163 +317,375 @@ for (i in 1:length(index(Austria_exports_xts["2015/"]))) {
 Austria_sum_export<-as.xts(t(Austria_sum_export), order.by = Date)
 colnames(Austria_sum_export)<-c("Austria")
 
-# Austria
-Austria_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Austria") %>% select(-Country))
-colnames(Austria_exports) <- Austria_exports[1, ]
-Austria_exports <- Austria_exports[-c(1), ]
 
-Austria_exports_xts <- as.xts(Austria_exports, order.by = Date)
-Austria_exports_xts_num <- as.numeric(Austria_exports_xts["2015/"], na.rm = TRUE)
-Austria_sum_export <- data.frame(NA, nrow = length(index(Austria_exports_xts["2015/"])))
 
-for (i in 1:length(index(Austria_exports_xts["2015/"]))) {
-  Austria_sum_export[i] <- sum(as.numeric(Austria_exports_xts[i, 2:ncol(Austria_exports_xts)]), na.rm = TRUE)
-}
 
-Austria_sum_export <- as.xts(t(Austria_sum_export), order.by = Date)
-colnames(Austria_sum_export) <- c("Austria")
 
-# Australia
-Australia_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Australia") %>% select(-Country))
-colnames(Australia_exports) <- Australia_exports[1, ]
-Australia_exports <- Australia_exports[-c(1), ]
 
-Australia_exports_xts <- as.xts(Australia_exports, order.by = Date)
-Australia_exports_xts_num <- as.numeric(Australia_exports_xts["2015/"], na.rm = TRUE)
-Australia_sum_export <- data.frame(NA, nrow = length(index(Australia_exports_xts["2015/"])))
+
+#Australia
+Australia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Australia") %>% select(-Country))
+colnames(Australia_exports) <-Australia_exports[1,]
+Australia_exports<-Australia_exports[-c(1),]
+
+Australia_exports_xts <- (as.xts(Australia_exports, order.by=Date))
+Australia_exports_xts_num<-as.numeric(Australia_exports_xts["2015/"],na.rm = TRUE)
+Australia_sum_export<-data.frame(NA, nrow=length(index(Australia_exports_xts["2015/"])))
 
 for (i in 1:length(index(Australia_exports_xts["2015/"]))) {
-  Australia_sum_export[i] <- sum(as.numeric(Australia_exports_xts[i, 2:ncol(Australia_exports_xts)]), na.rm = TRUE)
+  Australia_sum_export[i]<-sum(as.numeric(Australia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Australia_sum_export <- as.xts(t(Australia_sum_export), order.by = Date)
-colnames(Australia_sum_export) <- c("Australia")
+Australia_sum_export<-as.xts(t(Australia_sum_export), order.by = Date)
+colnames(Australia_sum_export)<-c("Australia")
 
-# Belgium
-print("Belgium")
-Belgium_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Belgium") %>% select(-Country))
-colnames(Belgium_exports) <- Belgium_exports[1, ]
-Belgium_exports <- Belgium_exports[-c(1), ]
 
-Belgium_exports_xts <- as.xts(Belgium_exports, order.by = Date)
-Belgium_exports_xts_num <- as.numeric(Belgium_exports_xts["2015/"], na.rm = TRUE)
-Belgium_sum_export <- data.frame(NA, nrow = length(index(Belgium_exports_xts["2015/"])))
+
+#Belgium
+Belgium_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Belgium") %>% select(-Country))
+colnames(Belgium_exports) <-Belgium_exports[1,]
+Belgium_exports<-Belgium_exports[-c(1),]
+
+Belgium_exports_xts <- (as.xts(Belgium_exports, order.by=Date))
+Belgium_exports_xts_num<-as.numeric(Belgium_exports_xts["2015/"],na.rm = TRUE)
+Belgium_sum_export<-data.frame(NA, nrow=length(index(Belgium_exports_xts["2015/"])))
 
 for (i in 1:length(index(Belgium_exports_xts["2015/"]))) {
-  Belgium_sum_export[i] <- sum(as.numeric(Belgium_exports_xts[i, 2:ncol(Belgium_exports_xts)]), na.rm = TRUE)
+  Belgium_sum_export[i]<-sum(as.numeric(Belgium_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Belgium_sum_export <- as.xts(t(Belgium_sum_export), order.by = Date)
-colnames(Belgium_sum_export) <- c("Belgium")
+Belgium_sum_export<-as.xts(t(Belgium_sum_export), order.by = Date)
+colnames(Belgium_sum_export)<-c("Belgium")
 
-# Bulgaria
-Bulgaria_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Bulgaria") %>% select(-Country))
-colnames(Bulgaria_exports) <- Bulgaria_exports[1, ]
-Bulgaria_exports <- Bulgaria_exports[-c(1), ]
+#Bulgaria
+Bulgaria_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Bulgaria") %>% select(-Country))
+colnames(Bulgaria_exports) <-Bulgaria_exports[1,]
+Bulgaria_exports<-Bulgaria_exports[-c(1),]
 
-Bulgaria_exports_xts <- as.xts(Bulgaria_exports, order.by = Date)
-Bulgaria_exports_xts_num <- as.numeric(Bulgaria_exports_xts["2015/"], na.rm = TRUE)
-Bulgaria_sum_export <- data.frame(NA, nrow = length(index(Bulgaria_exports_xts["2015/"])))
+Bulgaria_exports_xts <- (as.xts(Bulgaria_exports, order.by=Date))
+Bulgaria_exports_xts_num<-as.numeric(Bulgaria_exports_xts["2015/"],na.rm = TRUE)
+Bulgaria_sum_export<-data.frame(NA, nrow=length(index(Bulgaria_exports_xts["2015/"])))
 
 for (i in 1:length(index(Bulgaria_exports_xts["2015/"]))) {
-  Bulgaria_sum_export[i] <- sum(as.numeric(Bulgaria_exports_xts[i, 2:ncol(Bulgaria_exports_xts)]), na.rm = TRUE)
+  Bulgaria_sum_export[i]<-sum(as.numeric(Bulgaria_exports_xts[i,,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Bulgaria_sum_export <- as.xts(t(Bulgaria_sum_export), order.by = Date)
-colnames(Bulgaria_sum_export) <- c("Bulgaria")
+Bulgaria_sum_export<-as.xts(t(Bulgaria_sum_export), order.by = Date)
+colnames(Bulgaria_sum_export)<-c("Bulgaria")
 
-# Brazil
-Brazil_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Brazil") %>% select(-Country))
-colnames(Brazil_exports) <- Brazil_exports[1, ]
-Brazil_exports <- Brazil_exports[-c(1), ]
 
-Brazil_exports_xts <- as.xts(Brazil_exports, order.by = Date)
-Brazil_exports_xts_num <- as.numeric(Brazil_exports_xts["2015/"], na.rm = TRUE)
-Brazil_sum_export <- data.frame(NA, nrow = length(index(Brazil_exports_xts["2015/"])))
+#Brazil 
+Brazil_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Brazil") %>% select(-Country))
+colnames(Brazil_exports) <-Brazil_exports[1,]
+Brazil_exports<-Brazil_exports[-c(1),]
+
+Brazil_exports_xts <- (as.xts(Brazil_exports, order.by=Date))
+Brazil_exports_xts_num<-as.numeric(Brazil_exports_xts["2015/"],na.rm = TRUE)
+Brazil_sum_export<-data.frame(NA, nrow=length(index(Brazil_exports_xts["2015/"])))
 
 for (i in 1:length(index(Brazil_exports_xts["2015/"]))) {
-  Brazil_sum_export[i] <- sum(as.numeric(Brazil_exports_xts[i, 2:ncol(Brazil_exports_xts)]), na.rm = TRUE)
+  Brazil_sum_export[i]<-sum(as.numeric(Brazil_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Brazil_sum_export <- as.xts(t(Brazil_sum_export), order.by = Date)
-colnames(Brazil_sum_export) <- c("Brazil")
+Brazil_sum_export<-as.xts(t(Brazil_sum_export), order.by = Date)
+colnames(Brazil_sum_export)<-c("Brazil")
 
-# Canada
-Canada_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Canada") %>% select(-Country))
-colnames(Canada_exports) <- Canada_exports[1, ]
-Canada_exports <- Canada_exports[-c(1), ]
+#Canada 
+Canada_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Canada") %>% select(-Country))
+colnames(Canada_exports) <-Canada_exports[1,]
+Canada_exports<-Canada_exports[-c(1),]
 
-Canada_exports_xts <- as.xts(Canada_exports, order.by = Date)
-Canada_exports_xts_num <- as.numeric(Canada_exports_xts["2015/"], na.rm = TRUE)
-Canada_sum_export <- data.frame(NA, nrow = length(index(Canada_exports_xts["2015/"])))
+Canada_exports_xts <- (as.xts(Canada_exports, order.by=Date))
+Canada_exports_xts_num<-as.numeric(Canada_exports_xts["2015/"],na.rm = TRUE)
+Canada_sum_export<-data.frame(NA, nrow=length(index(Canada_exports_xts["2015/"])))
 
 for (i in 1:length(index(Canada_exports_xts["2015/"]))) {
-  Canada_sum_export[i] <- sum(as.numeric(Canada_exports_xts[i, 2:ncol(Canada_exports_xts)]), na.rm = TRUE)
+  Canada_sum_export[i]<-sum(as.numeric(Canada_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Canada_sum_export <- as.xts(t(Canada_sum_export), order.by = Date)
-colnames(Canada_sum_export) <- c("Canada")
+Canada_sum_export<-as.xts(t(Canada_sum_export), order.by = Date)
+colnames(Canada_sum_export)<-c("Canada")
 
-# Switzerland
-Switzerland_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Switzerland") %>% select(-Country))
-colnames(Switzerland_exports) <- Switzerland_exports[1, ]
-Switzerland_exports <- Switzerland_exports[-c(1), ]
 
-Switzerland_exports_xts <- as.xts(Switzerland_exports, order.by = Date)
-Switzerland_exports_xts_num <- as.numeric(Switzerland_exports_xts["2015/"], na.rm = TRUE)
-Switzerland_sum_export <- data.frame(NA, nrow = length(index(Switzerland_exports_xts["2015/"])))
+
+#Switzerland 
+Switzerland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Switzerland") %>% select(-Country))
+colnames(Switzerland_exports) <-Switzerland_exports[1,]
+Switzerland_exports<-Switzerland_exports[-c(1),]
+
+
+Switzerland_exports_xts <- (as.xts(Switzerland_exports, order.by=Date))
+Switzerland_exports_xts_num<-as.numeric(Switzerland_exports_xts["2015/"],na.rm = TRUE)
+Switzerland_sum_export<-data.frame(NA, nrow=length(index(Switzerland_exports_xts["2015/"])))
 
 for (i in 1:length(index(Switzerland_exports_xts["2015/"]))) {
-  Switzerland_sum_export[i] <- sum(as.numeric(Switzerland_exports_xts[i, 2:ncol(Switzerland_exports_xts)]), na.rm = TRUE)
+  Switzerland_sum_export[i]<-sum(as.numeric(Switzerland_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Switzerland_sum_export <- as.xts(t(Switzerland_sum_export), order.by = Date)
-colnames(Switzerland_sum_export) <- c("Switzerland")
+Switzerland_sum_export<-as.xts(t(Switzerland_sum_export), order.by = Date)
+colnames(Switzerland_sum_export)<-c("Switzerland")
 
-# China
-China_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "China") %>% select(-Country))
-colnames(China_exports) <- China_exports[1, ]
-China_exports <- China_exports[-c(1), ]
+#China 
+China_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="China") %>% select(-Country))
+colnames(China_exports) <-China_exports[1,]
+China_exports<-China_exports[-c(1),]
 
-China_exports_xts <- as.xts(China_exports, order.by = Date)
-China_exports_xts_num <- as.numeric(China_exports_xts["2015/"], na.rm = TRUE)
-China_sum_export <- data.frame(NA, nrow = length(index(China_exports_xts["2015/"])))
+China_exports_xts <- (as.xts(China_exports, order.by=Date))
+China_exports_xts_num<-as.numeric(China_exports_xts["2015/"],na.rm = TRUE)
+China_sum_export<-data.frame(NA, nrow=length(index(China_exports_xts["2015/"])))
 
 for (i in 1:length(index(China_exports_xts["2015/"]))) {
-  China_sum_export[i] <- sum(as.numeric(China_exports_xts[i, 2:ncol(China_exports_xts)]), na.rm = TRUE)
+  China_sum_export[i]<-sum(as.numeric(China_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-China_sum_export <- as.xts(t(China_sum_export), order.by = Date)
-colnames(China_sum_export) <- c("China")
+China_sum_export<-as.xts(t(China_sum_export), order.by = Date)
+colnames(China_sum_export)<-c("China")
 
-China_breakdown_exports <- as.xts(China_exports_xts)
-China_breakdown_exports1 <- 100 * ((as.numeric(China_exports_xts)) / as.numeric(China_sum_export$China))
 
-# Japan
-Japan_exports <- t(subset(Ireland_exports, Ireland_exports["2014-12-01"] == "Japan") %>% select(-Country))
-colnames(Japan_exports) <- Japan_exports[1, ]
-Japan_exports <- Japan_exports[-c(1), ]
+China_breakdown_exports<-as.xts(China_exports_xts)
 
-Japan_exports_xts <- as.xts(Japan_exports, order.by = Date)
-Japan_exports_xts_num <- as.numeric(Japan_exports_xts["2015/"], na.rm = TRUE)
-Japan_sum_export <- data.frame(NA, nrow = length(index(Japan_exports_xts["2015/"])))
+China_breakdown_exports1<-100*((as.numeric(China_exports_xts))/as.numeric(China_sum_export$China))
+
+#Cyprus 
+Cyprus_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Cyprus") %>% select(-Country))
+colnames(Cyprus_exports) <-Cyprus_exports[1,]
+Cyprus_exports<-Cyprus_exports[-c(1),]
+
+Cyprus_exports_xts <- (as.xts(Cyprus_exports, order.by=Date))
+Cyprus_exports_xts_num<-as.numeric(Cyprus_exports_xts["2015/"],na.rm = TRUE)
+Cyprus_sum_export<-data.frame(NA, nrow=length(index(Cyprus_exports_xts["2015/"])))
+
+for (i in 1:length(index(Cyprus_exports_xts["2015/"]))) {
+  Cyprus_sum_export[i]<-sum(as.numeric(Cyprus_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Cyprus_sum_export<-as.xts(t(Cyprus_sum_export), order.by = Date)
+colnames(Cyprus_sum_export)<-c("Cyprus")
+
+
+#Czech Republic
+Czech_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Czech Republic") %>% select(-Country))
+colnames(Czech_exports) <-Czech_exports[1,]
+Czech_exports<-Czech_exports[-c(1),]
+
+Czech_exports_xts <- (as.xts(Czech_exports, order.by=Date))
+Czech_exports_xts_num<-as.numeric(Czech_exports_xts["2015/"],na.rm = TRUE)
+Czech_sum_export<-data.frame(NA, nrow=length(index(Czech_exports_xts["2015/"])))
+
+for (i in 1:length(index(Czech_exports_xts["2015/"]))) {
+  Czech_sum_export[i]<-sum(as.numeric(Czech_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Czech_sum_export<-as.xts(t(Czech_sum_export), order.by = Date)
+colnames(Czech_sum_export)<-c("Czech")
+
+
+#Germany
+Germany_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Germany") %>% select(-Country))
+colnames(Germany_exports) <-Germany_exports[1,]
+Germany_exports<-Germany_exports[-c(1),]
+
+Germany_exports_xts <- (as.xts(Germany_exports, order.by=Date))
+Germany_exports_xts_num<-as.numeric(Germany_exports_xts["2015/"],na.rm = TRUE)
+Germany_sum_export<-data.frame(NA, nrow=length(index(Germany_exports_xts["2015/"])))
+
+for (i in 1:length(index(Germany_exports_xts["2015/"]))) {
+  Germany_sum_export[i]<-sum(as.numeric(Germany_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Germany_sum_export<-as.xts(t(Germany_sum_export), order.by = Date)
+colnames(Germany_sum_export)<-c("Germany")
+
+
+
+#Denmark 
+Denmark_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Denmark") %>% select(-Country))
+colnames(Denmark_exports) <-Denmark_exports[1,]
+Denmark_exports<-Denmark_exports[-c(1),]
+
+Denmark_exports_xts <- (as.xts(Denmark_exports, order.by=Date))
+Denmark_exports_xts_num<-as.numeric(Denmark_exports_xts["2015/"],na.rm = TRUE)
+Denmark_sum_export<-data.frame(NA, nrow=length(index(Denmark_exports_xts["2015/"])))
+
+for (i in 1:length(index(Denmark_exports_xts["2015/"]))) {
+  Denmark_sum_export[i]<-sum(as.numeric(Denmark_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Denmark_sum_export<-as.xts(t(Denmark_sum_export), order.by = Date)
+colnames(Denmark_sum_export)<-c("Denmark")
+
+
+#Estonia 
+Estonia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Estonia") %>% select(-Country))
+colnames(Estonia_exports) <-Estonia_exports[1,]
+Estonia_exports<-Estonia_exports[-c(1),]
+
+Estonia_exports_xts <- (as.xts(Estonia_exports, order.by=Date))
+Estonia_exports_xts_num<-as.numeric(Estonia_exports_xts["2015/"],na.rm = TRUE)
+Estonia_sum_export<-data.frame(NA, nrow=length(index(Estonia_exports_xts["2015/"])))
+
+for (i in 1:length(index(Estonia_exports_xts["2015/"]))) {
+  Estonia_sum_export[i]<-sum(as.numeric(Estonia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Estonia_sum_export<-as.xts(t(Estonia_sum_export), order.by = Date)
+colnames(Estonia_sum_export)<-c("Estonia")
+
+#Spain 
+Spain_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Spain") %>% select(-Country))
+colnames(Spain_exports) <-Spain_exports[1,]
+Spain_exports<-Spain_exports[-c(1),]
+
+Spain_exports_xts <- (as.xts(Spain_exports, order.by=Date))
+Spain_exports_xts_num<-as.numeric(Spain_exports_xts["2015/"],na.rm = TRUE)
+Spain_sum_export<-data.frame(NA, nrow=length(index(Spain_exports_xts["2015/"])))
+
+for (i in 1:length(index(Spain_exports_xts["2015/"]))) {
+  Spain_sum_export[i]<-sum(as.numeric(Spain_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Spain_sum_export<-as.xts(t(Spain_sum_export), order.by = Date)
+colnames(Spain_sum_export)<-c("Spain")
+
+
+
+#Finland 
+Finland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Finland") %>% select(-Country))
+colnames(Finland_exports) <-Finland_exports[1,]
+Finland_exports<-Finland_exports[-c(1),]
+
+Finland_exports_xts <- (as.xts(Finland_exports, order.by=Date))
+Finland_exports_xts_num<-as.numeric(Finland_exports_xts["2015/"],na.rm = TRUE)
+Finland_sum_export<-data.frame(NA, nrow=length(index(Finland_exports_xts["2015/"])))
+
+for (i in 1:length(index(Finland_exports_xts["2015/"]))) {
+  Finland_sum_export[i]<-sum(as.numeric(Finland_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Finland_sum_export<-as.xts(t(Finland_sum_export), order.by = Date)
+colnames(Finland_sum_export)<-c("Finland")
+
+
+
+#France
+France_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="France") %>% select(-Country))
+colnames(France_exports) <-France_exports[1,]
+France_exports<-France_exports[-c(1),]
+
+France_exports_xts <- (as.xts(France_exports, order.by=Date))
+France_exports_xts_num<-as.numeric(France_exports_xts["2015/"],na.rm = TRUE)
+France_sum_export<-data.frame(NA, nrow=length(index(France_exports_xts["2015/"])))
+
+for (i in 1:length(index(France_exports_xts["2015/"]))) {
+  France_sum_export[i]<-sum(as.numeric(France_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+France_sum_export<-as.xts(t(France_sum_export), order.by = Date)
+colnames(France_sum_export)<-c("France")
+
+
+#Greece
+Greece_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Greece") %>% select(-Country))
+colnames(Greece_exports) <-Greece_exports[1,]
+Greece_exports<-Greece_exports[-c(1),]
+
+Greece_exports_xts <- (as.xts(Greece_exports, order.by=Date))
+Greece_exports_xts_num<-as.numeric(Greece_exports_xts["2015/"],na.rm = TRUE)
+Greece_sum_export<-data.frame(NA, nrow=length(index(Greece_exports_xts["2015/"])))
+
+for (i in 1:length(index(Greece_exports_xts["2015/"]))) {
+  Greece_sum_export[i]<-sum(as.numeric(Greece_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Greece_sum_export<-as.xts(t(Greece_sum_export), order.by = Date)
+colnames(Greece_sum_export)<-c("Greece")
+
+
+##Croatia
+Croatia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Croatia") %>% select(-Country))
+colnames(Croatia_exports) <-Croatia_exports[1,]
+Croatia_exports<-Croatia_exports[-c(1),]
+
+Croatia_exports_xts <- (as.xts(Croatia_exports, order.by=Date))
+Croatia_exports_xts_num<-as.numeric(Croatia_exports_xts["2015/"],na.rm = TRUE)
+Croatia_sum_export<-data.frame(NA, nrow=length(index(Croatia_exports_xts["2015/"])))
+
+for (i in 1:length(index(Croatia_exports_xts["2015/"]))) {
+  Croatia_sum_export[i]<-sum(as.numeric(Croatia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Croatia_sum_export<-as.xts(t(Croatia_sum_export), order.by = Date)
+colnames(Croatia_sum_export)<-c("Croatia")
+
+
+
+#Hungary
+Hungary_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Hungary") %>% select(-Country))
+colnames(Hungary_exports) <-Hungary_exports[1,]
+Hungary_exports<-Hungary_exports[-c(1),]
+
+Hungary_exports_xts <- (as.xts(Hungary_exports, order.by=Date))
+Hungary_exports_xts_num<-as.numeric(Hungary_exports_xts["2015/"],na.rm = TRUE)
+Hungary_sum_export<-data.frame(NA, nrow=length(index(Hungary_exports_xts["2015/"])))
+
+for (i in 1:length(index(Hungary_exports_xts["2015/"]))) {
+  Hungary_sum_export[i]<-sum(as.numeric(Hungary_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Hungary_sum_export<-as.xts(t(Hungary_sum_export), order.by = Date)
+colnames(Hungary_sum_export)<-c("Hungary")
+
+#India
+India_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="India") %>% select(-Country))
+colnames(India_exports) <-India_exports[1,]
+India_exports<-India_exports[-c(1),]
+
+India_exports_xts <- (as.xts(India_exports, order.by=Date))
+India_exports_xts_num<-as.numeric(India_exports_xts["2015/"],na.rm = TRUE)
+India_sum_export<-data.frame(NA, nrow=length(index(India_exports_xts["2015/"])))
+
+for (i in 1:length(index(India_exports_xts["2015/"]))) {
+  India_sum_export[i]<-sum(as.numeric(India_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+India_sum_export<-as.xts(t(India_sum_export), order.by = Date)
+colnames(India_sum_export)<-c("India")
+
+#Italy
+Italy_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Italy") %>% select(-Country))
+colnames(Italy_exports) <-Italy_exports[1,]
+Italy_exports<-Italy_exports[-c(1),]
+
+Italy_exports_xts <- (as.xts(Italy_exports, order.by=Date))
+Italy_exports_xts_num<-as.numeric(Italy_exports_xts["2015/"],na.rm = TRUE)
+Italy_sum_export<-data.frame(NA, nrow=length(index(Italy_exports_xts["2015/"])))
+
+for (i in 1:length(index(Italy_exports_xts["2015/"]))) {
+  Italy_sum_export[i]<-sum(as.numeric(Italy_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
+}
+
+Italy_sum_export<-as.xts(t(Italy_sum_export), order.by = Date)
+colnames(Italy_sum_export)<-c("Italy")
+
+#Japan
+
+Japan_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Japan") %>% select(-Country))
+colnames(Japan_exports) <-Japan_exports[1,]
+Japan_exports<-Japan_exports[-c(1),]
+
+Japan_exports_xts <- (as.xts(Japan_exports, order.by=Date))
+Japan_exports_xts_num<-as.numeric(Japan_exports_xts["2015/"],na.rm = TRUE)
+Japan_sum_export<-data.frame(NA, nrow=length(index(Japan_exports_xts["2015/"])))
 
 for (i in 1:length(index(Japan_exports_xts["2015/"]))) {
-  Japan_sum_export[i] <- sum(as.numeric(Japan_exports_xts[i, 2:ncol(Japan_exports_xts)]), na.rm = TRUE)
+  Japan_sum_export[i]<-sum(as.numeric(Japan_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
-Japan_sum_export <- as.xts(t(Japan_sum_export), order.by = Date)
-colnames(Japan_sum_export) <- c("Japan")
-
-
-
-
+Japan_sum_export<-as.xts(t(Japan_sum_export), order.by = Date)
+colnames(Japan_sum_export)<-c("Japan")
 
 
 #South Korea
-
-print("Korea")
-
 Korea_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="South Korea") %>% select(-Country))
 colnames(Korea_exports) <-Korea_exports[1,]
 Korea_exports<-Korea_exports[-c(1),]
@@ -482,7 +695,7 @@ Korea_exports_xts_num<-as.numeric(Korea_exports_xts["2015/"],na.rm = TRUE)
 Korea_sum_export<-data.frame(NA, nrow=length(index(Korea_exports_xts["2015/"])))
 
 for (i in 1:length(index(Korea_exports_xts["2015/"]))) {
-  Korea_sum_export[i]<-sum(as.numeric(Korea_exports_xts[i,2:ncol(Korea_exports_xts)]),na.rm = TRUE)
+  Korea_sum_export[i]<-sum(as.numeric(Korea_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Korea_sum_export<-as.xts(t(Korea_sum_export), order.by = Date)
@@ -501,7 +714,7 @@ Lithuania_exports_xts_num<-as.numeric(Lithuania_exports_xts["2015/"],na.rm = TRU
 Lithuania_sum_export<-data.frame(NA, nrow=length(index(Lithuania_exports_xts["2015/"])))
 
 for (i in 1:length(index(Lithuania_exports_xts["2015/"]))) {
-  Lithuania_sum_export[i]<-sum(as.numeric(Lithuania_exports_xts[i,2:ncol(Lithuania_exports_xts)]),na.rm = TRUE)
+  Lithuania_sum_export[i]<-sum(as.numeric(Lithuania_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Lithuania_sum_export<-as.xts(t(Lithuania_sum_export), order.by = Date)
@@ -519,7 +732,7 @@ Luxembourg_exports_xts_num<-as.numeric(Luxembourg_exports_xts["2015/"],na.rm = T
 Luxembourg_sum_export<-data.frame(NA, nrow=length(index(Luxembourg_exports_xts["2015/"])))
 
 for (i in 1:length(index(Luxembourg_exports_xts["2015/"]))) {
-  Luxembourg_sum_export[i]<-sum(as.numeric(Luxembourg_exports_xts[i,2:ncol(Luxembourg_exports_xts)]),na.rm = TRUE)
+  Luxembourg_sum_export[i]<-sum(as.numeric(Luxembourg_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Luxembourg_sum_export<-as.xts(t(Luxembourg_sum_export), order.by = Date)
@@ -535,7 +748,7 @@ Latvia_exports_xts_num<-as.numeric(Latvia_exports_xts["2015/"],na.rm = TRUE)
 Latvia_sum_export<-data.frame(NA, nrow=length(index(Latvia_exports_xts["2015/"])))
 
 for (i in 1:length(index(Latvia_exports_xts["2015/"]))) {
-  Latvia_sum_export[i]<-sum(as.numeric(Latvia_exports_xts[i,2:ncol(Latvia_exports_xts)]),na.rm = TRUE)
+  Latvia_sum_export[i]<-sum(as.numeric(Latvia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Latvia_sum_export<-as.xts(t(Latvia_sum_export), order.by = Date)
@@ -553,7 +766,7 @@ Malta_exports_xts_num<-as.numeric(Malta_exports_xts["2015/"],na.rm = TRUE)
 Malta_sum_export<-data.frame(NA, nrow=length(index(Malta_exports_xts["2015/"])))
 
 for (i in 1:length(index(Malta_exports_xts["2015/"]))) {
-  Malta_sum_export[i]<-sum(as.numeric(Malta_exports_xts[i,2:ncol(Malta_exports_xts)]),na.rm = TRUE)
+  Malta_sum_export[i]<-sum(as.numeric(Malta_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Malta_sum_export<-as.xts(t(Malta_sum_export), order.by = Date)
@@ -563,7 +776,6 @@ colnames(Malta_sum_export)<-c("Malta")
 
 
 #Mexico 
-print("mexico")
 Mexico_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Mexico") %>% select(-Country))
 colnames(Mexico_exports) <-Mexico_exports[1,]
 Mexico_exports<-Mexico_exports[-c(1),]
@@ -573,7 +785,7 @@ Mexico_exports_xts_num<-as.numeric(Mexico_exports_xts["2015/"],na.rm = TRUE)
 Mexico_sum_export<-data.frame(NA, nrow=length(index(Mexico_exports_xts["2015/"])))
 
 for (i in 1:length(index(Mexico_exports_xts["2015/"]))) {
-  Mexico_sum_export[i]<-sum(as.numeric(Mexico_exports_xts[i,2:ncol(Mexico_exports_xts)]),na.rm = TRUE)
+  Mexico_sum_export[i]<-sum(as.numeric(Mexico_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Mexico_sum_export<-as.xts(t(Mexico_sum_export), order.by = Date)
@@ -591,7 +803,7 @@ Malaysia_exports_xts_num<-as.numeric(Malaysia_exports_xts["2015/"],na.rm = TRUE)
 Malaysia_sum_export<-data.frame(NA, nrow=length(index(Malaysia_exports_xts["2015/"])))
 
 for (i in 1:length(index(Malaysia_exports_xts["2015/"]))) {
-  Malaysia_sum_export[i]<-sum(as.numeric(Malaysia_exports_xts[i,2:ncol(Malaysia_exports_xts)]),na.rm = TRUE)
+  Malaysia_sum_export[i]<-sum(as.numeric(Malaysia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Malaysia_sum_export<-as.xts(t(Malaysia_sum_export), order.by = Date)
@@ -608,7 +820,7 @@ Netherlands_exports_xts_num<-as.numeric(Netherlands_exports_xts["2015/"],na.rm =
 Netherlands_sum_export<-data.frame(NA, nrow=length(index(Netherlands_exports_xts["2015/"])))
 
 for (i in 1:length(index(Netherlands_exports_xts["2015/"]))) {
-  Netherlands_sum_export[i]<-sum(as.numeric(Netherlands_exports_xts[i,2:ncol(Netherlands_exports_xts)]),na.rm = TRUE)
+  Netherlands_sum_export[i]<-sum(as.numeric(Netherlands_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Netherlands_sum_export<-as.xts(t(Netherlands_sum_export), order.by = Date)
@@ -626,7 +838,7 @@ Norway_exports_xts_num<-as.numeric(Norway_exports_xts["2015/"],na.rm = TRUE)
 Norway_sum_export<-data.frame(NA, nrow=length(index(Norway_exports_xts["2015/"])))
 
 for (i in 1:length(index(Norway_exports_xts["2015/"]))) {
-  Norway_sum_export[i]<-sum(as.numeric(Norway_exports_xts[i,2:ncol(Norway_exports_xts)]),na.rm = TRUE)
+  Norway_sum_export[i]<-sum(as.numeric(Norway_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Norway_sum_export<-as.xts(t(Norway_sum_export), order.by = Date)
@@ -645,7 +857,7 @@ Poland_exports_xts_num<-as.numeric(Poland_exports_xts["2015/"],na.rm = TRUE)
 Poland_sum_export<-data.frame(NA, nrow=length(index(Poland_exports_xts["2015/"])))
 
 for (i in 1:length(index(Poland_exports_xts["2015/"]))) {
-  Poland_sum_export[i]<-sum(as.numeric(Poland_exports_xts[i,2:ncol(Poland_exports_xts)]),na.rm = TRUE)
+  Poland_sum_export[i]<-sum(as.numeric(Poland_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Poland_sum_export<-as.xts(t(Poland_sum_export), order.by = Date)
@@ -663,7 +875,7 @@ Portugal_exports_xts_num<-as.numeric(Portugal_exports_xts["2015/"],na.rm = TRUE)
 Portugal_sum_export<-data.frame(NA, nrow=length(index(Portugal_exports_xts["2015/"])))
 
 for (i in 1:length(index(Portugal_exports_xts["2015/"]))) {
-  Portugal_sum_export[i]<-sum(as.numeric(Portugal_exports_xts[i,2:ncol(Portugal_exports_xts)]),na.rm = TRUE)
+  Portugal_sum_export[i]<-sum(as.numeric(Portugal_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Portugal_sum_export<-as.xts(t(Portugal_sum_export), order.by = Date)
@@ -682,14 +894,13 @@ Romania_exports_xts_num<-as.numeric(Romania_exports_xts["2015/"],na.rm = TRUE)
 Romania_sum_export<-data.frame(NA, nrow=length(index(Romania_exports_xts["2015/"])))
 
 for (i in 1:length(index(Romania_exports_xts["2015/"]))) {
-  Romania_sum_export[i]<-sum(as.numeric(Romania_exports_xts[i,2:ncol(Romania_exports_xts)]),na.rm = TRUE)
+  Romania_sum_export[i]<-sum(as.numeric(Romania_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Romania_sum_export<-as.xts(t(Romania_sum_export), order.by = Date)
 colnames(Romania_sum_export)<-c("Romania")
 
 #Russia  
-print("Russia")
 Russia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Russia") %>% select(-Country))
 colnames(Russia_exports) <-Russia_exports[1,]
 Russia_exports<-Russia_exports[-c(1),]
@@ -700,7 +911,7 @@ Russia_exports_xts_num<-as.numeric(Russia_exports_xts["2015/"],na.rm = TRUE)
 Russia_sum_export<-data.frame(NA, nrow=length(index(Russia_exports_xts["2015/"])))
 
 for (i in 1:length(index(Russia_exports_xts["2015/"]))) {
-  Russia_sum_export[i]<-sum(as.numeric(Russia_exports_xts[i,2:ncol(Russia_exports_xts)]),na.rm = TRUE)
+  Russia_sum_export[i]<-sum(as.numeric(Russia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Russia_sum_export<-as.xts(t(Russia_sum_export), order.by = Date)
@@ -717,7 +928,7 @@ Saudi_exports_xts_num<-as.numeric(Saudi_exports_xts["2015/"],na.rm = TRUE)
 Saudi_sum_export<-data.frame(NA, nrow=length(index(Saudi_exports_xts["2015/"])))
 
 for (i in 1:length(index(Saudi_exports_xts["2015/"]))) {
-  Saudi_sum_export[i]<-sum(as.numeric(Saudi_exports_xts[i,2:ncol(Saudi_exports_xts)]),na.rm = TRUE)
+  Saudi_sum_export[i]<-sum(as.numeric(Saudi_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Saudi_sum_export<-as.xts(t(Saudi_sum_export), order.by = Date)
@@ -735,7 +946,7 @@ Sweden_exports_xts_num<-as.numeric(Sweden_exports_xts["2015/"],na.rm = TRUE)
 Sweden_sum_export<-data.frame(NA, nrow=length(index(Sweden_exports_xts["2015/"])))
 
 for (i in 1:length(index(Sweden_exports_xts["2015/"]))) {
-  Sweden_sum_export[i]<-sum(as.numeric(Sweden_exports_xts[i,2:ncol(Sweden_exports_xts)]),na.rm = TRUE)
+  Sweden_sum_export[i]<-sum(as.numeric(Sweden_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Sweden_sum_export<-as.xts(t(Sweden_sum_export), order.by = Date)
@@ -752,7 +963,7 @@ Singapore_exports_xts_num<-as.numeric(Singapore_exports_xts["2015/"],na.rm = TRU
 Singapore_sum_export<-data.frame(NA, nrow=length(index(Singapore_exports_xts["2015/"])))
 
 for (i in 1:length(index(Singapore_exports_xts["2015/"]))) {
-  Singapore_sum_export[i]<-sum(as.numeric(Singapore_exports_xts[i,2:ncol(Singapore_exports_xts)]),na.rm = TRUE)
+  Singapore_sum_export[i]<-sum(as.numeric(Singapore_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Singapore_sum_export<-as.xts(t(Singapore_sum_export), order.by = Date)
@@ -761,7 +972,6 @@ colnames(Singapore_sum_export)<-c("Singapore")
 
 
 #Slovenia  
-print("Slovenia")
 Slovenia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Slovenia") %>% select(-Country))
 colnames(Slovenia_exports) <-Slovenia_exports[1,]
 Slovenia_exports<-Slovenia_exports[-c(1),]
@@ -771,7 +981,7 @@ Slovenia_exports_xts_num<-as.numeric(Slovenia_exports_xts["2015/"],na.rm = TRUE)
 Slovenia_sum_export<-data.frame(NA, nrow=length(index(Slovenia_exports_xts["2015/"])))
 
 for (i in 1:length(index(Slovenia_exports_xts["2015/"]))) {
-  Slovenia_sum_export[i]<-sum(as.numeric(Slovenia_exports_xts[i,2:ncol(Slovenia_exports_xts)]),na.rm = TRUE)
+  Slovenia_sum_export[i]<-sum(as.numeric(Slovenia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Slovenia_sum_export<-as.xts(t(Slovenia_sum_export), order.by = Date)
@@ -789,7 +999,7 @@ Slovakia_exports_xts_num<-as.numeric(Slovakia_exports_xts["2015/"],na.rm = TRUE)
 Slovakia_sum_export<-data.frame(NA, nrow=length(index(Slovakia_exports_xts["2015/"])))
 
 for (i in 1:length(index(Slovakia_exports_xts["2015/"]))) {
-  Slovakia_sum_export[i]<-sum(as.numeric(Slovakia_exports_xts[i,2:ncol(Slovakia_exports_xts)]),na.rm = TRUE)
+  Slovakia_sum_export[i]<-sum(as.numeric(Slovakia_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Slovakia_sum_export<-as.xts(t(Slovakia_sum_export), order.by = Date)
@@ -807,7 +1017,7 @@ Thailand_exports_xts_num<-as.numeric(Thailand_exports_xts["2015/"],na.rm = TRUE)
 Thailand_sum_export<-data.frame(NA, nrow=length(index(Thailand_exports_xts["2015/"])))
 
 for (i in 1:length(index(Thailand_exports_xts["2015/"]))) {
-  Thailand_sum_export[i]<-sum(as.numeric(Thailand_exports_xts[i,2:ncol(Thailand_exports_xts)]),na.rm = TRUE)
+  Thailand_sum_export[i]<-sum(as.numeric(Thailand_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Thailand_sum_export<-as.xts(t(Thailand_sum_export), order.by = Date)
@@ -824,7 +1034,7 @@ Turkey_exports_xts_num<-as.numeric(Turkey_exports_xts["2015/"],na.rm = TRUE)
 Turkey_sum_export<-data.frame(NA, nrow=length(index(Turkey_exports_xts["2015/"])))
 
 for (i in 1:length(index(Turkey_exports_xts["2015/"]))) {
-  Turkey_sum_export[i]<-sum(as.numeric(Turkey_exports_xts[i,2:ncol(Turkey_exports_xts)]),na.rm = TRUE)
+  Turkey_sum_export[i]<-sum(as.numeric(Turkey_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Turkey_sum_export<-as.xts(t(Turkey_sum_export), order.by = Date)
@@ -841,7 +1051,7 @@ Taiwan_exports_xts_num<-as.numeric(Taiwan_exports_xts["2015/"],na.rm = TRUE)
 Taiwan_sum_export<-data.frame(NA, nrow=length(index(Taiwan_exports_xts["2015/"])))
 
 for (i in 1:length(index(Taiwan_exports_xts["2015/"]))) {
-  Taiwan_sum_export[i]<-sum(as.numeric(Taiwan_exports_xts[i,2:ncol(Taiwan_exports_xts)]),na.rm = TRUE)
+  Taiwan_sum_export[i]<-sum(as.numeric(Taiwan_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 Taiwan_sum_export<-as.xts(t(Taiwan_sum_export), order.by = Date)
@@ -859,7 +1069,7 @@ USA_exports_xts_num<-as.numeric(USA_exports_xts["2015/"],na.rm = TRUE)
 USA_sum_export<-data.frame(NA, length(index(USA_exports_xts["2015/"])))
 
 for (i in 1:length(index(USA_exports_xts["2015/"]))) {
-  USA_sum_export[i]<-sum(as.numeric(USA_exports_xts[i,2:ncol(USA_exports_xts)]),na.rm = TRUE)
+  USA_sum_export[i]<-sum(as.numeric(USA_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 USA_sum_export<-as.xts(t(USA_sum_export), order.by = Date)
@@ -876,7 +1086,7 @@ GB_exports_xts_num<-as.numeric(GB_exports_xts["2015/"],na.rm = TRUE)
 GB_sum_export<-data.frame(NA, nrow=length(index(GB_exports_xts["2015/"])))
 
 for (i in 1:length(index(GB_exports_xts["2015/"]))) {
-  GB_sum_export[i]<-sum(as.numeric(GB_exports_xts[i,2:ncol(GB_exports_xts)]),na.rm = TRUE)
+  GB_sum_export[i]<-sum(as.numeric(GB_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 GB_sum_export<-as.xts(t(GB_sum_export), order.by = Date)
@@ -894,7 +1104,7 @@ NI_exports_xts_num<-as.numeric(NI_exports_xts["2015/"],na.rm = TRUE)
 NI_sum_export<-data.frame(NA, nrow=length(index(NI_exports_xts["2015/"])))
 
 for (i in 1:length(index(NI_exports_xts["2015/"]))) {
-  NI_sum_export[i]<-sum(as.numeric(NI_exports_xts[i,2:ncol(NI_exports_xts)]),na.rm = TRUE)
+  NI_sum_export[i]<-sum(as.numeric(NI_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 NI_sum_export<-as.xts(t(NI_sum_export), order.by = Date)
@@ -912,7 +1122,7 @@ SA_exports_xts_num<-as.numeric(SA_exports_xts["2015/"],na.rm = TRUE)
 SA_sum_export<-data.frame(NA, nrow=length(index(SA_exports_xts["2015/"])))
 
 for (i in 1:length(index(SA_exports_xts["2015/"]))) {
-  SA_sum_export[i]<-sum(as.numeric(SA_exports_xts[i,2:ncol(SA_exports_xts)]),na.rm = TRUE)
+  SA_sum_export[i]<-sum(as.numeric(SA_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 SA_sum_export<-as.xts(t(SA_sum_export), order.by = Date)
@@ -928,7 +1138,7 @@ OTHER_EU_exports_xts_num<-as.numeric(OTHER_EU_exports_xts["2015/"],na.rm = TRUE)
 OTHER_EU_sum_export<-data.frame(NA, nrow=length(index(OTHER_EU_exports_xts["2015/"])))
 
 for (i in 1:length(index(OTHER_EU_exports_xts["2015/"]))) {
-  OTHER_EU_sum_export[i]<-sum(as.numeric(OTHER_EU_exports_xts[i,2:ncol(OTHER_EU_exports_xts)]),na.rm = TRUE)
+  OTHER_EU_sum_export[i]<-sum(as.numeric(OTHER_EU_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 OTHER_EU_sum_export<-as.xts(t(OTHER_EU_sum_export), order.by = Date)
@@ -944,7 +1154,7 @@ OTHER_exports_xts_num<-as.numeric(OTHER_exports_xts["2015/"],na.rm = TRUE)
 OTHER_sum_export<-data.frame(NA, nrow=length(index(OTHER_exports_xts["2015/"])))
 
 for (i in 1:length(index(OTHER_exports_xts["2015/"]))) {
-  OTHER_sum_export[i]<-sum(as.numeric(OTHER_exports_xts[i,2:ncol(OTHER_exports_xts)]),na.rm = TRUE)
+  OTHER_sum_export[i]<-sum(as.numeric(OTHER_exports_xts[i,2:ncol(Austria_exports_xts)]),na.rm = TRUE)
 }
 
 OTHER_sum_export<-as.xts(t(OTHER_sum_export), order.by = Date)
@@ -1319,7 +1529,7 @@ kabble_format_table_short<-format_table1 %>% kbl(caption = "<center><strong>Tabl
 kabble_format_table_fix_email<-kabble_format_table_short %>% kableExtra::column_spec(ncol(summary_table)) %>%
   kableExtra::row_spec(nrow(summary_table)) %>%
   column_spec(ncol(summary_table),include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)-1]),"black",ifelse(summary_table[,ncol(summary_table)-1]<=0,"red",DOF_colours[1]))) %>%
-  column_spec(ncol(summary_table)+1,include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)]<=0), "red",DOF_colours[1]))  
+  column_spec(ncol(summary_table)+1,include_thead = FALSE, color = ifelse(is.na(summary_table[,ncol(summary_table)]<=0), "red",DOF_colours[1])) %>% as_image()  
 
 ```
 
@@ -1356,11 +1566,11 @@ kabble_format_table_MEDIUM_TERM<- kbl((MEDIUM_TERM_T),caption = "<center><strong
    kable_styling("striped", full_width = T)
 
 kabble_format_table_MEDIUM_TERM<-kabble_format_table_MEDIUM_TERM %>% kableExtra::column_spec(ncol(MEDIUM_TERM_T)) %>%
-  kableExtra::row_spec(nrow(MEDIUM_TERM_T))  
+  kableExtra::row_spec(nrow(MEDIUM_TERM_T))%>% as_image()  
 
 
 
-TEXT_THREE_MONTH<-conditional(last(THREE_MONTH_XTS))
+TEXT_THREE_MONTH<-conditional((THREE_MONTH_XTS[nrow(THREE_MONTH_XTS)]))
 TEXT_THREE_MONTH_PACE<-(as.numeric(THREE_MONTH_XTS[nrow(THREE_MONTH_XTS)])-as.numeric(THREE_MONTH_XTS[nrow(THREE_MONTH_XTS)-1])) %>% conditional_alt2()
 
 
@@ -1377,7 +1587,7 @@ SUMMARY_EXPORT_DATA_DOWNLOAD <- list('Short Term' =data.frame(index(SHORT_TERM),
 
 SUMMARY_EXPORT_DATA_DOWNLOAD$`Short Term`<-c("Date","Export Volume (M-o-M)","Export Value (M-o-M)","Import Value (M-o-M)","Export Volume (Y-o-Y)","Export Value (Y-o-Y)","Import Value (Y-o-Y)")
 
-SUMMARY_EXPORT_DATA_DOWNLOAD$`Medium Term`<-c("Date","Year to Date","Three Month Export Growth (Y-o-Y)","Six Month Export Growth (Y-o-Y)","Tweleve Month Export Growth (Y-o-Y)")
+SUMMARY_EXPORT_DATA_DOWNLOAD$`Medium Term`<-c("Date","Three Month Export Growth (Y-o-Y)","Six Month Export Growth (Y-o-Y)","Tweleve Month Export Growth (Y-o-Y)")
 
 
 write.xlsx(SUMMARY_EXPORT_DATA_DOWNLOAD, file = 'SUMMARY_EXPORT_DATA_DOWNLOAD.xlsx')
