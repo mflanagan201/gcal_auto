@@ -38,7 +38,7 @@ library(lubridate)
 
 cso_clear_cache() 
 
-
+print("all pacakges are loaded)
 DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
 
 growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
@@ -129,19 +129,19 @@ Three_month_yoy <- function(A){
   return(round(THREE_MONTH_GROWTH,2))
 }
 
-
-YTD <- function(x){
+print("YTD START")
+#YTD <- function(x){
   
-  CURRENTYEAR_YTD<-x[paste0("",index((last(x))) %>% year(),"")]
-  LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")]
+ # CURRENTYEAR_YTD<-x[paste0("",index((last(x))) %>% year(),"")]
+  #LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")]
  
-YTD_CURRENTYEAR<-NA
+#YTD_CURRENTYEAR<-NA
   
-  for(i in 1:length(CURRENTYEAR_YTD)){
-    YTD_CURRENTYEAR[i]<-((as.numeric(sum(CURRENTYEAR_YTD[1:i]))/as.numeric(sum(LASTYEAR[1:i])))-1)*100
-  } 
-  return(YTD_CURRENTYEAR)
-}
+ # for(i in 1:length(CURRENTYEAR_YTD)){
+ #   YTD_CURRENTYEAR[i]<-((as.numeric(sum(CURRENTYEAR_YTD[1:i]))/as.numeric(sum(LASTYEAR[1:i])))-1)*100
+ # } 
+ # return(YTD_CURRENTYEAR)
+#}
 
 
 
@@ -1131,7 +1131,7 @@ Export_Level<-data.frame(sum_6M_Total_LEVEL["2020/"],Date_level_6M[56:length(Dat
 colnames(Export_Level)<-c("sum_6M_Total_LEVEL","Date")
 
 
-EXPORT_YTD<-YTD(Total_Export_Country$TOTAL) %>% round(2)
+#EXPORT_YTD<-YTD(Total_Export_Country$TOTAL) %>% round(2)
 
 
 
@@ -1345,9 +1345,9 @@ THREE_MONTH_XTS<-as.xts(annual_growth_exports_threemonth$TOTAL,annual_growth_exp
 SIX_MONTH_XTS<-as.xts(annual_growth_exports_sixmonth$TOTAL,annual_growth_exports_sixmonth$Date_6MA_Growth)
 TWELEVE_MONTH_XTS<-as.xts(annual_growth_exports_twelevemonth$TOTAL,annual_growth_exports_twelevemonth$Date_12MA_Growth)
 
-MEDIUM_TERM<-merge(EXPORT_YTD,THREE_MONTH_XTS,SIX_MONTH_XTS,TWELEVE_MONTH_XTS) %>% .["2024-01-01/"] 
+MEDIUM_TERM<-merge(THREE_MONTH_XTS,SIX_MONTH_XTS,TWELEVE_MONTH_XTS) %>% .["2024-01-01/"] 
 MEDIUM_TERM_T<-MEDIUM_TERM %>% t()
-rownames(MEDIUM_TERM_T)<-c("Year to Date (y-o-y)","Three month (y-o-y)", "Six month (y-o-y)", "Tweleve month (y-o-y)")
+rownames(MEDIUM_TERM_T)<-c("Three month (y-o-y)", "Six month (y-o-y)", "Tweleve month (y-o-y)")
 colnames(MEDIUM_TERM_T)<-format(as.Date(colnames(MEDIUM_TERM_T)),"%b-%Y")
 
 
@@ -1371,7 +1371,7 @@ SHORT_TERM<-((merge(monthly_growth_exports_vol,monthly_growth_exports_val,monthl
 colnames(SHORT_TERM)<-c("Export Volume (M-o-M)","Export Value (M-o-M)","Import Value (M-o-M)","Export Volume (Y-o-Y)","Export Value (Y-o-Y)","Import Value (Y-o-Y)")
 
 
-Medium_TERM_DATA<-merge(EXPORT_YTD,THREE_MONTH_XTS,SIX_MONTH_XTS,TWELEVE_MONTH_XTS)
+Medium_TERM_DATA<-merge(THREE_MONTH_XTS,SIX_MONTH_XTS,TWELEVE_MONTH_XTS)
 
 SUMMARY_EXPORT_DATA_DOWNLOAD <- list('Short Term' =data.frame(index(SHORT_TERM),SHORT_TERM),'Medium Term' =data.frame(index(Medium_TERM_DATA),Medium_TERM_DATA))
 
