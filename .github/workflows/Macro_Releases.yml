@@ -61,6 +61,8 @@ jobs:
        git config --local user.name "mflanagan201"
        git add .
        git commit -m "Add Inflation_contributions_graph_data.XLSX, Waterfall_graph_data.XLSX, and trimmed_graph_data.XLSX"
+       git commit -m "Add SUMMARY_EXPORT_DATA_DOWNLOAD.XLSX and EXPORT_DATA_DOWNLOAD_ALL.XLSX"
+
        git pull --rebase origin main # Use rebase to avoid a merge commit
        # Resolve any conflicts that may arise during the pull
        git push
