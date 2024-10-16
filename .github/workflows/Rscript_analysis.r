@@ -268,7 +268,6 @@ IMF_URL_download<-read_html(
   c("https://www.imf.org/en/publications/weo")
 )
 
-
 IMF_Schedule_table<-IMF_URL_download %>% html_nodes(xpath='/html/body/div[3]/main/article/div[3]/div[2]')   %>% html_text()
 IMF_Schedule_table_2<-IMF_Schedule_table[[1]] %>% stringr::str_split("[\r\n]")   %>% data.frame()
 
@@ -288,7 +287,7 @@ for(i in 1:nrow(IMF_Schedule_table_2)){
 
 
 for(i in 1:nrow(IMF_Schedule_table_2)){
-  if(IMF_Schedule_table_2[i,1] %like any% c("%World Economic Outlook Update%")){
+  if(IMF_Schedule_table_2[i,1] %like any% c("%World Economic Outlook%")){
     RELEASE_IMF[i,1]<-IMF_Schedule_table_2[i,1]
     RELEASE_IMF[i,2]<-IMF_Schedule_table_2[i+8,1]
   } 
@@ -329,8 +328,8 @@ EVENTS_IMF <- EVENTS_IMF %>%
 ########
 cat("EC EVENT CREATED")
 
-EVENTS_EC = data.frame(DTSTART = c("2024-02-15 10:00:00 GMT"),
-                       DTEND = c("2024-02-15 10:00:01 GMT"),
+EVENTS_EC = data.frame(DTSTART = c("2024-11-15 10:00:00 GMT"),
+                       DTEND = c("2024-11-15 10:00:01 GMT"),
                        SUMMARY = c("EC Economic Forecast, Winter 2024"),
                        LOCATION = c("European Commission"),
                        transparent=TRUE)
