@@ -465,7 +465,7 @@ CSO_event <- CSO_event %>%
 
 event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
 
-event_all = subset(event_all, !(SUMMARY %like any% c("%Household Digital Consumer Behaviour%",
+event_all = subset(event_all, !(SUMMARY %like any% c("%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
 "%Hospitality: A Value Chain Analysis%",
 "%Internet Coverage and Usage in Ireland%",
 "%Press Statement Older Persons Information Hub%","%Education and Other Outcomes for SUSI Support Recipients%","%Census Pilot Survey%",
@@ -793,7 +793,7 @@ smtp <- emayili::server(host = "smtp.gmail.com",
 
 Body_weekly_email<-emayili::envelope(
   to=c("michael.flanagan@finance.gov.ie"
-  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","colm.roche@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Brendan.O'Connor@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie"),
+  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie"),
   
   from="mflanagan201@gmail.com",
   subject = "Weekly Economic Calendar"
