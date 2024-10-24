@@ -465,7 +465,7 @@ CSO_event <- CSO_event %>%
 
 event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
 
-event_all = subset(event_all, !(SUMMARY %like any% c("%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
+event_all = subset(event_all, !(SUMMARY %like any% c("%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
 "%Hospitality: A Value Chain Analysis%",
 "%Internet Coverage and Usage in Ireland%",
 "%Press Statement Older Persons Information Hub%","%Education and Other Outcomes for SUSI Support Recipients%","%Census Pilot Survey%",
