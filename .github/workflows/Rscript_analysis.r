@@ -349,95 +349,58 @@ EVENTS_EC <- EVENTS_EC %>%
 
 
 
-#CENTRAL_BANK_SCHEDULE<-read_html("https://www#.dailyfx.com/central-bank-calendar")
-#CENTRAL_BANK_SCHEDULE_table<-CENTRAL_BANK_SCHEDULE #%>% html_nodes("aside")
-#FED_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SC#HEDULE_table[[1]])   %>% html_text() %>% #stringr::str_split("\n") %>% .[[1]]   %>% #as.data.frame()
-#ECB_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SC#HEDULE_table[[2]])   %>% html_text() %>% #stringr::str_split("\n") %>% .[[1]] %>% #data.frame()
-#BOE_CENTRAL_BANK_SCHEDULE_table2<-(CENTRAL_BANK_SC#HEDULE_table[[3]])   %>% html_text() %>% #stringr::str_split("\n") %>% .[[1]] %>% #data.frame()
+Monetary_Meeting<-read_html(c("https://www.cbrates.com/meetings.htm")) %>% html_table() %>% .[[3]] %>% data.frame()
 
-#FED_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matri#x(NA,nrow=nrow(FED_CENTRAL_BANK_SCHEDULE_table2),n#col=1))
-#ECB_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matri#x(NA,nrow=nrow(ECB_CENTRAL_BANK_SCHEDULE_table2),n#col=1))
-#BOE_CENTRAL_BANK_SCHEDULE_table3<-data.frame(matri#x(NA,nrow=nrow(BOE_CENTRAL_BANK_SCHEDULE_table2),n#col=1))
+RELEASE_Monetary_Meeting<-data.frame(matrix(NA,nrow=nrow(Monetary_Meeting),ncol=2))
 
 
-
-#for(i in #1:length(FED_CENTRAL_BANK_SCHEDULE_table2[[1]])){
-#  if(FED_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
-#FED_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(FED_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
-#  }
-
-#  if(ECB_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
-#ECB_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(ECB_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
-#  }
-
-#  if(BOE_CENTRAL_BANK_SCHEDULE_table2[[1]][i]!="")#{
-#BOE_CENTRAL_BANK_SCHEDULE_table3[i,1]<-paste(BOE_C#ENTRAL_BANK_SCHEDULE_table2[[1]][i])
-#  }
-#}
-
-#Central_Banks_Schedules<-data.frame(na.omit(FED_CE#NTRAL_BANK_SCHEDULE_table3),na.omit(ECB_CENTRAL_BA#NK_SCHEDULE_table3),na.omit(BOE_CENTRAL_BANK_SCHED#ULE_table3))
-#colnames(Central_Banks_Schedules)<-c("FED","ECB","#Bank of England")
-
-#for (i in 1:nrow(Central_Banks_Schedules)+1){
-
-#Central_Banks_Schedules[i,1]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,1] ," #",Central_Banks_Schedules[i+1,1]," #2024"),orders="%d %m %Y"))
-#Central_Banks_Schedules[i,2]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,2] ," #",Central_Banks_Schedules[i+1,2]," #2024"),orders="%d %m %Y"))
-#Central_Banks_Schedules[i,3]<-paste(parse_date_tim#e(paste0(Central_Banks_Schedules[i,3] ," #",Central_Banks_Schedules[i+1,3]," #2024"),orders="%d %m %Y"))
-
-#}
-
-#Central_Banks_Schedules$FED<- #as.Date(Central_Banks_Schedules$FED,"%Y-%m-%d")
-#Central_Banks_Schedules$ECB<- #as.Date(Central_Banks_Schedules$ECB,"%Y-%m-%d")
-#Central_Banks_Schedules$`Bank of England`<- #as.Date(Central_Banks_Schedules$`Bank of #England`,"%Y-%m-%d")
-
-#Central_Banks_Schedules<-data.frame(na.omit(Central#_Banks_Schedules))
-#colnames(Central_Banks_Schedules)<-c("FED Monetary #Decision (FOMC)","ECB Monetary Decision","BOE #Monetary Decision")
-
-FED_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(c("18/09/2024"),"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-ECB_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(c("12/09/2024"),"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-BOE_DECISIONS<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(c("19/09/2024"),"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
-
-
-FED_Monetary_Decision = data.frame(DTSTARTv = FED_DECISIONS,
-                                   DTEND = FED_DECISIONS+1,
-                                   SUMMARY = c("FED Monetary Policy Decision (FOMC)"),
-                                   LOCATION = c("US Federal Reserve"),
-                                   transparent=TRUE)
-
-
-FED_Monetary_Decision <- FED_Monetary_Decision %>%
-  mutate(UID = replicate(nrow(FED_Monetary_Decision), ic_guid()))
-
-
-
-ECB_Monetary_Decision = data.frame(DTSTARTv = ECB_DECISIONS,
-                                   DTEND = ECB_DECISIONS+1,
-                                   SUMMARY = c("ECB Monetary Policy Decision"),
-                                   LOCATION = c("European Central Bank"),
-                                   transparent=TRUE)
-
-
-ECB_Monetary_Decision <- ECB_Monetary_Decision %>%
-  mutate(UID = replicate(nrow(ECB_Monetary_Decision), ic_guid()))
+for(i in 1:nrow(Monetary_Meeting)){
+  if(Monetary_Meeting[i,3] %like any% c("%Eurozone: European Central Bank%")){
+    RELEASE_Monetary_Meeting[i,1]<-c("ECB: Monetary Policy Decision")
+    RELEASE_Monetary_Meeting[i,2]<-Monetary_Meeting[i,2] 
+  }
+  
+  if(Monetary_Meeting[i,3] %like any% c("%USA: Federal Reserve%")){
+    RELEASE_Monetary_Meeting[i,1]<-c("US FED: Monetary Policy Decision")
+    RELEASE_Monetary_Meeting[i,2]<-Monetary_Meeting[i,2] 
+  }
+  
+  if(Monetary_Meeting[i,3] %like any% c("%United Kingdom: Bank of England%")){
+    RELEASE_Monetary_Meeting[i,1]<-c("Bank of England: Monetary Policy Decision")
+    RELEASE_Monetary_Meeting[i,2]<-Monetary_Meeting[i,2] 
+  }
+}
 
 
 
 
+RELEASE_Monetary_Meeting<-na.omit(RELEASE_Monetary_Meeting)
+colnames(RELEASE_Monetary_Meeting)<-c("Release", "Date")
 
-BOE_Monetary_Decision = data.frame(DTSTARTv = BOE_DECISIONS,
-                                   DTEND = BOE_DECISIONS+1,
-                                   SUMMARY = c("Bank of England Monetary Policy Decision"),
-                                   LOCATION = c("Bank of England "),
-                                   transparent=TRUE)
+if(is.na(RELEASE_Monetary_Meeting$Release[1])){
+  EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
+                          DTEND = c("2024-12-01 10:00:00 GMT"),
+                          SUMMARY = c("NA"),
+                          LOCATION = c("ECB"),
+                          transparent=TRUE)
+
+} else {
+  RELEASE_Monetary_Meeting$Date<-parse_date_time2(paste(RELEASE_Monetary_Meeting$Date,"2024"), orders="%b %d %Y") 
+  
+  EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = RELEASE_Monetary_Meeting$Date,
+                          DTEND = RELEASE_Monetary_Meeting$Date+1,
+                          SUMMARY =RELEASE_Monetary_Meeting$Release ,
+                          LOCATION = c(str_remove(RELEASE_Monetary_Meeting$Release,": Monetary Policy Decision")),
+                          transparent=TRUE)
+  
+}
 
 
-BOE_Monetary_Decision <- BOE_Monetary_Decision %>%
-  mutate(UID = replicate(nrow(BOE_Monetary_Decision), ic_guid()))
+EVENTS_RELEASE_Monetary_Meeting <- EVENTS_RELEASE_Monetary_Meeting %>%
+  mutate(UID = replicate(nrow(EVENTS_RELEASE_Monetary_Meeting), ic_guid()))
 
 
-
-Monetary_Policy_Decisions<-rbind(BOE_Monetary_Decision,FED_Monetary_Decision,ECB_Monetary_Decision)
-colnames(Monetary_Policy_Decisions)<-c("DTSTART",     "DTEND" ,      "SUMMARY"  ,   "LOCATION"    ,"transparent" ,"UID")
+colnames(EVENTS_RELEASE_Monetary_Meeting)<-c("DTSTART",     "DTEND" ,      "SUMMARY"  ,   "LOCATION"    ,"transparent" ,"UID")
 
 
 
@@ -463,7 +426,7 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
   mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-event_all<-rbind(Monetary_Policy_Decisions,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
+event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
 
 event_all = subset(event_all, !(SUMMARY %like any% c("%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
 "%Hospitality: A Value Chain Analysis%",
