@@ -11,7 +11,7 @@ library(xts)
 library(calendar)
 #DescTools is no longer needed
 library(splitstackshape)
-library(pdftools)
+#library(pdftools)
 library(rvest)
 library(lubridate)
 library(stringr)
@@ -49,57 +49,57 @@ EUROSTAT_calendar<-ical(EUROSTAT_cal_short)
 
 
 
-PMI_URL_download<-pdf_text("PMI_2024.pdf") %>% .[[1]] %>% stringr::str_split("\n") %>% unlist() %>% matrix()  
-PMI_URL_download_PG2<-pdf_text("PMI_2024.pdf") %>% .[[2]] %>% stringr::str_split("\n") %>% unlist() %>% matrix()  
+#PMI_URL_download<-pdf_text("PMI_2024.pdf") %>% .#[[1]] %>% stringr::str_split("\n") %>% #unlist() %>% matrix()  
+#PMI_URL_download_PG2<-pdf_text("PMI_2024.pdf") #%>% .[[2]] %>% stringr::str_split("\n") %>% #unlist() %>% matrix()  
 
-PMI_URL_download_PG1<-PMI_URL_download[3:nrow(PMI_URL_download)] %>% data.frame() 
-PMI_URL_download_PG2<-PMI_URL_download_PG2[3:nrow(PMI_URL_download)] %>% data.frame() 
-
-
-
-PMI_URL_download_ALL<-rbind(PMI_URL_download_PG1,PMI_URL_download_PG2)
+#PMI_URL_download_PG1<-PMI_URL_download[3:nrow(PMI_#URL_download)] %>% data.frame() 
+#PMI_URL_download_PG2<-PMI_URL_download_PG2[3:nrow(#PMI_URL_download)] %>% data.frame() 
 
 
+
+#PMI_URL_download_ALL<-rbind(PMI_URL_download_PG1,P#MI_URL_download_PG2)
 
 
 
 
-Date_PMI<-substr(PMI_URL_download_ALL[[1]],1,23) %>% as.Date(format = "%d %b") %>% as.data.frame()
-Name_PMI<-substr(PMI_URL_download_ALL[[1]],100,130) %>% as.data.frame()
 
-PMI_DF<-data.frame(Date_PMI,Name_PMI) %>% na.omit() 
-colnames(PMI_DF)<-c("Date", "Release")
-PMI_XTS<-as.xts(PMI_DF,PMI_DF$Date)
-PMI_XTS$Location<-"S&P Global"
 
-RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XTS),ncol=3))
+#Date_PMI<-substr(PMI_URL_download_ALL[[1]],1,23) #%>% as.Date(format = "%d %b") %>% as.data.frame()
+#Name_PMI<-substr(PMI_URL_download_ALL[[1]],100,130) #%>% as.data.frame()
+
+#PMI_DF<-data.frame(Date_PMI,Name_PMI) %>% #na.omit() 
+#colnames(PMI_DF)<-c("Date", "Release")
+#PMI_XTS<-as.xts(PMI_DF,PMI_DF$Date)
+#PMI_XTS$Location<-"S&P Global"
+
+#RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XT#S),ncol=3))
 
 #Using grepl with appropriate regex
-for(i in 1:nrow(PMI_XTS)){
- if(grepl("Ireland Manufacturing PMI|Ireland Services PMI|Ireland Construction PMI", PMI_XTS$Release[i], ignore.case = TRUE)){
-  RELEASE_PMI[i,]<-PMI_XTS[i,]
- } else {
-  RELEASE_PMI[i,] <- NA
- }
-}
+#for(i in 1:nrow(PMI_XTS)){
+# if(grepl("Ireland Manufacturing PMI|Ireland #Services PMI|Ireland Construction PMI", #PMI_XTS$Release[i], ignore.case = TRUE)){
+#  RELEASE_PMI[i,]<-PMI_XTS[i,]
+# } else {
+#  RELEASE_PMI[i,] <- NA
+# }
+#}
 
 
-RELEASE_PMI<-na.omit(RELEASE_PMI)
-colnames(RELEASE_PMI)<-c("Date","Release","Location")
+#RELEASE_PMI<-na.omit(RELEASE_PMI)
+#colnames(RELEASE_PMI)<-c("Date","Release","Locatio#n")
 
 
-RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_PMI$Date,"%Y-%m-%d")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+#RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as#.POSIXct.Date(as.Date(RELEASE_PMI$Date,"%Y-%m-%d")#), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = #c("GMT"))
 
-PMI_RELEASE = data.frame(DTSTART = RELEASE_PMI_DATE,
-             DTEND = RELEASE_PMI_DATE+1,
-             SUMMARY =RELEASE_PMI$Release ,
-             LOCATION = RELEASE_PMI$Location,
-             transparent=TRUE)
+#PMI_RELEASE = data.frame(DTSTART = #RELEASE_PMI_DATE,
+#             DTEND = RELEASE_PMI_DATE+1,
+ #            SUMMARY =RELEASE_PMI$Release ,
+#             LOCATION = RELEASE_PMI$Location,
+#             transparent=TRUE)
 
 
 
-PMI_RELEASE<-PMI_RELEASE %>%
- mutate(UID = replicate(nrow(PMI_RELEASE), ic_guid()))
+#PMI_RELEASE<-PMI_RELEASE %>%
+# mutate(UID = replicate(nrow(PMI_RELEASE), #ic_guid()))
 
 
 
@@ -426,7 +426,7 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
  mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,PMI_RELEASE,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
+event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,EVENTS_IMF,EVENTS_OECD,EVENTS_EC)
 
 #Using grepl with appropriate regex and negative lookahead assertion for efficiency
 exclude_terms <- paste0("\\b(", paste(c("%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
