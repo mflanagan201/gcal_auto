@@ -17,7 +17,7 @@ library(lubridate)
 library(stringr)
 library(rlang)
 library(purrr)
-library(httpuv)
+#library(httpuv)
 library(curl)
 
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
