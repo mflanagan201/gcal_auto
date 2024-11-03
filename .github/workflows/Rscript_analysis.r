@@ -765,7 +765,7 @@ Body_weekly_email<-emayili::envelope(
   from="mflanagan201@gmail.com",
   subject = "Weekly Economic Calendar"
 ) %>%
-  emayili::render(' <span class="text-center" style="color:#A3915E"> <left> <font size="4"> *Hi, The following economic releases will be released next week.* </font> </left> </span>
+  emayili::render(' <span class="text-center" style="color:#A3915E"> <left> <font size="4"> *Hi, The following economic releases will be released this week.* </font> </left> </span>
 
 
                 
@@ -848,7 +848,7 @@ Body_weekly_email<-emayili::envelope(
 ')
 
 
-if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Fri"))){
+if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Mon"))){
   smtp(Body_weekly_email)  
 }
 
