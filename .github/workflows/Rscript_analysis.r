@@ -634,7 +634,7 @@ if(is.data.frame(data.frame(events_data$items))){
 
 NEXT_WEEK_release<-NA
 for(i in 1:nrow(CALENDAR_ALL_XTS)){
-  if(index(CALENDAR_ALL_XTS$DTSTART[i]) %like any% (seq(from=Sys.Date()+1,to=Sys.Date()+7, by="day"))){
+  if(index(CALENDAR_ALL_XTS$DTSTART[i]) %like any% (seq(from=Sys.Date(),to=Sys.Date()+6, by="day"))){
     NEXT_WEEK_release[i]<-paste0("* ",format(index(CALENDAR_ALL_XTS$DTSTART[i]),"%A"),": ",CALENDAR_ALL_XTS$LOCATION[i]," - " ,CALENDAR_ALL_XTS$SUMMARY[i]) 
   }
 }
