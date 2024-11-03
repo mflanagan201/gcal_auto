@@ -72,7 +72,7 @@ colnames(PMI_DF)<-c("Date", "Release")
 PMI_XTS<-as.xts(PMI_DF,PMI_DF$Date)
 PMI_XTS$Location<-"S&P Global"
 
-RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XT#S),ncol=3))
+RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XTS),ncol=3))
 
 Using grepl with appropriate regex
 for(i in 1:nrow(PMI_XTS)){
