@@ -9,7 +9,7 @@ library(huxtable)
 library(httr2)
 library(xts)
 library(calendar)
-#DescTools is no longer needed
+library(DescTools)
 library(splitstackshape)
 #library(pdftools)
 library(rvest)
