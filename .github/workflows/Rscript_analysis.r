@@ -85,7 +85,7 @@ if(grepl("Ireland Manufacturing PMI|Ireland Services PMI|Ireland Construction PM
 
 
 RELEASE_PMI<-na.omit(RELEASE_PMI)
-colnames(RELEASE_PMI)<-c("Date","Release","Locatio#n")
+colnames(RELEASE_PMI)<-c("Date","Release","Location")
 
 
 RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_PMI$Date,"%Y-%m-%d")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
