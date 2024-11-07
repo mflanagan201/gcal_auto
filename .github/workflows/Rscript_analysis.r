@@ -330,7 +330,7 @@ cat("EC EVENT CREATED")
 
 EVENTS_EC = data.frame(DTSTART = c("2024-11-15 10:00:00 GMT"),
             DTEND = c("2024-11-15 10:00:01 GMT"),
-            SUMMARY = c("EC Economic Forecast, Winter 2024"),
+            SUMMARY = c("EC Economic Forecast, Autumn 2024"),
             LOCATION = c("European Commission"),
             transparent=TRUE)
 
@@ -428,7 +428,7 @@ CSO_event <- CSO_event %>%
 
 event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,EVENTS_IMF,EVENTS_OECD,EVENTS_EC,PMI_RELEASE)
 
-event_all =subset(event_all, !(SUMMARY %like any% c("%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
+event_all =subset(event_all, !(SUMMARY %like any% c("%Educational Attainment%","%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
                                                     "%Hospitality: A Value Chain Analysis%",
                                                     "%Internet Coverage and Usage in Ireland%",
                                                     "%Press Statement Older Persons Information Hub%","%Education and Other Outcomes for SUSI Support Recipients%","%Census Pilot Survey%",
@@ -634,7 +634,7 @@ if(is.data.frame(data.frame(events_data$items))){
 
 NEXT_WEEK_release<-NA
 for(i in 1:nrow(CALENDAR_ALL_XTS)){
-  if(index(CALENDAR_ALL_XTS$DTSTART[i]) %like any% (seq(from=Sys.Date(),to=Sys.Date()+6, by="day"))){
+  if(index(CALENDAR_ALL_XTS$DTSTART[i]) %like any% (seq(from=Sys.Date()+1,to=Sys.Date()+7, by="day"))){
     NEXT_WEEK_release[i]<-paste0("* ",format(index(CALENDAR_ALL_XTS$DTSTART[i]),"%A"),": ",CALENDAR_ALL_XTS$LOCATION[i]," - " ,CALENDAR_ALL_XTS$SUMMARY[i]) 
   }
 }
@@ -765,7 +765,7 @@ Body_weekly_email<-emayili::envelope(
   from="mflanagan201@gmail.com",
   subject = "Weekly Economic Calendar"
 ) %>%
-  emayili::render(' <span class="text-center" style="color:#205E55"> <left> <font size="4"> *Hi, The following economic releases will be released this week.* </font> </left> </span>
+  emayili::render(' <span class="text-center" style="color:#205E55"> <left> <font size="4"> *Hi, The following indicators will be released next week.* </font> </left> </span>
 
 
                 
