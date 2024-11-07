@@ -765,7 +765,7 @@ Body_weekly_email<-emayili::envelope(
   from="mflanagan201@gmail.com",
   subject = "Weekly Economic Calendar"
 ) %>%
-  emayili::render(' <span class="text-center" style="color:#A3915E"> <left> <font size="4"> *Hi, The following economic releases will be released this week.* </font> </left> </span>
+  emayili::render(' <span class="text-center" style="color:#205E55"> <left> <font size="4"> *Hi, The following economic releases will be released this week.* </font> </left> </span>
 
 
                 
@@ -848,14 +848,14 @@ Body_weekly_email<-emayili::envelope(
 ')
 
 
-if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Mon"))){
+if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Fri"))){
   smtp(Body_weekly_email)  
 }
 
 
 
 
-#"Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Brendan.O'Connor@finance.gov.ie","Shane.Dunne@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie", "Sarah.Hogan@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie"
+
 
 
 
