@@ -70,6 +70,8 @@ if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CAL
   }
 }
 
+
+
 print("running code from now")
         Body_EXTERNAL_TRADE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
@@ -79,30 +81,30 @@ subject = "External Trade Release!"
         # Render R Markdown from a file.
         emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
     
-      smtp(Body_EXTERNAL_TRADE)  
+     # smtp(Body_EXTERNAL_TRADE)  
     
     
 
 
 
-#for(i in 1:nrow(CALENDAR_ALL_short)){
-  #if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[#i],format="%Y-%m-%d") && #CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods #Exports and Imports%")){
+for(i in 1:nrow(CALENDAR_ALL_short)){
+  if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
     
-#        Body_EXTERNAL_TRADE<-emayili::envelope(
- #         from = "mflanagan201@gmail.com",
-#         to=c("michael.flanagan@finance.gov.ie"),
-#bcc=c("Ian.Power@finance.gov.ie","Oisin#.Tarrant@finance.gov.ie","Daire.DeHora@finance.gov#.ie"), subject = "External Trade Release!"
-#      ) %>%
-#        # Render R Markdown from a file.
- #       emayili::render(".github/workflows/#Monthly_External_Trade_Beta_5.Rmd")
+        Body_EXTERNAL_TRADE<-emayili::envelope(
+          from = "mflanagan201@gmail.com",
+        to=c("michael.flanagan@finance.gov.ie"),
+bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@finance.gov.ie"), subject = "External Trade Release!"
+    ) %>%
+       # Render R Markdown from a file.
+      emayili::render(".github/workflows/#Monthly_External_Trade_Beta_5.Rmd")
     
-#      smtp(Body_EXTERNAL_TRADE)  
+     smtp(Body_EXTERNAL_TRADE)  
     
     
-#  } else { 
+ } else { 
     
-#    print("Don't run code")
-#  }
-#}
+   print("Don't run code")
+  }
+}
 
 
