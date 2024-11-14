@@ -161,7 +161,7 @@ Date<-seq(as.Date("2014-10-01"), by="month",length.out=NROW(Ire_Exports))
 Ireland_Exports<-as.xts(Ire_Exports, order.by = Date)
 colnames(Ireland_Exports)<-Ireland_Exports["2014-12-01"]
 
-Date_vol<-seq(as.Date("1969-11-01"), by="month",length.out=NROW(Ire_Exports_SA_vol)) 
+Date_vol<-seq(as.Date("1970-01-01"), by="month",length.out=NROW(Ire_Exports_SA_vol)) 
 Date_value<-seq(as.Date("1969-11-01"), by="month",length.out=NROW(Ire_Exports_SA))
 
 current_date<-format(max(Date_value), "%B %Y")
