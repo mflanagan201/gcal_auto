@@ -1585,9 +1585,7 @@ Medium_TERM_DATA<-merge(THREE_MONTH_XTS,SIX_MONTH_XTS,TWELEVE_MONTH_XTS)
 
 SUMMARY_EXPORT_DATA_DOWNLOAD <- list('Short Term' =data.frame(index(SHORT_TERM),SHORT_TERM),'Medium Term' =data.frame(index(Medium_TERM_DATA),Medium_TERM_DATA))
 
-SUMMARY_EXPORT_DATA_DOWNLOAD$`Short Term`<-c("Date","Export Volume (M-o-M)","Export Value (M-o-M)","Import Value (M-o-M)","Export Volume (Y-o-Y)","Export Value (Y-o-Y)","Import Value (Y-o-Y)")
 
-SUMMARY_EXPORT_DATA_DOWNLOAD$`Medium Term`<-c("Date","Three Month Export Growth (Y-o-Y)","Six Month Export Growth (Y-o-Y)","Tweleve Month Export Growth (Y-o-Y)")
 
 
 write.xlsx(SUMMARY_EXPORT_DATA_DOWNLOAD, file = 'SUMMARY_EXPORT_DATA_DOWNLOAD.xlsx')
