@@ -161,8 +161,8 @@ Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"
 RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity:", " ")
 
 if(is.na(Date_CB[1])){
- event_CB = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-            DTEND = c("2024-12-01 10:00:00 GMT"),
+ event_CB = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+            DTEND = c("2025-12-01 10:00:00 GMT"),
             SUMMARY = "NA",
             LOCATION = c("Central Bank of Ireland"),
             transparent=TRUE)
@@ -223,8 +223,8 @@ event_CB <- event_CB %>%
 #
 #
 #if(is.na(RELEASE_OECD)){
-# EVENTS_OECD = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-#            DTEND = c("2024-12-01 #10:00:00 GMT"),
+# EVENTS_OECD = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+#            DTEND = c("2025-12-01 #10:00:00 GMT"),
 #            SUMMARY = "NA",
 #            LOCATION = c("OECD"),
 #            transparent=TRUE)
@@ -300,8 +300,8 @@ cat("IMF BLANK event created")
 RELEASE_IMF<-na.omit(RELEASE_IMF)
 
 if(is.na(RELEASE_IMF$Release[1])){
- EVENTS_IMF = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-             DTEND = c("2024-12-01 10:00:00 GMT"),
+ EVENTS_IMF = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+             DTEND = c("2025-12-01 10:00:00 GMT"),
              SUMMARY = c("NA"),
              LOCATION = c("IMF"),
              transparent=TRUE)
@@ -378,8 +378,8 @@ RELEASE_Monetary_Meeting<-na.omit(RELEASE_Monetary_Meeting)
 colnames(RELEASE_Monetary_Meeting)<-c("Release", "Date")
 
 if(is.na(RELEASE_Monetary_Meeting$Release[1])){
- EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = c("2024-12-01 10:00:00 GMT"),
-             DTEND = c("2024-12-01 10:00:00 GMT"),
+ EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+             DTEND = c("2025-12-01 10:00:00 GMT"),
              SUMMARY = c("NA"),
              LOCATION = c("ECB"),
              transparent=TRUE)
