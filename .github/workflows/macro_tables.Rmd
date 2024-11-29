@@ -38,6 +38,8 @@ library(kableExtra)
 library(readxl)
 library(eurostat)
 
+print("code 1")
+
 DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
 
 growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
@@ -175,7 +177,7 @@ EUROSTAT_INFLATION_GROWTH<-growth(EUROSTAT_INFLATION,12)
 
 
 
-
+print("code 2")
 
 
 
@@ -245,7 +247,7 @@ Date_Services_index_months<-seq(as.Date("2015-01-01"), length.out=(length(na.omi
 Services_Vol_INDEX_months<-na.omit(Services_Vol_INDEX_months) %>% na.omit() %>% as.xts(order.by=Date_Services_index_months)
 Services_Vol_M_Growth<-growth(Services_Vol_INDEX_months, freq=12) %>% round(1)
 
-
+print("code 3")
 Unemployment_Rate<- t(data.frame(subset(subset(subset(cso_get_data("MUM01"),Statistic=="Seasonally Adjusted Monthly Unemployment Rate"), Age.Group=="15 - 74 years"),Sex=="Both sexes"))) %>% as.numeric()  %>% na.omit()
 UR_Date_index<-seq(as.Date("1998-01-01"), by="month",length.out=NROW(Unemployment_Rate))
 Unemployment_Rate_XTS<-as.xts(Unemployment_Rate,order.by=UR_Date_index)
@@ -271,7 +273,7 @@ if(length(Unemployment_Rate_LFS_XTS)>=length(Unemployment_Rate_QUARTERLY)){
   Unemployment_Rate_QUARTERLY<-Unemployment_Rate_QUARTERLY
  }
 
-
+print("code 4")
 Average_Hourly_Earnings<- t(data.frame(subset(subset(subset(cso_get_data("EHQ03"),Statistic=="Average Hourly Earnings"),Economic.Sector.NACE.Rev.2 =="All NACE economic sectors"),Type.of.Employee =="All employees"))) %>% as.numeric() 
 Date_Average_Hourly_Earnings<-seq(as.Date("2008-01-01"), length.out=(length(na.omit(Average_Hourly_Earnings))), by="quarter")
 Average_Hourly_Earnings_XTS<-na.omit(Average_Hourly_Earnings) %>% na.omit() %>% as.xts(order.by=Date_Average_Hourly_Earnings)
@@ -377,7 +379,7 @@ POP<-c(4575,
 
 POPULATION<-POP %>% as.xts(., order.by=seq(as.Date("2011-01-01"), length.out=length(POP),by='quarter'))
 
-
+print("code 6")
 
 
 COE_PER_CAPITA_XTS<-COE_XTS["2011-04-01/"]/POPULATION$POP["2011-04-01/"]
@@ -471,7 +473,7 @@ EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH<-growth(EXTERNAL_TRADE_VAL_XTS_QUARTERLY
 
 
 
-
+print("code 7")
 
 
 VAT<-c(958313,328500,839274,263186,967608,298627,931211,325461,884810,313217,1071418	,288586	,1138525	,335986	,907584	,277126	,1007009	,288162	,982011	,317807	,930670	,314220	,1032967	,388394	,1156144	,396175	,919379	,
@@ -532,7 +534,7 @@ colnames(inflation_GROWTH)<- c("inflation")
 
 Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
 
-
+print("code 8")
 
 
 
