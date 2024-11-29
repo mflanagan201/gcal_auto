@@ -20,6 +20,7 @@ library(httpuv)
 library(csodata)
 library(gmailr)
 library(emayili)
+library(eurostat)
 
 CALENDAR_ALL_short<-read.csv("ECON_CAL.CSV")
 
@@ -108,3 +109,12 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
 }
 
 
+        MACRO_TABLE<-emayili::envelope(
+          from = "mflanagan201@gmail.com",
+        to=c("michael.flanagan@finance.gov.ie"),
+      subject = "[Auto-Email] Macroeconomic Tables"
+    ) %>%
+       # Render R Markdown from a file.
+      emayili::render(".github/workflows/macro_tables.Rmd")
+    
+     smtp(MACRO_TABLE)  
