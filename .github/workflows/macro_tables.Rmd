@@ -38,7 +38,7 @@ library(kableExtra)
 library(readxl)
 library(eurostat)
 library(webshot)
-
+webshot::install_phantomjs()
 print("code 1")
 
 DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
