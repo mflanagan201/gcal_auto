@@ -268,11 +268,13 @@ Date_Unemployment_Rate_LFS<-seq(as.Date("1998-01-01"), length.out=(length(na.omi
 Unemployment_Rate_LFS_XTS<-na.omit(Unemployment_Rate_LFS) %>% na.omit() %>% as.xts(order.by=Date_Unemployment_Rate_LFS)
 
 
-if(length(Unemployment_Rate_LFS_XTS)>=length(Unemployment_Rate_QUARTERLY)){   
+
+if(length(Unemployment_Rate_LFS_XTS)>=length(na.omit(Unemployment_Rate_QUARTERLY))){   
   Unemployment_Rate_QUARTERLY<-Unemployment_Rate_LFS_XTS 
 } else { 
   Unemployment_Rate_QUARTERLY<-Unemployment_Rate_QUARTERLY
  }
+
 
 print("code 4")
 Average_Hourly_Earnings<- t(data.frame(subset(subset(subset(cso_get_data("EHQ03"),Statistic=="Average Hourly Earnings"),Economic.Sector.NACE.Rev.2 =="All NACE economic sectors"),Type.of.Employee =="All employees"))) %>% as.numeric() 
@@ -587,7 +589,7 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
 temp_file2 <- tempfile(fileext = ".html")
 kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
 
-webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 850, zoom = 1.2)
+webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 880, zoom = 1.2)
 
 
 Date_95_QNA_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date("2030/10/01"), by="quarters")
