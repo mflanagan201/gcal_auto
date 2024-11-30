@@ -37,6 +37,7 @@ library(tframePlus)
 library(kableExtra)
 library(readxl)
 library(eurostat)
+library(webshot)
 
 print("code 1")
 
