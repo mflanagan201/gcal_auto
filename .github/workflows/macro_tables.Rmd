@@ -382,7 +382,7 @@ POPULATION<-POP %>% as.xts(., order.by=seq(as.Date("2011-01-01"), length.out=len
 print("code 6")
 
 
-COE_PER_CAPITA_XTS<-COE_XTS["2011-04-01/"]/POPULATION$POP["2011-04-01/"]
+COE_PER_CAPITA_XTS<-COE_XTS["2011-04-01/"]/POPULATION["2011-04-01/"]
 
 COE_XTS_Growth<-growth(COE_XTS, freq=4) %>% round(1)
 COE_PER_CAPITA_XTS_Growth<-growth(COE_PER_CAPITA_XTS, freq=4) %>% round(1)
@@ -395,7 +395,7 @@ GDI_XTS_Growth<-growth(GDI_XTS, freq=4)
 
 
 Deflated_GDI_GROWTH<-((1+(GDI_XTS_Growth["2000/"]/100))/(1+(HICP_QUARTERLY_GROWTH[index(GDI_XTS_Growth["2000/"])]/100))-1)*100 
-GDI_PER_CAPITA_XTS<-GDI_XTS["2011-04-01/"]/POPULATION$POP["2011-04-01/"]
+GDI_PER_CAPITA_XTS<-GDI_XTS["2011-04-01/"]/POPULATION["2011-04-01/"]
 GDI_PER_CAPITA_XTS_Growth<-growth(GDI_PER_CAPITA_XTS, freq=4) %>% round(1)
 Deflated_GDI_PER_CAPITA_XTS_Growth<-((1+(GDI_PER_CAPITA_XTS_Growth["2012/"]/100))/(1+(HICP_QUARTERLY_GROWTH[index(GDI_PER_CAPITA_XTS_Growth["2012/"])]/100))-1)*100 
 
@@ -597,7 +597,7 @@ Retail_Quarterly,
 ALL_CB_PAYMENTS_QUARTERLY,
 Services_Vol_INDEX,
 COE_XTS,
-POPULATION$POP,
+POPULATION,
 GDI_XTS,
 HH_Deposits_Quarterly,
 HICP_QUARTERLY,
