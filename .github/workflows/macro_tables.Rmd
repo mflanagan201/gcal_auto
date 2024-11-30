@@ -587,7 +587,7 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
 temp_file2 <- tempfile(fileext = ".html")
 kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
 
-webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 830, zoom = 1.2)
+webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 850, zoom = 1.2)
 
 
 Date_95_QNA_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date("2030/10/01"), by="quarters")
@@ -600,6 +600,7 @@ Services_Vol_INDEX,
 COE_XTS,
 POPULATION,
 GDI_XTS,
+Average_Hourly_Earnings_XTS,
 HH_Deposits_Quarterly,
 HICP_QUARTERLY,
 sr[,1],
@@ -612,7 +613,7 @@ EXTERNAL_TRADE_VOL_XTS_QUARTERLY,
 EXTERNAL_TRADE_VAL_XTS_QUARTERLY
 ) %>% data.frame() %>% .[101:nrow(.),] %>% cbind(Date_95_QNA_EXTEND,.)
 
-colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Services Index","Compensation of Employees","Population","Gross Disposable Income","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
 
 QUARTERLY_DATA_DOWNLOAD_ALL <- list('Quarterly Data Levels' =DOWNLOAD_QUARTERLY_DF)
 
