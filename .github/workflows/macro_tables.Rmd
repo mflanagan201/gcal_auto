@@ -109,6 +109,33 @@ colnames(GDP)<-c("GDP")
 GDP_Q_Annual_growth<-growth(GDP,freq=4) %>% round(1)
 
 
+EUROSTAT_GDP_FLASH<-get_eurostat("namq_10_gdp",  filters = list(
+    geo = "IE",
+    s_adj = "NSA",
+    unit = "CLV_I20",
+    na_item="B1GQ"
+  ),
+ time_format = "date", cache = FALSE) 
+
+
+EUROSTAT_GDP_FLASH<-EUROSTAT_GDP_FLASH %>% .$values %>% as.xts(order.by=as.Date(EUROSTAT_GDP_FLASH$time)) 
+
+EUROSTAT_GDP_FLASH_GROWTH<-growth(EUROSTAT_GDP_FLASH,4)
+
+
+if(length(EUROSTAT_GDP_FLASH_GROWTH["2022/"])>length(GDP_Q_Annual_growth["2022/"])){
+  GDP_Q_Annual_growth<-EUROSTAT_GDP_FLASH_GROWTH %>% round(2)
+} else {
+GDP_Q_Annual_growth<-GDP_Q_Annual_growth
+  
+}
+
+
+
+
+
+
+
 
 
 
@@ -589,7 +616,7 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
 temp_file2 <- tempfile(fileext = ".html")
 kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
 
-webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 880, zoom = 1.2)
+webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 900, zoom = 1.2)
 
 
 Date_95_QNA_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date("2030/10/01"), by="quarters")
