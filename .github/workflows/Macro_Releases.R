@@ -109,12 +109,23 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
 }
 
 
-        MACRO_TABLE<-emayili::envelope(
+
+
+WEEK<-seq(from=as.Date("02/12/2024", format=c('%d/%m/%Y')),to=as.Date("31/12/2025", format=c('%d/%m/%Y')), by="2 week")
+if(Sys.Date() %like any% WEEK){
+
+  MACRO_TABLE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
         to=c("michael.flanagan@finance.gov.ie"),
+    bcc=c("Ian.Power@finance.gov.ie","David.Hughes@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Patrick.Wolohan@finance.gov.ie"), 
       subject = "[Auto-Email] Macroeconomic Tables"
     ) %>%
        # Render R Markdown from a file.
       emayili::render(".github/workflows/macro_tables.Rmd")
     
      smtp(MACRO_TABLE)  
+
+} else {
+  print("nothing to send")
+}
+
