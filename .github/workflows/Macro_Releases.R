@@ -111,7 +111,7 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
 
 
 
-WEEK<-seq(from=as.Date("02/12/2024", format=c('%d/%m/%Y')),to=as.Date("31/12/2025", format=c('%d/%m/%Y')), by="2 week")
+WEEK<-seq(from=as.Date("02/12/2024", format=c('%d/%m/%Y')),to=as.Date("31/12/2025", format=c('%d/%m/%Y')), by="week")
 if(Sys.Date() %like any% WEEK){
 
   MACRO_TABLE<-emayili::envelope(
