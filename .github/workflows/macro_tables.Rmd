@@ -690,7 +690,11 @@ webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwi
   
 
 
-Date_95_Monthly_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date(index(HEADLINE_HICP_XTS[nrow(HEADLINE_HICP_XTS),1]),format="YYYY/m/d"), by="month")
+
+Date_95_Monthly_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date(index(HEADLINE_HICP_GROWTH[nrow(HEADLINE_HICP_GROWTH),1]),format="YYYY/m/d"), by="month")
+
+
+
 
 DOWNLOAD_MONTHLY_DF<-cbind(Retail_XTS,
 CORE_Retail_INDEX,
