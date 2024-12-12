@@ -528,15 +528,15 @@ DOF_EVENTS_2024 <- DOF_EVENTS %>%
 
 
 
-Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-10-01"
+Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-12-17"
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT")),
 
 
-DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-10-01"
+DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-12-17"
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))+1
 
-,SUMMARY = paste("Budget 2025"),
-LOCATION = c("Department of Finance"),
+,SUMMARY = paste("Quarterly Bulletin"),
+LOCATION = c("Central Bank of Ireland"),
 transparent=TRUE)
 
 Budget_2025 <- Budget %>%
