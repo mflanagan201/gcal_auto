@@ -458,8 +458,11 @@ CB_DEPOSIT_DATA<-read.csv(URL_CENTRAL_BANK_DEPOSIT_DATA_DOWNLOAD,header=FALSE) %
 
 HH_DEPOSITS_DATE<-as.Date(CB_DEPOSIT_DATA$V1,format = "%d/%m/%Y") %>% format(.,"%Y-%m-01") %>% na.omit()
 
-HH_DEPOSITS_XTS<-data.frame((CB_DEPOSIT_DATA[2:nrow(CB_DEPOSIT_DATA),9:12])) %>% na.omit() %>% as.xts(order.by=as.Date(HH_DEPOSITS_DATE))
-HH_DEPOSITS_XTS$TOTAL<-as.numeric(str_remove(HH_DEPOSITS_XTS$V9,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V10,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V11,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V12,","))
+HH_DEPOSITS_XTS<-data.frame((CB_DEPOSIT_DATA[2:nrow(CB_DEPOSIT_DATA),8:11])) %>% na.omit() %>% as.xts(order.by=as.Date(HH_DEPOSITS_DATE))
+HH_DEPOSITS_XTS$TOTAL<-as.numeric(str_remove(HH_DEPOSITS_XTS$V8,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V9,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V10,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V11,","))
+
+
+HH_DEPOSITS_annual_growth<-growth(HH_DEPOSITS_XTS$TOTAL, freq = 12) %>% round(1)
 
 
 HH_DEPOSITS_annual_growth<-growth(HH_DEPOSITS_XTS$TOTAL, freq = 12) %>% round(1)
