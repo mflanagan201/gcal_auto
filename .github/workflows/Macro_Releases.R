@@ -134,10 +134,10 @@ if(Sys.Date() %like any% WEEK){
 
 MACRO_TABLE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
-        to="michael.flanagan@finance.gov.ie",
+        to="mflanagan201@gmail.com",
       subject = "[Auto-Email] Macroeconomic Tables"
     ) %>%
-       # Render R Markdown from a file.
       emayili::render(".github/workflows/macro_tables.Rmd")
     
-     smtp(MACRO_TABLE)
+
+smtp(MACRO_TABLE)
