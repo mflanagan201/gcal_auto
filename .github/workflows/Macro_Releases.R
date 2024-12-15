@@ -117,7 +117,7 @@ if(Sys.Date() %like any% WEEK){
   MACRO_TABLE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
         to=c("michael.flanagan@finance.gov.ie"),
-    bcc=c("Ian.Power@finance.gov.ie","David.Hughes@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Patrick.Wolohan@finance.gov.ie"), 
+    bcc=c("Ian.Power@finance.gov.ie","David.Hughes@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Patrick.Wolohan@finance.gov.ie",mark.hennessy@finance.gov.ie), 
       subject = "[Auto-Email] Macroeconomic Tables"
     ) %>%
        # Render R Markdown from a file.
