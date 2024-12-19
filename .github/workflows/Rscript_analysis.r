@@ -428,7 +428,7 @@ CSO_event <- CSO_event %>%
 
 event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,EVENTS_IMF,EVENTS_OECD,EVENTS_EC,PMI_RELEASE)
 
-event_all =subset(event_all, !(SUMMARY %like any% c("%Services Producer Price Index%","%Farm Structure Survey%","%Suicide%","%Fuel Oil Movements%","%Probation%","%Press Statement: CSO Launch Housing Hub%","%Monthly Mortality and Average Temperatures in Ireland%","%Educational Attainment%","%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
+event_all =subset(event_all, !(SUMMARY %like any% c("%Baby Names%","%Press Statement: CSO reveals most popular December Baby Names%","%Services Producer Price Index%","%Farm Structure Survey%","%Suicide%","%Fuel Oil Movements%","%Probation%","%Press Statement: CSO Launch Housing Hub%","%Monthly Mortality and Average Temperatures in Ireland%","%Educational Attainment%","%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
                                                     "%Hospitality: A Value Chain Analysis%",
                                                     "%Internet Coverage and Usage in Ireland%",
                                                     "%Press Statement Older Persons Information Hub%","%Education and Other Outcomes for SUSI Support Recipients%","%Census Pilot Survey%",
