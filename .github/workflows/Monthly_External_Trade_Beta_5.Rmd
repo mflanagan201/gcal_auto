@@ -5725,7 +5725,7 @@ colnames(Contribution_Prod_CON_DF)<-c("Date",colnames(Contribution_Prod_CON_DF[2
 
 
 
-dataset_names <- list('Annual Export -Countries.and.Territories'=Contribution_annual_growth_DF,' Annual Export -Product' =Contribution_Prod_CON_DF,'Annual Import -Countries.and.Territories'=Contribution_annual__IMPORT_growth_DF)
+dataset_names <- list('Annual Export -Countries'=Contribution_annual_growth_DF,' Annual Export -Product' =Contribution_Prod_CON_DF,'Annual Import -Countries'=Contribution_annual__IMPORT_growth_DF)
 
 write.xlsx(dataset_names, file = 'external_trade_excel2.xlsx')
 
