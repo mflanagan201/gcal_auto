@@ -302,7 +302,7 @@ Ireland_exports<- subset(cso_get_data("TSM10"),Statistic=="Value of Exports") %>
 Date<-seq(as.Date("2015-01-01"), by="month",length.out=NROW(Ire_Exports)-3)
 
 #Austria
-Austria_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Austria") %>% select(-Countries.and.Territories))
+Austria_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Austria") %>% select(-Country))
 colnames(Austria_exports) <-Austria_exports[1,]
 Austria_exports<-Austria_exports[-c(1),]
 
@@ -324,7 +324,7 @@ colnames(Austria_sum_export)<-c("Austria")
 
 
 #Australia
-Australia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Australia") %>% select(-Countries.and.Territories))
+Australia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Australia") %>% select(-Country))
 colnames(Australia_exports) <-Australia_exports[1,]
 Australia_exports<-Australia_exports[-c(1),]
 
@@ -342,7 +342,7 @@ colnames(Australia_sum_export)<-c("Australia")
 
 
 #Belgium
-Belgium_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Belgium") %>% select(-Countries.and.Territories))
+Belgium_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Belgium") %>% select(-Country))
 colnames(Belgium_exports) <-Belgium_exports[1,]
 Belgium_exports<-Belgium_exports[-c(1),]
 
@@ -358,7 +358,7 @@ Belgium_sum_export<-as.xts(t(Belgium_sum_export), order.by = Date)
 colnames(Belgium_sum_export)<-c("Belgium")
 
 #Bulgaria
-Bulgaria_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Bulgaria") %>% select(-Countries.and.Territories))
+Bulgaria_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Bulgaria") %>% select(-Country))
 colnames(Bulgaria_exports) <-Bulgaria_exports[1,]
 Bulgaria_exports<-Bulgaria_exports[-c(1),]
 
@@ -375,7 +375,7 @@ colnames(Bulgaria_sum_export)<-c("Bulgaria")
 
 
 #Brazil 
-Brazil_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Brazil") %>% select(-Countries.and.Territories))
+Brazil_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Brazil") %>% select(-Country))
 colnames(Brazil_exports) <-Brazil_exports[1,]
 Brazil_exports<-Brazil_exports[-c(1),]
 
@@ -391,7 +391,7 @@ Brazil_sum_export<-as.xts(t(Brazil_sum_export), order.by = Date)
 colnames(Brazil_sum_export)<-c("Brazil")
 
 #Canada 
-Canada_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Canada") %>% select(-Countries.and.Territories))
+Canada_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Canada") %>% select(-Country))
 colnames(Canada_exports) <-Canada_exports[1,]
 Canada_exports<-Canada_exports[-c(1),]
 
@@ -409,7 +409,7 @@ colnames(Canada_sum_export)<-c("Canada")
 
 
 #Switzerland 
-Switzerland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Switzerland") %>% select(-Countries.and.Territories))
+Switzerland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Switzerland") %>% select(-Country))
 colnames(Switzerland_exports) <-Switzerland_exports[1,]
 Switzerland_exports<-Switzerland_exports[-c(1),]
 
@@ -426,7 +426,7 @@ Switzerland_sum_export<-as.xts(t(Switzerland_sum_export), order.by = Date)
 colnames(Switzerland_sum_export)<-c("Switzerland")
 
 #China 
-China_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="China") %>% select(-Countries.and.Territories))
+China_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="China") %>% select(-Country))
 colnames(China_exports) <-China_exports[1,]
 China_exports<-China_exports[-c(1),]
 
@@ -447,7 +447,7 @@ China_breakdown_exports<-as.xts(China_exports_xts)
 China_breakdown_exports1<-100*((as.numeric(China_exports_xts))/as.numeric(China_sum_export$China))
 
 #Cyprus 
-Cyprus_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Cyprus") %>% select(-Countries.and.Territories))
+Cyprus_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Cyprus") %>% select(-Country))
 colnames(Cyprus_exports) <-Cyprus_exports[1,]
 Cyprus_exports<-Cyprus_exports[-c(1),]
 
@@ -464,7 +464,7 @@ colnames(Cyprus_sum_export)<-c("Cyprus")
 
 
 #Czech Republic
-Czech_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Czech Republic") %>% select(-Countries.and.Territories))
+Czech_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Czech Republic") %>% select(-Country))
 colnames(Czech_exports) <-Czech_exports[1,]
 Czech_exports<-Czech_exports[-c(1),]
 
@@ -481,7 +481,7 @@ colnames(Czech_sum_export)<-c("Czech")
 
 
 #Germany
-Germany_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Germany") %>% select(-Countries.and.Territories))
+Germany_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Germany") %>% select(-Country))
 colnames(Germany_exports) <-Germany_exports[1,]
 Germany_exports<-Germany_exports[-c(1),]
 
@@ -499,7 +499,7 @@ colnames(Germany_sum_export)<-c("Germany")
 
 
 #Denmark 
-Denmark_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Denmark") %>% select(-Countries.and.Territories))
+Denmark_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Denmark") %>% select(-Country))
 colnames(Denmark_exports) <-Denmark_exports[1,]
 Denmark_exports<-Denmark_exports[-c(1),]
 
@@ -516,7 +516,7 @@ colnames(Denmark_sum_export)<-c("Denmark")
 
 
 #Estonia 
-Estonia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Estonia") %>% select(-Countries.and.Territories))
+Estonia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Estonia") %>% select(-Country))
 colnames(Estonia_exports) <-Estonia_exports[1,]
 Estonia_exports<-Estonia_exports[-c(1),]
 
@@ -532,7 +532,7 @@ Estonia_sum_export<-as.xts(t(Estonia_sum_export), order.by = Date)
 colnames(Estonia_sum_export)<-c("Estonia")
 
 #Spain 
-Spain_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Spain") %>% select(-Countries.and.Territories))
+Spain_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Spain") %>% select(-Country))
 colnames(Spain_exports) <-Spain_exports[1,]
 Spain_exports<-Spain_exports[-c(1),]
 
@@ -550,7 +550,7 @@ colnames(Spain_sum_export)<-c("Spain")
 
 
 #Finland 
-Finland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Finland") %>% select(-Countries.and.Territories))
+Finland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Finland") %>% select(-Country))
 colnames(Finland_exports) <-Finland_exports[1,]
 Finland_exports<-Finland_exports[-c(1),]
 
@@ -568,7 +568,7 @@ colnames(Finland_sum_export)<-c("Finland")
 
 
 #France
-France_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="France") %>% select(-Countries.and.Territories))
+France_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="France") %>% select(-Country))
 colnames(France_exports) <-France_exports[1,]
 France_exports<-France_exports[-c(1),]
 
@@ -585,7 +585,7 @@ colnames(France_sum_export)<-c("France")
 
 
 #Greece
-Greece_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Greece") %>% select(-Countries.and.Territories))
+Greece_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Greece") %>% select(-Country))
 colnames(Greece_exports) <-Greece_exports[1,]
 Greece_exports<-Greece_exports[-c(1),]
 
@@ -602,7 +602,7 @@ colnames(Greece_sum_export)<-c("Greece")
 
 
 ##Croatia
-Croatia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Croatia") %>% select(-Countries.and.Territories))
+Croatia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Croatia") %>% select(-Country))
 colnames(Croatia_exports) <-Croatia_exports[1,]
 Croatia_exports<-Croatia_exports[-c(1),]
 
@@ -620,7 +620,7 @@ colnames(Croatia_sum_export)<-c("Croatia")
 
 
 #Hungary
-Hungary_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Hungary") %>% select(-Countries.and.Territories))
+Hungary_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Hungary") %>% select(-Country))
 colnames(Hungary_exports) <-Hungary_exports[1,]
 Hungary_exports<-Hungary_exports[-c(1),]
 
@@ -636,7 +636,7 @@ Hungary_sum_export<-as.xts(t(Hungary_sum_export), order.by = Date)
 colnames(Hungary_sum_export)<-c("Hungary")
 
 #India
-India_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="India") %>% select(-Countries.and.Territories))
+India_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="India") %>% select(-Country))
 colnames(India_exports) <-India_exports[1,]
 India_exports<-India_exports[-c(1),]
 
@@ -652,7 +652,7 @@ India_sum_export<-as.xts(t(India_sum_export), order.by = Date)
 colnames(India_sum_export)<-c("India")
 
 #Italy
-Italy_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Italy") %>% select(-Countries.and.Territories))
+Italy_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Italy") %>% select(-Country))
 colnames(Italy_exports) <-Italy_exports[1,]
 Italy_exports<-Italy_exports[-c(1),]
 
@@ -669,7 +669,7 @@ colnames(Italy_sum_export)<-c("Italy")
 
 #Japan
 
-Japan_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Japan") %>% select(-Countries.and.Territories))
+Japan_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Japan") %>% select(-Country))
 colnames(Japan_exports) <-Japan_exports[1,]
 Japan_exports<-Japan_exports[-c(1),]
 
@@ -686,7 +686,7 @@ colnames(Japan_sum_export)<-c("Japan")
 
 
 #South Korea
-Korea_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="South Korea") %>% select(-Countries.and.Territories))
+Korea_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="South Korea") %>% select(-Country))
 colnames(Korea_exports) <-Korea_exports[1,]
 Korea_exports<-Korea_exports[-c(1),]
 
@@ -705,7 +705,7 @@ colnames(Korea_sum_export)<-c("Korea")
 
 
 #Lithuania
-Lithuania_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Lithuania") %>% select(-Countries.and.Territories))
+Lithuania_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Lithuania") %>% select(-Country))
 colnames(Lithuania_exports) <-Lithuania_exports[1,]
 Lithuania_exports<-Lithuania_exports[-c(1),]
 
@@ -723,7 +723,7 @@ colnames(Lithuania_sum_export)<-c("Lithuania")
 
 
 #Luxembourg 
-Luxembourg_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Luxembourg") %>% select(-Countries.and.Territories))
+Luxembourg_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Luxembourg") %>% select(-Country))
 colnames(Luxembourg_exports) <-Luxembourg_exports[1,]
 Luxembourg_exports<-Luxembourg_exports[-c(1),]
 
@@ -739,7 +739,7 @@ Luxembourg_sum_export<-as.xts(t(Luxembourg_sum_export), order.by = Date)
 colnames(Luxembourg_sum_export)<-c("Luxembourg")
 
 #Latvia 
-Latvia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Latvia") %>% select(-Countries.and.Territories))
+Latvia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Latvia") %>% select(-Country))
 colnames(Latvia_exports) <-Latvia_exports[1,]
 Latvia_exports<-Latvia_exports[-c(1),]
 
@@ -757,7 +757,7 @@ colnames(Latvia_sum_export)<-c("Latvia")
 
 
 #Malta 
-Malta_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Malta") %>% select(-Countries.and.Territories))
+Malta_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Malta") %>% select(-Country))
 colnames(Malta_exports) <-Malta_exports[1,]
 Malta_exports<-Malta_exports[-c(1),]
 
@@ -776,7 +776,7 @@ colnames(Malta_sum_export)<-c("Malta")
 
 
 #Mexico 
-Mexico_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Mexico") %>% select(-Countries.and.Territories))
+Mexico_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Mexico") %>% select(-Country))
 colnames(Mexico_exports) <-Mexico_exports[1,]
 Mexico_exports<-Mexico_exports[-c(1),]
 
@@ -794,7 +794,7 @@ colnames(Mexico_sum_export)<-c("Mexico")
 
 
 #Malaysia 
-Malaysia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Malaysia") %>% select(-Countries.and.Territories))
+Malaysia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Malaysia") %>% select(-Country))
 colnames(Malaysia_exports) <-Malaysia_exports[1,]
 Malaysia_exports<-Malaysia_exports[-c(1),]
 
@@ -811,7 +811,7 @@ colnames(Malaysia_sum_export)<-c("Malaysia")
 
 
 #Netherlands 
-Netherlands_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Netherlands") %>% select(-Countries.and.Territories))
+Netherlands_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Netherlands") %>% select(-Country))
 colnames(Netherlands_exports) <-Netherlands_exports[1,]
 Netherlands_exports<-Netherlands_exports[-c(1),]
 
@@ -829,7 +829,7 @@ colnames(Netherlands_sum_export)<-c("Netherlands")
 
 
 #Norway  
-Norway_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Norway") %>% select(-Countries.and.Territories))
+Norway_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Norway") %>% select(-Country))
 colnames(Norway_exports) <-Norway_exports[1,]
 Norway_exports<-Norway_exports[-c(1),]
 
@@ -848,7 +848,7 @@ colnames(Norway_sum_export)<-c("Norway")
 
 
 #Poland  
-Poland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Poland") %>% select(-Countries.and.Territories))
+Poland_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Poland") %>% select(-Country))
 colnames(Poland_exports) <-Poland_exports[1,]
 Poland_exports<-Poland_exports[-c(1),]
 
@@ -866,7 +866,7 @@ colnames(Poland_sum_export)<-c("Poland")
 
 
 #Portugal  
-Portugal_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Portugal") %>% select(-Countries.and.Territories))
+Portugal_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Portugal") %>% select(-Country))
 colnames(Portugal_exports) <-Portugal_exports[1,]
 Portugal_exports<-Portugal_exports[-c(1),]
 
@@ -885,7 +885,7 @@ colnames(Portugal_sum_export)<-c("Portugal")
 
 
 #Romania  
-Romania_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Romania") %>% select(-Countries.and.Territories))
+Romania_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Romania") %>% select(-Country))
 colnames(Romania_exports) <-Romania_exports[1,]
 Romania_exports<-Romania_exports[-c(1),]
 
@@ -901,7 +901,7 @@ Romania_sum_export<-as.xts(t(Romania_sum_export), order.by = Date)
 colnames(Romania_sum_export)<-c("Romania")
 
 #Russia  
-Russia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Russia") %>% select(-Countries.and.Territories))
+Russia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Russia") %>% select(-Country))
 colnames(Russia_exports) <-Russia_exports[1,]
 Russia_exports<-Russia_exports[-c(1),]
 
@@ -919,7 +919,7 @@ colnames(Russia_sum_export)<-c("Russia")
 
 
 #Saudi Arabia  
-Saudi_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Saudi Arabia") %>% select(-Countries.and.Territories))
+Saudi_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Saudi Arabia") %>% select(-Country))
 colnames(Saudi_exports) <-Saudi_exports[1,]
 Saudi_exports<-Saudi_exports[-c(1),]
 
@@ -937,7 +937,7 @@ colnames(Saudi_sum_export)<-c("Saudi")
 
 
 #Sweden  
-Sweden_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Sweden") %>% select(-Countries.and.Territories))
+Sweden_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Sweden") %>% select(-Country))
 colnames(Sweden_exports) <-Sweden_exports[1,]
 Sweden_exports<-Sweden_exports[-c(1),]
 
@@ -954,7 +954,7 @@ colnames(Sweden_sum_export)<-c("Sweden")
 
 
 #Singapore  
-Singapore_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Singapore") %>% select(-Countries.and.Territories))
+Singapore_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Singapore") %>% select(-Country))
 colnames(Singapore_exports) <-Singapore_exports[1,]
 Singapore_exports<-Singapore_exports[-c(1),]
 
@@ -972,7 +972,7 @@ colnames(Singapore_sum_export)<-c("Singapore")
 
 
 #Slovenia  
-Slovenia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Slovenia") %>% select(-Countries.and.Territories))
+Slovenia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Slovenia") %>% select(-Country))
 colnames(Slovenia_exports) <-Slovenia_exports[1,]
 Slovenia_exports<-Slovenia_exports[-c(1),]
 
@@ -990,7 +990,7 @@ colnames(Slovenia_sum_export)<-c("Slovenia")
 
 
 #Slovakia  
-Slovakia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Slovakia") %>% select(-Countries.and.Territories))
+Slovakia_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Slovakia") %>% select(-Country))
 colnames(Slovakia_exports) <-Slovakia_exports[1,]
 Slovakia_exports<-Slovakia_exports[-c(1),]
 
@@ -1007,7 +1007,7 @@ colnames(Slovakia_sum_export)<-c("Slovakia")
 
 
 #Thailand  
-Thailand_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Thailand") %>% select(-Countries.and.Territories))
+Thailand_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Thailand") %>% select(-Country))
 colnames(Thailand_exports) <-Thailand_exports[1,]
 Thailand_exports<-Thailand_exports[-c(1),]
 
@@ -1025,7 +1025,7 @@ colnames(Thailand_sum_export)<-c("Thailand")
 
 
 #Turkey  
-Turkey_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Turkey") %>% select(-Countries.and.Territories))
+Turkey_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Turkey") %>% select(-Country))
 colnames(Turkey_exports) <-Turkey_exports[1,]
 Turkey_exports<-Turkey_exports[-c(1),]
 
@@ -1042,7 +1042,7 @@ colnames(Turkey_sum_export)<-c("Turkey")
 
 
 #Taiwan  
-Taiwan_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Taiwan") %>% select(-Countries.and.Territories))
+Taiwan_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Taiwan") %>% select(-Country))
 colnames(Taiwan_exports) <-Taiwan_exports[1,]
 Taiwan_exports<-Taiwan_exports[-c(1),]
 
@@ -1059,7 +1059,7 @@ colnames(Taiwan_sum_export)<-c("Taiwan")
 
 
 #USA  
-USA_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="USA") %>% select(-Countries.and.Territories))
+USA_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="USA") %>% select(-Country))
 colnames(USA_exports) <-USA_exports[1,]
 USA_exports<-USA_exports[-c(1),]
 USA_exports_xts <- (as.xts(USA_exports, order.by=Date))
@@ -1077,7 +1077,7 @@ colnames(USA_sum_export)<-c("USA")
 
 
 #Great Britian  
-GB_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Great Britain") %>% select(-Countries.and.Territories))
+GB_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Great Britain") %>% select(-Country))
 colnames(GB_exports) <-GB_exports[1,]
 GB_exports<-GB_exports[-c(1),]
 
@@ -1095,7 +1095,7 @@ colnames(GB_sum_export)<-c("GB")
 
 
 #Northern Ireland 
-NI_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Northern Ireland") %>% select(-Countries.and.Territories))
+NI_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Northern Ireland") %>% select(-Country))
 colnames(NI_exports) <-NI_exports[1,]
 NI_exports<-NI_exports[-c(1),]
 
@@ -1113,7 +1113,7 @@ colnames(NI_sum_export)<-c("NI")
 
 
 #South Africa 
-SA_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="South Africa") %>% select(-Countries.and.Territories))
+SA_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="South Africa") %>% select(-Country))
 colnames(SA_exports) <-SA_exports[1,]
 SA_exports<-SA_exports[-c(1),]
 
@@ -1129,7 +1129,7 @@ SA_sum_export<-as.xts(t(SA_sum_export), order.by = Date)
 colnames(SA_sum_export)<-c("SA")
 
 #EU country not specified 
-OTHER_EU_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="EU country not specified") %>% select(-Countries.and.Territories))
+OTHER_EU_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="EU country not specified") %>% select(-Country))
 colnames(OTHER_EU_exports) <-OTHER_EU_exports[1,]
 OTHER_EU_exports<-OTHER_EU_exports[-c(1),]
 
@@ -1145,7 +1145,7 @@ OTHER_EU_sum_export<-as.xts(t(OTHER_EU_sum_export), order.by = Date)
 colnames(OTHER_EU_sum_export)<-c("OTHER_EU")
 
 #OTHER 
-OTHER_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Other countries") %>% select(-Countries.and.Territories))
+OTHER_exports<- t(subset(Ireland_exports,Ireland_Exports["2014-12-01"]=="Other countries") %>% select(-Country))
 colnames(OTHER_exports) <-OTHER_exports[1,]
 OTHER_exports<-OTHER_exports[-c(1),]
 
@@ -1973,7 +1973,7 @@ high_contribution_value_NI<-round(as.numeric(latest_NI_prod_contribution[,paste0
 
 
 #Live animals except fish etc. (00)
-Live_animals_00<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Live animals except fish etc. (00)") %>% select(-Countries.and.Territories,-Commodity.group))
+Live_animals_00<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Live animals except fish etc. (00)") %>% select(-Country,-Commodity.group))
 Live_animals_00_exports_xts <- (as.xts(Live_animals_00, order.by=Date))
 Live_animals_00_exports<-data.frame(NA, nrow=length(index(Live_animals_00_exports_xts["2015/"])))
 
@@ -1987,7 +1987,7 @@ colnames(Live_animals_00_exports)<-c("Live_animals_00")
 
 
 #Meat and meat preparations (01)
-meat_01<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Meat and meat preparations (01)") %>% select(-Countries.and.Territories,-Commodity.group))
+meat_01<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Meat and meat preparations (01)") %>% select(-Country,-Commodity.group))
 meat_01_exports_xts <- (as.xts(meat_01, order.by=Date))
 meat_01_exports<-data.frame(NA, nrow=length(index(meat_01_exports_xts["2015/"])))
 
@@ -2001,7 +2001,7 @@ colnames(meat_01_exports)<-c("meat_01")
 
 
 #Dairy products and birds eggs (02)                                       
-Dairy_02<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Dairy products and birds eggs (02)") %>% select(-Countries.and.Territories,-Commodity.group))
+Dairy_02<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Dairy products and birds eggs (02)") %>% select(-Country,-Commodity.group))
 Dairy_02_exports_xts <- (as.xts(Dairy_02, order.by=Date))
 Dairy_02_exports<-data.frame(NA, nrow=length(index(Dairy_02_exports_xts["2015/"])))
 
@@ -2015,7 +2015,7 @@ colnames(Dairy_02_exports)<-c("Dairy_02")
 
 #Fish, crustaceans, molluscs and preparations thereof (03)                                       
                                        
-Fish_03<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Fish, crustaceans, molluscs and preparations thereof (03)") %>% select(-Countries.and.Territories,-Commodity.group))
+Fish_03<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Fish, crustaceans, molluscs and preparations thereof (03)") %>% select(-Country,-Commodity.group))
 Fish_03_exports_xts <- (as.xts(Fish_03, order.by=Date))
 Fish_03_exports<-data.frame(NA, nrow=length(index(Fish_03_exports_xts["2015/"])))
 
@@ -2030,7 +2030,7 @@ colnames(Fish_03_exports)<-c("Fish_03")
 
 #Cereals and cereal preparations (04)                                       
 
-Cereal_04<-t(subset(Ireland_exports,Commodity.group=="Cereals and cereal preparations (04)") %>% select(-Countries.and.Territories,-Commodity.group))
+Cereal_04<-t(subset(Ireland_exports,Commodity.group=="Cereals and cereal preparations (04)") %>% select(-Country,-Commodity.group))
 Cereal_04_exports_xts <- (as.xts(Cereal_04, order.by=Date))
 Cereal_04_exports<-data.frame(NA, nrow=length(index(Cereal_04_exports_xts["2015/"])))
 
@@ -2046,7 +2046,7 @@ colnames(Cereal_04_exports)<-c("Cereal_04")
 
 #Vegetables and fruit (05)                                       
 
-Veg_05<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Vegetables and fruit (05)") %>% select(-Countries.and.Territories,-Commodity.group))
+Veg_05<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Vegetables and fruit (05)") %>% select(-Country,-Commodity.group))
 Veg_05_exports_xts <- (as.xts(Veg_05, order.by=Date))
 Veg_05_exports<-data.frame(NA, nrow=length(index(Veg_05_exports_xts["2015/"])))
 
@@ -2059,7 +2059,7 @@ colnames(Veg_05_exports)<-c("Veg_05")
 
 
 #Sugar, sugar preparations and honey (06)      
-Sugar_06<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Sugar, sugar preparations and honey (06)") %>% select(-Countries.and.Territories,-Commodity.group))
+Sugar_06<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Sugar, sugar preparations and honey (06)") %>% select(-Country,-Commodity.group))
 Sugar_06_exports_xts <- (as.xts(Sugar_06, order.by=Date))
 Sugar_06_exports<-data.frame(NA, nrow=length(index(Sugar_06_exports_xts["2015/"])))
 
@@ -2071,7 +2071,7 @@ Sugar_06_exports<-as.xts(t(Sugar_06_exports), order.by = Date)
 colnames(Sugar_06_exports)<-c("Sugar_06")
 
 #Coffee, tea, cocoa, spices and manufactures thereof (07)      
-Coffee_07<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Coffee, tea, cocoa, spices and manufactures thereof (07)") %>% select(-Countries.and.Territories,-Commodity.group))
+Coffee_07<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Coffee, tea, cocoa, spices and manufactures thereof (07)") %>% select(-Country,-Commodity.group))
 Coffee_07_exports_xts <- (as.xts(Coffee_07, order.by=Date))
 Coffee_07_exports<-data.frame(NA, nrow=length(index(Coffee_07_exports_xts["2015/"])))
 
@@ -2088,7 +2088,7 @@ colnames(Coffee_07_exports)<-c("Coffee_07")
 
 
 #Feeding stuffs for animals, excluding unmilled cereals (08)      
-animal_feed_08<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Countries.and.Territories,-Commodity.group))
+animal_feed_08<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Country,-Commodity.group))
 animal_feed_08_exports_xts <- (as.xts(animal_feed_08, order.by=Date))
 animal_feed_08_exports<-data.frame(NA, nrow=length(index(animal_feed_08_exports_xts["2015/"])))
 
@@ -2102,7 +2102,7 @@ colnames(animal_feed_08_exports)<-c("animal_feed_08")
 
 
 #Feeding stuffs for animals, excluding unmilled cereals (08)      
-animal_feed_08<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Countries.and.Territories,-Commodity.group))
+animal_feed_08<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Country,-Commodity.group))
 animal_feed_08_exports_xts <- (as.xts(animal_feed_08, order.by=Date))
 animal_feed_08_exports<-data.frame(NA, nrow=length(index(animal_feed_08_exports_xts["2015/"])))
 
@@ -2115,7 +2115,7 @@ colnames(animal_feed_08_exports)<-c("animal_feed_08")
 
 
 #Miscellaneous edible products and preparations (09)     
-Miscellaneous_09<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Miscellaneous edible products and preparations (09)") %>% select(-Countries.and.Territories,-Commodity.group))
+Miscellaneous_09<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Miscellaneous edible products and preparations (09)") %>% select(-Country,-Commodity.group))
 Miscellaneous_09_exports_xts <- (as.xts(Miscellaneous_09, order.by=Date))
 
 Miscellaneous_09_exports<-data.frame(NA, nrow=length(index(Miscellaneous_09_exports_xts["2015/"])))
@@ -2129,7 +2129,7 @@ colnames(Miscellaneous_09_exports)<-c("Miscellaneous_09")
 
 
 #Beverages (11)                                                      
-Beverages_11<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Beverages (11)") %>% select(-Countries.and.Territories,-Commodity.group))
+Beverages_11<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Beverages (11)") %>% select(-Country,-Commodity.group))
 Beverages_11_exports_xts <- (as.xts(Beverages_11, order.by=Date))
 
 Beverages_11_exports<-data.frame(NA, nrow=length(index(Beverages_11_exports_xts["2015/"])))
@@ -2143,7 +2143,7 @@ colnames(Beverages_11_exports)<-c("Beverages_11")
 
 
 #Tobacco and tobacco manufactures (12)                                                      
-Tobacco_12<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Tobacco and tobacco manufactures (12)") %>% select(-Countries.and.Territories,-Commodity.group))
+Tobacco_12<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Tobacco and tobacco manufactures (12)") %>% select(-Country,-Commodity.group))
 Tobacco_12_exports_xts <- (as.xts(Tobacco_12, order.by=Date))
 
 Tobacco_12_exports<-data.frame(NA, nrow=length(index(Tobacco_12_exports_xts["2015/"])))
@@ -2158,7 +2158,7 @@ colnames(Tobacco_12_exports)<-c("Tobacco_12")
 
 
 #Hides, skins and furskins, raw (21)                                                      
-Hides_21<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Hides, skins and furskins, raw (21)") %>% select(-Countries.and.Territories,-Commodity.group))
+Hides_21<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Hides, skins and furskins, raw (21)") %>% select(-Country,-Commodity.group))
 Hides_21_exports_xts <- (as.xts(Hides_21, order.by=Date))
 
 Hides_21_exports<-data.frame(NA, nrow=length(index(Hides_21_exports_xts["2015/"])))
@@ -2172,7 +2172,7 @@ colnames(Hides_21_exports)<-c("Hides_21")
 
 
 #Oilseeds and oleaginous fruit (22)                                                      
-oilseeds_22<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Oilseeds and oleaginous fruit (22)") %>% select(-Countries.and.Territories,-Commodity.group))
+oilseeds_22<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Oilseeds and oleaginous fruit (22)") %>% select(-Country,-Commodity.group))
 oilseeds_22_exports_xts <- (as.xts(oilseeds_22, order.by=Date))
 
 oilseeds_22_exports<-data.frame(NA, nrow=length(index(oilseeds_22_exports_xts["2015/"])))
@@ -2188,7 +2188,7 @@ colnames(oilseeds_22_exports)<-c("oilseeds_22")
 
 # Crude rubber, including synthetic and reclaimed rubber (23)  
 
-Crude_rubber_23<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Crude rubber, including synthetic and reclaimed rubber (23)") %>% select(-Countries.and.Territories,-Commodity.group))
+Crude_rubber_23<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Crude rubber, including synthetic and reclaimed rubber (23)") %>% select(-Country,-Commodity.group))
 Crude_rubber_23_exports_xts <- (as.xts(Crude_rubber_23, order.by=Date))
 
 Crude_rubber_23_exports<-data.frame(NA, nrow=length(index(Crude_rubber_23_exports_xts["2015/"])))
@@ -2203,7 +2203,7 @@ colnames(Crude_rubber_23_exports)<-c("Crude_rubber_23")
 
 # Cork and wood (24)
 
-Cork_24<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Cork and wood (24)") %>% select(-Countries.and.Territories,-Commodity.group))
+Cork_24<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Cork and wood (24)") %>% select(-Country,-Commodity.group))
 Cork_24_exports_xts <- (as.xts(Cork_24, order.by=Date))
 
 Cork_24_exports<-data.frame(NA, nrow=length(index(Cork_24_exports_xts["2015/"])))
@@ -2218,7 +2218,7 @@ colnames(Cork_24_exports)<-c("Cork_24")
 
 # Pulp and waste paper (25)" 
 
-Pulp_25<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Pulp and waste paper (25)") %>% select(-Countries.and.Territories,-Commodity.group))
+Pulp_25<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Pulp and waste paper (25)") %>% select(-Country,-Commodity.group))
 Pulp_25_exports_xts <- (as.xts(Pulp_25, order.by=Date))
 
 Pulp_25_exports<-data.frame(NA, nrow=length(index(Pulp_25_exports_xts["2015/"])))
@@ -2233,7 +2233,7 @@ colnames(Pulp_25_exports)<-c("Pulp_25")
 
 # Textile fibres, excluding wool tops, and their wastes (26) 
 
-Textile_fibres_26<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Textile fibres, excluding wool tops, and their wastes (26)") %>% select(-Countries.and.Territories,-Commodity.group))
+Textile_fibres_26<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Textile fibres, excluding wool tops, and their wastes (26)") %>% select(-Country,-Commodity.group))
 Textile_fibres_26_exports_xts <- (as.xts(Textile_fibres_26, order.by=Date))
 
 Textile_fibres_26_exports<-data.frame(NA, nrow=length(index(Textile_fibres_26_exports_xts["2015/"])))
@@ -2249,7 +2249,7 @@ colnames(Textile_fibres_26_exports)<-c("Textile_fibres_26")
 
 # Crude fertilisers and minerals, excluding coal, petroleum etc. (27)
 
-Crude_fertilisers_27<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Crude fertilisers and minerals, excluding coal, petroleum etc. (27)") %>% select(-Countries.and.Territories,-Commodity.group))
+Crude_fertilisers_27<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Crude fertilisers and minerals, excluding coal, petroleum etc. (27)") %>% select(-Country,-Commodity.group))
 Crude_fertilisers_27_exports_xts <- (as.xts(Crude_fertilisers_27, order.by=Date))
 
 Crude_fertilisers_27_exports<-data.frame(NA, nrow=length(index(Crude_fertilisers_27_exports_xts["2015/"])))
@@ -2266,7 +2266,7 @@ colnames(Crude_fertilisers_27_exports)<-c("Crude_fertilisers_27")
 
 # Metalliferous ores and metal scrap (28)
 
-Metalliferous_ores_28<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Metalliferous ores and metal scrap (28)") %>% select(-Countries.and.Territories,-Commodity.group))
+Metalliferous_ores_28<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Metalliferous ores and metal scrap (28)") %>% select(-Country,-Commodity.group))
 Metalliferous_ores_28_exports_xts <- (as.xts(Metalliferous_ores_28, order.by=Date))
 
 Metalliferous_ores_28_exports<-data.frame(NA, nrow=length(index(Metalliferous_ores_28_exports_xts["2015/"])))
@@ -2280,7 +2280,7 @@ colnames(Metalliferous_ores_28_exports)<-c("Metalliferous_ores_28")
 
 # Crude animal and vegetable materials, n.e.s. (29)
 
-Crude_animal_and_vegetable_materials_29<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Crude animal and vegetable materials, n.e.s. (29)") %>% select(-Countries.and.Territories,-Commodity.group))
+Crude_animal_and_vegetable_materials_29<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Crude animal and vegetable materials, n.e.s. (29)") %>% select(-Country,-Commodity.group))
 Crude_animal_and_vegetable_materials_29_exports_xts <- (as.xts(Crude_animal_and_vegetable_materials_29, order.by=Date))
 
 Crude_animal_and_vegetable_materials_29_exports<-data.frame(NA, nrow=length(index(Crude_animal_and_vegetable_materials_29_exports_xts["2015/"])))
@@ -2296,7 +2296,7 @@ colnames(Crude_animal_and_vegetable_materials_29_exports)<-c("Crude_animal_and_v
 
 # Coal, coke and briquettes (32)
 
-Coal_32<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Coal, coke and briquettes (32)") %>% select(-Countries.and.Territories,-Commodity.group))
+Coal_32<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Coal, coke and briquettes (32)") %>% select(-Country,-Commodity.group))
 Coal_32_exports_xts <- (as.xts(Coal_32, order.by=Date))
 
 Coal_32_exports<-data.frame(NA, nrow=length(index(Coal_32_exports_xts["2015/"])))
@@ -2311,7 +2311,7 @@ colnames(Coal_32_exports)<-c("Coal_32_exports")
 
 # Petroleum, petroleum products and related materials (33)
 
-Petroleum_33<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Petroleum, petroleum products and related materials (33)") %>% select(-Countries.and.Territories,-Commodity.group))
+Petroleum_33<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Petroleum, petroleum products and related materials (33)") %>% select(-Country,-Commodity.group))
 Petroleum_33_exports_xts <- (as.xts(Petroleum_33, order.by=Date))
 
 Petroleum_33_exports<-data.frame(NA, nrow=length(index(Petroleum_33_exports_xts["2015/"])))
@@ -2325,7 +2325,7 @@ colnames(Petroleum_33_exports)<-c("Petroleum_33")
 
 # Gas, natural and manufactured (34)
 
-Gas_34<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Gas, natural and manufactured (34)") %>% select(-Countries.and.Territories,-Commodity.group))
+Gas_34<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Gas, natural and manufactured (34)") %>% select(-Country,-Commodity.group))
 Gas_34_exports_xts <- (as.xts(Gas_34, order.by=Date))
 
 Gas_34_exports<-data.frame(NA, nrow=length(index(Gas_34_exports_xts["2015/"])))
@@ -2340,7 +2340,7 @@ colnames(Gas_34_exports)<-c("Gas_34")
 
 # Electric current (35)
 
-Electric_current_35<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Electric current (35)") %>% select(-Countries.and.Territories,-Commodity.group))
+Electric_current_35<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Electric current (35)") %>% select(-Country,-Commodity.group))
 Electric_current_35_exports_xts <- (as.xts(Electric_current_35, order.by=Date))
 
 Electric_current_35_exports<-data.frame(NA, nrow=length(index(Electric_current_35_exports_xts["2015/"])))
@@ -2354,7 +2354,7 @@ colnames(Electric_current_35_exports)<-c("Electric_current_35")
 
 # Animal oils and fats (41)
 
-Animal_oils_and_fats_41<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Animal oils and fats (41)") %>% select(-Countries.and.Territories,-Commodity.group))
+Animal_oils_and_fats_41<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Animal oils and fats (41)") %>% select(-Country,-Commodity.group))
 Animal_oils_and_fats_41_exports_xts <- (as.xts(Animal_oils_and_fats_41, order.by=Date))
 
 Animal_oils_and_fats_41_exports<-data.frame(NA, nrow=length(index(Animal_oils_and_fats_41_exports_xts["2015/"])))
@@ -2368,7 +2368,7 @@ colnames(Animal_oils_and_fats_41_exports)<-c("Animal_oils_and_fats_41")
 
 # Fixed vegetable oils and fats (42)
 
-Fixed_vegetable_oils_and_fats_42<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Fixed vegetable oils and fats (42)") %>% select(-Countries.and.Territories,-Commodity.group))
+Fixed_vegetable_oils_and_fats_42<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Fixed vegetable oils and fats (42)") %>% select(-Country,-Commodity.group))
 Fixed_vegetable_oils_and_fats_42_exports_xts <- (as.xts(Fixed_vegetable_oils_and_fats_42, order.by=Date))
 
 Fixed_vegetable_oils_and_fats_42_exports<-data.frame(NA, nrow=length(index(Fixed_vegetable_oils_and_fats_42_exports_xts["2015/"])))
@@ -2382,7 +2382,7 @@ colnames(Fixed_vegetable_oils_and_fats_42_exports)<-c("Fixed_vegetable_oils_and_
 
 # Animal and vegetable oils and fats, processed, and waxes (43)
 
-Animal_and_vegetable_oils_43<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Animal and vegetable oils and fats, processed, and waxes (43)") %>% select(-Countries.and.Territories,-Commodity.group))
+Animal_and_vegetable_oils_43<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Animal and vegetable oils and fats, processed, and waxes (43)") %>% select(-Country,-Commodity.group))
 Animal_and_vegetable_oils_43_exports_xts <- (as.xts(Animal_and_vegetable_oils_43, order.by=Date))
 
 Animal_and_vegetable_oils_43_exports<-data.frame(NA, nrow=length(index(Animal_and_vegetable_oils_43_exports_xts["2015/"])))
@@ -2396,7 +2396,7 @@ colnames(Animal_and_vegetable_oils_43_exports)<-c("Animal_and_vegetable_oils_43"
 
 # Organic chemicals (51)
 
-Organic_chemicals_51<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Organic chemicals (51)") %>% select(-Countries.and.Territories,-Commodity.group))
+Organic_chemicals_51<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Organic chemicals (51)") %>% select(-Country,-Commodity.group))
 Organic_chemicals_51_exports_xts <- (as.xts(Organic_chemicals_51, order.by=Date))
 
 Organic_chemicals_51_exports<-data.frame(NA, nrow=length(index(Organic_chemicals_51_exports_xts["2015/"])))
@@ -2411,7 +2411,7 @@ colnames(Organic_chemicals_51_exports)<-c("Organic_chemicals_51")
 
 # Inorganic chemicals (52)
 
-Inorganic_chemicals_52<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Inorganic chemicals (52)") %>% select(-Countries.and.Territories,-Commodity.group))
+Inorganic_chemicals_52<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Inorganic chemicals (52)") %>% select(-Country,-Commodity.group))
 Inorganic_chemicals_52_exports_xts <- (as.xts(Inorganic_chemicals_52, order.by=Date))
 
 Inorganic_chemicals_52_exports<-data.frame(NA, nrow=length(index(Inorganic_chemicals_52_exports_xts["2015/"])))
@@ -2427,7 +2427,7 @@ colnames(Inorganic_chemicals_52_exports)<-c("Inorganic_chemicals_52")
 
 #Dyeing, tanning and colouring materials (53)
 
-Dyeing_tanning_53<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Dyeing, tanning and colouring materials (53)") %>% select(-Countries.and.Territories,-Commodity.group))
+Dyeing_tanning_53<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Dyeing, tanning and colouring materials (53)") %>% select(-Country,-Commodity.group))
 Dyeing_tanning_53_exports_xts <- (as.xts(Dyeing_tanning_53, order.by=Date))
 
 Dyeing_tanning_53_exports<-data.frame(NA, nrow=length(index(Dyeing_tanning_53_exports_xts["2015/"])))
@@ -2443,7 +2443,7 @@ colnames(Dyeing_tanning_53_exports)<-c("Dyeing_tanning_53")
 
 #Medicinal and pharmaceutical products (54)
 
-Medicinal_and_pharma_54<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Medicinal and pharmaceutical products (54)") %>% select(-Countries.and.Territories,-Commodity.group))
+Medicinal_and_pharma_54<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Medicinal and pharmaceutical products (54)") %>% select(-Country,-Commodity.group))
 Medicinal_and_pharma_54_exports_xts <- (as.xts(Medicinal_and_pharma_54, order.by=Date))
 
 Medicinal_and_pharma_54_exports<-data.frame(NA, nrow=length(index(Medicinal_and_pharma_54_exports_xts["2015/"])))
@@ -2460,7 +2460,7 @@ colnames(Medicinal_and_pharma_54_exports)<-c("Medicinal_and_pharma_54")
 
 #Essential oils, perfume materials, toilet preparations etc. (55) 
 
-Essential_oils_55<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Essential oils, perfume materials, toilet preparations etc. (55)") %>% select(-Countries.and.Territories,-Commodity.group))
+Essential_oils_55<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Essential oils, perfume materials, toilet preparations etc. (55)") %>% select(-Country,-Commodity.group))
 Essential_oils_55_exports_xts <- (as.xts(Essential_oils_55, order.by=Date))
 
 Essential_oils_55_exports<-data.frame(NA, nrow=length(index(Essential_oils_55_exports_xts["2015/"])))
@@ -2474,7 +2474,7 @@ colnames(Essential_oils_55_exports)<-c("Essential_oils_55")
 
 
 #Fertilisers, manufactured (56)
-Fertilisers_56<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Fertilisers, manufactured (56)") %>% select(-Countries.and.Territories,-Commodity.group))
+Fertilisers_56<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Fertilisers, manufactured (56)") %>% select(-Country,-Commodity.group))
 Fertilisers_56_exports_xts <- (as.xts(Fertilisers_56, order.by=Date))
 
 Fertilisers_56_exports<-data.frame(NA, nrow=length(index(Fertilisers_56_exports_xts["2015/"])))
@@ -2489,7 +2489,7 @@ colnames(Fertilisers_56_exports)<-c("Fertilisers_56")
 
 
 #Plastics in primary forms (57)
-Plastics_57<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Plastics in primary forms (57)") %>% select(-Countries.and.Territories,-Commodity.group))
+Plastics_57<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Plastics in primary forms (57)") %>% select(-Country,-Commodity.group))
 Plastics_57_exports_xts <- (as.xts(Plastics_57, order.by=Date))
 
 Plastics_57_exports<-data.frame(NA, nrow=length(index(Plastics_57_exports_xts["2015/"])))
@@ -2504,7 +2504,7 @@ colnames(Plastics_57_exports)<-c("Plastics_57")
 
 
 #Plastics in non-primary forms (58)
-Plastics_non_primary_58<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Plastics in non-primary forms (58)") %>% select(-Countries.and.Territories,-Commodity.group))
+Plastics_non_primary_58<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Plastics in non-primary forms (58)") %>% select(-Country,-Commodity.group))
 Plastics_non_primary_58_exports_xts <- (as.xts(Plastics_non_primary_58, order.by=Date))
 
 Plastics_non_primary_58_exports<-data.frame(NA, nrow=length(index(Plastics_non_primary_58_exports_xts["2015/"])))
@@ -2518,7 +2518,7 @@ colnames(Plastics_non_primary_58_exports)<-c("Plastics_non_primary_58")
 
 
 #Chemical materials and products, n.e.s. (59)
-Chemical_materials_59<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Chemical materials and products, n.e.s. (59)") %>% select(-Countries.and.Territories,-Commodity.group))
+Chemical_materials_59<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Chemical materials and products, n.e.s. (59)") %>% select(-Country,-Commodity.group))
 Chemical_materials_59_exports_xts <- (as.xts(Chemical_materials_59, order.by=Date))
 
 Chemical_materials_59_exports<-data.frame(NA, nrow=length(index(Chemical_materials_59_exports_xts["2015/"])))
@@ -2532,7 +2532,7 @@ colnames(Chemical_materials_59_exports)<-c("Chemical_materials_59")
 
 
 #Leather, leather manufactures and dressed furskins (61)
-Leather_61<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Leather, leather manufactures and dressed furskins (61)") %>% select(-Countries.and.Territories,-Commodity.group))
+Leather_61<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Leather, leather manufactures and dressed furskins (61)") %>% select(-Country,-Commodity.group))
 Leather_61_exports_xts <- (as.xts(Leather_61, order.by=Date))
 
 Leather_61_exports<-data.frame(NA, nrow=length(index(Leather_61_exports_xts["2015/"])))
@@ -2547,7 +2547,7 @@ colnames(Leather_61_exports)<-c("Leather_61")
 
 
 #Rubber manufactures, n.e.s. (62)
-Rubber_manufactures_62<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Rubber manufactures, n.e.s. (62)") %>% select(-Countries.and.Territories,-Commodity.group))
+Rubber_manufactures_62<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Rubber manufactures, n.e.s. (62)") %>% select(-Country,-Commodity.group))
 Rubber_manufactures_62_exports_xts <- (as.xts(Rubber_manufactures_62, order.by=Date))
 
 Rubber_manufactures_62_exports<-data.frame(NA, nrow=length(index(Rubber_manufactures_62_exports_xts["2015/"])))
@@ -2563,7 +2563,7 @@ colnames(Rubber_manufactures_62_exports)<-c("Rubber_manufactures_62")
 
 
 #Cork and wood manufactures, excluding furniture (63)
-Cork_and_wood_manufactures_63<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Cork and wood manufactures, excluding furniture (63)") %>% select(-Countries.and.Territories,-Commodity.group))
+Cork_and_wood_manufactures_63<-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Cork and wood manufactures, excluding furniture (63)") %>% select(-Country,-Commodity.group))
 Cork_and_wood_manufactures_63_exports_xts <- (as.xts(Cork_and_wood_manufactures_63, order.by=Date))
 
 Cork_and_wood_manufactures_63_exports<-data.frame(NA, nrow=length(index(Cork_and_wood_manufactures_63_exports_xts["2015/"])))
@@ -2578,7 +2578,7 @@ colnames(Cork_and_wood_manufactures_63_exports)<-c("Cork_and_wood_manufactures_6
 
 
 #Paper, paperboard and articles of paper pulp, paper etc. (64)       
-Paper_paperboard_64 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Paper, paperboard and articles of paper pulp, paper etc. (64)") %>% select(-Countries.and.Territories,-Commodity.group))
+Paper_paperboard_64 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Paper, paperboard and articles of paper pulp, paper etc. (64)") %>% select(-Country,-Commodity.group))
 Paper_paperboard_64_exports_xts <- (as.xts(Paper_paperboard_64, order.by=Date))
 
 Paper_paperboard_64_exports<-data.frame(NA, nrow=length(index(Paper_paperboard_64_exports_xts["2015/"])))
@@ -2593,7 +2593,7 @@ colnames(Paper_paperboard_64_exports)<-c("Paper_paperboard_64")
 
 #Textile yarn, fabrics, made-up articles and related products (65) 
 
-Textile_yarn_65 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Textile yarn, fabrics, made-up articles and related products (65)") %>% select(-Countries.and.Territories,-Commodity.group))
+Textile_yarn_65 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Textile yarn, fabrics, made-up articles and related products (65)") %>% select(-Country,-Commodity.group))
 Textile_yarn_65_exports_xts <- (as.xts(Textile_yarn_65, order.by=Date))
 
 Textile_yarn_65_exports<-data.frame(NA, nrow=length(index(Textile_yarn_65_exports_xts["2015/"])))
@@ -2610,7 +2610,7 @@ colnames(Textile_yarn_65_exports)<-c("Textile_yarn_65")
 
 #Non-metallic mineral manufactures, n.e.s. (66)  
 
-Non_metallic_mineral_66 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Non-metallic mineral manufactures, n.e.s. (66)") %>% select(-Countries.and.Territories,-Commodity.group))
+Non_metallic_mineral_66 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Non-metallic mineral manufactures, n.e.s. (66)") %>% select(-Country,-Commodity.group))
 Non_metallic_mineral_66_exports_xts <- (as.xts(Non_metallic_mineral_66, order.by=Date))
 
 Non_metallic_mineral_66_exports<-data.frame(NA, nrow=length(index(Non_metallic_mineral_66_exports_xts["2015/"])))
@@ -2626,7 +2626,7 @@ colnames(Non_metallic_mineral_66_exports)<-c("Non_metallic_mineral_66")
 
 
 #Iron and steel (67)
-Iron_and_steel_67 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Iron and steel (67)") %>% select(-Countries.and.Territories,-Commodity.group))
+Iron_and_steel_67 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Iron and steel (67)") %>% select(-Country,-Commodity.group))
 Iron_and_steel_67_exports_xts <- (as.xts(Iron_and_steel_67, order.by=Date))
 
 Iron_and_steel_67_exports<-data.frame(NA, nrow=length(index(Iron_and_steel_67_exports_xts["2015/"])))
@@ -2639,7 +2639,7 @@ Iron_and_steel_67_exports<-as.xts(t(Iron_and_steel_67_exports), order.by = Date)
 colnames(Iron_and_steel_67_exports)<-c("Iron_and_steel_67")
 
 #Non-ferrous metals (68)                                             
-Non_ferrous_metals_68 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Non-ferrous metals (68)") %>% select(-Countries.and.Territories,-Commodity.group))
+Non_ferrous_metals_68 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Non-ferrous metals (68)") %>% select(-Country,-Commodity.group))
 Non_ferrous_metals_68_exports_xts <- (as.xts(Non_ferrous_metals_68, order.by=Date))
 
 Non_ferrous_metals_68_exports<-data.frame(NA, nrow=length(index(Non_ferrous_metals_68_exports_xts["2015/"])))
@@ -2654,7 +2654,7 @@ colnames(Non_ferrous_metals_68_exports)<-c("Non_ferrous_metals_68")
 
 
 #Manufactures of metal, n.e.s. (69)
-Manufactures_of_metal_69 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Manufactures of metal, n.e.s. (69)") %>% select(-Countries.and.Territories,-Commodity.group))
+Manufactures_of_metal_69 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Manufactures of metal, n.e.s. (69)") %>% select(-Country,-Commodity.group))
 Manufactures_of_metal_69_exports_xts <- (as.xts(Manufactures_of_metal_69, order.by=Date))
 
 Manufactures_of_metal_69_exports<-data.frame(NA, nrow=length(index(Manufactures_of_metal_69_exports_xts["2015/"])))
@@ -2670,7 +2670,7 @@ colnames(Manufactures_of_metal_69_exports)<-c("Manufactures_of_metal_69")
 
 #Power generating machinery and equipment (71)
 
-Power_generating_machinery_71 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Power generating machinery and equipment (71)") %>% select(-Countries.and.Territories,-Commodity.group))
+Power_generating_machinery_71 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Power generating machinery and equipment (71)") %>% select(-Country,-Commodity.group))
 Power_generating_machinery_71_exports_xts <- (as.xts(Power_generating_machinery_71, order.by=Date))
 
 Power_generating_machinery_71_exports<-data.frame(NA, nrow=length(index(Power_generating_machinery_71_exports_xts["2015/"])))
@@ -2685,7 +2685,7 @@ colnames(Power_generating_machinery_71_exports)<-c("Power_generating_machinery_7
 
 #Machinery specialised for particular industries (72)
 
-Machinery_specialised_for_particular_industries_72 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Machinery specialised for particular industries (72)") %>% select(-Countries.and.Territories,-Commodity.group))
+Machinery_specialised_for_particular_industries_72 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Machinery specialised for particular industries (72)") %>% select(-Country,-Commodity.group))
 Machinery_specialised_for_particular_industries_72_exports_xts <- (as.xts(Machinery_specialised_for_particular_industries_72, order.by=Date))
 
 Machinery_specialised_for_particular_industries_72_exports<-data.frame(NA, nrow=length(index(Machinery_specialised_for_particular_industries_72_exports_xts["2015/"])))
@@ -2700,7 +2700,7 @@ colnames(Machinery_specialised_for_particular_industries_72_exports)<-c("Machine
 
 #Metalworking machinery (73)
 
-Metalworking_machinery_73 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Metalworking machinery (73)") %>% select(-Countries.and.Territories,-Commodity.group))
+Metalworking_machinery_73 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Metalworking machinery (73)") %>% select(-Country,-Commodity.group))
 Metalworking_machinery_73_exports_xts <- (as.xts(Metalworking_machinery_73, order.by=Date))
 
 Metalworking_machinery_73_exports<-data.frame(NA, nrow=length(index(Metalworking_machinery_73_exports_xts["2015/"])))
@@ -2716,7 +2716,7 @@ colnames(Metalworking_machinery_73_exports)<-c("Metalworking_machinery_73")
 #General industrial machinery and parts, n.e.s. (74)
 
 
-General_industrial_machinery_74 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="General industrial machinery and parts, n.e.s. (74)") %>% select(-Countries.and.Territories,-Commodity.group))
+General_industrial_machinery_74 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="General industrial machinery and parts, n.e.s. (74)") %>% select(-Country,-Commodity.group))
 General_industrial_machinery_74_exports_xts <- (as.xts(General_industrial_machinery_74, order.by=Date))
 
 General_industrial_machinery_74_exports<-data.frame(NA, nrow=length(index(General_industrial_machinery_74_exports_xts["2015/"])))
@@ -2734,7 +2734,7 @@ colnames(General_industrial_machinery_74_exports)<-c("General_industrial_machine
 #Office machines and automatic data processing equipment (75)
 
 
-Office_machines_and_automatic_data_processing_equipment_75 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Office machines and automatic data processing equipment (75)") %>% select(-Countries.and.Territories,-Commodity.group))
+Office_machines_and_automatic_data_processing_equipment_75 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Office machines and automatic data processing equipment (75)") %>% select(-Country,-Commodity.group))
 Office_machines_and_automatic_data_processing_equipment_75_exports_xts <- (as.xts(Office_machines_and_automatic_data_processing_equipment_75, order.by=Date))
 
 Office_machines_and_automatic_data_processing_equipment_75_exports<-data.frame(NA, nrow=length(index(Office_machines_and_automatic_data_processing_equipment_75_exports_xts["2015/"])))
@@ -2750,7 +2750,7 @@ colnames(Office_machines_and_automatic_data_processing_equipment_75_exports)<-c(
 #Telecommunications and sound recording, reproducing equipment (76)
 
 
-Telecommunications_and_sound_recording_76 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Telecommunications and sound recording, reproducing equipment (76)") %>% select(-Countries.and.Territories,-Commodity.group))
+Telecommunications_and_sound_recording_76 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Telecommunications and sound recording, reproducing equipment (76)") %>% select(-Country,-Commodity.group))
 Telecommunications_and_sound_recording_76_exports_xts <- (as.xts(Telecommunications_and_sound_recording_76, order.by=Date))
 
 Telecommunications_and_sound_recording_76_exports<-data.frame(NA, nrow=length(index(Telecommunications_and_sound_recording_76_exports_xts["2015/"])))
@@ -2767,7 +2767,7 @@ colnames(Telecommunications_and_sound_recording_76_exports)<-c("Telecommunicatio
 #Electrical machinery, appliances etc., n.e.s. (77)                  
 
 
-Electrical_machinery_77 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Electrical machinery, appliances etc., n.e.s. (77)") %>% select(-Countries.and.Territories,-Commodity.group))
+Electrical_machinery_77 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Electrical machinery, appliances etc., n.e.s. (77)") %>% select(-Country,-Commodity.group))
 Electrical_machinery_77_exports_xts <- (as.xts(Electrical_machinery_77, order.by=Date))
 
 Electrical_machinery_77_exports<-data.frame(NA, nrow=length(index(Electrical_machinery_77_exports_xts["2015/"])))
@@ -2786,7 +2786,7 @@ colnames(Electrical_machinery_77_exports)<-c("Electrical_machinery_77")
 #Road vehicles (78)
 
 
-Road_vehicles_78 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Road vehicles (78)") %>% select(-Countries.and.Territories,-Commodity.group))
+Road_vehicles_78 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Road vehicles (78)") %>% select(-Country,-Commodity.group))
 Road_vehicles_78_exports_xts <- (as.xts(Road_vehicles_78, order.by=Date))
 
 Road_vehicles_78_exports<-data.frame(NA, nrow=length(index(Road_vehicles_78_exports_xts["2015/"])))
@@ -2804,7 +2804,7 @@ colnames(Road_vehicles_78_exports)<-c("Road_vehicles_78")
 
 #Other transport equipment (79)      
 
-Other_transport_equipment_79 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Other transport equipment (79)") %>% select(-Countries.and.Territories,-Commodity.group))
+Other_transport_equipment_79 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Other transport equipment (79)") %>% select(-Country,-Commodity.group))
 Other_transport_equipment_79_exports_xts <- (as.xts(Other_transport_equipment_79, order.by=Date))
 
 Other_transport_equipment_79_exports<-data.frame(NA, nrow=length(index(Other_transport_equipment_79_exports_xts["2015/"])))
@@ -2819,7 +2819,7 @@ colnames(Other_transport_equipment_79_exports)<-c("Other_transport_equipment_79"
 
 #Prefab buildings; plumbing and electrical fixtures and fittings (81)
 
-Prefab_buildings_plumbing_and_electrical_81 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Prefab buildings; plumbing and electrical fixtures and fittings (81)") %>% select(-Countries.and.Territories,-Commodity.group))
+Prefab_buildings_plumbing_and_electrical_81 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Prefab buildings; plumbing and electrical fixtures and fittings (81)") %>% select(-Country,-Commodity.group))
 Prefab_buildings_plumbing_and_electrical_81_exports_xts <- (as.xts(Prefab_buildings_plumbing_and_electrical_81, order.by=Date))
 
 Prefab_buildings_plumbing_and_electrical_81_exports<-data.frame(NA, nrow=length(index(Prefab_buildings_plumbing_and_electrical_81_exports_xts["2015/"])))
@@ -2834,7 +2834,7 @@ colnames(Prefab_buildings_plumbing_and_electrical_81_exports)<-c("Prefab_buildin
 
 
 #Furniture and parts thereof (82)
-Furniture_and_parts_thereof_82 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Furniture and parts thereof (82)") %>% select(-Countries.and.Territories,-Commodity.group))
+Furniture_and_parts_thereof_82 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Furniture and parts thereof (82)") %>% select(-Country,-Commodity.group))
 Furniture_and_parts_thereof_82_exports_xts <- (as.xts(Furniture_and_parts_thereof_82, order.by=Date))
 
 Furniture_and_parts_thereof_82_exports<-data.frame(NA, nrow=length(index(Furniture_and_parts_thereof_82_exports_xts["2015/"])))
@@ -2850,7 +2850,7 @@ colnames(Furniture_and_parts_thereof_82_exports)<-c("Furniture_and_parts_thereof
 
 
 #Travel goods, handbags and similar containers (83)
-Travel_goods_handbags_and_similar_containers_83 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Travel goods, handbags and similar containers (83)") %>% select(-Countries.and.Territories,-Commodity.group))
+Travel_goods_handbags_and_similar_containers_83 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Travel goods, handbags and similar containers (83)") %>% select(-Country,-Commodity.group))
 Travel_goods_handbags_and_similar_containers_83_exports_xts <- (as.xts(Travel_goods_handbags_and_similar_containers_83, order.by=Date))
 
 Travel_goods_handbags_and_similar_containers_83_exports<-data.frame(NA, nrow=length(index(Travel_goods_handbags_and_similar_containers_83_exports_xts["2015/"])))
@@ -2865,7 +2865,7 @@ colnames(Travel_goods_handbags_and_similar_containers_83_exports)<-c("Travel_goo
 
 
 #Articles of apparel and clothing accessories (84)
-Articles_of_apparel_84 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Articles of apparel and clothing accessories (84)") %>% select(-Countries.and.Territories,-Commodity.group))
+Articles_of_apparel_84 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Articles of apparel and clothing accessories (84)") %>% select(-Country,-Commodity.group))
 Articles_of_apparel_84_exports_xts <- (as.xts(Articles_of_apparel_84, order.by=Date))
 
 Articles_of_apparel_84_exports<-data.frame(NA, nrow=length(index(Articles_of_apparel_84_exports_xts["2015/"])))
@@ -2882,7 +2882,7 @@ colnames(Articles_of_apparel_84_exports)<-c("Articles_of_apparel_84")
 
 #Footwear (85)
 
-Footwear_85 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Footwear (85)") %>% select(-Countries.and.Territories,-Commodity.group))
+Footwear_85 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Footwear (85)") %>% select(-Country,-Commodity.group))
 Footwear_85_exports_xts <- (as.xts(Footwear_85, order.by=Date))
 
 Footwear_85_exports<-data.frame(NA, nrow=length(index(Footwear_85_exports_xts["2015/"])))
@@ -2898,7 +2898,7 @@ colnames(Footwear_85_exports)<-c("Footwear_85")
 
 #Professional, scientific and controlling apparatus (87)
 
-Professional_scientific_and_controlling_apparatus_87 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Professional, scientific and controlling apparatus (87)") %>% select(-Countries.and.Territories,-Commodity.group))
+Professional_scientific_and_controlling_apparatus_87 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Professional, scientific and controlling apparatus (87)") %>% select(-Country,-Commodity.group))
 Professional_scientific_and_controlling_apparatus_87_exports_xts <- (as.xts(Professional_scientific_and_controlling_apparatus_87, order.by=Date))
 
 Professional_scientific_and_controlling_apparatus_87_exports<-data.frame(NA, nrow=length(index(Professional_scientific_and_controlling_apparatus_87_exports_xts["2015/"])))
@@ -2914,7 +2914,7 @@ colnames(Professional_scientific_and_controlling_apparatus_87_exports)<-c("Profe
 
 #Photographic apparatus, optical goods, watches and clocks (88)
 
-Photographic_apparatus_88 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Photographic apparatus, optical goods, watches and clocks (88)") %>% select(-Countries.and.Territories,-Commodity.group))
+Photographic_apparatus_88 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Photographic apparatus, optical goods, watches and clocks (88)") %>% select(-Country,-Commodity.group))
 Photographic_apparatus_88_exports_xts <- (as.xts(Photographic_apparatus_88, order.by=Date))
 
 Photographic_apparatus_88_exports<-data.frame(NA, nrow=length(index(Photographic_apparatus_88_exports_xts["2015/"])))
@@ -2929,7 +2929,7 @@ colnames(Photographic_apparatus_88_exports)<-c("Photographic_apparatus_88")
 
 #Miscellaneous manufactured articles, n.e.s. (89)
 
-Miscellaneous_manufactured_articles_89 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Miscellaneous manufactured articles, n.e.s. (89)") %>% select(-Countries.and.Territories,-Commodity.group))
+Miscellaneous_manufactured_articles_89 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Miscellaneous manufactured articles, n.e.s. (89)") %>% select(-Country,-Commodity.group))
 Miscellaneous_manufactured_articles_89_exports_xts <- (as.xts(Miscellaneous_manufactured_articles_89, order.by=Date))
 
 Miscellaneous_manufactured_articles_89_exports<-data.frame(NA, nrow=length(index(Miscellaneous_manufactured_articles_89_exports_xts["2015/"])))
@@ -2943,7 +2943,7 @@ colnames(Miscellaneous_manufactured_articles_89_exports)<-c("Miscellaneous_manuf
 
 #Commodities and transactions n.e.s. (9)
 
-Commodities_and_transactions_9 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Commodities and transactions n.e.s. (9)") %>% select(-Countries.and.Territories,-Commodity.group))
+Commodities_and_transactions_9 <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Commodities and transactions n.e.s. (9)") %>% select(-Country,-Commodity.group))
 Commodities_and_transactions_9_exports_xts <- (as.xts(Commodities_and_transactions_9, order.by=Date))
 
 Commodities_and_transactions_9_exports<-data.frame(NA, nrow=length(index(Commodities_and_transactions_9_exports_xts["2015/"])))
@@ -2958,7 +2958,7 @@ colnames(Commodities_and_transactions_9_exports)<-c("Commodities_and_transaction
 #Unclassified estimates 
 
 
-Unclassified_estimates <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Unclassified estimates") %>% select(-Countries.and.Territories,-Commodity.group))
+Unclassified_estimates <-t(subset(Ireland_exports,Ireland_Exports["2014-11-01"]=="Unclassified estimates") %>% select(-Country,-Commodity.group))
 Unclassified_estimates_exports_xts <- (as.xts(Commodities_and_transactions_9, order.by=Date))
 
 Unclassified_estimates_exports<-data.frame(NA, nrow=length(index(Unclassified_estimates_exports_xts["2015/"])))
@@ -3346,7 +3346,7 @@ Ireland_imports<- subset(cso_get_data("TSM10"),Statistic=="Value of Imports") %>
 Date<-seq(as.Date("2015-01-01"), by="month",length.out=NROW(Ire_Imports)-3)
 
 #Austria
-Austria_Imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Austria") %>% select(-Countries.and.Territories))
+Austria_Imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Austria") %>% select(-Country))
 colnames(Austria_Imports) <-Austria_Imports[1,]
 Austria_Imports<-Austria_Imports[-c(1),]
 
@@ -3368,7 +3368,7 @@ colnames(Austria_sum_import)<-c("Austria")
 
 
 #Australia
-Australia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Australia") %>% select(-Countries.and.Territories))
+Australia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Australia") %>% select(-Country))
 colnames(Australia_imports) <-Australia_imports[1,]
 Australia_imports<-Australia_imports[-c(1),]
 
@@ -3386,7 +3386,7 @@ colnames(Australia_sum_import)<-c("Australia")
 
 
 #Belgium
-Belgium_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Belgium") %>% select(-Countries.and.Territories))
+Belgium_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Belgium") %>% select(-Country))
 colnames(Belgium_imports) <-Belgium_imports[1,]
 Belgium_imports<-Belgium_imports[-c(1),]
 
@@ -3402,7 +3402,7 @@ Belgium_sum_import<-as.xts(t(Belgium_sum_import), order.by = Date)
 colnames(Belgium_sum_import)<-c("Belgium")
 
 #Bulgaria
-Bulgaria_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Bulgaria") %>% select(-Countries.and.Territories))
+Bulgaria_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Bulgaria") %>% select(-Country))
 colnames(Bulgaria_imports) <-Bulgaria_imports[1,]
 Bulgaria_imports<-Bulgaria_imports[-c(1),]
 
@@ -3419,7 +3419,7 @@ colnames(Bulgaria_sum_import)<-c("Bulgaria")
 
 
 #Brazil 
-Brazil_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Brazil") %>% select(-Countries.and.Territories))
+Brazil_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Brazil") %>% select(-Country))
 colnames(Brazil_imports) <-Brazil_imports[1,]
 Brazil_imports<-Brazil_imports[-c(1),]
 
@@ -3435,7 +3435,7 @@ Brazil_sum_import<-as.xts(t(Brazil_sum_import), order.by = Date)
 colnames(Brazil_sum_import)<-c("Brazil")
 
 #Canada 
-Canada_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Canada") %>% select(-Countries.and.Territories))
+Canada_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Canada") %>% select(-Country))
 colnames(Canada_imports) <-Canada_imports[1,]
 Canada_imports<-Canada_imports[-c(1),]
 
@@ -3453,7 +3453,7 @@ colnames(Canada_sum_import)<-c("Canada")
 
 
 #Switzerland 
-Switzerland_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Switzerland") %>% select(-Countries.and.Territories))
+Switzerland_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Switzerland") %>% select(-Country))
 colnames(Switzerland_imports) <-Switzerland_imports[1,]
 Switzerland_imports<-Switzerland_imports[-c(1),]
 
@@ -3470,7 +3470,7 @@ Switzerland_sum_import<-as.xts(t(Switzerland_sum_import), order.by = Date)
 colnames(Switzerland_sum_import)<-c("Switzerland")
 
 #China 
-China_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="China") %>% select(-Countries.and.Territories))
+China_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="China") %>% select(-Country))
 colnames(China_imports) <-China_imports[1,]
 China_imports<-China_imports[-c(1),]
 
@@ -3488,7 +3488,7 @@ colnames(China_sum_import)<-c("China")
 
 
 #Cyprus 
-Cyprus_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Cyprus") %>% select(-Countries.and.Territories))
+Cyprus_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Cyprus") %>% select(-Country))
 colnames(Cyprus_imports) <-Cyprus_imports[1,]
 Cyprus_imports<-Cyprus_imports[-c(1),]
 
@@ -3505,7 +3505,7 @@ colnames(Cyprus_sum_import)<-c("Cyprus")
 
 
 #Czech Republic
-Czech_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Czech Republic") %>% select(-Countries.and.Territories))
+Czech_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Czech Republic") %>% select(-Country))
 colnames(Czech_imports) <-Czech_imports[1,]
 Czech_imports<-Czech_imports[-c(1),]
 
@@ -3522,7 +3522,7 @@ colnames(Czech_sum_import)<-c("Czech")
 
 
 #Germany
-Germany_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Germany") %>% select(-Countries.and.Territories))
+Germany_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Germany") %>% select(-Country))
 colnames(Germany_imports) <-Germany_imports[1,]
 Germany_imports<-Germany_imports[-c(1),]
 
@@ -3540,7 +3540,7 @@ colnames(Germany_sum_import)<-c("Germany")
 
 
 #Denmark 
-Denmark_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Denmark") %>% select(-Countries.and.Territories))
+Denmark_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Denmark") %>% select(-Country))
 colnames(Denmark_imports) <-Denmark_imports[1,]
 Denmark_imports<-Denmark_imports[-c(1),]
 
@@ -3557,7 +3557,7 @@ colnames(Denmark_sum_import)<-c("Denmark")
 
 
 #Estonia 
-Estonia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Estonia") %>% select(-Countries.and.Territories))
+Estonia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Estonia") %>% select(-Country))
 colnames(Estonia_imports) <-Estonia_imports[1,]
 Estonia_imports<-Estonia_imports[-c(1),]
 
@@ -3573,7 +3573,7 @@ Estonia_sum_import<-as.xts(t(Estonia_sum_import), order.by = Date)
 colnames(Estonia_sum_import)<-c("Estonia")
 
 #Spain 
-Spain_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Spain") %>% select(-Countries.and.Territories))
+Spain_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Spain") %>% select(-Country))
 colnames(Spain_imports) <-Spain_imports[1,]
 Spain_imports<-Spain_imports[-c(1),]
 
@@ -3591,7 +3591,7 @@ colnames(Spain_sum_import)<-c("Spain")
 
 
 #Finland 
-Finland_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Finland") %>% select(-Countries.and.Territories))
+Finland_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Finland") %>% select(-Country))
 colnames(Finland_imports) <-Finland_imports[1,]
 Finland_imports<-Finland_imports[-c(1),]
 
@@ -3609,7 +3609,7 @@ colnames(Finland_sum_import)<-c("Finland")
 
 
 #France
-France_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="France") %>% select(-Countries.and.Territories))
+France_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="France") %>% select(-Country))
 colnames(France_imports) <-France_imports[1,]
 France_imports<-France_imports[-c(1),]
 
@@ -3626,7 +3626,7 @@ colnames(France_sum_import)<-c("France")
 
 
 #Greece
-Greece_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Greece") %>% select(-Countries.and.Territories))
+Greece_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Greece") %>% select(-Country))
 colnames(Greece_imports) <-Greece_imports[1,]
 Greece_imports<-Greece_imports[-c(1),]
 
@@ -3643,7 +3643,7 @@ colnames(Greece_sum_import)<-c("Greece")
 
 
 ##Croatia
-Croatia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Croatia") %>% select(-Countries.and.Territories))
+Croatia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Croatia") %>% select(-Country))
 colnames(Croatia_imports) <-Croatia_imports[1,]
 Croatia_imports<-Croatia_imports[-c(1),]
 
@@ -3661,7 +3661,7 @@ colnames(Croatia_sum_import)<-c("Croatia")
 
 
 #Hungary
-Hungary_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Hungary") %>% select(-Countries.and.Territories))
+Hungary_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Hungary") %>% select(-Country))
 colnames(Hungary_imports) <-Hungary_imports[1,]
 Hungary_imports<-Hungary_imports[-c(1),]
 
@@ -3677,7 +3677,7 @@ Hungary_sum_import<-as.xts(t(Hungary_sum_import), order.by = Date)
 colnames(Hungary_sum_import)<-c("Hungary")
 
 #India
-India_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="India") %>% select(-Countries.and.Territories))
+India_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="India") %>% select(-Country))
 colnames(India_imports) <-India_imports[1,]
 India_imports<-India_imports[-c(1),]
 
@@ -3693,7 +3693,7 @@ India_sum_import<-as.xts(t(India_sum_import), order.by = Date)
 colnames(India_sum_import)<-c("India")
 
 #Italy
-Italy_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Italy") %>% select(-Countries.and.Territories))
+Italy_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Italy") %>% select(-Country))
 colnames(Italy_imports) <-Italy_imports[1,]
 Italy_imports<-Italy_imports[-c(1),]
 
@@ -3712,7 +3712,7 @@ colnames(Italy_sum_import)<-c("Italy")
 
 #Japan
 
-Japan_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Japan") %>% select(-Countries.and.Territories))
+Japan_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Japan") %>% select(-Country))
 colnames(Japan_imports) <-Japan_imports[1,]
 Japan_imports<-Japan_imports[-c(1),]
 
@@ -3729,7 +3729,7 @@ colnames(Japan_sum_import)<-c("Japan")
 
 
 #South Korea
-Korea_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="South Korea") %>% select(-Countries.and.Territories))
+Korea_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="South Korea") %>% select(-Country))
 colnames(Korea_imports) <-Korea_imports[1,]
 Korea_imports<-Korea_imports[-c(1),]
 
@@ -3748,7 +3748,7 @@ colnames(Korea_sum_import)<-c("Korea")
 
 
 #Lithuania
-Lithuania_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Lithuania") %>% select(-Countries.and.Territories))
+Lithuania_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Lithuania") %>% select(-Country))
 colnames(Lithuania_imports) <-Lithuania_imports[1,]
 Lithuania_imports<-Lithuania_imports[-c(1),]
 
@@ -3766,7 +3766,7 @@ colnames(Lithuania_sum_import)<-c("Lithuania")
 
 
 #Luxembourg 
-Luxembourg_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Luxembourg") %>% select(-Countries.and.Territories))
+Luxembourg_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Luxembourg") %>% select(-Country))
 colnames(Luxembourg_imports) <-Luxembourg_imports[1,]
 Luxembourg_imports<-Luxembourg_imports[-c(1),]
 
@@ -3784,7 +3784,7 @@ colnames(Luxembourg_sum_import)<-c("Luxembourg")
 
 
 #Latvia 
-Latvia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Latvia") %>% select(-Countries.and.Territories))
+Latvia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Latvia") %>% select(-Country))
 colnames(Latvia_imports) <-Latvia_imports[1,]
 Latvia_imports<-Latvia_imports[-c(1),]
 
@@ -3802,7 +3802,7 @@ colnames(Latvia_sum_import)<-c("Latvia")
 
 
 #Malta 
-Malta_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Malta") %>% select(-Countries.and.Territories))
+Malta_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Malta") %>% select(-Country))
 colnames(Malta_imports) <-Malta_imports[1,]
 Malta_imports<-Malta_imports[-c(1),]
 
@@ -3821,7 +3821,7 @@ colnames(Malta_sum_import)<-c("Malta")
 
 
 #Mexico 
-Mexico_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Mexico") %>% select(-Countries.and.Territories))
+Mexico_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Mexico") %>% select(-Country))
 colnames(Mexico_imports) <-Mexico_imports[1,]
 Mexico_imports<-Mexico_imports[-c(1),]
 
@@ -3839,7 +3839,7 @@ colnames(Mexico_sum_import)<-c("Mexico")
 
 
 #Malaysia 
-Malaysia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Malaysia") %>% select(-Countries.and.Territories))
+Malaysia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Malaysia") %>% select(-Country))
 colnames(Malaysia_imports) <-Malaysia_imports[1,]
 Malaysia_imports<-Malaysia_imports[-c(1),]
 
@@ -3856,7 +3856,7 @@ colnames(Malaysia_sum_import)<-c("Malaysia")
 
 
 #Netherlands 
-Netherlands_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Netherlands") %>% select(-Countries.and.Territories))
+Netherlands_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Netherlands") %>% select(-Country))
 colnames(Netherlands_imports) <-Netherlands_imports[1,]
 Netherlands_imports<-Netherlands_imports[-c(1),]
 
@@ -3874,7 +3874,7 @@ colnames(Netherlands_sum_import)<-c("Netherlands")
 
 
 #Norway  
-Norway_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Norway") %>% select(-Countries.and.Territories))
+Norway_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Norway") %>% select(-Country))
 colnames(Norway_imports) <-Norway_imports[1,]
 Norway_imports<-Norway_imports[-c(1),]
 
@@ -3893,7 +3893,7 @@ colnames(Norway_sum_import)<-c("Norway")
 
 
 #Poland  
-Poland_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Poland") %>% select(-Countries.and.Territories))
+Poland_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Poland") %>% select(-Country))
 colnames(Poland_imports) <-Poland_imports[1,]
 Poland_imports<-Poland_imports[-c(1),]
 
@@ -3911,7 +3911,7 @@ colnames(Poland_sum_import)<-c("Poland")
 
 
 #Portugal  
-Portugal_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Portugal") %>% select(-Countries.and.Territories))
+Portugal_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Portugal") %>% select(-Country))
 colnames(Portugal_imports) <-Portugal_imports[1,]
 Portugal_imports<-Portugal_imports[-c(1),]
 
@@ -3930,7 +3930,7 @@ colnames(Portugal_sum_import)<-c("Portugal")
 
 
 #Romania  
-Romania_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Romania") %>% select(-Countries.and.Territories))
+Romania_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Romania") %>% select(-Country))
 colnames(Romania_imports) <-Romania_imports[1,]
 Romania_imports<-Romania_imports[-c(1),]
 
@@ -3946,7 +3946,7 @@ Romania_sum_import<-as.xts(t(Romania_sum_import), order.by = Date)
 colnames(Romania_sum_import)<-c("Romania")
 
 #Russia  
-Russia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Russia") %>% select(-Countries.and.Territories))
+Russia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Russia") %>% select(-Country))
 colnames(Russia_imports) <-Russia_imports[1,]
 Russia_imports<-Russia_imports[-c(1),]
 
@@ -3963,7 +3963,7 @@ colnames(Russia_sum_import)<-c("Russia")
 
 
 #Saudi Arabia  
-Saudi_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Saudi Arabia") %>% select(-Countries.and.Territories))
+Saudi_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Saudi Arabia") %>% select(-Country))
 colnames(Saudi_imports) <-Saudi_imports[1,]
 Saudi_imports<-Saudi_imports[-c(1),]
 
@@ -3981,7 +3981,7 @@ colnames(Saudi_sum_import)<-c("Saudi")
 
 
 #Sweden  
-Sweden_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Sweden") %>% select(-Countries.and.Territories))
+Sweden_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Sweden") %>% select(-Country))
 colnames(Sweden_imports) <-Sweden_imports[1,]
 Sweden_imports<-Sweden_imports[-c(1),]
 
@@ -3998,7 +3998,7 @@ colnames(Sweden_sum_import)<-c("Sweden")
 
 
 #Singapore  
-Singapore_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Singapore") %>% select(-Countries.and.Territories))
+Singapore_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Singapore") %>% select(-Country))
 colnames(Singapore_imports) <-Singapore_imports[1,]
 Singapore_imports<-Singapore_imports[-c(1),]
 
@@ -4016,7 +4016,7 @@ colnames(Singapore_sum_import)<-c("Singapore")
 
 
 #Slovenia  
-Slovenia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Slovenia") %>% select(-Countries.and.Territories))
+Slovenia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Slovenia") %>% select(-Country))
 colnames(Slovenia_imports) <-Slovenia_imports[1,]
 Slovenia_imports<-Slovenia_imports[-c(1),]
 
@@ -4034,7 +4034,7 @@ colnames(Slovenia_sum_import)<-c("Slovenia")
 
 
 #Slovakia  
-Slovakia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Slovakia") %>% select(-Countries.and.Territories))
+Slovakia_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Slovakia") %>% select(-Country))
 colnames(Slovakia_imports) <-Slovakia_imports[1,]
 Slovakia_imports<-Slovakia_imports[-c(1),]
 
@@ -4051,7 +4051,7 @@ colnames(Slovakia_sum_import)<-c("Slovakia")
 
 
 #Thailand  
-Thailand_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Thailand") %>% select(-Countries.and.Territories))
+Thailand_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Thailand") %>% select(-Country))
 colnames(Thailand_imports) <-Thailand_imports[1,]
 Thailand_imports<-Thailand_imports[-c(1),]
 
@@ -4068,7 +4068,7 @@ colnames(Thailand_sum_import)<-c("Thailand")
 
 
 #Turkey  
-Turkey_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Turkey") %>% select(-Countries.and.Territories))
+Turkey_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Turkey") %>% select(-Country))
 colnames(Turkey_imports) <-Turkey_imports[1,]
 Turkey_imports<-Turkey_imports[-c(1),]
 
@@ -4085,7 +4085,7 @@ colnames(Turkey_sum_import)<-c("Turkey")
 
 
 #Taiwan  
-Taiwan_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Taiwan") %>% select(-Countries.and.Territories))
+Taiwan_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Taiwan") %>% select(-Country))
 colnames(Taiwan_imports) <-Taiwan_imports[1,]
 Taiwan_imports<-Taiwan_imports[-c(1),]
 
@@ -4102,7 +4102,7 @@ colnames(Taiwan_sum_import)<-c("Taiwan")
 
 
 #USA  
-USA_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="USA") %>% select(-Countries.and.Territories))
+USA_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="USA") %>% select(-Country))
 colnames(USA_imports) <-USA_imports[1,]
 USA_imports<-USA_imports[-c(1),]
 USA_imports_xts <- (as.xts(USA_imports, order.by=Date))
@@ -4120,7 +4120,7 @@ colnames(USA_sum_import)<-c("USA")
 
 
 #Great Britian  
-GB_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Great Britain") %>% select(-Countries.and.Territories))
+GB_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Great Britain") %>% select(-Country))
 colnames(GB_imports) <-GB_imports[1,]
 GB_imports<-GB_imports[-c(1),]
 
@@ -4138,7 +4138,7 @@ colnames(GB_sum_import)<-c("GB")
 
 
 #Northern Ireland 
-NI_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Northern Ireland") %>% select(-Countries.and.Territories))
+NI_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Northern Ireland") %>% select(-Country))
 colnames(NI_imports) <-NI_imports[1,]
 NI_imports<-NI_imports[-c(1),]
 
@@ -4156,7 +4156,7 @@ colnames(NI_sum_import)<-c("NI")
 
 
 #South Africa 
-SA_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="South Africa") %>% select(-Countries.and.Territories))
+SA_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="South Africa") %>% select(-Country))
 colnames(SA_imports) <-SA_imports[1,]
 SA_imports<-SA_imports[-c(1),]
 
@@ -4172,7 +4172,7 @@ SA_sum_import<-as.xts(t(SA_sum_import), order.by = Date)
 colnames(SA_sum_import)<-c("SA")
 
 #EU country not specified 
-OTHER_EU_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="EU country not specified") %>% select(-Countries.and.Territories))
+OTHER_EU_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="EU country not specified") %>% select(-Country))
 colnames(OTHER_EU_imports) <-OTHER_EU_imports[1,]
 OTHER_EU_imports<-OTHER_EU_imports[-c(1),]
 
@@ -4188,7 +4188,7 @@ OTHER_EU_sum_import<-as.xts(t(OTHER_EU_sum_import), order.by = Date)
 colnames(OTHER_EU_sum_import)<-c("OTHER_EU")
 
 #OTHER 
-OTHER_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Other countries") %>% select(-Countries.and.Territories))
+OTHER_imports<- t(subset(Ireland_imports,Ireland_Imports["2014-12-01"]=="Other countries") %>% select(-Country))
 colnames(OTHER_imports) <-OTHER_imports[1,]
 OTHER_imports<-OTHER_imports[-c(1),]
 
@@ -4326,7 +4326,7 @@ Ireland_Imports<-as.xts(Ire_Imports, order.by = Date_Import)
 
 
 #Live animals except fish etc. (00)
-Live_animals_00<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Live animals except fish etc. (00)") %>% select(-Countries.and.Territories,-Commodity.group))
+Live_animals_00<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Live animals except fish etc. (00)") %>% select(-Country,-Commodity.group))
 Live_animals_00_imports_xts <- (as.xts(Live_animals_00, order.by=Date_Import[4:length(Date_Import)]))
 Live_animals_00_imports<-data.frame(NA, nrow=length(index(Live_animals_00_imports_xts["2015/"])))
 
@@ -4340,7 +4340,7 @@ colnames(Live_animals_00_imports)<-c("Live_animals_00")
 
 
 #Meat and meat preparations (01)
-meat_01<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Meat and meat preparations (01)") %>% select(-Countries.and.Territories,-Commodity.group))
+meat_01<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Meat and meat preparations (01)") %>% select(-Country,-Commodity.group))
 meat_01_imports_xts <- (as.xts(meat_01, order.by=Date))
 meat_01_imports<-data.frame(NA, nrow=length(index(meat_01_imports_xts["2015/"])))
 
@@ -4354,7 +4354,7 @@ colnames(meat_01_imports)<-c("meat_01")
 
 
 #Dairy products and birds eggs (02)                                       
-Dairy_02<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Dairy products and birds eggs (02)") %>% select(-Countries.and.Territories,-Commodity.group))
+Dairy_02<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Dairy products and birds eggs (02)") %>% select(-Country,-Commodity.group))
 Dairy_02_imports_xts <- (as.xts(Dairy_02, order.by=Date))
 Dairy_02_imports<-data.frame(NA, nrow=length(index(Dairy_02_imports_xts["2015/"])))
 
@@ -4368,7 +4368,7 @@ colnames(Dairy_02_imports)<-c("Dairy_02")
 
 #Fish, crustaceans, molluscs and preparations thereof (03)                                       
                                        
-Fish_03<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Fish, crustaceans, molluscs and preparations thereof (03)") %>% select(-Countries.and.Territories,-Commodity.group))
+Fish_03<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Fish, crustaceans, molluscs and preparations thereof (03)") %>% select(-Country,-Commodity.group))
 Fish_03_imports_xts <- (as.xts(Fish_03, order.by=Date))
 Fish_03_imports<-data.frame(NA, nrow=length(index(Fish_03_imports_xts["2015/"])))
 
@@ -4383,7 +4383,7 @@ colnames(Fish_03_imports)<-c("Fish_03")
 
 #Cereals and cereal preparations (04)                                       
 
-Cereal_04<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Cereals and cereal preparations (04)") %>% select(-Countries.and.Territories,-Commodity.group))
+Cereal_04<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Cereals and cereal preparations (04)") %>% select(-Country,-Commodity.group))
 Cereal_04_imports_xts <- (as.xts(Cereal_04, order.by=Date))
 Cereal_04_imports<-data.frame(NA, nrow=length(index(Cereal_04_imports_xts["2015/"])))
 
@@ -4399,7 +4399,7 @@ colnames(Cereal_04_imports)<-c("Cereal_04")
 
 #Vegetables and fruit (05)                                       
 
-Veg_05<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Vegetables and fruit (05)") %>% select(-Countries.and.Territories,-Commodity.group))
+Veg_05<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Vegetables and fruit (05)") %>% select(-Country,-Commodity.group))
 Veg_05_imports_xts <- (as.xts(Veg_05, order.by=Date))
 Veg_05_imports<-data.frame(NA, nrow=length(index(Veg_05_imports_xts["2015/"])))
 
@@ -4412,7 +4412,7 @@ colnames(Veg_05_imports)<-c("Veg_05")
 
 
 #Sugar, sugar preparations and honey (06)      
-Sugar_06<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Sugar, sugar preparations and honey (06)") %>% select(-Countries.and.Territories,-Commodity.group))
+Sugar_06<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Sugar, sugar preparations and honey (06)") %>% select(-Country,-Commodity.group))
 Sugar_06_imports_xts <- (as.xts(Sugar_06, order.by=Date))
 Sugar_06_imports<-data.frame(NA, nrow=length(index(Sugar_06_imports_xts["2015/"])))
 
@@ -4424,7 +4424,7 @@ Sugar_06_imports<-as.xts(t(Sugar_06_imports), order.by = Date)
 colnames(Sugar_06_imports)<-c("Sugar_06")
 
 #Coffee, tea, cocoa, spices and manufactures thereof (07)      
-Coffee_07<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Coffee, tea, cocoa, spices and manufactures thereof (07)") %>% select(-Countries.and.Territories,-Commodity.group))
+Coffee_07<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Coffee, tea, cocoa, spices and manufactures thereof (07)") %>% select(-Country,-Commodity.group))
 Coffee_07_imports_xts <- (as.xts(Coffee_07, order.by=Date))
 Coffee_07_imports<-data.frame(NA, nrow=length(index(Coffee_07_imports_xts["2015/"])))
 
@@ -4441,7 +4441,7 @@ colnames(Coffee_07_imports)<-c("Coffee_07")
 
 
 #Feeding stuffs for animals, excluding unmilled cereals (08)      
-animal_feed_08<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Countries.and.Territories,-Commodity.group))
+animal_feed_08<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Country,-Commodity.group))
 animal_feed_08_imports_xts <- (as.xts(animal_feed_08, order.by=Date))
 animal_feed_08_imports<-data.frame(NA, nrow=length(index(animal_feed_08_imports_xts["2015/"])))
 
@@ -4455,7 +4455,7 @@ colnames(animal_feed_08_imports)<-c("animal_feed_08")
 
 
 #Feeding stuffs for animals, excluding unmilled cereals (08)      
-animal_feed_08<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Countries.and.Territories,-Commodity.group))
+animal_feed_08<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Feeding stuffs for animals, excluding unmilled cereals (08)") %>% select(-Country,-Commodity.group))
 animal_feed_08_imports_xts <- (as.xts(animal_feed_08, order.by=Date))
 animal_feed_08_imports<-data.frame(NA, nrow=length(index(animal_feed_08_imports_xts["2015/"])))
 
@@ -4468,7 +4468,7 @@ colnames(animal_feed_08_imports)<-c("animal_feed_08")
 
 
 #Miscellaneous edible products and preparations (09)     
-Miscellaneous_09<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Miscellaneous edible products and preparations (09)") %>% select(-Countries.and.Territories,-Commodity.group))
+Miscellaneous_09<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Miscellaneous edible products and preparations (09)") %>% select(-Country,-Commodity.group))
 Miscellaneous_09_imports_xts <- (as.xts(Miscellaneous_09, order.by=Date))
 
 Miscellaneous_09_imports<-data.frame(NA, nrow=length(index(Miscellaneous_09_imports_xts["2015/"])))
@@ -4482,7 +4482,7 @@ colnames(Miscellaneous_09_imports)<-c("Miscellaneous_09")
 
 
 #Beverages (11)                                                      
-Beverages_11<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Beverages (11)") %>% select(-Countries.and.Territories,-Commodity.group))
+Beverages_11<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Beverages (11)") %>% select(-Country,-Commodity.group))
 Beverages_11_imports_xts <- (as.xts(Beverages_11, order.by=Date))
 
 Beverages_11_imports<-data.frame(NA, nrow=length(index(Beverages_11_imports_xts["2015/"])))
@@ -4496,7 +4496,7 @@ colnames(Beverages_11_imports)<-c("Beverages_11")
 
 
 #Tobacco and tobacco manufactures (12)                                                      
-Tobacco_12<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Tobacco and tobacco manufactures (12)") %>% select(-Countries.and.Territories,-Commodity.group))
+Tobacco_12<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Tobacco and tobacco manufactures (12)") %>% select(-Country,-Commodity.group))
 Tobacco_12_imports_xts <- (as.xts(Tobacco_12, order.by=Date))
 
 Tobacco_12_imports<-data.frame(NA, nrow=length(index(Tobacco_12_imports_xts["2015/"])))
@@ -4511,7 +4511,7 @@ colnames(Tobacco_12_imports)<-c("Tobacco_12")
 
 
 #Hides, skins and furskins, raw (21)                                                      
-Hides_21<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Hides, skins and furskins, raw (21)") %>% select(-Countries.and.Territories,-Commodity.group))
+Hides_21<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Hides, skins and furskins, raw (21)") %>% select(-Country,-Commodity.group))
 Hides_21_imports_xts <- (as.xts(Hides_21, order.by=Date))
 
 Hides_21_imports<-data.frame(NA, nrow=length(index(Hides_21_imports_xts["2015/"])))
@@ -4525,7 +4525,7 @@ colnames(Hides_21_imports)<-c("Hides_21")
 
 
 #Oilseeds and oleaginous fruit (22)                                                      
-oilseeds_22<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Oilseeds and oleaginous fruit (22)") %>% select(-Countries.and.Territories,-Commodity.group))
+oilseeds_22<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Oilseeds and oleaginous fruit (22)") %>% select(-Country,-Commodity.group))
 oilseeds_22_imports_xts <- (as.xts(oilseeds_22, order.by=Date))
 
 oilseeds_22_imports<-data.frame(NA, nrow=length(index(oilseeds_22_imports_xts["2015/"])))
@@ -4541,7 +4541,7 @@ colnames(oilseeds_22_imports)<-c("oilseeds_22")
 
 # Crude rubber, including synthetic and reclaimed rubber (23)  
 
-Crude_rubber_23<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Crude rubber, including synthetic and reclaimed rubber (23)") %>% select(-Countries.and.Territories,-Commodity.group))
+Crude_rubber_23<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Crude rubber, including synthetic and reclaimed rubber (23)") %>% select(-Country,-Commodity.group))
 Crude_rubber_23_imports_xts <- (as.xts(Crude_rubber_23, order.by=Date))
 
 Crude_rubber_23_imports<-data.frame(NA, nrow=length(index(Crude_rubber_23_imports_xts["2015/"])))
@@ -4556,7 +4556,7 @@ colnames(Crude_rubber_23_imports)<-c("Crude_rubber_23")
 
 # Cork and wood (24)
 
-Cork_24<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Cork and wood (24)") %>% select(-Countries.and.Territories,-Commodity.group))
+Cork_24<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Cork and wood (24)") %>% select(-Country,-Commodity.group))
 Cork_24_imports_xts <- (as.xts(Cork_24, order.by=Date))
 
 Cork_24_imports<-data.frame(NA, nrow=length(index(Cork_24_imports_xts["2015/"])))
@@ -4571,7 +4571,7 @@ colnames(Cork_24_imports)<-c("Cork_24")
 
 # Pulp and waste paper (25)" 
 
-Pulp_25<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Pulp and waste paper (25)") %>% select(-Countries.and.Territories,-Commodity.group))
+Pulp_25<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Pulp and waste paper (25)") %>% select(-Country,-Commodity.group))
 Pulp_25_imports_xts <- (as.xts(Pulp_25, order.by=Date))
 
 Pulp_25_imports<-data.frame(NA, nrow=length(index(Pulp_25_imports_xts["2015/"])))
@@ -4586,7 +4586,7 @@ colnames(Pulp_25_imports)<-c("Pulp_25")
 
 # Textile fibres, excluding wool tops, and their wastes (26) 
 
-Textile_fibres_26<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Textile fibres, excluding wool tops, and their wastes (26)") %>% select(-Countries.and.Territories,-Commodity.group))
+Textile_fibres_26<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Textile fibres, excluding wool tops, and their wastes (26)") %>% select(-Country,-Commodity.group))
 Textile_fibres_26_imports_xts <- (as.xts(Textile_fibres_26, order.by=Date))
 
 Textile_fibres_26_imports<-data.frame(NA, nrow=length(index(Textile_fibres_26_imports_xts["2015/"])))
@@ -4602,7 +4602,7 @@ colnames(Textile_fibres_26_imports)<-c("Textile_fibres_26")
 
 # Crude fertilisers and minerals, excluding coal, petroleum etc. (27)
 
-Crude_fertilisers_27<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Crude fertilisers and minerals, excluding coal, petroleum etc. (27)") %>% select(-Countries.and.Territories,-Commodity.group))
+Crude_fertilisers_27<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Crude fertilisers and minerals, excluding coal, petroleum etc. (27)") %>% select(-Country,-Commodity.group))
 Crude_fertilisers_27_imports_xts <- (as.xts(Crude_fertilisers_27, order.by=Date))
 
 Crude_fertilisers_27_imports<-data.frame(NA, nrow=length(index(Crude_fertilisers_27_imports_xts["2015/"])))
@@ -4619,7 +4619,7 @@ colnames(Crude_fertilisers_27_imports)<-c("Crude_fertilisers_27")
 
 # Metalliferous ores and metal scrap (28)
 
-Metalliferous_ores_28<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Metalliferous ores and metal scrap (28)") %>% select(-Countries.and.Territories,-Commodity.group))
+Metalliferous_ores_28<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Metalliferous ores and metal scrap (28)") %>% select(-Country,-Commodity.group))
 Metalliferous_ores_28_imports_xts <- (as.xts(Metalliferous_ores_28, order.by=Date))
 
 Metalliferous_ores_28_imports<-data.frame(NA, nrow=length(index(Metalliferous_ores_28_imports_xts["2015/"])))
@@ -4633,7 +4633,7 @@ colnames(Metalliferous_ores_28_imports)<-c("Metalliferous_ores_28")
 
 # Crude animal and vegetable materials, n.e.s. (29)
 
-Crude_animal_and_vegetable_materials_29<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Crude animal and vegetable materials, n.e.s. (29)") %>% select(-Countries.and.Territories,-Commodity.group))
+Crude_animal_and_vegetable_materials_29<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Crude animal and vegetable materials, n.e.s. (29)") %>% select(-Country,-Commodity.group))
 Crude_animal_and_vegetable_materials_29_imports_xts <- (as.xts(Crude_animal_and_vegetable_materials_29, order.by=Date))
 
 Crude_animal_and_vegetable_materials_29_imports<-data.frame(NA, nrow=length(index(Crude_animal_and_vegetable_materials_29_imports_xts["2015/"])))
@@ -4649,7 +4649,7 @@ colnames(Crude_animal_and_vegetable_materials_29_imports)<-c("Crude_animal_and_v
 
 # Coal, coke and briquettes (32)
 
-Coal_32<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Coal, coke and briquettes (32)") %>% select(-Countries.and.Territories,-Commodity.group))
+Coal_32<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Coal, coke and briquettes (32)") %>% select(-Country,-Commodity.group))
 Coal_32_imports_xts <- (as.xts(Coal_32, order.by=Date))
 
 Coal_32_imports<-data.frame(NA, nrow=length(index(Coal_32_imports_xts["2015/"])))
@@ -4664,7 +4664,7 @@ colnames(Coal_32_imports)<-c("Coal_32_exports")
 
 # Petroleum, petroleum products and related materials (33)
 
-Petroleum_33<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Petroleum, petroleum products and related materials (33)") %>% select(-Countries.and.Territories,-Commodity.group))
+Petroleum_33<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Petroleum, petroleum products and related materials (33)") %>% select(-Country,-Commodity.group))
 Petroleum_33_imports_xts <- (as.xts(Petroleum_33, order.by=Date))
 
 Petroleum_33_imports<-data.frame(NA, nrow=length(index(Petroleum_33_imports_xts["2015/"])))
@@ -4678,7 +4678,7 @@ colnames(Petroleum_33_imports)<-c("Petroleum_33")
 
 # Gas, natural and manufactured (34)
 
-Gas_34<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Gas, natural and manufactured (34)") %>% select(-Countries.and.Territories,-Commodity.group))
+Gas_34<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Gas, natural and manufactured (34)") %>% select(-Country,-Commodity.group))
 Gas_34_imports_xts <- (as.xts(Gas_34, order.by=Date))
 
 Gas_34_imports<-data.frame(NA, nrow=length(index(Gas_34_imports_xts["2015/"])))
@@ -4693,7 +4693,7 @@ colnames(Gas_34_imports)<-c("Gas_34")
 
 # Electric current (35)
 
-Electric_current_35<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Electric current (35)") %>% select(-Countries.and.Territories,-Commodity.group))
+Electric_current_35<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Electric current (35)") %>% select(-Country,-Commodity.group))
 Electric_current_35_imports_xts <- (as.xts(Electric_current_35, order.by=Date))
 
 Electric_current_35_imports<-data.frame(NA, nrow=length(index(Electric_current_35_imports_xts["2015/"])))
@@ -4707,7 +4707,7 @@ colnames(Electric_current_35_imports)<-c("Electric_current_35")
 
 # Animal oils and fats (41)
 
-Animal_oils_and_fats_41<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Animal oils and fats (41)") %>% select(-Countries.and.Territories,-Commodity.group))
+Animal_oils_and_fats_41<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Animal oils and fats (41)") %>% select(-Country,-Commodity.group))
 Animal_oils_and_fats_41_imports_xts <- (as.xts(Animal_oils_and_fats_41, order.by=Date))
 
 Animal_oils_and_fats_41_imports<-data.frame(NA, nrow=length(index(Animal_oils_and_fats_41_imports_xts["2015/"])))
@@ -4721,7 +4721,7 @@ colnames(Animal_oils_and_fats_41_imports)<-c("Animal_oils_and_fats_41")
 
 # Fixed vegetable oils and fats (42)
 
-Fixed_vegetable_oils_and_fats_42<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Fixed vegetable oils and fats (42)") %>% select(-Countries.and.Territories,-Commodity.group))
+Fixed_vegetable_oils_and_fats_42<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Fixed vegetable oils and fats (42)") %>% select(-Country,-Commodity.group))
 Fixed_vegetable_oils_and_fats_42_imports_xts <- (as.xts(Fixed_vegetable_oils_and_fats_42, order.by=Date))
 
 Fixed_vegetable_oils_and_fats_42_imports<-data.frame(NA, nrow=length(index(Fixed_vegetable_oils_and_fats_42_imports_xts["2015/"])))
@@ -4735,7 +4735,7 @@ colnames(Fixed_vegetable_oils_and_fats_42_imports)<-c("Fixed_vegetable_oils_and_
 
 # Animal and vegetable oils and fats, processed, and waxes (43)
 
-Animal_and_vegetable_oils_43<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Animal and vegetable oils and fats, processed, and waxes (43)") %>% select(-Countries.and.Territories,-Commodity.group))
+Animal_and_vegetable_oils_43<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Animal and vegetable oils and fats, processed, and waxes (43)") %>% select(-Country,-Commodity.group))
 Animal_and_vegetable_oils_43_imports_xts <- (as.xts(Animal_and_vegetable_oils_43, order.by=Date))
 
 Animal_and_vegetable_oils_43_imports<-data.frame(NA, nrow=length(index(Animal_and_vegetable_oils_43_imports_xts["2015/"])))
@@ -4749,7 +4749,7 @@ colnames(Animal_and_vegetable_oils_43_imports)<-c("Animal_and_vegetable_oils_43"
 
 # Organic chemicals (51)
 
-Organic_chemicals_51<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Organic chemicals (51)") %>% select(-Countries.and.Territories,-Commodity.group))
+Organic_chemicals_51<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Organic chemicals (51)") %>% select(-Country,-Commodity.group))
 Organic_chemicals_51_imports_xts <- (as.xts(Organic_chemicals_51, order.by=Date))
 
 Organic_chemicals_51_imports<-data.frame(NA, nrow=length(index(Organic_chemicals_51_imports_xts["2015/"])))
@@ -4764,7 +4764,7 @@ colnames(Organic_chemicals_51_imports)<-c("Organic_chemicals_51")
 
 # Inorganic chemicals (52)
 
-Inorganic_chemicals_52<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Inorganic chemicals (52)") %>% select(-Countries.and.Territories,-Commodity.group))
+Inorganic_chemicals_52<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Inorganic chemicals (52)") %>% select(-Country,-Commodity.group))
 Inorganic_chemicals_52_imports_xts <- (as.xts(Inorganic_chemicals_52, order.by=Date))
 
 Inorganic_chemicals_52_imports<-data.frame(NA, nrow=length(index(Inorganic_chemicals_52_imports_xts["2015/"])))
@@ -4780,7 +4780,7 @@ colnames(Inorganic_chemicals_52_imports)<-c("Inorganic_chemicals_52")
 
 #Dyeing, tanning and colouring materials (53)
 
-Dyeing_tanning_53<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Dyeing, tanning and colouring materials (53)") %>% select(-Countries.and.Territories,-Commodity.group))
+Dyeing_tanning_53<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Dyeing, tanning and colouring materials (53)") %>% select(-Country,-Commodity.group))
 Dyeing_tanning_53_imports_xts <- (as.xts(Dyeing_tanning_53, order.by=Date))
 
 Dyeing_tanning_53_imports<-data.frame(NA, nrow=length(index(Dyeing_tanning_53_imports_xts["2015/"])))
@@ -4796,7 +4796,7 @@ colnames(Dyeing_tanning_53_imports)<-c("Dyeing_tanning_53")
 
 #Medicinal and pharmaceutical products (54)
 
-Medicinal_and_pharma_54<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Medicinal and pharmaceutical products (54)") %>% select(-Countries.and.Territories,-Commodity.group))
+Medicinal_and_pharma_54<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Medicinal and pharmaceutical products (54)") %>% select(-Country,-Commodity.group))
 Medicinal_and_pharma_54_imports_xts <- (as.xts(Medicinal_and_pharma_54, order.by=Date))
 
 Medicinal_and_pharma_54_imports<-data.frame(NA, nrow=length(index(Medicinal_and_pharma_54_imports_xts["2015/"])))
@@ -4813,7 +4813,7 @@ colnames(Medicinal_and_pharma_54_imports)<-c("Medicinal_and_pharma_54")
 
 #Essential oils, perfume materials, toilet preparations etc. (55) 
 
-Essential_oils_55<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Essential oils, perfume materials, toilet preparations etc. (55)") %>% select(-Countries.and.Territories,-Commodity.group))
+Essential_oils_55<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Essential oils, perfume materials, toilet preparations etc. (55)") %>% select(-Country,-Commodity.group))
 Essential_oils_55_imports_xts <- (as.xts(Essential_oils_55, order.by=Date))
 
 Essential_oils_55_imports<-data.frame(NA, nrow=length(index(Essential_oils_55_imports_xts["2015/"])))
@@ -4827,7 +4827,7 @@ colnames(Essential_oils_55_imports)<-c("Essential_oils_55")
 
 
 #Fertilisers, manufactured (56)
-Fertilisers_56<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Fertilisers, manufactured (56)") %>% select(-Countries.and.Territories,-Commodity.group))
+Fertilisers_56<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Fertilisers, manufactured (56)") %>% select(-Country,-Commodity.group))
 Fertilisers_56_imports_xts <- (as.xts(Fertilisers_56, order.by=Date))
 
 Fertilisers_56_imports<-data.frame(NA, nrow=length(index(Fertilisers_56_imports_xts["2015/"])))
@@ -4842,7 +4842,7 @@ colnames(Fertilisers_56_imports)<-c("Fertilisers_56")
 
 
 #Plastics in primary forms (57)
-Plastics_57<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Plastics in primary forms (57)") %>% select(-Countries.and.Territories,-Commodity.group))
+Plastics_57<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Plastics in primary forms (57)") %>% select(-Country,-Commodity.group))
 Plastics_57_imports_xts <- (as.xts(Plastics_57, order.by=Date))
 
 Plastics_57_imports<-data.frame(NA, nrow=length(index(Plastics_57_imports_xts["2015/"])))
@@ -4857,7 +4857,7 @@ colnames(Plastics_57_imports)<-c("Plastics_57")
 
 
 #Plastics in non-primary forms (58)
-Plastics_non_primary_58<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Plastics in non-primary forms (58)") %>% select(-Countries.and.Territories,-Commodity.group))
+Plastics_non_primary_58<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Plastics in non-primary forms (58)") %>% select(-Country,-Commodity.group))
 Plastics_non_primary_58_imports_xts <- (as.xts(Plastics_non_primary_58, order.by=Date))
 
 Plastics_non_primary_58_imports<-data.frame(NA, nrow=length(index(Plastics_non_primary_58_imports_xts["2015/"])))
@@ -4871,7 +4871,7 @@ colnames(Plastics_non_primary_58_imports)<-c("Plastics_non_primary_58")
 
 
 #Chemical materials and products, n.e.s. (59)
-Chemical_materials_59<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Chemical materials and products, n.e.s. (59)") %>% select(-Countries.and.Territories,-Commodity.group))
+Chemical_materials_59<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Chemical materials and products, n.e.s. (59)") %>% select(-Country,-Commodity.group))
 Chemical_materials_59_imports_xts <- (as.xts(Chemical_materials_59, order.by=Date))
 
 Chemical_materials_59_imports<-data.frame(NA, nrow=length(index(Chemical_materials_59_imports_xts["2015/"])))
@@ -4885,7 +4885,7 @@ colnames(Chemical_materials_59_imports)<-c("Chemical_materials_59")
 
 
 #Leather, leather manufactures and dressed furskins (61)
-Leather_61<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Leather, leather manufactures and dressed furskins (61)") %>% select(-Countries.and.Territories,-Commodity.group))
+Leather_61<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Leather, leather manufactures and dressed furskins (61)") %>% select(-Country,-Commodity.group))
 Leather_61_imports_xts <- (as.xts(Leather_61, order.by=Date))
 
 Leather_61_imports<-data.frame(NA, nrow=length(index(Leather_61_imports_xts["2015/"])))
@@ -4900,7 +4900,7 @@ colnames(Leather_61_imports)<-c("Leather_61")
 
 
 #Rubber manufactures, n.e.s. (62)
-Rubber_manufactures_62<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Rubber manufactures, n.e.s. (62)") %>% select(-Countries.and.Territories,-Commodity.group))
+Rubber_manufactures_62<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Rubber manufactures, n.e.s. (62)") %>% select(-Country,-Commodity.group))
 Rubber_manufactures_62_imports_xts <- (as.xts(Rubber_manufactures_62, order.by=Date))
 
 Rubber_manufactures_62_imports<-data.frame(NA, nrow=length(index(Rubber_manufactures_62_imports_xts["2015/"])))
@@ -4916,7 +4916,7 @@ colnames(Rubber_manufactures_62_imports)<-c("Rubber_manufactures_62")
 
 
 #Cork and wood manufactures, excluding furniture (63)
-Cork_and_wood_manufactures_63<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Cork and wood manufactures, excluding furniture (63)") %>% select(-Countries.and.Territories,-Commodity.group))
+Cork_and_wood_manufactures_63<-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Cork and wood manufactures, excluding furniture (63)") %>% select(-Country,-Commodity.group))
 Cork_and_wood_manufactures_63_imports_xts <- (as.xts(Cork_and_wood_manufactures_63, order.by=Date))
 
 Cork_and_wood_manufactures_63_imports<-data.frame(NA, nrow=length(index(Cork_and_wood_manufactures_63_imports_xts["2015/"])))
@@ -4931,7 +4931,7 @@ colnames(Cork_and_wood_manufactures_63_imports)<-c("Cork_and_wood_manufactures_6
 
 
 #Paper, paperboard and articles of paper pulp, paper etc. (64)       
-Paper_paperboard_64 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Paper, paperboard and articles of paper pulp, paper etc. (64)") %>% select(-Countries.and.Territories,-Commodity.group))
+Paper_paperboard_64 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Paper, paperboard and articles of paper pulp, paper etc. (64)") %>% select(-Country,-Commodity.group))
 Paper_paperboard_64_imports_xts <- (as.xts(Paper_paperboard_64, order.by=Date))
 
 Paper_paperboard_64_imports<-data.frame(NA, nrow=length(index(Paper_paperboard_64_imports_xts["2015/"])))
@@ -4946,7 +4946,7 @@ colnames(Paper_paperboard_64_imports)<-c("Paper_paperboard_64")
 
 #Textile yarn, fabrics, made-up articles and related products (65) 
 
-Textile_yarn_65 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Textile yarn, fabrics, made-up articles and related products (65)") %>% select(-Countries.and.Territories,-Commodity.group))
+Textile_yarn_65 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Textile yarn, fabrics, made-up articles and related products (65)") %>% select(-Country,-Commodity.group))
 Textile_yarn_65_imports_xts <- (as.xts(Textile_yarn_65, order.by=Date))
 
 Textile_yarn_65_imports<-data.frame(NA, nrow=length(index(Textile_yarn_65_imports_xts["2015/"])))
@@ -4963,7 +4963,7 @@ colnames(Textile_yarn_65_imports)<-c("Textile_yarn_65")
 
 #Non-metallic mineral manufactures, n.e.s. (66)  
 
-Non_metallic_mineral_66 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Non-metallic mineral manufactures, n.e.s. (66)") %>% select(-Countries.and.Territories,-Commodity.group))
+Non_metallic_mineral_66 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Non-metallic mineral manufactures, n.e.s. (66)") %>% select(-Country,-Commodity.group))
 Non_metallic_mineral_66_imports_xts <- (as.xts(Non_metallic_mineral_66, order.by=Date))
 
 Non_metallic_mineral_66_imports<-data.frame(NA, nrow=length(index(Non_metallic_mineral_66_imports_xts["2015/"])))
@@ -4979,7 +4979,7 @@ colnames(Non_metallic_mineral_66_imports)<-c("Non_metallic_mineral_66")
 
 
 #Iron and steel (67)
-Iron_and_steel_67 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Iron and steel (67)") %>% select(-Countries.and.Territories,-Commodity.group))
+Iron_and_steel_67 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Iron and steel (67)") %>% select(-Country,-Commodity.group))
 Iron_and_steel_67_imports_xts <- (as.xts(Iron_and_steel_67, order.by=Date))
 
 Iron_and_steel_67_imports<-data.frame(NA, nrow=length(index(Iron_and_steel_67_imports_xts["2015/"])))
@@ -4992,7 +4992,7 @@ Iron_and_steel_67_imports<-as.xts(t(Iron_and_steel_67_imports), order.by = Date)
 colnames(Iron_and_steel_67_imports)<-c("Iron_and_steel_67")
 
 #Non-ferrous metals (68)                                             
-Non_ferrous_metals_68 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Non-ferrous metals (68)") %>% select(-Countries.and.Territories,-Commodity.group))
+Non_ferrous_metals_68 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Non-ferrous metals (68)") %>% select(-Country,-Commodity.group))
 Non_ferrous_metals_68_imports_xts <- (as.xts(Non_ferrous_metals_68, order.by=Date))
 
 Non_ferrous_metals_68_imports<-data.frame(NA, nrow=length(index(Non_ferrous_metals_68_imports_xts["2015/"])))
@@ -5007,7 +5007,7 @@ colnames(Non_ferrous_metals_68_imports)<-c("Non_ferrous_metals_68")
 
 
 #Manufactures of metal, n.e.s. (69)
-Manufactures_of_metal_69 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Manufactures of metal, n.e.s. (69)") %>% select(-Countries.and.Territories,-Commodity.group))
+Manufactures_of_metal_69 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Manufactures of metal, n.e.s. (69)") %>% select(-Country,-Commodity.group))
 Manufactures_of_metal_69_imports_xts <- (as.xts(Manufactures_of_metal_69, order.by=Date))
 
 Manufactures_of_metal_69_imports<-data.frame(NA, nrow=length(index(Manufactures_of_metal_69_imports_xts["2015/"])))
@@ -5023,7 +5023,7 @@ colnames(Manufactures_of_metal_69_imports)<-c("Manufactures_of_metal_69")
 
 #Power generating machinery and equipment (71)
 
-Power_generating_machinery_71 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Power generating machinery and equipment (71)") %>% select(-Countries.and.Territories,-Commodity.group))
+Power_generating_machinery_71 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Power generating machinery and equipment (71)") %>% select(-Country,-Commodity.group))
 Power_generating_machinery_71_imports_xts <- (as.xts(Power_generating_machinery_71, order.by=Date))
 
 Power_generating_machinery_71_imports<-data.frame(NA, nrow=length(index(Power_generating_machinery_71_imports_xts["2015/"])))
@@ -5038,7 +5038,7 @@ colnames(Power_generating_machinery_71_imports)<-c("Power_generating_machinery_7
 
 #Machinery specialised for particular industries (72)
 
-Machinery_specialised_for_particular_industries_72 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Machinery specialised for particular industries (72)") %>% select(-Countries.and.Territories,-Commodity.group))
+Machinery_specialised_for_particular_industries_72 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Machinery specialised for particular industries (72)") %>% select(-Country,-Commodity.group))
 Machinery_specialised_for_particular_industries_72_imports_xts <- (as.xts(Machinery_specialised_for_particular_industries_72, order.by=Date))
 
 Machinery_specialised_for_particular_industries_72_imports<-data.frame(NA, nrow=length(index(Machinery_specialised_for_particular_industries_72_imports_xts["2015/"])))
@@ -5053,7 +5053,7 @@ colnames(Machinery_specialised_for_particular_industries_72_imports)<-c("Machine
 
 #Metalworking machinery (73)
 
-Metalworking_machinery_73 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Metalworking machinery (73)") %>% select(-Countries.and.Territories,-Commodity.group))
+Metalworking_machinery_73 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Metalworking machinery (73)") %>% select(-Country,-Commodity.group))
 Metalworking_machinery_73_imports_xts <- (as.xts(Metalworking_machinery_73, order.by=Date))
 
 Metalworking_machinery_73_imports<-data.frame(NA, nrow=length(index(Metalworking_machinery_73_imports_xts["2015/"])))
@@ -5069,7 +5069,7 @@ colnames(Metalworking_machinery_73_imports)<-c("Metalworking_machinery_73")
 #General industrial machinery and parts, n.e.s. (74)
 
 
-General_industrial_machinery_74 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="General industrial machinery and parts, n.e.s. (74)") %>% select(-Countries.and.Territories,-Commodity.group))
+General_industrial_machinery_74 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="General industrial machinery and parts, n.e.s. (74)") %>% select(-Country,-Commodity.group))
 General_industrial_machinery_74_imports_xts <- (as.xts(General_industrial_machinery_74, order.by=Date))
 
 General_industrial_machinery_74_imports<-data.frame(NA, nrow=length(index(General_industrial_machinery_74_imports_xts["2015/"])))
@@ -5087,7 +5087,7 @@ colnames(General_industrial_machinery_74_imports)<-c("General_industrial_machine
 #Office machines and automatic data processing equipment (75)
 
 
-Office_machines_and_automatic_data_processing_equipment_75 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Office machines and automatic data processing equipment (75)") %>% select(-Countries.and.Territories,-Commodity.group))
+Office_machines_and_automatic_data_processing_equipment_75 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Office machines and automatic data processing equipment (75)") %>% select(-Country,-Commodity.group))
 Office_machines_and_automatic_data_processing_equipment_75_imports_xts <- (as.xts(Office_machines_and_automatic_data_processing_equipment_75, order.by=Date))
 
 Office_machines_and_automatic_data_processing_equipment_75_imports<-data.frame(NA, nrow=length(index(Office_machines_and_automatic_data_processing_equipment_75_imports_xts["2015/"])))
@@ -5103,7 +5103,7 @@ colnames(Office_machines_and_automatic_data_processing_equipment_75_imports)<-c(
 #Telecommunications and sound recording, reproducing equipment (76)
 
 
-Telecommunications_and_sound_recording_76 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Telecommunications and sound recording, reproducing equipment (76)") %>% select(-Countries.and.Territories,-Commodity.group))
+Telecommunications_and_sound_recording_76 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Telecommunications and sound recording, reproducing equipment (76)") %>% select(-Country,-Commodity.group))
 Telecommunications_and_sound_recording_76_imports_xts <- (as.xts(Telecommunications_and_sound_recording_76, order.by=Date))
 
 Telecommunications_and_sound_recording_76_imports<-data.frame(NA, nrow=length(index(Telecommunications_and_sound_recording_76_imports_xts["2015/"])))
@@ -5120,7 +5120,7 @@ colnames(Telecommunications_and_sound_recording_76_imports)<-c("Telecommunicatio
 #Electrical machinery, appliances etc., n.e.s. (77)                  
 
 
-Electrical_machinery_77 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Electrical machinery, appliances etc., n.e.s. (77)") %>% select(-Countries.and.Territories,-Commodity.group))
+Electrical_machinery_77 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Electrical machinery, appliances etc., n.e.s. (77)") %>% select(-Country,-Commodity.group))
 Electrical_machinery_77_imports_xts <- (as.xts(Electrical_machinery_77, order.by=Date))
 
 Electrical_machinery_77_imports<-data.frame(NA, nrow=length(index(Electrical_machinery_77_imports_xts["2015/"])))
@@ -5139,7 +5139,7 @@ colnames(Electrical_machinery_77_imports)<-c("Electrical_machinery_77")
 #Road vehicles (78)
 
 
-Road_vehicles_78 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Road vehicles (78)") %>% select(-Countries.and.Territories,-Commodity.group))
+Road_vehicles_78 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Road vehicles (78)") %>% select(-Country,-Commodity.group))
 Road_vehicles_78_imports_xts <- (as.xts(Road_vehicles_78, order.by=Date))
 
 Road_vehicles_78_imports<-data.frame(NA, nrow=length(index(Road_vehicles_78_imports_xts["2015/"])))
@@ -5157,7 +5157,7 @@ colnames(Road_vehicles_78_imports)<-c("Road_vehicles_78")
 
 #Other transport equipment (79)      
 
-Other_transport_equipment_79 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Other transport equipment (79)") %>% select(-Countries.and.Territories,-Commodity.group))
+Other_transport_equipment_79 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Other transport equipment (79)") %>% select(-Country,-Commodity.group))
 Other_transport_equipment_79_imports_xts <- (as.xts(Other_transport_equipment_79, order.by=Date))
 
 Other_transport_equipment_79_imports<-data.frame(NA, nrow=length(index(Other_transport_equipment_79_imports_xts["2015/"])))
@@ -5172,7 +5172,7 @@ colnames(Other_transport_equipment_79_imports)<-c("Other_transport_equipment_79"
 
 #Prefab buildings; plumbing and electrical fixtures and fittings (81)
 
-Prefab_buildings_plumbing_and_electrical_81 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Prefab buildings; plumbing and electrical fixtures and fittings (81)") %>% select(-Countries.and.Territories,-Commodity.group))
+Prefab_buildings_plumbing_and_electrical_81 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Prefab buildings; plumbing and electrical fixtures and fittings (81)") %>% select(-Country,-Commodity.group))
 Prefab_buildings_plumbing_and_electrical_81_imports_xts <- (as.xts(Prefab_buildings_plumbing_and_electrical_81, order.by=Date))
 
 Prefab_buildings_plumbing_and_electrical_81_imports<-data.frame(NA, nrow=length(index(Prefab_buildings_plumbing_and_electrical_81_imports_xts["2015/"])))
@@ -5187,7 +5187,7 @@ colnames(Prefab_buildings_plumbing_and_electrical_81_imports)<-c("Prefab_buildin
 
 
 #Furniture and parts thereof (82)
-Furniture_and_parts_thereof_82 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Furniture and parts thereof (82)") %>% select(-Countries.and.Territories,-Commodity.group))
+Furniture_and_parts_thereof_82 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Furniture and parts thereof (82)") %>% select(-Country,-Commodity.group))
 Furniture_and_parts_thereof_82_imports_xts <- (as.xts(Furniture_and_parts_thereof_82, order.by=Date))
 
 Furniture_and_parts_thereof_82_imports<-data.frame(NA, nrow=length(index(Furniture_and_parts_thereof_82_imports_xts["2015/"])))
@@ -5203,7 +5203,7 @@ colnames(Furniture_and_parts_thereof_82_imports)<-c("Furniture_and_parts_thereof
 
 
 #Travel goods, handbags and similar containers (83)
-Travel_goods_handbags_and_similar_containers_83 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Travel goods, handbags and similar containers (83)") %>% select(-Countries.and.Territories,-Commodity.group))
+Travel_goods_handbags_and_similar_containers_83 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Travel goods, handbags and similar containers (83)") %>% select(-Country,-Commodity.group))
 Travel_goods_handbags_and_similar_containers_83_imports_xts <- (as.xts(Travel_goods_handbags_and_similar_containers_83, order.by=Date))
 
 Travel_goods_handbags_and_similar_containers_83_imports<-data.frame(NA, nrow=length(index(Travel_goods_handbags_and_similar_containers_83_imports_xts["2015/"])))
@@ -5218,7 +5218,7 @@ colnames(Travel_goods_handbags_and_similar_containers_83_imports)<-c("Travel_goo
 
 
 #Articles of apparel and clothing accessories (84)
-Articles_of_apparel_84 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Articles of apparel and clothing accessories (84)") %>% select(-Countries.and.Territories,-Commodity.group))
+Articles_of_apparel_84 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Articles of apparel and clothing accessories (84)") %>% select(-Country,-Commodity.group))
 Articles_of_apparel_84_imports_xts <- (as.xts(Articles_of_apparel_84, order.by=Date))
 
 Articles_of_apparel_84_imports<-data.frame(NA, nrow=length(index(Articles_of_apparel_84_imports_xts["2015/"])))
@@ -5235,7 +5235,7 @@ colnames(Articles_of_apparel_84_imports)<-c("Articles_of_apparel_84")
 
 #Footwear (85)
 
-Footwear_85 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Footwear (85)") %>% select(-Countries.and.Territories,-Commodity.group))
+Footwear_85 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Footwear (85)") %>% select(-Country,-Commodity.group))
 Footwear_85_imports_xts <- (as.xts(Footwear_85, order.by=Date))
 
 Footwear_85_imports<-data.frame(NA, nrow=length(index(Footwear_85_imports_xts["2015/"])))
@@ -5251,7 +5251,7 @@ colnames(Footwear_85_imports)<-c("Footwear_85")
 
 #Professional, scientific and controlling apparatus (87)
 
-Professional_scientific_and_controlling_apparatus_87 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Professional, scientific and controlling apparatus (87)") %>% select(-Countries.and.Territories,-Commodity.group))
+Professional_scientific_and_controlling_apparatus_87 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Professional, scientific and controlling apparatus (87)") %>% select(-Country,-Commodity.group))
 Professional_scientific_and_controlling_apparatus_87_imports_xts <- (as.xts(Professional_scientific_and_controlling_apparatus_87, order.by=Date))
 
 Professional_scientific_and_controlling_apparatus_87_imports<-data.frame(NA, nrow=length(index(Professional_scientific_and_controlling_apparatus_87_imports_xts["2015/"])))
@@ -5267,7 +5267,7 @@ colnames(Professional_scientific_and_controlling_apparatus_87_imports)<-c("Profe
 
 #Photographic apparatus, optical goods, watches and clocks (88)
 
-Photographic_apparatus_88 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Photographic apparatus, optical goods, watches and clocks (88)") %>% select(-Countries.and.Territories,-Commodity.group))
+Photographic_apparatus_88 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Photographic apparatus, optical goods, watches and clocks (88)") %>% select(-Country,-Commodity.group))
 Photographic_apparatus_88_imports_xts <- (as.xts(Photographic_apparatus_88, order.by=Date))
 
 Photographic_apparatus_88_imports<-data.frame(NA, nrow=length(index(Photographic_apparatus_88_imports_xts["2015/"])))
@@ -5282,7 +5282,7 @@ colnames(Photographic_apparatus_88_imports)<-c("Photographic_apparatus_88")
 
 #Miscellaneous manufactured articles, n.e.s. (89)
 
-Miscellaneous_manufactured_articles_89 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Miscellaneous manufactured articles, n.e.s. (89)") %>% select(-Countries.and.Territories,-Commodity.group))
+Miscellaneous_manufactured_articles_89 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Miscellaneous manufactured articles, n.e.s. (89)") %>% select(-Country,-Commodity.group))
 Miscellaneous_manufactured_articles_89_imports_xts <- (as.xts(Miscellaneous_manufactured_articles_89, order.by=Date))
 
 Miscellaneous_manufactured_articles_89_imports<-data.frame(NA, nrow=length(index(Miscellaneous_manufactured_articles_89_imports_xts["2015/"])))
@@ -5296,7 +5296,7 @@ colnames(Miscellaneous_manufactured_articles_89_imports)<-c("Miscellaneous_manuf
 
 #Commodities and transactions n.e.s. (9)
 
-Commodities_and_transactions_9 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Commodities and transactions n.e.s. (9)") %>% select(-Countries.and.Territories,-Commodity.group))
+Commodities_and_transactions_9 <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Commodities and transactions n.e.s. (9)") %>% select(-Country,-Commodity.group))
 Commodities_and_transactions_9_imports_xts <- (as.xts(Commodities_and_transactions_9, order.by=Date))
 
 Commodities_and_transactions_9_imports<-data.frame(NA, nrow=length(index(Commodities_and_transactions_9_imports_xts["2015/"])))
@@ -5311,7 +5311,7 @@ colnames(Commodities_and_transactions_9_imports)<-c("Commodities_and_transaction
 #Unclassified estimates 
 
 
-Unclassified_estimates <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Unclassified estimates") %>% select(-Countries.and.Territories,-Commodity.group))
+Unclassified_estimates <-t(subset(Ireland_imports,Ireland_Imports["2014-11-01"]=="Unclassified estimates") %>% select(-Country,-Commodity.group))
 Unclassified_estimates_imports_xts <- (as.xts(Unclassified_estimates, order.by=Date))
 
 Unclassified_estimates_imports<-data.frame(NA, nrow=length(index(Unclassified_estimates_imports_xts["2015/"])))
@@ -5725,7 +5725,7 @@ colnames(Contribution_Prod_CON_DF)<-c("Date",colnames(Contribution_Prod_CON_DF[2
 
 
 
-dataset_names <- list('Annual Export -Countries'=Contribution_annual_growth_DF,' Annual Export -Product' =Contribution_Prod_CON_DF,'Annual Import -Countries'=Contribution_annual__IMPORT_growth_DF)
+dataset_names <- list('Annual Export -Country'=Contribution_annual_growth_DF,' Annual Export -Product' =Contribution_Prod_CON_DF,'Annual Import -Country'=Contribution_annual__IMPORT_growth_DF)
 
 write.xlsx(dataset_names, file = 'external_trade_excel2.xlsx')
 
@@ -5739,102 +5739,105 @@ write.xlsx(dataset_names, file = 'external_trade_excel2.xlsx')
 
 
 
-Ireland_72821 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72821.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_72821 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.72821.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
-Ireland_72821_EXPORT<-t(data.frame(Ireland_72821[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72821[9,])))) 
+Ireland_72821_EXPORT<-t(data.frame(Ireland_72821[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_72821[1,])))) 
 
-Ireland_72821_IMPORT<-t(data.frame(Ireland_72821[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72821[9,]))))
+Ireland_72821_IMPORT<-t(data.frame(Ireland_72821[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_72821[2,])))) 
 
 Ireland_72821_NET_TRADE<-Ireland_72821_EXPORT-Ireland_72821_IMPORT
 
 
 
-Ireland_72822 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72822.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_72822 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.72822.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
-Ireland_72822_EXPORT<-t(data.frame(Ireland_72822[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72822[9,])))) 
+Ireland_72822_EXPORT<-t(data.frame(Ireland_72822[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_72822[1,])))) 
 
-Ireland_72822_IMPORT<-t(data.frame(Ireland_72822[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72822[9,]))))
+Ireland_72822_IMPORT<-t(data.frame(Ireland_72822[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_72822[2,])))) 
 
 Ireland_72822_NET_TRADE<-Ireland_72822_EXPORT-Ireland_72822_IMPORT
 
 
+#72829
 
+Ireland_72829 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.72829.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
-Ireland_72829 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+72822.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_72829_EXPORT<-t(data.frame(Ireland_72829[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_72829[1,])))) 
 
-Ireland_72829_EXPORT<-t(data.frame(Ireland_72829[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_72829_IMPORT<-t(data.frame(Ireland_72829[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_72829[2,])))) 
 
-Ireland_72829_IMPORT<-t(data.frame(Ireland_72829[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
-
-Ireland_72829_NET_TRADE<-Ireland_72829_EXPORT-Ireland_72829_IMPORT 
+Ireland_72829_NET_TRADE<-Ireland_72829_EXPORT-Ireland_72829_IMPORT
 
 
 #Commercial Vehicles 
-Ireland_782 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+782.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+#782
+Ireland_782 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.782.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_782_EXPORT<-t(data.frame(Ireland_782[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_782_EXPORT<-t(data.frame(Ireland_782[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_782[1,])))) 
 
-Ireland_782_IMPORT<-t(data.frame(Ireland_782[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_782_IMPORT<-t(data.frame(Ireland_782[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_782[2,])))) 
 
-Ireland_782_NET_TRADE<-Ireland_782_EXPORT-Ireland_782_IMPORT 
+Ireland_782_NET_TRADE<-Ireland_782_EXPORT-Ireland_782_IMPORT
 
 #Road Vehicles NES
-Ireland_783 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+783.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_783 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.783.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_783_EXPORT<-t(data.frame(Ireland_783[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_783_EXPORT<-t(data.frame(Ireland_783[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_783[1,])))) 
 
-Ireland_783_IMPORT<-t(data.frame(Ireland_783[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_783_IMPORT<-t(data.frame(Ireland_783[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_783[2,])))) 
 
-Ireland_783_NET_TRADE<-Ireland_783_EXPORT-Ireland_783_IMPORT 
+Ireland_783_NET_TRADE<-Ireland_783_EXPORT-Ireland_783_IMPORT
 
 
 #Railway Vehicles NES
-Ireland_791 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+791.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+#791
+Ireland_791 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.791.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_791_EXPORT<-t(data.frame(Ireland_791[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_791_EXPORT<-t(data.frame(Ireland_791[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_791[1,])))) 
 
-Ireland_791_IMPORT<-t(data.frame(Ireland_791[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_791_IMPORT<-t(data.frame(Ireland_791[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_791[2,])))) 
 
-Ireland_791_NET_TRADE<-Ireland_791_EXPORT-Ireland_791_IMPORT 
+Ireland_791_NET_TRADE<-Ireland_791_EXPORT-Ireland_791_IMPORT
 
 
 
 #SHIPS/BOATS
-Ireland_793 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+793.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_793 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.793.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_793_EXPORT<-t(data.frame(Ireland_793[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_793_EXPORT<-t(data.frame(Ireland_793[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_793[1,])))) 
 
-Ireland_793_IMPORT<-t(data.frame(Ireland_793[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_793_IMPORT<-t(data.frame(Ireland_793[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_793[2,])))) 
 
-Ireland_793_NET_TRADE<-Ireland_793_EXPORT-Ireland_793_IMPORT 
+Ireland_793_NET_TRADE<-Ireland_793_EXPORT-Ireland_793_IMPORT
 
 
 
 
 #TELECOMS, Sound Recording 
-Ireland_76 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+76.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_76 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.76.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_76_EXPORT<-t(data.frame(Ireland_76[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_76_EXPORT<-t(data.frame(Ireland_76[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_76[1,])))) 
 
-Ireland_76_IMPORT<-t(data.frame(Ireland_76[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_76_IMPORT<-t(data.frame(Ireland_76[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_76[2,])))) 
 
-Ireland_76_NET_TRADE<-Ireland_76_EXPORT-Ireland_76_IMPORT 
+Ireland_76_NET_TRADE<-Ireland_76_EXPORT-Ireland_76_IMPORT
 
 
 #LAPTOP 
-Ireland_7522 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7522.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+#7522
+Ireland_7522 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.7522.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_7522_EXPORT<-t(data.frame(Ireland_7522[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_7522_EXPORT<-t(data.frame(Ireland_7522[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_7522[1,])))) 
 
-Ireland_7522_IMPORT<-t(data.frame(Ireland_7522[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_7522_IMPORT<-t(data.frame(Ireland_7522[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_7522[2,])))) 
 
-Ireland_7522_NET_TRADE<-Ireland_7522_EXPORT-Ireland_7522_IMPORT 
+Ireland_7522_NET_TRADE<-Ireland_7522_EXPORT-Ireland_7522_IMPORT
 
 
 
@@ -5842,87 +5845,88 @@ Ireland_7522_NET_TRADE<-Ireland_7522_EXPORT-Ireland_7522_IMPORT
 
 
 #AGRI Machinery 
-Ireland_721 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+721.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_721 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.721.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_721_EXPORT<-t(data.frame(Ireland_721[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_721_EXPORT<-t(data.frame(Ireland_721[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_721[1,])))) 
 
-Ireland_721_IMPORT<-t(data.frame(Ireland_721[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_721_IMPORT<-t(data.frame(Ireland_721[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_721[2,])))) 
 
-Ireland_721_NET_TRADE<-Ireland_721_EXPORT-Ireland_721_IMPORT 
+Ireland_721_NET_TRADE<-Ireland_721_EXPORT-Ireland_721_IMPORT
 
 
 
 
 
 #TRACTORS 
-Ireland_722 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+722.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_722 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.722.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_722_EXPORT<-t(data.frame(Ireland_722[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_722_EXPORT<-t(data.frame(Ireland_722[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_722[1,])))) 
 
-Ireland_722_IMPORT<-t(data.frame(Ireland_722[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_722_IMPORT<-t(data.frame(Ireland_722[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_722[2,])))) 
 
-Ireland_722_NET_TRADE<-Ireland_722_EXPORT-Ireland_722_IMPORT 
+Ireland_722_NET_TRADE<-Ireland_722_EXPORT-Ireland_722_IMPORT
 
 
 
 #FOOD PROCESSING MACHINES 
-Ireland_727 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+727.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_727 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.727.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_727_EXPORT<-t(data.frame(Ireland_727[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_727_EXPORT<-t(data.frame(Ireland_727[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_727[1,])))) 
 
-Ireland_727_IMPORT<-t(data.frame(Ireland_727[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_727_IMPORT<-t(data.frame(Ireland_727[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_727[2,])))) 
 
-Ireland_727_NET_TRADE<-Ireland_727_EXPORT-Ireland_727_IMPORT 
+Ireland_727_NET_TRADE<-Ireland_727_EXPORT-Ireland_727_IMPORT
 
 
 
 #METALWORKING MACHINERY 
-Ireland_73 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+73.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_73 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.73.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_73_EXPORT<-t(data.frame(Ireland_73[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_73_EXPORT<-t(data.frame(Ireland_73[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_73[1,])))) 
 
-Ireland_73_IMPORT<-t(data.frame(Ireland_73[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_73_IMPORT<-t(data.frame(Ireland_73[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_73[2,])))) 
 
-Ireland_73_NET_TRADE<-Ireland_73_EXPORT-Ireland_73_IMPORT 
+Ireland_73_NET_TRADE<-Ireland_73_EXPORT-Ireland_73_IMPORT
 
 
 
 #POWER GENERATING M&E 
-Ireland_71 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+71.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_71 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.71.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_71_EXPORT<-t(data.frame(Ireland_71[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_71_EXPORT<-t(data.frame(Ireland_71[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_71[1,])))) 
 
-Ireland_71_IMPORT<-t(data.frame(Ireland_71[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_71_IMPORT<-t(data.frame(Ireland_71[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_71[2,])))) 
 
-Ireland_71_NET_TRADE<-Ireland_71_EXPORT-Ireland_71_IMPORT 
-
-
-#TURBOJET  ETC 
-Ireland_7144 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7144.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+Ireland_71_NET_TRADE<-Ireland_71_EXPORT-Ireland_71_IMPORT
 
 
-Ireland_7144_EXPORT<-t(data.frame(Ireland_7144[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+#TURBOJET  ETC
+#7144
+Ireland_7144 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.7144.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
-Ireland_7144_IMPORT<-t(data.frame(Ireland_7144[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
 
-Ireland_7144_NET_TRADE<-Ireland_7144_EXPORT-Ireland_7144_IMPORT 
+Ireland_7144_EXPORT<-t(data.frame(Ireland_7144[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_7144[1,])))) 
 
+Ireland_7144_IMPORT<-t(data.frame(Ireland_7144[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_7144[2,])))) 
+
+Ireland_7144_NET_TRADE<-Ireland_7144_EXPORT-Ireland_7144_IMPORT
 
 
 #PARTS OF ENGINES  
-Ireland_7149 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/DS-018995/M.IE.EU27_2020_EXTRA+EU27_2020_INTRA+WORLD.TOTAL+7149.1+2.VALUE_IN_EUROS/?format=TSV&startPeriod=1988-01&endPeriod=2024-12")
+#7149
+Ireland_7149 <-read_table2("https://ec.europa.eu/eurostat/api/comext/dissemination/sdmx/2.1/data/ds-059331/M.IE.WORLD.7149.1+2.VALUE_EUR?format=TSV&startPeriod=2002-01&endPeriod=2024-12")
 
 
-Ireland_7149_EXPORT<-t(data.frame(Ireland_7149[10,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_7149_EXPORT<-t(data.frame(Ireland_7149[2,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_7149[1,])))) 
 
-Ireland_7149_IMPORT<-t(data.frame(Ireland_7149[9,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("1998-12-01"), by="month",length.out=length(Ireland_72829[9,]))))
+Ireland_7149_IMPORT<-t(data.frame(Ireland_7149[1,])) %>% as.numeric() %>% as.xts(order.by=as.Date(seq(as.Date("2001-12-01"), by="month",length.out=length(Ireland_7149[2,])))) 
 
-Ireland_7149_NET_TRADE<-Ireland_7149_EXPORT-Ireland_7149_IMPORT 
+Ireland_7149_NET_TRADE<-Ireland_7149_EXPORT-Ireland_7149_IMPORT
 
 
 
@@ -5935,7 +5939,7 @@ Ireland_OTHER_MACHINES<-Ireland_727_NET_TRADE+Ireland_73_NET_TRADE+Ireland_71_NE
 DOMESTIC_ME_IMPORTS<-data.frame(index(Ireland_COMMERCIAL_V_NET_TRADE),(data.frame(Ireland_COMMERCIAL_V_NET_TRADE,Ireland_PHONES_MONITORS_NET_TRADE,Ireland_AGRI_MACHINES,Ireland_OTHER_MACHINES)*-1)/1000000)
 colnames(DOMESTIC_ME_IMPORTS)<-c("Date","Commercial vehicles", "Phones, monitors, laptops", "Agricultural machines", "Other machines")
 
-DOMESTIC_ME_IMPORTS_SHORT<-DOMESTIC_ME_IMPORTS[260:nrow((DOMESTIC_ME_IMPORTS)),]
+DOMESTIC_ME_IMPORTS_SHORT<-DOMESTIC_ME_IMPORTS[230:nrow((DOMESTIC_ME_IMPORTS)),]
 
 ######
 
@@ -5945,7 +5949,7 @@ DOMESTIC_ME_IMPORTS_SHORT<-DOMESTIC_ME_IMPORTS[260:nrow((DOMESTIC_ME_IMPORTS)),]
 SEMI_NET_IMPORTS<-data.frame((Ireland_72821_NET_TRADE+Ireland_72822_NET_TRADE+Ireland_72829_NET_TRADE)*-1,index(Ireland_72829_NET_TRADE))
 colnames(SEMI_NET_IMPORTS)<-c("SEMI_NET_IMPORTS","Date")
 
-SEMICON_NET_IMPORT_GRAPH<-ggplot(SEMI_NET_IMPORTS[260:nrow(SEMI_NET_IMPORTS),],aes(Date,SEMI_NET_IMPORTS/1000000)) + 
+SEMICON_NET_IMPORT_GRAPH<-ggplot(SEMI_NET_IMPORTS[230:nrow(SEMI_NET_IMPORTS),],aes(Date,SEMI_NET_IMPORTS/1000000)) + 
   geom_col(fill=DOF_colours[2],colour=DOF_colours[2])+theme(legend.position.inside='bottom',element_text(size=100))+
   labs(x="",
        title="Monthly net trade in machinery to develop semiconductors",
