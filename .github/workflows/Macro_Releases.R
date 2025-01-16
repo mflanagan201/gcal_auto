@@ -45,7 +45,7 @@ bcc=c("ian.power@finance.gov.ie","harry.morris@finance.gov.ie"),
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
-    smtp(Body_INFLATION)
+    #smtp(Body_INFLATION)
   
     } else { 
     
@@ -63,7 +63,7 @@ if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CAL
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
-    smtp(Body_INFLATION)
+   #smtp(Body_INFLATION)
   
     } else { 
     
@@ -82,7 +82,7 @@ subject = "External Trade Release!"
         # Render R Markdown from a file.
         emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
     
-      smtp(Body_EXTERNAL_TRADE)  
+      #smtp(Body_EXTERNAL_TRADE)  
     
     
 
@@ -123,7 +123,7 @@ if(Sys.Date() %like any% WEEK){
        # Render R Markdown from a file.
       emayili::render(".github/workflows/macro_tables.Rmd")
     
-     smtp(MACRO_TABLE)  
+     #smtp(MACRO_TABLE)  
 
 } else {
   print("nothing to send")
