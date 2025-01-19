@@ -540,7 +540,7 @@ Deflated_VAT_Quarterly_GROWTH<-((1+(VAT_XTS_Quarterly_GROWTH["2024/"]/100))/(1+(
 
 Deflated_VAT_MONTHLY_GROWTH<-(((1+(as.numeric(unlist(VAT_YTD_GROWTH))/100))/((1+as.numeric(unlist(INFLATION_YTD_GROWTH_VAT))/100)))-1)*100
 
-Deflated_VAT_MONTHLY_GROWTH<-as.xts(Deflated_VAT_MONTHLY_GROWTH, order.by = index(VAT_XTS["2024/"]))
+Deflated_VAT_MONTHLY_GROWTH<-as.xts(Deflated_VAT_MONTHLY_GROWTH, order.by = index(VAT_XTS["2023/"]))
 
 
 
