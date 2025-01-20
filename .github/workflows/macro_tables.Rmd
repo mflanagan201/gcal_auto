@@ -540,6 +540,8 @@ Deflated_VAT_Quarterly_GROWTH<-((1+(VAT_XTS_Quarterly_GROWTH["2024/"]/100))/(1+(
 
 Deflated_VAT_MONTHLY_GROWTH<-(((1+(as.numeric(unlist(VAT_YTD_GROWTH))/100))/((1+as.numeric(unlist(INFLATION_YTD_GROWTH_VAT))/100)))-1)*100
 
+Deflated_VAT_MONTHLY_GROWTH<-as.xts(Deflated_VAT_MONTHLY_GROWTH,order.by=index(VAT_XTS["2023/"]))
+
 #Deflated_VAT_MONTHLY_GROWTH
 
 
@@ -555,13 +557,12 @@ colnames(inflation_GROWTH)<- c("inflation")
 
 
 
-Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
-
-Deflated_VAT_GROWTH<-as.xts(Deflated_VAT_GROWTH)
+#Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH$VAT/100))/(1+(inflation_GROWTH/100))-1)*100
 
 
 
-summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,(Deflated_VAT_GROWTH$VAT),Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-01-01/"]  %>% data.frame() %>% round(1) %>% t() 
+
+summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,(Deflated_VAT_MONTHLY_GROWTH[,1]),Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-01-01/"]  %>% data.frame() %>% round(1) %>% t() 
 
 
 
