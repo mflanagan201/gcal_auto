@@ -606,8 +606,7 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
   pack_rows("External Trade", 15, 18,label_row_css = "background-color: #34495e; color: #fff;") %>% 
   column_spec(1,include_thead = TRUE) %>%
   row_spec(0,bold=TRUE, angle=0, align = "c") %>% column_spec(ncol(Quarterly_consumer_Table),include_thead = FALSE) %>%    
-  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP.","Real Disposable income deflated HICP."))    
-
+  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP.","Real Disposable income deflated HICP."))    %>% as_image()  
 
 
 temp_file2 <- tempfile(fileext = ".html")
@@ -674,7 +673,7 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
   column_spec(1,include_thead = TRUE) %>%
   row_spec(0,bold=TRUE, angle=0, align = "c") %>% 
   column_spec(ncol(summary_consumer),include_thead = FALSE) %>%    
-  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP."))    
+  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP."))      %>% as_image()
 
 
 temp_file <- tempfile(fileext = ".html")
