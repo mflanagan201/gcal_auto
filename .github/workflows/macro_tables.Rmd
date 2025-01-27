@@ -607,12 +607,12 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
   column_spec(1,include_thead = TRUE) %>%
   row_spec(0,bold=TRUE, angle=0, align = "c") %>% column_spec(ncol(Quarterly_consumer_Table),include_thead = FALSE) %>%    
   add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP.","Real Disposable income deflated HICP."))    %>% as_image()  
+Quarterly_TABLE2
 
+#temp_file2 <- tempfile(fileext = ".html")
+#kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
 
-temp_file2 <- tempfile(fileext = ".html")
-kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
-
-webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 900, zoom = 1.2)
+#webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 900, zoom = 1.2)
 
 
 Date_95_QNA_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date("2030/10/01"), by="quarters")
@@ -675,10 +675,11 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
   column_spec(ncol(summary_consumer),include_thead = FALSE) %>%    
   add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP."))      %>% as_image()
 
+Monthly_TABLE2
 
-temp_file <- tempfile(fileext = ".html")
-kableExtra::save_kable(Monthly_TABLE2, file = temp_file)
-webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 680, zoom = 1.2)
+#temp_file <- tempfile(fileext = ".html")
+#kableExtra::save_kable(Monthly_TABLE2, file = temp_file)
+#webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 680, zoom = 1.2)
 
 
 
