@@ -543,7 +543,7 @@ Deflated_VAT_MONTHLY_GROWTH<-(((1+(as.numeric(unlist(VAT_YTD_GROWTH))/100))/((1+
 
 
 
-Deflated_VAT_MONTHLY_GROWTH<-as.xts(Deflated_VAT_MONTHLY_GROWTH,order.by=index(VAT_XTS["2023/"]))
+Deflated_VAT_MONTHLY_GROWTH<-as.xts(Deflated_VAT_MONTHLY_GROWTH,order.by=index(HEADLINE_HICP_XTS["2023/"]))
 
 #Deflated_VAT_MONTHLY_GROWTH
 
