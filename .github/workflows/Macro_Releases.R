@@ -139,4 +139,11 @@ if(Sys.Date() %like any% WEEK){
        # Render R Markdown from a file.
       emayili::render(".github/workflows/macro_tables.Rmd")
     
-     smtp(MACRO_TABLE)  
+   
+
+
+tryCatch({
+  smtp(MACRO_TABLE)
+}, error = function(e) {
+  message("SMTP error: ", e$message)
+})
