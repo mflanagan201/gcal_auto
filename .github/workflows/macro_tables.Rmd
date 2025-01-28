@@ -539,6 +539,11 @@ INFLATION_YTD_GROWTH_VAT<-INFLATION_YTD_GROWTH[paste0("2023/",last(index(VAT_YTD
 VAT_XTS_Quarterly<-VAT_XTS   %>% ts(start=c(2000,1), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
 VAT_XTS_Quarterly_GROWTH<-growth(VAT_XTS_Quarterly,4)
 
+
+
+HICP_QUARTERLY_FULL_YTD<-INFLATION_YTD_GROWTH   %>% ts(start=c(2023,1), frequency=12) %>% as.quarterly(FUN = mean) %>% as.xts()
+
+
 Deflated_VAT_Quarterly_GROWTH<-((1+(VAT_XTS_Quarterly_GROWTH["2023/"]/100))/(1+(HICP_QUARTERLY_FULL_YTD/100))-1)*100
 
 
