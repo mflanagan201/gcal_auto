@@ -507,7 +507,8 @@ EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH<-growth(EXTERNAL_TRADE_VAL_XTS_QUARTERLY
 VAT<-c(958313,328500,839274,263186,967608,298627,931211,325461,884810,313217,1071418	,288586	,1138525	,335986	,907584	,277126	,1007009	,288162	,982011	,317807	,930670	,314220	,1032967	,388394	,1156144	,396175	,919379	,
        436179	,1117309	,316097	,1114500	,308937	,1170220	,345332	,1229223	,375407	,1507241	,328153	,1175359	,256382	,1234709	,298355	,1288791	,240259	,1272536	,304048	,1426646	,388065	,1608214	,321053	,1249142	,301055	,1441982	,329443	,1486293	,310794	,1455593	,285232	,1541468	,363022	,1672738	,510549	,1391326	,376993	,1582415	,356631	,1660132	,338815	,1688398	,413108	,1749043	,348922	,2035575	,422611	,1632914	,317923	,1842946	,323391	,1861888	,376679	,1896172	,393696	,1962536	,381660	,2331507	,431968	,1750908	,392949	,2035905	,335801	,2169119	,321751	,1999690	,442303	,1875341	,409346	,2335014	,363700	,1827988	,351226	,1855918	,344059	,1853324	,252614	,1814642	,315932	,1720065	,395120	,1969657	,277114	,1450698	,137253	,1470837	,263975	,1391949	,241790	,1454018	,
        294768	,1416167	,301426	,1616164	,330492	,1269024	,204726	,1452330	,249377	,1356044	,260744	,1422426	,284847	,1434612	,220498	,1674183	,225452	,1210161	,277011	,1480225	,207603	,1324247	,221461	,1374103	,201675	,1353954	,190450	,1724848	,203968	,1362563	,190683	,1496593	,209908	,1413479	,224884	,1431860	,222954	,1484078	,204952	,1740838	,237227	,1321132	,176368	,1518475	,185417	,1450690	,169860	,1609924	,212011,	1624788,89270	,1369126	,667167	,1330068	,286419	,1560912	,345127	,1548169	,269919	,1582685	,365677	,1496859	,330801	,1968753	,397267	,1431371	,232837	,1679858	,289697	,1666893	,293314	,1741402	,339597	,1715405	,187652	,2098520	,310048	,1486399	,270721	,1860215	,193146	,1768442	,286641	,1917316	,322593	,1797916	,108523	,2312784	,503081	,1751979	,200317	,2059455	,78049	,1887231	,233500	,1991911	,200821	,2004229,79741	,2445116	,320538	,1910321	,168242	,2071797	,184681	,2086326	,194620	,2188989	,240677	,2269139	,153882	,2729975	,172388	,2083169	,6171	,2316022	,138124	,2302655	,152903	,2411107	,240127	,2286933	,278030	,2701541	,355337	,1080257,86448	,1496398	,201368	,1610916	,261493	,2074689	,274936	,2071889	,208285	,2358553	,298026	,1827490	,198197	,2296065	,225129	,2475515	,137238	,2622796	,168922	,2579507	,253659	,3107722	,260849	,2482287	,191664	,2929814	,115680	,2794045	,275943	,3124333	,177730	,3078177,62707	,3683166	,379541	,2718490	,229375	,3008004	,298122	,2929626	,270935	,3251583	,243210	,3120131	,214589	,
-       3830766, 	 428410, 	 2886341, 	 304605, 	 3372684, 	 129206, 	 3213730, 	 361129,3413659,380458) 
+       3830766, 	 428410, 	 2886341, 	 304605, 	 3372684, 	 129206, 	 3213730, 	 361129,3413659,380458,3095005,
+419228) 
 
 
 
@@ -541,7 +542,8 @@ VAT_XTS_Quarterly_GROWTH<-growth(VAT_XTS_Quarterly,4)
 
 
 
-HICP_QUARTERLY_FULL_YTD<-INFLATION_YTD_GROWTH   %>% ts(start=c(2023,1), frequency=12) %>% as.quarterly(FUN = mean) %>% as.xts()
+HICP_QUARTERLY_FULL_YTD<-(as.xts(as.numeric(INFLATION_YTD_GROWTH),order.by=index(INFLATION_YTD_GROWTH$INFLATION)))   %>% ts(start=c(2023,1), frequency=12) %>% as.quarterly(mean,na.rm=TRUE) %>% as.xts()
+
 
 
 Deflated_VAT_Quarterly_GROWTH<-((1+(VAT_XTS_Quarterly_GROWTH["2023/"]/100))/(1+(HICP_QUARTERLY_FULL_YTD/100))-1)*100
@@ -571,13 +573,13 @@ Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
 
 
 
-summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-01-01/"]  %>% data.frame() %>% round(1) %>% t() 
+summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-06-01/"]  %>% data.frame() %>% round(1) %>% t() 
 colnames(summary_consumer)<-c(format(as.Date(colnames(summary_consumer)),"%b %y"))
 rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Service Index","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","Goods External Trade Volume","Goods External Trade Value")
 
 
 Quarterly_consumer_Table<-merge(Consumption_Q_Annual_growth$Consumption,Deflated_VAT_Quarterly_GROWTH, Retail_Quarterly_yoy_growth,Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY
-                                ,Services_Vol_Q_Growth,COE_PER_CAPITA_XTS_Growth,Deflated_GDI_PER_CAPITA_XTS_Growth,Average_Hourly_Earnings_XTS_GROWTH,HH_Deposits_ANNUAL_growth,HICP_QUARTERLY_GROWTH,sr,Employment_XTS_Growth,PMOD_XTS_QUARTERLY_GROWTH,Unemployment_Rate_QUARTERLY,GDP_Q_Annual_growth,EXPORTS_Q_ANNUAL_GROWTH,EXTERNAL_TRADE_VOL_XTS_QUARTERLY_GROWTH,EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH) %>% .["2023/"]   %>% round(1) %>% t()
+                                ,Services_Vol_Q_Growth,COE_PER_CAPITA_XTS_Growth,Deflated_GDI_PER_CAPITA_XTS_Growth,Average_Hourly_Earnings_XTS_GROWTH,HH_Deposits_ANNUAL_growth,HICP_QUARTERLY_GROWTH,sr,Employment_XTS_Growth,PMOD_XTS_QUARTERLY_GROWTH,Unemployment_Rate_QUARTERLY,GDP_Q_Annual_growth,EXPORTS_Q_ANNUAL_GROWTH,EXTERNAL_TRADE_VOL_XTS_QUARTERLY_GROWTH,EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH) %>% .["2023-10-01/"]   %>% round(1) %>% t()
 rownames(Quarterly_consumer_Table)<-c("Consumption","Real VAT (YTD)","Retail Sales","Real Card Spending","Service Index","Compensation of Employees per person","Real Disposable Income per person","Average Hourly Earnings","Household Deposits", "Inflation Rate", "Savings Rate","Employment Growth", "Payroll Employment", "Unemployment Rate","GDP","Total Exports","External Trade Volume","External Trade Value")
 colnames(Quarterly_consumer_Table)<-colnames(Quarterly_consumer_Table) %>% as.Date() %>% as.yearqtr("%Y") %>% paste()
 
@@ -616,7 +618,7 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
   row_spec(0,bold=TRUE, angle=0, align = "c") %>% column_spec(ncol(Quarterly_consumer_Table),include_thead = FALSE) 
 
 #%>%    
-  #add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP.","Real Disposable income deflated HICP."))    
+#  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated #by YTD HICP.","Real Disposable income deflated HICP."))    
 
 
 
@@ -659,8 +661,6 @@ write.xlsx(QUARTERLY_DATA_DOWNLOAD_ALL, file = 'QUARTERLY_DATA_DOWNLOAD_ALL.xlsx
 ```
 <div style="text-align: center;">
 <br>
-<span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/QUARTERLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
-<br>
 
 
 ***
@@ -686,7 +686,7 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
   column_spec(ncol(summary_consumer),include_thead = FALSE) 
 
 #%>%    
- # add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP."))    
+#  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated #by YTD HICP."))    
 
 
 temp_file <- tempfile(fileext = ".html")
@@ -700,7 +700,7 @@ webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwi
 
 
 
-Date_95_Monthly_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date(index(HEADLINE_HICP_GROWTH[nrow(HEADLINE_HICP_GROWTH),1]),format="YYYY/m/d"), by="month")
+Date_95_Monthly_EXTEND<-seq(from=as.Date("1995/01/01"), to=index(last(HEADLINE_HICP_XTS)), by="month")
 
 
 
@@ -717,7 +717,7 @@ HEADLINE_HICP_XTS,
 CORE_HICP_XTS,
 EXTERNAL_TRADE_VOL_XTS,
 EXTERNAL_TRADE_VAL_XTS
-) %>% .[301:nrow(.),]%>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.)
+) %>% .[301:nrow(.),] %>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.)
 
 colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
 
@@ -731,6 +731,3 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 
 ```
-
-<div style="text-align: center;">
-<span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
