@@ -24,7 +24,16 @@ library(eurostat)
 
 CALENDAR_ALL_short<-read.csv("ECON_CAL.CSV")
 
+Body_INFLATION<-emayili::envelope(
+    from = "mflanagan201@gmail.com",
+    to=c("michael.flanagan@finance.gov.ie"),
+    subject = "[Auto-Email] Inflation Release"
+  ) %>%
+    emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
+   #smtp(Body_INFLATION)
+  
+   
 
 
 
