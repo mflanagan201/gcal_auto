@@ -700,7 +700,7 @@ webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwi
 
 
 
-Date_95_Monthly_EXTEND<-seq(from=as.Date("01/01/1995"), to=index(last(HEADLINE_HICP_XTS)), by="month")
+Date_95_Monthly_EXTEND<-seq(from=as.Date("01/01/1995"), to=as.Date("01/01/2025"), by="month")
 
 
 
