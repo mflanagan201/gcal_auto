@@ -31,7 +31,7 @@ Body_INFLATION<-emayili::envelope(
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
-   #smtp(Body_INFLATION)
+   smtp(Body_INFLATION)
   
    
 
