@@ -23,7 +23,8 @@ library(emayili)
 library(eurostat)
 
 CALENDAR_ALL_short<-read.csv("ECON_CAL.CSV")
-
+
+
 
 
 smtp <- server(host = "smtp.gmail.com",
