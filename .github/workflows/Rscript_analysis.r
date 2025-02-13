@@ -760,7 +760,7 @@ smtp <- emayili::server(host = "smtp.gmail.com",
 
 Body_weekly_email<-emayili::envelope(
   to=c("michael.flanagan@finance.gov.ie"
-  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie"),
+  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Harry.Williamson@finance.gov.ie"),
   
   from="mflanagan201@gmail.com",
   subject = "Weekly Economic Calendar"
@@ -854,6 +854,99 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Fri"))){
 
 
 
+
+Body_weekly_email_test<-emayili::envelope(
+  to=c("michael.flanagan@finance.gov.ie"),
+  
+  from="mflanagan201@gmail.com",
+  subject = "Weekly Economic Calendar"
+) %>%
+  emayili::render(' <span class="text-center" style="color:#205E55"> <left> <font size="4"> *Hi, The following indicators will be released next week.* </font> </left> </span>
+
+
+                
+                       {{NEXT_WEEK_release_text_1}}   
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_2}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_3}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_4}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_5}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_6}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_7}}
+                       </br>
+                       </br>
+                       </br>        
+                       
+                       {{NEXT_WEEK_release_text_8}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_9}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_10}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_11}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_12}}
+                       </br>
+                       </br>
+                       </br> 
+                       
+                       {{NEXT_WEEK_release_text_13}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_14}}
+                       </br>
+                       </br>
+                       </br> 
+                      
+                       {{NEXT_WEEK_release_text_15}}
+                       </br>
+                       </br>
+                       </br> 
+
+                       
+')
+
+
+if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
+  smtp(Body_weekly_email_test)  
+}
 
 
 
