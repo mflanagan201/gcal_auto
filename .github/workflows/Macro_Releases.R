@@ -93,7 +93,7 @@ subject = "External Trade Release!"
         # Render R Markdown from a file.
         emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
     
-      smtp(Body_EXTERNAL_TRADE)  
+     # smtp(Body_EXTERNAL_TRADE)  
     
     
 
@@ -110,7 +110,7 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
        # Render R Markdown from a file.
       emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
     
-     #smtp(Body_EXTERNAL_TRADE)  
+     smtp(Body_EXTERNAL_TRADE)  
     
     
  } else { 
@@ -132,7 +132,7 @@ if(Sys.Date() %like any% WEEK){
       subject = "[Auto-Email] Macroeconomic Tables"
     ) %>%
        # Render R Markdown from a file.
-      emayili::render(".github/workflows/macro_tables.Rmd")
+  #    emayili::render(".github/workflows/macro_tables.Rmd")
     
      #smtp(MACRO_TABLE)  
 
@@ -142,13 +142,13 @@ if(Sys.Date() %like any% WEEK){
 
 
 
-  MACRO_TABLE<-emayili::envelope(
+ # MACRO_TABLE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
         to=c("michael.flanagan@finance.gov.ie"),
           subject = "[Auto-Email] Macroeconomic Tables"
     ) %>%
        # Render R Markdown from a file.
-      emayili::render(".github/workflows/macro_tables.Rmd")
+    #  emayili::render(".github/workflows/#macro_tables.Rmd")
     
    
 
