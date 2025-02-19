@@ -31,7 +31,6 @@ smtp <- server(host = "smtp.gmail.com",
 
 for(i in 1:nrow(CALENDAR_ALL_short)){
 if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
-
     Body_INFLATION<-emayili::envelope(
     from = "mflanagan201@gmail.com",
     to=c("michael.flanagan@finance.gov.ie"),
