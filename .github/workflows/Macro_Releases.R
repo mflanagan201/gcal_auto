@@ -41,7 +41,7 @@ if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALEN
     from = "mflanagan201@gmail.com",
     to=c("michael.flanagan@finance.gov.ie"),
 bcc=c("ian.power@finance.gov.ie","eamonn.sweeney@finance.gov.ie"),
-    subject = "[Auto-Email] Inflation Release"
+    subject = "Inflation Release"
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
