@@ -24,15 +24,10 @@ library(eurostat)
 
 CALENDAR_ALL_short<-read.csv("ECON_CAL.CSV")
 
-
-
-
 smtp <- server(host = "smtp.gmail.com",
                port = 465,
                username = "mflanagan201@gmail.com",
                password = "ddauvuifpknvsobo")
-
-
 
 for(i in 1:nrow(CALENDAR_ALL_short)){
 if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
@@ -73,9 +68,6 @@ if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CAL
   }
 }
 
-
-  
-
 for(i in 1:nrow(CALENDAR_ALL_short)){
   if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
     
@@ -88,14 +80,9 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
       emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
     
      smtp(Body_EXTERNAL_TRADE)  
-    
-    
- } else { 
+
+  } else { 
     
    print("Don't run code")
   }
 }
-
-
-
-
