@@ -540,8 +540,12 @@ CHAIN_INDEX_ENERGY_CONTRIBUTION[is.na(CHAIN_INDEX_ENERGY_CONTRIBUTION)]<-0
 
 
 DEC_BASE_ENERGY<-(as.numeric(ENERGY_OVERALL_INDEX_XTS[paste0(year(ENERGY_OVERALL_INDEX_XTS["2016/"]), "-12-01")])) 
-ENERGY_INDEX_CONTRIBUTION<-rowSums(CHAIN_INDEX_ENERGY_CONTRIBUTION)*DEC_BASE_ENERGY[1:length(ENERGY_OVERALL_INDEX_XTS["2017/"])] 
+ENERGY_INDEX_CONTRIBUTION_OVERALL_XTS<-matrix(NA,nrow=length(Date[241:length(Date)]),ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
+
+ENERGY_INDEX_CONTRIBUTION<-rowSums(CHAIN_INDEX_ENERGY_CONTRIBUTION)*DEC_BASE_ENERGY[1:nrow(CHAIN_INDEX_ENERGY_CONTRIBUTION)] 
 ENERGY_INDEX_XTS<-as.xts((ENERGY_INDEX_CONTRIBUTION),order.by=(Date[253:length(Date)]))
+
+
 
 ENERGY_INDEX_OVERALL<-as.xts(matrix(NA,length(Date[1:length(Date)]),ncol=1),order.by=Date[1:length(Date)])
 ENERGY_INDEX_OVERALL["2016"]<-ENERGY_OVERALL_INDEX_XTS["1996/2017"]
@@ -553,6 +557,16 @@ colnames(ENERGY)<-c("Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lub
 ENergy_CONTRIBUTIONS<-data.frame(index(ENERGY_INDEX_OVERALL["2019/"]),na.omit(growth(ENERGY_INDEX_OVERALL["2018/"],12)),ENERGY)  
 colnames(ENergy_CONTRIBUTIONS)<- c("Date","Energy Growth","Electricity","Gas","Liquid Fuel","Solid Fuels","Fuels & Lubricants for personal transport")
 ENergy_CONTRIBUTIONS %>%  write.csv("ENERGY.csv")
+
+
+
+
+################
+
+
+
+
+
 
 #NEIG 
 #CP0722 has been removed but could be replace is lubricants (CP07224) can be isolated. 
@@ -685,7 +699,6 @@ NEIG_WEIGHT_XTS$CP055<-NEIG_WEIGHT_XTS$CP055-EXCLUDE_NEIG_WEIGHT_df$A.CP05512.IE
 NEIG_WEIGHT_XTS$CP0934_5<-NEIG_WEIGHT_XTS$CP0934_5-EXCLUDE_NEIG_WEIGHT_df$A.CP0935.IE
 NEIG_WEIGHT_XTS$CP0934_5 <-NEIG_WEIGHT_XTS$CP032-EXCLUDE_NEIG_WEIGHT_df$A.CP0322.IE
 
-
 NEIG_WEIGHT_XTS<-NEIG_WEIGHT_XTS/rowSums(NEIG_WEIGHT_XTS)
 
 CHAIN_INDEX_NEIG_CONTRIBUTION<-matrix(NA,nrow=length(Date[253:length(Date)]),ncol=ncol(NEIG_INDEX_XTS)) %>% as.xts(order.by=Date[253:length(Date)])
@@ -706,12 +719,22 @@ NEIG_INDEX_XTS[is.na(NEIG_INDEX_XTS)]<-0
 NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(as.numeric(NEIG_INDEX_CONTRIBUTION_XTS),order.by=index(NEIG_INDEX_CONTRIBUTION_XTS["2017/"]))
 
 
-#NEIG_INDEX_CONTRIBUTION_XTS_LONG<-matrix(NA,nrow=length(Date[241:length(Date)]), ncol=1) %>% #as.xts(order.by=Date[241:length(Date)])
+NEIG_INDEX_CONTRIBUTION_XTS_LONG<-matrix(NA,nrow=length(Date[241:length(Date)]), ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
 
-#NEIG_INDEX_CONTRIBUTION_XTS_LONG["2016"]<-NEIG_OVERALL_INDEX_XTS["2016"]
-#NEIG_INDEX_CONTRIBUTION_XTS_LONG["2017/"]<-NEIG_INDEX_CONTRIBUTION_XTS["2017/"]
-  
-#NEIG_CONTRIBUTIONS<-Contribution(NEIG_INDEX_CONTRIBUTION_XTS_LONG["/2023"],NEIG_WEIGHT_XTS["/2023"],NEIG_INDEX_XTS["/2023"])
+NEIG_INDEX_CONTRIBUTION_XTS_LONG["2016"]<-NEIG_OVERALL_INDEX_XTS["2016"]
+NEIG_INDEX_CONTRIBUTION_XTS_LONG["2017/"]<-NEIG_INDEX_CONTRIBUTION_XTS["2017/"]
+CSO_NEIG<-CSO_HICP_INDEX_XTS$`Non-energy industrial goods`
+
+NEIG_CONTRIBUTIONS<-Contribution(CSO_NEIG,NEIG_WEIGHT_XTS,NEIG_INDEX_XTS)*1000
+colnames(NEIG_CONTRIBUTIONS)<-c("Clothing Material","Garments","Other articles of clothing and clothing accessories", "Footwear","Material for the maintenance of dwellings","Water Supply","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils",
+"House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products","Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Recording Equipment","Photographic Equipment","Information processing equipment", "Recording Media","Musical Instruments","Games, Toys, hobbies","Sports & outdoor Equipment","Gardens, plants and flowers","Pets Products","Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects")
+
+
+write.xlsx(NEIG_CONTRIBUTIONS, file="NEIG_CONTRIBUTIONS_NEW-2.xlsx")
+
+
+
+
 
 
 
@@ -912,7 +935,7 @@ CHAIN_CORE_SERVICES_CONTRIBUTION[is.nan(CHAIN_CORE_SERVICES_CONTRIBUTION)]<-0
 DEC_BASE_SERVICES<-(as.numeric(SERVICES_OVERALL_INDEX_XTS[paste0(year(SERVICES_OVERALL_INDEX_XTS["2016/"]), "-12-01")])) 
 
 SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS<-matrix(NA,nrow=length(Date[241:length(Date)]),ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
-SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]<-rowSums(CHAIN_CORE_SERVICES_CONTRIBUTION)*DEC_BASE_SERVICES[1:length(SERVICES_OVERALL_INDEX_XTS["2017/"])]   
+SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2017/"]<-rowSums(CHAIN_CORE_SERVICES_CONTRIBUTION)*DEC_BASE_SERVICES[1:nrow(CHAIN_CORE_SERVICES_CONTRIBUTION)]      
 SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS["2016"]<-SERVICES_OVERALL_INDEX_XTS["2016"]
 
 SERVICES_CONTRIBUTION<-Contribution(SERVICES_INDEX_CONTRIBUTION_OVERALL_XTS,CORE_SERVICES_WEIGHT_XTS,CORE_SERVICES_INDEX_XTS)
@@ -1033,8 +1056,8 @@ CORE_SERVICES<-CONTRIBUTION$`Cleaning & Repair Clothing`+
   
   
   
-summary_contribution<-data.frame(merge(NEIG["2020/"],FOOD["2020/"],ENERGY["2020/"],Rent["2020/"],CORE_SERVICES["2020/"]))
-summary_contribution<-data.frame(summary_contribution,index(ENERGY["2020/"]))
+summary_contribution<-data.frame(merge(NEIG["2022/"],FOOD["2022/"],ENERGY["2022/"],Rent["2022/"],CORE_SERVICES["2022/"]))
+summary_contribution<-data.frame(summary_contribution,index(ENERGY["2022/"]))
 
 colnames(summary_contribution)<-c("NEIG","Food","Energy","Rent","Core Services","Date")
 summary_contribution_melt<-melt(summary_contribution,id=c("Date"))
@@ -1346,7 +1369,7 @@ betweeen_zero_two_xts<-as.xts(betweeen_zero_two_xts_sum, order.by = index(below_
 betweeen_two_five_xts<-as.xts(betweeen_two_five_xts_sum, order.by = index(below_zero_xts))
 over_five_xts<-as.xts(over_five_xts_sum, order.by = index(below_zero_xts))
 
-inflationbreakdown<-data.frame(index(below_zero_xts["2022/"]),below_zero_xts["2022/"],betweeen_zero_two_xts["2022/"],betweeen_two_five_xts["2022/"],over_five_xts["2022/"])
+inflationbreakdown<-data.frame(index(below_zero_xts["2024/"]),below_zero_xts["2024/"],betweeen_zero_two_xts["2024/"],betweeen_two_five_xts["2024/"],over_five_xts["2024/"])
 colnames(inflationbreakdown)<-c("Date","<0%","0%-2%","2%-5%",">5%")
 
 summary_df_graph_melt<-melt(inflationbreakdown,id=c("Date"))
@@ -1911,14 +1934,14 @@ Monthly_CORE_INFLATION_TEXT<-conditional(Monthly_CORE_INFLATION[length(Monthly_C
 
 
 
-YTD_2024_annual<-ANNUAL_INFLATION["2024/"] %>% mean()  %>% round(1)
+YTD_2024_annual<-ANNUAL_INFLATION["2025/"] %>% mean()  %>% round(1)
 
-FORECAST_KPI<-YTD_2024_annual-1.7
+FORECAST_KPI<-YTD_2024_annual-1.9
 FORECAST_KPI_TEXT<-conditional_alt4(FORECAST_KPI)
 
 
-carryover_weight<-(length(OVERALL_HICP_XTS["2024/"])/12)
-Carryover<-((((as.numeric(OVERALL_HICP_XTS[length(OVERALL_HICP_XTS)])*(1-carryover_weight))+(mean(as.numeric(OVERALL_HICP_XTS["2024"]))*carryover_weight))-mean(as.numeric(OVERALL_HICP_XTS["2023"])))/mean(as.numeric(OVERALL_HICP_XTS["2023"])))*100 %>% as.numeric() 
+carryover_weight<-(length(OVERALL_HICP_XTS["2025/"])/12)
+Carryover<-((((as.numeric(OVERALL_HICP_XTS[length(OVERALL_HICP_XTS)])*(1-carryover_weight))+(mean(as.numeric(OVERALL_HICP_XTS["2025"]))*carryover_weight))-mean(as.numeric(OVERALL_HICP_XTS["2024"])))/mean(as.numeric(OVERALL_HICP_XTS["2024"])))*100 %>% as.numeric() 
 Carryover_TEXT<-paste0(round(Carryover,1),sep="%")
 
 
@@ -1983,11 +2006,11 @@ names(GROWTH_COMPONENTS)<-GROWTH_COMPONENTS %>% names() %>% gsub(
 <br>
 <br>
 
-* As part of Budget 2025, the Department forecast Inflation growth of 1.7% in 2024. Year to date, annual inflation is averaging `r YTD_2024_annual`% in `r CURRENT_DATE`. As a result inflation is currently running `r FORECAST_KPI_TEXT`. 
+* As part of Budget 2025, the Department forecast Inflation growth of 1.9% in 2025. Year to date, annual inflation is averaging `r YTD_2024_annual`% in `r CURRENT_DATE`. As a result inflation is currently running `r FORECAST_KPI_TEXT`. 
 <br>
 <br>
 
-* On a carryover only basis, annual inflation is currently running at `r Carryover_TEXT` for 2024.  
+* On a carryover only basis, annual inflation is currently running at `r Carryover_TEXT` for 2025.  
 <br>
 <br>
 
@@ -2000,7 +2023,7 @@ names(GROWTH_COMPONENTS)<-GROWTH_COMPONENTS %>% names() %>% gsub(
 INFLATION_CON_plot<-INFLATION_CON_plot+theme(legend.position=c(0.2,0.6),plot.title = element_text(hjust = 0.5))
 
 
-LINE_DATA<-data.frame(index(ANNUAL_INFLATION["2020/"]),ANNUAL_INFLATION["2020/"])
+LINE_DATA<-data.frame(index(ANNUAL_INFLATION["2022/"]),ANNUAL_INFLATION["2022/"])
 colnames(LINE_DATA)<-c("Date","Growth")
 
 LINE_DATA_2<-melt(LINE_DATA, id=c("Date"))
@@ -2011,7 +2034,7 @@ INFLATION_CON_plot_WITH_LINE
 
 Inflation_contributions_graph_data<-summary_contribution[1:5] %>% round(3)
 
-Inflation_contributions_graph_data_XTS<-data.frame(index(ANNUAL_INFLATION["2020/"]),Inflation_contributions_graph_data) 
+Inflation_contributions_graph_data_XTS<-data.frame(index(ANNUAL_INFLATION["2022/"]),Inflation_contributions_graph_data) 
 colnames(Inflation_contributions_graph_data_XTS)<-c("Date","NEIG","Food","Energy","Rent","Core Services")
 
 write.xlsx(Inflation_contributions_graph_data_XTS, file="Inflation_contributions_graph_data.xlsx")
@@ -2714,7 +2737,7 @@ Energy_overall_contributions_bar_chart <- ggplot(Energy_overall_contributions_da
 #chart five
 #adding in overall contribution line
 #contribution to overall inflation rate bar chart
-CONTRIBUTION_df <- data.frame(CONTRIBUTION["2022/"])
+CONTRIBUTION_df <- data.frame(CONTRIBUTION["2023/"])
 
 Energy_overall_contributions_data <- CONTRIBUTION_df %>% select('Electricity', 'Gas', 'Liquid.Fuel', 'Solid.Fuels', 'Fuels...Lubricants.for.personal.transport')
 Energy_overall_contributions_data$Date <- rownames(Energy_overall_contributions_data)
@@ -2742,7 +2765,7 @@ Energy_overall_contributions_bar_chart <- ggplot(Energy_overall_contributions_da
   theme_bw()+ theme(panel.border = element_blank(), legend.position=c(0.8, 0.8),
                     legend.title=element_blank(), plot.title = element_text(hjust = 0.5, size=15))
 
-Overall_energy_contribution_line<- data.frame(index(ENERGY["2022/"]), ENERGY["2022/"])
+Overall_energy_contribution_line<- data.frame(index(ENERGY["2023/"]), ENERGY["2023/"])
 colnames(Overall_energy_contribution_line) <- c("Date", "Growth")
 Overall_energy_contribution_line<- melt(Overall_energy_contribution_line, id=c("Date"))
 
