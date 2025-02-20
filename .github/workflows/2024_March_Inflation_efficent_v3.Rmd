@@ -1,7 +1,7 @@
 ---
 title: <span class="text-center" style="color:#A3915E"> <center> <font size="6">  **Inflation Release**  </font> </center> </span>
 output: 
-  
+
   html_document: default
   word_document: default
   pdf_document: default
@@ -1554,7 +1554,7 @@ colnames(graph_data_2023)<-c("Date", "Trimmed Inflation","Overall Inflation", "C
 
 
 
-infl_CONTR<-data.frame(inflationbreakdown[14:nrow(inflationbreakdown),],over_five_12_Months_SUM["2023-02-01/"])
+infl_CONTR<-data.frame(inflationbreakdown[1:nrow(inflationbreakdown),],over_five_12_Months_SUM["2024-01-01/"])
 colnames(infl_CONTR)<-c("Date","<0%","0%-2%","2%-5%",">5%",">5% MORE THAN 12 Months")
 
 
