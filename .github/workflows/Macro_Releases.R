@@ -39,7 +39,7 @@ bcc=c("ian.power@finance.gov.ie","eamonn.sweeney@finance.gov.ie"),
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
-    #smtp(Body_INFLATION)
+    smtp(Body_INFLATION)
   
     } else { 
     
@@ -50,7 +50,7 @@ bcc=c("ian.power@finance.gov.ie","eamonn.sweeney@finance.gov.ie"),
 
 
 for(i in 1:nrow(CALENDAR_ALL_short)){
-if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
+if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
 
     Body_INFLATION<-emayili::envelope(
     from = "mflanagan201@gmail.com",
@@ -59,7 +59,7 @@ if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALEN
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
 
-   smtp(Body_INFLATION)
+   #smtp(Body_INFLATION)
   
     } else { 
     
