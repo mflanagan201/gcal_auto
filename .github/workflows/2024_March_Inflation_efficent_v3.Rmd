@@ -21,7 +21,7 @@ tidy.opts=list(width.cutoff=10))
 library('tidyverse')
 library(reshape)
 library('xts')
-library(eurostat)
+
 library('openxlsx')
 library("dplyr")
 library(xts)
@@ -32,6 +32,7 @@ library(lubridate)
 library(readxl)
 library(waterfalls)
 library(stringr)
+library(eurostat)
 
 
 
@@ -83,26 +84,42 @@ CSO_CPI_INDEX_XTS<-t(CSO_CPI_INDEX) %>% .[3:nrow(.),] %>% as.xts(order.by=Date_C
 colnames(CSO_CPI_INDEX_XTS)<-(unique((CSO_CPI_INDEX[,2]))) 
 
 
-
-
-ENERGY_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.NRG.IE")%>% .$value %>% as.numeric()
-ENERGY_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.NRG.IE") %>% .$period %>% as.Date()
+ENERGY_INDEX<-get_eurostat("prc_hicp_midx", filters = list(coicop="NRG",geo = "IE",unit="I15")) %>% .$values %>% as.numeric() 
+ENERGY_HICP_DATE<-get_eurostat("prc_hicp_midx", filters = list(coicop="NRG",geo = "IE",unit="I15")) %>% .$time %>% as.Date()
 ENERGY_OVERALL_INDEX_XTS<-as.xts(ENERGY_INDEX,order.by=ENERGY_HICP_DATE)
 
+#ENERGY_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.NRG.IE")%>% .$value %>% as.numeric()
+#ENERGY_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.NRG.IE") %>% .$period %>% as.Date()
+#ENERGY_OVERALL_INDEX_XTS<-as.xts(ENERGY_INDEX,order.by=ENERGY_HICP_DATE)
 
-NEIG_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.IGD_NNRG.IE")%>% .$value %>% as.numeric()
-NEIG_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.IGD_NNRG.IE") %>% .$period %>% as.Date()
+NEIG_INDEX<-get_eurostat("prc_hicp_midx", filters = list(coicop="IGD_NNRG",geo = "IE",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() 
+NEIG_HICP_DATE<-get_eurostat("prc_hicp_midx", filters = list(coicop="IGD_NNRG",geo = "IE",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date()
 NEIG_OVERALL_INDEX_XTS<-as.xts(NEIG_INDEX,order.by=NEIG_HICP_DATE)
 
+#NEIG_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.IGD_NNRG.IE")%>% .$value %>% as.numeric()
+#NEIG_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.IGD_NNRG.IE") %>% .$period %>% as.Date()
+#NEIG_OVERALL_INDEX_XTS<-as.xts(NEIG_INDEX,order.by=NEIG_HICP_DATE)
 
-SERVICES_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE")%>% .$value %>% as.numeric()
-SERVICES_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE") %>% .$period %>% as.Date()
+SERVICES_INDEX<-get_eurostat("prc_hicp_midx", filters = list(coicop="SERV",geo = "IE",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() 
+SERVICES_HICP_DATE<-get_eurostat("prc_hicp_midx", filters = list(coicop="SERV",geo = "IE",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date()
 SERVICES_OVERALL_INDEX_XTS<-as.xts(SERVICES_INDEX,order.by=SERVICES_HICP_DATE)
 
 
-PROCESSED_FOOD_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE")%>% .$value %>% as.numeric()
-PROCESSED_FOOD_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE") %>% .$period %>% as.Date()
+
+#SERVICES_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE")%>% .$value %>% as.numeric()
+#SERVICES_HICP_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.SERV.IE") %>% .$period %>% as.Date()
+#SERVICES_OVERALL_INDEX_XTS<-as.xts(SERVICES_INDEX,order.by=SERVICES_HICP_DATE)
+
+
+PROCESSED_FOOD_INDEX<-get_eurostat("prc_hicp_midx", filters = list(coicop="FOOD_P",geo = "IE",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() 
+PROCESSED_FOOD_DATE<-get_eurostat("prc_hicp_midx", filters = list(coicop="FOOD_P",geo = "IE",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date()
 PROCESSED_FOOD_INDEX_XTS<-as.xts(PROCESSED_FOOD_INDEX,order.by=PROCESSED_FOOD_DATE)
+
+
+
+#PROCESSED_FOOD_INDEX<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE")%>% .$value %>% as.numeric()
+#PROCESSED_FOOD_DATE<-rdb("Eurostat/prc_hicp_midx/M.I15.FOOD_P.IE") %>% .$period %>% as.Date()
+#PROCESSED_FOOD_INDEX_XTS<-as.xts(PROCESSED_FOOD_INDEX,order.by=PROCESSED_FOOD_DATE)
 
 
 
@@ -651,14 +668,18 @@ NEIG_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP0311
 
 
 ```{r NEIGWEIGHT, include=FALSE}
-NEIG_WEIGHT_OVERALL<-c("A.IGD_NNRG.IE")
+NEIG_WEIGHT_OVERALL<-c("IGD_NNRG")
 NEIG_WEIGHT_OVERALL_XTS<-matrix(NA,nrow=length(Date),ncol=length(NEIG_WEIGHT_OVERALL)) %>% as.xts(order.by=Date)
 
 
 for(i in 1:length(NEIG_WEIGHT_OVERALL)){
-  NEIG_WEIGHT_OVERALL_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$period %>% as.Date()),i]<-
-    (rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
-      rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$period %>% as.Date())
+
+  NEIG_WEIGHT_OVERALL_XTS[get_eurostat("prc_hicp_inw", filters = list(coicop=NEIG_WEIGHT_OVERALL[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date(),i]<-get_eurostat("prc_hicp_inw", filters = list(coicop=NEIG_WEIGHT_OVERALL[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(get_eurostat("prc_hicp_inw", filters = list(coicop=NEIG_WEIGHT_OVERALL[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date())
+  
+  
+  #NEIG_WEIGHT_OVERALL_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$period %>% as.Date()),i]<-
+  #  (rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+  #    rdb(paste0("Eurostat/prc_hicp_inw/",(NEIG_WEIGHT_OVERALL[i]))) %>% .$period %>% as.Date())
 } 
 
 NEIG_WEIGHT_OVERALL_df<-as.data.frame(NEIG_WEIGHT_OVERALL_XTS["2017/"])
@@ -674,14 +695,20 @@ for (i in 1:nrow(NEIG_WEIGHT_OVERALL_df)){
 
 NEIG_WEIGHT_OVERALL_XTS<-as.xts(NEIG_WEIGHT_OVERALL_df)
 
-EXCLUDE_NEIG_WEIGHT_NAMES<-c("A.CP05512.IE","A.CP0931.IE","A.CP0935.IE","A.CP0322.IE")
+EXCLUDE_NEIG_WEIGHT_NAMES<-c("CP05512","CP0931","CP0935","CP0322")
 EXCLUDE_NEIG_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(EXCLUDE_NEIG_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
 
 
 for(i in 1:length(EXCLUDE_NEIG_WEIGHT_NAMES)){
-  EXCLUDE_NEIG_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
-    (rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
-      rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+  
+  EXCLUDE_NEIG_WEIGHT_XTS[get_eurostat("prc_hicp_inw", filters = list(coicop=EXCLUDE_NEIG_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date(),i]<-get_eurostat("prc_hicp_inw", filters = list(coicop=EXCLUDE_NEIG_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(get_eurostat("prc_hicp_inw", filters = list(coicop=EXCLUDE_NEIG_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date())
+  
+  
+  
+  
+  #EXCLUDE_NEIG_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+   # (rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+    #  rdb(paste0("Eurostat/prc_hicp_inw/",(EXCLUDE_NEIG_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
 } 
 
 EXCLUDE_NEIG_WEIGHT_df<-as.data.frame(EXCLUDE_NEIG_WEIGHT_XTS["2017/"])
@@ -698,9 +725,9 @@ for (i in 1:nrow(EXCLUDE_NEIG_WEIGHT_df)){
 
 colnames(EXCLUDE_NEIG_WEIGHT_df)<-c(EXCLUDE_NEIG_WEIGHT_NAMES)
 
-NEIG_WEIGHT_XTS$CP055<-NEIG_WEIGHT_XTS$CP055-EXCLUDE_NEIG_WEIGHT_df$A.CP05512.IE
-NEIG_WEIGHT_XTS$CP0934_5<-NEIG_WEIGHT_XTS$CP0934_5-EXCLUDE_NEIG_WEIGHT_df$A.CP0935.IE
-NEIG_WEIGHT_XTS$CP0934_5 <-NEIG_WEIGHT_XTS$CP032-EXCLUDE_NEIG_WEIGHT_df$A.CP0322.IE
+NEIG_WEIGHT_XTS$CP055<-NEIG_WEIGHT_XTS$CP055-EXCLUDE_NEIG_WEIGHT_df$CP05512
+NEIG_WEIGHT_XTS$CP0934_5<-NEIG_WEIGHT_XTS$CP0934_5-EXCLUDE_NEIG_WEIGHT_df$CP0935
+NEIG_WEIGHT_XTS$CP0934_5 <-NEIG_WEIGHT_XTS$CP032-EXCLUDE_NEIG_WEIGHT_df$CP0322
 
 NEIG_WEIGHT_XTS<-NEIG_WEIGHT_XTS/rowSums(NEIG_WEIGHT_XTS)
 
@@ -753,14 +780,18 @@ UNPROCESSED_FOOD_INDEX<-CSO_HICP_INDEX_XTS$`Unprocessed food`
 ```
 
 ```{r food weight, include=FALSE}
-FOOD_WEIGHT_NAMES<-c("A.FOOD_NP.IE","A.FOOD_P_X_ALC_TBC.IE","A.CP011.IE","A.CP01.IE","A.CP02.IE")
+FOOD_WEIGHT_NAMES<-c("FOOD_NP","FOOD_P_X_ALC_TBC","CP011","CP01","CP02")
 FOOD_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(FOOD_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
 
 
 for(i in 1:length(FOOD_WEIGHT_NAMES)){
-  FOOD_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
-    (rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
-      rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+  
+    FOOD_WEIGHT_XTS[get_eurostat("prc_hicp_inw", filters = list(coicop=FOOD_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date(),i]<-get_eurostat("prc_hicp_inw", filters = list(coicop=FOOD_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(get_eurostat("prc_hicp_inw", filters = list(coicop=FOOD_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date())
+
+  
+  #FOOD_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+   # (rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+    #  rdb(paste0("Eurostat/prc_hicp_inw/",(FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
 } 
 
 FOOD_WEIGHT_df<-as.data.frame(FOOD_WEIGHT_XTS["2017/"])
@@ -777,10 +808,10 @@ for (i in 1:nrow(FOOD_WEIGHT_df)){
 colnames(FOOD_WEIGHT_df)<-c(FOOD_WEIGHT_NAMES)
 FOOD_WEIGHT_xTS<-as.xts(FOOD_WEIGHT_df)
 
-UNPROCESSED_FOOD_CONTRIBUTION<-Chainlinking(UNPROCESSED_FOOD_INDEX)*(FOOD_WEIGHT_xTS$A.FOOD_NP.IE["2017/"]/FOOD_WEIGHT_xTS$A.CP01.IE["2017/"])*100
-PROCESSED_FOOD_CONTRIBUTION<-(FOOD_INDEX-UNPROCESSED_FOOD_CONTRIBUTION)/(FOOD_WEIGHT_xTS$A.FOOD_P_X_ALC_TBC.IE["2017/"]/FOOD_WEIGHT_xTS$A.CP01.IE["2017/"])*100
+UNPROCESSED_FOOD_CONTRIBUTION<-Chainlinking(UNPROCESSED_FOOD_INDEX)*(FOOD_WEIGHT_xTS$FOOD_NP["2017/"]/FOOD_WEIGHT_xTS$CP01["2017/"])*100
+PROCESSED_FOOD_CONTRIBUTION<-(FOOD_INDEX-UNPROCESSED_FOOD_CONTRIBUTION)/(FOOD_WEIGHT_xTS$FOOD_P_X_ALC_TBC["2017/"]/FOOD_WEIGHT_xTS$CP01["2017/"])*100
 
-PROCESSED_FOOD<-(as.numeric(FOOD_INDEX["2017/"])-((Chainlinking(UNPROCESSED_FOOD_INDEX)["2017/"])*as.numeric(FOOD_WEIGHT_xTS$A.FOOD_NP.IE["2017/"]/FOOD_WEIGHT_xTS$A.CP01.IE["2017/"])))
+PROCESSED_FOOD<-(as.numeric(FOOD_INDEX["2017/"])-((Chainlinking(UNPROCESSED_FOOD_INDEX)["2017/"])*as.numeric(FOOD_WEIGHT_xTS$FOOD_NP["2017/"]/FOOD_WEIGHT_xTS$CP01["2017/"])))
 
 CSO_ALCHOL<-CSO_HICP_INDEX_XTS$`Alcoholic beverages, tobacco and narcotics (COICOP 02`
 CSO_NEIG<-CSO_HICP_INDEX_XTS$`Non-energy industrial goods`
@@ -827,15 +858,21 @@ HICP_INDEX_XTS$CP01173,
 HICP_INDEX_XTS$CP01174,
 HICP_INDEX_XTS$CP01175,HICP_INDEX_XTS$CP0118,HICP_INDEX_XTS$CP0119,HICP_INDEX_XTS$CP0121,HICP_INDEX_XTS$CP0122,HICP_INDEX_XTS$CP0211,HICP_INDEX_XTS$CP0212,HICP_INDEX_XTS$CP0213,HICP_INDEX_XTS$CP0220)
 
-PROCESSED_FOOD_WEIGHT_NAMES<-c("A.CP0111.IE","A.CP01127.IE","A.CP01128.IE","A.CP01132.IE","A.CP01135.IE","A.CP01136.IE","A.CP01141.IE","A.CP01142.IE","A.CP01144.IE","A.CP01145.IE","A.CP01146.IE","A.CP0115.IE","A.CP01163.IE","A.CP01164.IE","A.CP01172.IE","A.CP01173.IE","A.CP01174.IE","A.CP01175.IE","A.CP0118.IE","A.CP0119.IE","A.CP0121.IE","A.CP0122.IE","A.CP0211.IE","A.CP0212.IE","A.CP0213.IE","A.CP022.IE")
+PROCESSED_FOOD_WEIGHT_NAMES<-c("CP0111","CP01127","CP01128","CP01132","CP01135","CP01136","CP01141","CP01142","CP01144","CP01145","CP01146","CP0115","CP01163","CP01164","CP01172","CP01173","CP01174","CP01175","CP0118","CP0119","CP0121","CP0122","CP0211","CP0212","CP0213","CP022")
 
 PROCESSED_FOOD_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(PROCESSED_FOOD_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
 
 
 for(i in 1:length(PROCESSED_FOOD_WEIGHT_NAMES)){
-  PROCESSED_FOOD_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
-    (rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
-      rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+
+    PROCESSED_FOOD_WEIGHT_XTS[get_eurostat("prc_hicp_inw", filters = list(coicop=PROCESSED_FOOD_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date(),i]<-get_eurostat("prc_hicp_inw", filters = list(coicop=PROCESSED_FOOD_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(get_eurostat("prc_hicp_inw", filters = list(coicop=PROCESSED_FOOD_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date())
+
+  
+  
+  #  PROCESSED_FOOD_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+   # (rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+    #  rdb(paste0("Eurostat/prc_hicp_inw/",(PROCESSED_FOOD_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+  
 } 
 
 PROCESSED_FOOD_WEIGHT_XTS_df<-as.data.frame(PROCESSED_FOOD_WEIGHT_XTS["2017/"])
@@ -853,7 +890,7 @@ colnames(PROCESSED_FOOD_WEIGHT_XTS_df)<-c(PROCESSED_FOOD_WEIGHT_NAMES)
 PROCESSED_FOOD_WEIGHT_XTS<-as.xts(PROCESSED_FOOD_WEIGHT_XTS_df)
 
 
-Processed_FOOD_WEIGHT_XTS<-merge(PROCESSED_FOOD_WEIGHT_XTS$A.CP0111.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01127.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01128.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01132.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01135.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01136.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01141.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01142.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01144.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01145.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01146.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0115.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01163.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01164.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01172.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01173.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01174.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP01175.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0118.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0119.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0121.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0122.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0211.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0212.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP0213.IE,PROCESSED_FOOD_WEIGHT_XTS$A.CP022.IE)
+Processed_FOOD_WEIGHT_XTS<-merge(PROCESSED_FOOD_WEIGHT_XTS$CP0111,PROCESSED_FOOD_WEIGHT_XTS$CP01127,PROCESSED_FOOD_WEIGHT_XTS$CP01128,PROCESSED_FOOD_WEIGHT_XTS$CP01132,PROCESSED_FOOD_WEIGHT_XTS$CP01135,PROCESSED_FOOD_WEIGHT_XTS$CP01136,PROCESSED_FOOD_WEIGHT_XTS$CP01141,PROCESSED_FOOD_WEIGHT_XTS$CP01142,PROCESSED_FOOD_WEIGHT_XTS$CP01144,PROCESSED_FOOD_WEIGHT_XTS$CP01145,PROCESSED_FOOD_WEIGHT_XTS$CP01146,PROCESSED_FOOD_WEIGHT_XTS$CP0115,PROCESSED_FOOD_WEIGHT_XTS$CP01163,PROCESSED_FOOD_WEIGHT_XTS$CP01164,PROCESSED_FOOD_WEIGHT_XTS$CP01172,PROCESSED_FOOD_WEIGHT_XTS$CP01173,PROCESSED_FOOD_WEIGHT_XTS$CP01174,PROCESSED_FOOD_WEIGHT_XTS$CP01175,PROCESSED_FOOD_WEIGHT_XTS$CP0118,PROCESSED_FOOD_WEIGHT_XTS$CP0119,PROCESSED_FOOD_WEIGHT_XTS$CP0121,PROCESSED_FOOD_WEIGHT_XTS$CP0122,PROCESSED_FOOD_WEIGHT_XTS$CP0211,PROCESSED_FOOD_WEIGHT_XTS$CP0212,PROCESSED_FOOD_WEIGHT_XTS$CP0213,PROCESSED_FOOD_WEIGHT_XTS$CP022)
 
 
 
@@ -883,14 +920,18 @@ PROCESSED_FOOD_INDEX_CONTRIBUTION_OVERALL_XTS["2016"]<-Processed_FOOD_INDEX_XTS[
 ```{r services weight, include=FALSE}
 #SERVICES INDEX START BELOW. 
 
-SERVICES_WEIGHT_NAMES<-c("A.CP0322.IE","A.CP0830.IE")
+SERVICES_WEIGHT_NAMES<-c("CP0322","CP0830")
 SERVICES_WEIGHT_XTS<-matrix(NA,nrow=length(Date),ncol=length(SERVICES_WEIGHT_NAMES)) %>% as.xts(order.by=Date)
 
 
 for(i in 1:length(SERVICES_WEIGHT_NAMES)){
-  SERVICES_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
-    (rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
-      rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
+  
+    SERVICES_WEIGHT_XTS[get_eurostat("prc_hicp_inw", filters = list(coicop=SERVICES_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date(),i]<-get_eurostat("prc_hicp_inw", filters = list(coicop=SERVICES_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(get_eurostat("prc_hicp_inw", filters = list(coicop=SERVICES_WEIGHT_NAMES[i],geo = "IE"),cache = FALSE,update_cache = TRUE) %>% .$time %>% as.Date())
+
+  
+#  SERVICES_WEIGHT_XTS[(rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date()),i]<-
+ #   (rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$value %>% as.numeric()) %>% as.xts(
+  #    rdb(paste0("Eurostat/prc_hicp_inw/",(SERVICES_WEIGHT_NAMES[i]))) %>% .$period %>% as.Date())
 } 
 
 SERVICES_WEIGHT_XTS_df<-as.data.frame(SERVICES_WEIGHT_XTS["2017/"])
@@ -912,8 +953,8 @@ SERVICES_WEIGHT_XTS_df<-as.xts(SERVICES_WEIGHT_XTS_df)
 
 
 
-CORE_SERVICES_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP081,SERVICES_WEIGHT_XTS_df$A.CP0830.IE
-,HICP_WEIGHT_XTS$CP0411,HICP_WEIGHT_XTS$CP0432,HICP_WEIGHT_XTS$CP0442,HICP_WEIGHT_XTS$CP0443,HICP_WEIGHT_XTS$CP0444,HICP_WEIGHT_XTS$CP0533,HICP_WEIGHT_XTS$CP0562,HICP_WEIGHT_XTS$CP1252,HICP_WEIGHT_XTS$CP0621_3,HICP_WEIGHT_XTS$CP0622,HICP_WEIGHT_XTS$CP063,HICP_WEIGHT_XTS$CP10,HICP_WEIGHT_XTS$CP124,HICP_WEIGHT_XTS$CP1253,HICP_WEIGHT_XTS$CP126,HICP_WEIGHT_XTS$CP127,HICP_WEIGHT_XTS$CP096,HICP_WEIGHT_XTS$CP112,HICP_WEIGHT_XTS$CP0314,SERVICES_WEIGHT_XTS_df$A.CP0322.IE,HICP_WEIGHT_XTS$CP0915,HICP_WEIGHT_XTS$CP0941,HICP_WEIGHT_XTS$CP0942,HICP_WEIGHT_XTS$CP1111,HICP_WEIGHT_XTS$CP1112,HICP_WEIGHT_XTS$CP1211,HICP_WEIGHT_XTS$CP0723,HICP_WEIGHT_XTS$CP0724,HICP_WEIGHT_XTS$CP0731,HICP_WEIGHT_XTS$CP0732,HICP_WEIGHT_XTS$CP0733,HICP_WEIGHT_XTS$CP0734,HICP_WEIGHT_XTS$CP0735,HICP_WEIGHT_XTS$CP0736,HICP_WEIGHT_XTS$CP1254)
+CORE_SERVICES_WEIGHT_XTS<-merge(HICP_WEIGHT_XTS$CP081,SERVICES_WEIGHT_XTS_df$CP0830
+,HICP_WEIGHT_XTS$CP0411,HICP_WEIGHT_XTS$CP0432,HICP_WEIGHT_XTS$CP0442,HICP_WEIGHT_XTS$CP0443,HICP_WEIGHT_XTS$CP0444,HICP_WEIGHT_XTS$CP0533,HICP_WEIGHT_XTS$CP0562,HICP_WEIGHT_XTS$CP1252,HICP_WEIGHT_XTS$CP0621_3,HICP_WEIGHT_XTS$CP0622,HICP_WEIGHT_XTS$CP063,HICP_WEIGHT_XTS$CP10,HICP_WEIGHT_XTS$CP124,HICP_WEIGHT_XTS$CP1253,HICP_WEIGHT_XTS$CP126,HICP_WEIGHT_XTS$CP127,HICP_WEIGHT_XTS$CP096,HICP_WEIGHT_XTS$CP112,HICP_WEIGHT_XTS$CP0314,SERVICES_WEIGHT_XTS_df$CP0322,HICP_WEIGHT_XTS$CP0915,HICP_WEIGHT_XTS$CP0941,HICP_WEIGHT_XTS$CP0942,HICP_WEIGHT_XTS$CP1111,HICP_WEIGHT_XTS$CP1112,HICP_WEIGHT_XTS$CP1211,HICP_WEIGHT_XTS$CP0723,HICP_WEIGHT_XTS$CP0724,HICP_WEIGHT_XTS$CP0731,HICP_WEIGHT_XTS$CP0732,HICP_WEIGHT_XTS$CP0733,HICP_WEIGHT_XTS$CP0734,HICP_WEIGHT_XTS$CP0735,HICP_WEIGHT_XTS$CP0736,HICP_WEIGHT_XTS$CP1254)
 
 
 HICP_INDEX_XTS$CP0322a<-data.frame(as.numeric(CSO_CPI_INDEX_XTS$`Repair and hire of footwear`["2003/"])/mean(as.numeric(CSO_CPI_INDEX_XTS$`Repair and hire of footwear`["2015"])))    %>%  as.xts(as.Date(Date[85:length(Date)])) *100
@@ -1612,11 +1653,11 @@ CORE_SERVICES_WEIGHT <- as.data.frame(CORE_SERVICES_WEIGHT_XTS)
 
 
 #rename column 
-names(CORE_SERVICES_WEIGHT)[names(CORE_SERVICES_WEIGHT) == 'A.CP0830.IE'] <- 'CP082_3'
-names(CORE_SERVICES_WEIGHT_XTS)[names(CORE_SERVICES_WEIGHT_XTS) == 'A.CP0830.IE'] <- 'CP082_3'
+names(CORE_SERVICES_WEIGHT)[names(CORE_SERVICES_WEIGHT) == 'CP0830'] <- 'CP082_3'
+names(CORE_SERVICES_WEIGHT_XTS)[names(CORE_SERVICES_WEIGHT_XTS) == 'CP0830'] <- 'CP082_3'
 
-names(CORE_SERVICES_WEIGHT)[names(CORE_SERVICES_WEIGHT) == 'A.CP0322.IE'] <- 'CP0322a'
-names(CORE_SERVICES_WEIGHT_XTS)[names(CORE_SERVICES_WEIGHT_XTS) == 'A.CP0322.IE'] <- 'CP0322a'
+names(CORE_SERVICES_WEIGHT)[names(CORE_SERVICES_WEIGHT) == 'CP0322'] <- 'CP0322a'
+names(CORE_SERVICES_WEIGHT_XTS)[names(CORE_SERVICES_WEIGHT_XTS) == 'CP0322'] <- 'CP0322a'
 
 rowSums(CORE_SERVICES_WEIGHT_XTS,na.rm=TRUE)
 
@@ -2481,23 +2522,43 @@ text_heatmap_LOW_growth_rate_3<-last(Graph_DECREASING_Data_Heatmap[,order(as.num
 ```{r contribution EA inflation, echo=FALSE, message=FALSE, warning=FALSE}
 #EURO AREA 
 
-EA_INFLATION_XTS<-rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$period)
+EA_INFLATION_XTS<-get_eurostat("prc_hicp_midx", filters = list(coicop="CP00",geo = "EA",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_midx", filters = list(coicop="CP00",geo = "EA",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
 
-FOOD_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$period)
+#EA_INFLATION_XTS<-rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$period)
 
-RENT_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$period)
-
-NEIG_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$period)
+FOOD_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP011",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP011",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
 
-ENERGY_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$period)
+#FOOD_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$period)
 
 
-CORE_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$period) - RENT_EA_XTS
+RENT_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP041",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP041",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
 
-MISC_GOOD_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$period) 
+
+#RENT_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$period)
+
+NEIG_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="IGD_NNRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="IGD_NNRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
+
+
+#NEIG_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$period)
+
+ENERGY_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="NRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="NRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
+
+
+#ENERGY_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$period)
+
+CORE_SERVICES_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="SERV",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="SERV",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time) - RENT_EA_XTS
+
+
+#CORE_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$period) - RENT_EA_XTS
+
+MISC_GOOD_SERVICES_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP12",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP12",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
+
+
+
+#MISC_GOOD_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$period) 
 
 
 
