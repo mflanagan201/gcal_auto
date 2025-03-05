@@ -25,12 +25,6 @@ jobs:
       with:
            r-version: '4.2.2'
 
-    - name: Cache R packages
-      uses: actions/cache@v3.3.2
-      with:
-       key: ${{ runner.os }}-r-${{ hashFiles('.github/workflows/Rscript_analysis.r.cache') }}
-       restore-keys: ${{ runner.os }}-r-
-
     - name: Install dependencies      
       run: | 
         R -e 'system("sudo apt install libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev")'
