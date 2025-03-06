@@ -1,6 +1,5 @@
 
-library(httr)
-library(gargle)
+library(httr)
 library(googleAuthR)
 library(jsonlite)
 library(knitr)
