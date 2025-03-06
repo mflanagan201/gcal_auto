@@ -1,5 +1,4 @@
-
-library(httr)
+library(httr)
 library(googleAuthR)
 library(jsonlite)
 library(knitr)
