@@ -30,16 +30,6 @@ smtp <- server(host = "smtp.gmail.com",
                password = "ddauvuifpknvsobo")
 
 
-    Body_INFLATION<-emayili::envelope(
-    from = "mflanagan201@gmail.com",
-    to=c("michael.flanagan@finance.gov.ie"),
-bcc=c("ian.power@finance.gov.ie","eamonn.sweeney@finance.gov.ie"),
-    subject = "Inflation Release"
-  ) %>%
-    emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
-
-    smtp(Body_INFLATION)
- 
 
 
 for(i in 1:nrow(CALENDAR_ALL_short)){
@@ -98,3 +88,16 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
    print("Don't run code")
   }
 }
+
+
+
+    Body_MACRO_TABLE<-emayili::envelope(
+    from = "mflanagan201@gmail.com",
+    to=c("michael.flanagan@finance.gov.ie"),
+    subject = "Macroeconomic Tables"
+  ) %>%
+    emayili::render(".github/workflows/macro_tables.Rmd")  
+
+
+     smtp(Body_MACRO_TABLE)  
+
