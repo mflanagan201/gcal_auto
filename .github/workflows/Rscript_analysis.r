@@ -185,68 +185,62 @@ event_CB <- event_CB %>%
 
 
 #OECD Calendar Below
-#OECD_RELEASE<-"https://www.oecd.org/newsroom"
-#tmp <- tempfile()
-#OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, #tmp)
+OECD_RELEASE<-"https://www.oecd.org/en/publications/forthcoming"
+tmp <- tempfile()
+OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp)
 
 
-#OECD_URL_download<-read_html(OECD_RELEASE_v1)
-#OECD_Schedule_table<-OECD_URL_download %>% #html_nodes(xpath='/html/body/div[2]/div[2]/div[2]/#div[3]/div[1]')  %>% html_text()
-#OECD_Schedule_table_2<-OECD_Schedule_table[[1]] #%>% stringr::str_split("\n") %>% data.frame()
+OECD_URL_download<-read_html(OECD_RELEASE_v1)
+OECD_Schedule_table<-OECD_URL_download %>% html_nodes(xpath='/html/body/div[3]/div/main/div/div[4]/div/div[3]/div/div[1]/div/div[2]/div/table')  %>% html_table()
+OECD_Schedule_table_2<-OECD_Schedule_table[[1]] %>% data.frame()
+
+RELEASE_OECD<-data.frame(matrix(NA,nrow=nrow(OECD_Schedule_table_2),ncol=2))
 
 
-#RELEASE_OECD<-data.frame(matrix(NA,nrow(nrow(OECD_#Schedule_table_2),ncol=2))
+for(i in 1:nrow(OECD_Schedule_table_2)){
+if(OECD_Schedule_table_2[i,1]==""){
+ OECD_Schedule_table_2[i,1]<-NA
+} else {
+OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[i,1]
+}
+}
 
 
-#for(i in 1:nrow(OECD_Schedule_table_2)){
-#if(OECD_Schedule_table_2[i,1]==""){
-# OECD_Schedule_table_2[i,1]<-NA 
-#} else {
-#OECD_Schedule_table_2[i,1]<-OECD_Schedule_table_2[#i,1]
-#}
-#}
+for(i in 1:nrow(OECD_Schedule_table_2)){
+ if(grepl("OECD Economic Outlook", OECD_Schedule_table_2[i,1], ignore.case = TRUE)){
+  RELEASE_OECD[i,1]<-OECD_Schedule_table_2[i,1]
+  RELEASE_OECD[i,2]<-paste0(as.Date(OECD_Schedule_table_2[i,1],format='%d %B %Y'))
+   } 
+}
 
+RELEASE_OECD<-na.omit(RELEASE_OECD)
+colnames(RELEASE_OECD)<-c("Release", "Date")
 
-#for(i in 1:nrow(OECD_Schedule_table_2)){
-# if(grepl("OECD Interim Economic Outlook", OECD_Schedule_table_2[i,1], ignore.case = TRUE)){
-#  RELEASE_OECD[i,1]<-OECD_Schedule_table_2[i,1]
-#  #RELEASE_OECD[i,2]<-OECD_Schedule_table_2[i-1,1]
-#   } 
-#}
+RELEASE_OECD$Date<-parse_date_time2(RELEASE_OECD$Date, orders="%Y-%m-%d")
 
-#RELEASE_OECD<-na.omit(RELEASE_OECD)
-#colnames(RELEASE_OECD)<-c("Release", "Date")
-#RELEASE_OECD$Date<-parse_date_time2(paste0(RELEASE#_OECD$Date),orders="%d %B %Y")
-#
-#
-#if(is.na(RELEASE_OECD)){
-# EVENTS_OECD = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
-#            DTEND = c("2025-12-01 #10:00:00 GMT"),
-#            SUMMARY = "NA",
-#            LOCATION = c("OECD"),
-#            transparent=TRUE)
+if(is.na(RELEASE_OECD$Release[1])){
+ EVENTS_OECD = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+            DTEND = c("2025-12-01 10:00:00 GMT"),
+            SUMMARY = "NA",
+            LOCATION = c("OECD"),
+            transparent=TRUE)
 
 
 
 
-#} else {
+} else {
 
-# EVENTS_OECD = data.frame(DTSTART = #RELEASE_OECD$Date,
-#            DTEND = #RELEASE_OECD$Date+1,
-#            SUMMARY = #paste(RELEASE_OECD$Release),
-#            LOCATION = c("OECD"),
-#            transparent=TRUE)
-#  
+ EVENTS_OECD = data.frame(DTSTART = RELEASE_OECD$Date,
+            DTEND = RELEASE_OECD$Date+1,
+            SUMMARY = paste("OECD Economic Outlook"),
+            LOCATION = c("OECD"),
+            transparent=TRUE)
+  
 
-# }
+ }
 
 cat("OECD EVENT CREATED")
 
-EVENTS_OECD = data.frame(DTSTART = c("2024-02-05 10:00:00 GMT"),
-             DTEND = c("2024-02-05 10:00:01 GMT"),
-             SUMMARY = c("OECD Economic Outlook, Interim Report"),
-             LOCATION = c("OECD"),
-             transparent=TRUE)
 
 EVENTS_OECD <- EVENTS_OECD %>%
  mutate(UID = replicate(nrow(EVENTS_OECD), ic_guid()))
