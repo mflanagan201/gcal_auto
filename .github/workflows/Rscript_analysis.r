@@ -185,7 +185,7 @@ event_CB <- event_CB %>%
 
 
 #OECD Calendar Below
-OECD_RELEASE<-"https://www.oecd.org/en/publications/forthcoming"
+OECD_RELEASE<-"https://www.oecd.org/en/publications/forthcoming.html"
 tmp <- tempfile()
 
 # Create a new curl handle with a user-agent header
