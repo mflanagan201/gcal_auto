@@ -187,7 +187,15 @@ event_CB <- event_CB %>%
 #OECD Calendar Below
 OECD_RELEASE<-"https://www.oecd.org/en/publications/forthcoming"
 tmp <- tempfile()
-OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp)
+
+# Create a new curl handle with a user-agent header
+handle <- curl::new_handle()
+curl::handle_setheaders(handle, "User-Agent" = "Mozilla/5.0")
+
+# Download the file using the modified handle
+OECD_RELEASE_v1<-curl::curl_download(OECD_RELEASE, tmp, handle = handle)
+
+
 
 
 OECD_URL_download<-read_html(OECD_RELEASE_v1)
