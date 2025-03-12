@@ -32,8 +32,6 @@ jobs:
     - name: Install remotes package
       run: Rscript -e 'install.packages("remotes", repos = "http://cran.us.r-project.org")'
 
-    - name: Install emayili v0.8.0
-      run: Rscript -e 'remotes::install_version("emayili", version = "0.8.0", repos = "http://cran.us.r-project.org")'
 
     - name: Debug
       run: |
