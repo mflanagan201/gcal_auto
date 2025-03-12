@@ -27,7 +27,7 @@ jobs:
       run: | 
         sudo apt-get update
         sudo apt-get install -y libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev libcurl4-openssl-dev libpoppler-cpp-dev default-jre default-jdk libgdal-dev r-cran-sf
-        R -e 'install.packages(c("calendar","xts","knitr","jsonlite","readr","webshot2","tinytex","kableExtra","formattable","reshape2","magrittr","htmltools","htmlwidgets","formatR","waterfalls","readxl","units","rdbnomics","openxlsx","googleAuthR","httr2","DescTools","splitstackshape", "pdftools","rvest","lubridate","stringr","rlang","purrr","curl"))'
+        R -e 'install.packages(c("calendar","xts","knitr","jsonlite","readr","webshot2","tinytex","kableExtra","formattable","reshape2","magrittr","htmltools","htmlwidgets","formatR","waterfalls","readxl","units","rdbnomics","openxlsx","googleAuthR","httr2","DescTools","splitstackshape", "pdftools","rvest","lubridate","stringr","rlang","purrr","curl","dplyr"))'
 
     - name: Install remotes package
       run: Rscript -e 'install.packages("remotes", repos = "http://cran.us.r-project.org")'
