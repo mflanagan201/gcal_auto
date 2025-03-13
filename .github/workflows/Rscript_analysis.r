@@ -855,7 +855,7 @@ Body_weekly_email<-emayili::envelope(
 
 
 if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Fri"))){
-  #smtp(Body_weekly_email)  
+  smtp(Body_weekly_email)  
 }
 
 
