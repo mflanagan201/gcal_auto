@@ -743,24 +743,24 @@ CHAIN_INDEX_NEIG_CONTRIBUTION[is.na(CHAIN_INDEX_NEIG_CONTRIBUTION)]<-0
 DEC_BASE_NEIG<-(as.numeric(NEIG_OVERALL_INDEX_XTS[paste0(year(NEIG_OVERALL_INDEX_XTS["2016/"]), "-12-01")])) 
 NEIG_INDEX_CONTRIBUTION<-rowSums(CHAIN_INDEX_NEIG_CONTRIBUTION)*DEC_BASE_NEIG[1:length(NEIG_OVERALL_INDEX_XTS["2017/"])] 
 
-NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(NEIG_INDEX_CONTRIBUTION,order.by=index(NEIG_INDEX_XTS["2017/"]))
-NEIG_INDEX_XTS[is.na(NEIG_INDEX_XTS)]<-0
+#NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(NEIG_INDEX_CONTRIBUTION,order.by=index(NEIG_INDEX_XTS["2017/"]))
+#NEIG_INDEX_XTS[is.na(NEIG_INDEX_XTS)]<-0
 
-NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(as.numeric(NEIG_INDEX_CONTRIBUTION_XTS),order.by=index(NEIG_INDEX_CONTRIBUTION_XTS["2017/"]))
-
-
-NEIG_INDEX_CONTRIBUTION_XTS_LONG<-matrix(NA,nrow=length(Date[241:length(Date)]), ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
-
-NEIG_INDEX_CONTRIBUTION_XTS_LONG["2016"]<-NEIG_OVERALL_INDEX_XTS["2016"]
-NEIG_INDEX_CONTRIBUTION_XTS_LONG["2017/"]<-NEIG_INDEX_CONTRIBUTION_XTS["2017/"]
-CSO_NEIG<-CSO_HICP_INDEX_XTS$`Non-energy industrial goods`
-
-NEIG_CONTRIBUTIONS<-Contribution(CSO_NEIG,NEIG_WEIGHT_XTS,NEIG_INDEX_XTS)*1000
-colnames(NEIG_CONTRIBUTIONS)<-c("Clothing Material","Garments","Other articles of clothing and clothing accessories", "Footwear","Material for the maintenance of dwellings","Water Supply","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils",
-"House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products","Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Recording Equipment","Photographic Equipment","Information processing equipment", "Recording Media","Musical Instruments","Games, Toys, hobbies","Sports & outdoor Equipment","Gardens, plants and flowers","Pets Products","Books","Newspapers", "Misc. Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects")
+#NEIG_INDEX_CONTRIBUTION_XTS<-as.xts(as.numeric(NEIG_INDEX_CONTRIBUTION_XTS),order.by=index(NEIG_INDEX_CONTRIBUTION_XTS["2017/"]))
 
 
-write.xlsx(NEIG_CONTRIBUTIONS, file="NEIG_CONTRIBUTIONS_NEW-2.xlsx")
+#NEIG_INDEX_CONTRIBUTION_XTS_LONG<-matrix(NA,nrow=length(Date[241:length(Date)]), ncol=1) %>% as.xts(order.by=Date[241:length(Date)])
+
+#NEIG_INDEX_CONTRIBUTION_XTS_LONG["2016"]<-NEIG_OVERALL_INDEX_XTS["2016"]
+#NEIG_INDEX_CONTRIBUTION_XTS_LONG["2017/"]<-NEIG_INDEX_CONTRIBUTION_XTS["2017/"]
+#CSO_NEIG<-CSO_HICP_INDEX_XTS$`Non-energy industrial goods`
+
+#NEIG_CONTRIBUTIONS<-Contribution(CSO_NEIG,NEIG_WEIGHT_XTS,NEIG_INDEX_XTS)*1000
+#colnames(NEIG_CONTRIBUTIONS)<-c("Clothing Material","Garments","Other articles of clothing and clothing accessories", "Footwear","Material for the maintenance of dwellings","Water #Supply","Furniture","Carpets","Household textiles","Major Household Appliances","Glassware,tableware and Utensils",
+#"House & Garden Tools","Non-durable househld goods","Pharma Products","Other medical products","Motor Cars","Motor Cycles, Bicycles", "Spare parts personal transport", "Recording Equipment","Photographic #Equipment","Information processing equipment", "Recording Media","Musical Instruments","Games, Toys, hobbies","Sports & outdoor Equipment","Gardens, plants and flowers","Pets Products","Books","Newspapers", "Misc. #Print","Electrical Appliances for personal care", "Jewellery, clocks, watches", "Other Personal effects")
+
+
+#write.xlsx(NEIG_CONTRIBUTIONS, file="NEIG_CONTRIBUTIONS_NEW-2.xlsx")
 
 
 
