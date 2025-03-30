@@ -9,7 +9,7 @@ on:
 
 jobs:
   run_rscript:
-      runs-on: ubuntu-22.04
+     runs-on: ubuntu-22.04
 
     env:
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
