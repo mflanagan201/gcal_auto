@@ -36,8 +36,7 @@ for(i in 1:nrow(CALENDAR_ALL_short)){
 if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
     Body_INFLATION<-emayili::envelope(
     from = "mflanagan201@gmail.com",
-    to=c("michael.flanagan@finance.gov.ie"),
-bcc=c("ian.power@finance.gov.ie","eamonn.sweeney@finance.gov.ie"),
+    to=c("mflanagan201@gmail.com"),
     subject = "Inflation Release"
   ) %>%
     emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
@@ -52,31 +51,13 @@ bcc=c("ian.power@finance.gov.ie","eamonn.sweeney@finance.gov.ie"),
 
 
 
-for(i in 1:nrow(CALENDAR_ALL_short)){
-if(Sys.Date()+1==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Consumer Price Index%")){
-
-    Body_INFLATION<-emayili::envelope(
-    from = "mflanagan201@gmail.com",
-    to=c("michael.flanagan@finance.gov.ie"),
-    subject = "[Auto-Email] Inflation Release"
-  ) %>%
-    emayili::render(".github/workflows/2024_March_Inflation_efficent_v3.Rmd")  
-
-   #smtp(Body_INFLATION)
-  
-    } else { 
-    
-    print("Don't run code")
-  }
-}
 
 for(i in 1:nrow(CALENDAR_ALL_short)){
   if(Sys.Date()==as.Date(CALENDAR_ALL_short$DTSTART[i],format="%Y-%m-%d") && CALENDAR_ALL_short$SUMMARY[i] %like any% c("%Goods Exports and Imports%")){
     
         Body_EXTERNAL_TRADE<-emayili::envelope(
           from = "mflanagan201@gmail.com",
-        to=c("michael.flanagan@finance.gov.ie"),
-bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@finance.gov.ie"), subject = "External Trade Release!"
+        to=c("mflanagan201@gmail.com"), subject = "External Trade Release!"
     ) %>%
        # Render R Markdown from a file.
       emayili::render(".github/workflows/Monthly_External_Trade_Beta_5.Rmd")
@@ -91,9 +72,10 @@ bcc=c("Ian.Power@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Daire.DeHora@fi
 
 
 
+
     Body_MACRO_TABLE<-emayili::envelope(
     from = "mflanagan201@gmail.com",
-    to=c("michael.flanagan@finance.gov.ie"),
+    to=c("mflanagan201@gmail.com"),
     subject = "Macroeconomic Tables"
   ) %>%
     emayili::render(".github/workflows/macro_tables.Rmd")  
