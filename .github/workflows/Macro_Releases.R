@@ -91,7 +91,7 @@ bcc=c("Ian.Power@finance.gov.ie",
   ) %>%
     emayili::render(".github/workflows/macro_tables.Rmd")  
 
-if(((format(Sys.Date(),"%a")==c("Fri"))){ 
+if(((format(Sys.Date(),"%a")==c("Fri")))){ 
 smtp(Body_MACRO_TABLE)  
 }
 
