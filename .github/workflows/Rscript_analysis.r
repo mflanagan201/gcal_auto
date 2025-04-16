@@ -36,7 +36,7 @@ EUROSTAT_cal$DTEND<-as.POSIXct(paste0("",EUROSTAT_cal$DTEND.TZID.Europe.Luxembou
 
 
 #Using grepl with appropriate regex
-EUROSTAT_cal = EUROSTAT_cal[grepl("Inflation|inflation|Flash|GDP|Unemployment", EUROSTAT_cal$SUMMARY, ignore.case = TRUE), ]
+EUROSTAT_cal = EUROSTAT_cal[grepl("Inflation|inflation|Flash|GDP|Unemployment|Government Finance Statistics", EUROSTAT_cal$SUMMARY, ignore.case = TRUE), ]
 EUROSTAT_cal$LOCATION<-c("Eurostat")
 EUROSTAT_cal$transparent<-c("TRUE")
 
