@@ -73,7 +73,7 @@ RELEASE_PMI<-data.frame(matrix(NA,nrow=nrow(PMI_XTS),ncol=3))
 
 
 for(i in 1:nrow(PMI_XTS)){
-if(grepl("Ireland Manufacturing PMI|Ireland Services PMI|Ireland Construction PMI", PMI_XTS$Release[i], ignore.case = TRUE)){
+if(grepl("Ireland Manufacturing PMI|Ireland Services PMI| Ireland Construction PMI", PMI_XTS$Release[i], ignore.case = TRUE)){
   RELEASE_PMI[i,]<-PMI_XTS[i,]
  } else {
   RELEASE_PMI[i,] <- NA
