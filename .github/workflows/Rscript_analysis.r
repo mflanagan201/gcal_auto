@@ -335,9 +335,9 @@ EVENTS_IMF <- EVENTS_IMF %>%
 ########
 cat("EC EVENT CREATED")
 
-EVENTS_EC = data.frame(DTSTART = c("2024-11-15 10:00:00 GMT"),
-            DTEND = c("2024-11-15 10:00:01 GMT"),
-            SUMMARY = c("EC Economic Forecast, Autumn 2024"),
+EVENTS_EC = data.frame(DTSTART = c("2025-05-16 10:00:00 GMT"),
+            DTEND = c("2025-05-16 10:00:01 GMT"),
+            SUMMARY = c("EC Economic Forecast, Spring 2025"),
             LOCATION = c("European Commission"),
             transparent=TRUE)
 
