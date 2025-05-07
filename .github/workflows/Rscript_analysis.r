@@ -155,7 +155,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
   RELEASE_CB[i,2]<-NA
  }
 
- if(grepl("Activity: Statistics: Monthly Card Payment Statistics|Monthly Card Payment Statistics|Activity: Private Household Credit and Deposits Statistics|Publication: Quarterly Bulletin|Interest Rates|Private Household Credit and Deposits|Mortgage Arrears|Credit and Debit Card Statistics|Private Household Credit and Deposits Statistics", CB_Schedule_table3$Releases[i], ignore.case = TRUE)){
+ if(grepl("Statistics: Monthly Card Payment Statistics|Activity: Statistics: Monthly Card Payment Statistics|Monthly Card Payment Statistics|Activity: Private Household Credit and Deposits Statistics|Publication: Quarterly Bulletin|Interest Rates|Private Household Credit and Deposits|Mortgage Arrears|Credit and Debit Card Statistics|Private Household Credit and Deposits Statistics", CB_Schedule_table3$Releases[i], ignore.case = TRUE)){
   RELEASE_CB[i,1]<-RELEASE_CB[i,1]
   RELEASE_CB[i,2]<-RELEASE_CB[i,2]
  } else {
