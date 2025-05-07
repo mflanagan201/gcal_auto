@@ -85,14 +85,26 @@ RELEASE_PMI<-na.omit(RELEASE_PMI)
 colnames(RELEASE_PMI)<-c("Date","Release","Location")
 
 
+
 RELEASE_PMI_DATE<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_PMI$Date,"%Y-%m-%d")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+
+if(is.na(RELEASE_PMI$Release[1])){
+ PMI_RELEASE = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+             DTEND = c("2025-12-01 10:00:00 GMT"),
+             SUMMARY = c("NA"),
+             LOCATION = c("PMI"),
+             transparent=TRUE)
+
+} else {
+
+
 
 PMI_RELEASE = data.frame(DTSTART = RELEASE_PMI_DATE,
             DTEND = RELEASE_PMI_DATE+1,
            SUMMARY =RELEASE_PMI$Release ,
              LOCATION = RELEASE_PMI$Location,
             transparent=TRUE)
-
+}
 
 
 PMI_RELEASE<-PMI_RELEASE %>%
