@@ -2521,10 +2521,11 @@ text_heatmap_LOW_growth_rate_3<-last(Graph_DECREASING_Data_Heatmap[,order(as.num
 
 ```{r contribution EA inflation, echo=FALSE, message=FALSE, warning=FALSE}
 #EURO AREA 
+print("ea1")
 
 EA_INFLATION_XTS<-get_eurostat("prc_hicp_midx", filters = list(coicop="CP00",geo = "EA",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_midx", filters = list(coicop="CP00",geo = "EA",unit="I15"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
-
+print("ea2")
 #EA_INFLATION_XTS<-rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_manr/M.RCH_A.CP00.EA") %>% .$period)
 
 FOOD_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP011",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP011",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
@@ -2532,27 +2533,33 @@ FOOD_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP011",geo = "
 
 #FOOD_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.FOOD.EA") %>% .$period)
 
-
+print("ea3")
 RENT_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP041",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP041",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
 
 
 #RENT_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP041.EA") %>% .$period)
 
+print("ea4")
 NEIG_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="IGD_NNRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="IGD_NNRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
 
 #NEIG_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.IGD_NNRG.EA") %>% .$period)
 
+print("ea5")
 ENERGY_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="NRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="NRG",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
 
 #ENERGY_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.NRG.EA") %>% .$period)
 
+
+print("ea6")
 CORE_SERVICES_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="SERV",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="SERV",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time) - RENT_EA_XTS
 
 
 #CORE_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.SERV.EA") %>% .$period) - RENT_EA_XTS
+
+print("ea7")
 
 MISC_GOOD_SERVICES_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP12",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$values %>% as.numeric() %>% as.xts(order.by = get_eurostat("prc_hicp_ctrb", filters = list(coicop="CP12",geo = "EA"),cache = FALSE,update_cache = TRUE) %>% .$time)
 
@@ -2560,7 +2567,7 @@ MISC_GOOD_SERVICES_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="
 
 #MISC_GOOD_SERVICES_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP12.EA") %>% .$period) 
 
-
+print("ea8")
 
 #NEIG
 CP1212_1213_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1212_1213.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1212_1213.EA") %>% .$period) 
