@@ -273,13 +273,13 @@ Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY<-((1+(ALL_CB_PAYMENTS_QUARTERLY_GROWTH
 #CARS_MONTHLY_YOY_growth<-growth(Total_Cars_ROLLSUM,12) %>% round(1)
 
 
-Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="Services, excl. Sector J. (G, H, I, L, M, N (excl. N7735), R92, R93, S95, S96)"))) %>% as.numeric()  
 Date_Services_index<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX))), by="quarters")
 Services_Vol_INDEX<-na.omit(Services_Vol_INDEX) %>% na.omit() %>% as.xts (order.by=Date_Services_index)
 Services_Vol_Q_Growth<-growth(Services_Vol_INDEX, freq=4) %>% round(1)
 
 
-Services_Vol_INDEX_months<- t(data.frame(subset(subset(cso_get_data("MSI02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Services_Vol_INDEX_months<- t(data.frame(subset(subset(cso_get_data("MSI02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="Services, excl. Sector J. (G, H, I, L, M, N (excl. N7735), R92, R93, S95, S96)"))) %>% as.numeric()  
 Date_Services_index_months<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX_months))), by="month")
 Services_Vol_INDEX_months<-na.omit(Services_Vol_INDEX_months) %>% na.omit() %>% as.xts(order.by=Date_Services_index_months)
 Services_Vol_M_Growth<-growth(Services_Vol_INDEX_months, freq=12) %>% round(1)
@@ -479,7 +479,7 @@ Consumption_Q_Annual_growth<-growth(Consumption_Q,freq=4) %>% round(1)
 Consumption_Q_SA_Growth<-growth(Consumption_Q_SA,freq=1) %>% round(1)
 
 
-Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="Services, excl. Sector J. (G, H, I, L, M, N (excl. N7735), R92, R93, S95, S96)"))) %>% as.numeric()  
 Date_Services_index<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX))), by="quarters")
 Services_Vol_INDEX<-na.omit(Services_Vol_INDEX) %>% na.omit() %>% as.xts (order.by=Date_Services_index)
 Services_Vol_Q_Growth<-growth(Services_Vol_INDEX, freq=4) %>% round(1)
@@ -580,12 +580,12 @@ Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
 
 summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-09-01/"]  %>% data.frame() %>% round(1) %>% t() 
 colnames(summary_consumer)<-c(format(as.Date(colnames(summary_consumer)),"%b %y"))
-rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Service Index","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","Goods External Trade Volume","Goods External Trade Value")
+rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Modified Service Index","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","Goods External Trade Volume","Goods External Trade Value")
 
 
 Quarterly_consumer_Table<-merge(Consumption_Q_Annual_growth$Consumption,Deflated_VAT_Quarterly_GROWTH, Retail_Quarterly_yoy_growth,Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY
                                 ,Services_Vol_Q_Growth,COE_PER_CAPITA_XTS_Growth,Deflated_GDI_PER_CAPITA_XTS_Growth,Average_Hourly_Earnings_XTS_GROWTH,HH_Deposits_ANNUAL_growth,HICP_QUARTERLY_GROWTH,sr,Employment_XTS_Growth,PMOD_XTS_QUARTERLY_GROWTH,Unemployment_Rate_QUARTERLY,GDP_Q_Annual_growth,EXPORTS_Q_ANNUAL_GROWTH,EXTERNAL_TRADE_VOL_XTS_QUARTERLY_GROWTH,EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH) %>% .["2023-10-01/"]   %>% round(1) %>% t()
-rownames(Quarterly_consumer_Table)<-c("Consumption","Real VAT (YTD)","Retail Sales","Real Card Spending","Service Index","Compensation of Employees per person","Real Disposable Income per person","Average Hourly Earnings","Household Deposits", "Inflation Rate", "Savings Rate","Employment Growth", "Payroll Employment", "Unemployment Rate","GDP","Total Exports","External Trade Volume","External Trade Value")
+rownames(Quarterly_consumer_Table)<-c("Consumption","Real VAT (YTD)","Retail Sales","Real Card Spending","Modified Service Index","Compensation of Employees per person","Real Disposable Income per person","Average Hourly Earnings","Household Deposits", "Inflation Rate", "Savings Rate","Employment Growth", "Payroll Employment", "Unemployment Rate","GDP","Total Exports","External Trade Volume","External Trade Value")
 colnames(Quarterly_consumer_Table)<-colnames(Quarterly_consumer_Table) %>% as.Date() %>% as.yearqtr("%Y") %>% paste()
 
 
@@ -654,7 +654,7 @@ EXTERNAL_TRADE_VOL_XTS_QUARTERLY,
 EXTERNAL_TRADE_VAL_XTS_QUARTERLY
 ) %>% data.frame() %>% .[101:nrow(.),] %>% cbind(Date_95_QNA_EXTEND,.)
 
-colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Modified Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade Volume Index", "External Trade Value")
 
 QUARTERLY_DATA_DOWNLOAD_ALL <- list('Quarterly Data Levels' =DOWNLOAD_QUARTERLY_DF)
 
@@ -722,7 +722,7 @@ EXTERNAL_TRADE_VOL_XTS,
 EXTERNAL_TRADE_VAL_XTS
 ) %>% .[301:nrow(.),] %>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.)
 
-colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Modified Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
 
 MONTHLY_DATA_DOWNLOAD_ALL <- list('Monthly Data Levels' =DOWNLOAD_MONTHLY_DF)
 
