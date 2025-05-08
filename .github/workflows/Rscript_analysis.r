@@ -62,7 +62,7 @@ PMI_URL_download_ALL<-rbind(PMI_URL_download_PG1,PMI_URL_download_PG2)
 
 
 Date_PMI<-substr(PMI_URL_download_ALL[[1]],1,23) %>% as.Date(format = "%d %b") %>% as.data.frame()
-Name_PMI<-substr(PMI_URL_download_ALL[[1]],100,130) %>% as.data.frame()
+Name_PMI<-substr(PMI_URL_download_ALL[[1]],50,130) %>% as.data.frame()
 
 PMI_DF<-data.frame(Date_PMI,Name_PMI) %>% na.omit() 
 colnames(PMI_DF)<-c("Date", "Release")
