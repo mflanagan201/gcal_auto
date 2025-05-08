@@ -62,7 +62,7 @@ PMI_URL_download_ALL<-rbind(PMI_URL_download_PG1,PMI_URL_download_PG2)
 
 
 Date_PMI<-substr(PMI_URL_download_ALL[[1]],1,23) %>% as.Date(format = "%d %b") %>% as.data.frame()
-Name_PMI<-substr(PMI_URL_download_ALL[[1]],50,130) %>% as.data.frame()
+Name_PMI<-substr(PMI_URL_download_ALL[[1]],100,130) %>% as.data.frame()
 
 PMI_DF<-data.frame(Date_PMI,Name_PMI) %>% na.omit() 
 colnames(PMI_DF)<-c("Date", "Release")
@@ -155,7 +155,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
   RELEASE_CB[i,2]<-NA
  }
 
- if(grepl("Statistics: Monthly Card Payment Statistics|Activity: Statistics: Monthly Card Payment Statistics|Monthly Card Payment Statistics|Activity: Private Household Credit and Deposits Statistics|Publication: Quarterly Bulletin|Interest Rates|Private Household Credit and Deposits|Mortgage Arrears|Credit and Debit Card Statistics|Private Household Credit and Deposits Statistics", CB_Schedule_table3$Releases[i], ignore.case = TRUE)){
+ if(CB_Schedule_table3$Releases[i] %like any% c("%Statistics: Monthly Card Payment Statistics%","%Activity: Statistics: Monthly Card Payment Statistics%","%Monthly Card Payment Statistics%","%Activity: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%")){
   RELEASE_CB[i,1]<-RELEASE_CB[i,1]
   RELEASE_CB[i,2]<-RELEASE_CB[i,2]
  } else {
@@ -548,15 +548,15 @@ DOF_EVENTS_2024 <- DOF_EVENTS %>%
 
 
 
-Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-12-17"
+Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2025-05-13"
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT")),
 
 
-DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-12-17"
+DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2025-05-13"
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))+1
 
-,SUMMARY = paste("Quarterly Bulletin"),
-LOCATION = c("Central Bank of Ireland"),
+,SUMMARY = paste("Ireland Construction PMI"),
+LOCATION = c("S&P"),
 transparent=TRUE)
 
 Budget_2025 <- Budget %>%
