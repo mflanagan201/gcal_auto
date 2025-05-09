@@ -40,6 +40,9 @@ jobs:
         R -e 'install.packages(c("readr","webshot2","tinytex","kableExtra","formattable","reshape2","magrittr","htmltools","htmlwidgets","formatR","waterfalls","readxl","units","rdbnomics","openxlsx","reshape","rJava","xlsxjars","xlsx","gmailr","emayili","csodata","httr", "gargle", "googleAuthR", "jsonlite", "knitr", "dplyr", "huxtable", "tidyverse", "rmarkdown", "csodata", "xts", "calendar", "DescTools", "splitstackshape", "pdftools", "rvest", "lubridate", "httr2","stringr","rlang","purrr","httpuv","xlsx","eurostat","tframe","tframePlus","webshot","eurostat","csodata"), repos="http://cran.rstudio.com/")'
 
 
+    - name: Install PhantomJS
+      run: Rscript -e "webshot::install_phantomjs()"
+
     - name: Debug
       run: |
         ls -R
