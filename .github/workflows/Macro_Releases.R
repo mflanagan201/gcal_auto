@@ -75,6 +75,21 @@ for(i in 1:nrow(CALENDAR_ALL_short)){
     Body_MACRO_TABLE<-emayili::envelope(
     from = "mflanagan201@gmail.com",
     to=c("mflanagan201@gmail.com"),
+    subject = "Macroeconomic Tables"
+  ) %>%
+    emayili::render(".github/workflows/macro_tables.Rmd")  
+
+
+smtp(Body_MACRO_TABLE)  
+
+
+
+
+
+
+    Body_MACRO_TABLE<-emayili::envelope(
+    from = "mflanagan201@gmail.com",
+    to=c("mflanagan201@gmail.com"),
 bcc=c("Ian.Power@finance.gov.ie",
 "David.Hughes@finance.gov.ie",
 "Joanne.Mulholland@finance.gov.ie",
