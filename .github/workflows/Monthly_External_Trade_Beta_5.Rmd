@@ -1409,7 +1409,7 @@ Pre_Covid_export_text_vol<-conditional(Pre_Covid_export_vol)
 
 
 
-summary_table<-data.frame((merge(monthly_growth_exports_vol["2024-01-01/"],monthly_growth_exports_val["2024-01-01/"],monthly_growth_imports_val["2024-01-01/"],annual_growth_exports_vol["2024-01-01/"],annual_growth_exports_val["2024-01-01/"],annual_growth_imports_val["2024-01-01/"])))
+summary_table<-data.frame((merge(monthly_growth_exports_vol["2024-09-01/"],monthly_growth_exports_val["2024-09-01/"],monthly_growth_imports_val["2024-09-01/"],annual_growth_exports_vol["2024-09-01/"],annual_growth_exports_val["2024-09-01/"],annual_growth_imports_val["2024-09-01/"])))
 r<-as.Date(rownames(summary_table))
 rt<-format(r,"%b-%Y")
 
