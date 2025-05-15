@@ -1,32 +1,737 @@
-Set up
+---
+title: <span class="text-center" style="color:#34495e"> <center> <font size="6">  **Maroeconomic Tables**  </font> </center> 
 
-library(tidyverse) library(xts) library(openxlsx) library(rdbnomics) library(csodata) library(units) library(lubridate) library(magrittr) library(ggplot2) library(reshape2) library(formattable) library(knitr) library(kableExtra) library(eurostat) library(webshot) library(httr) library(rvest) library(readxl) library(htmlwidgets) library(tframePlus) library(zoo) library(emayili)
+</span>output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 
-webshot::install_phantomjs()
 
-Helper Functions
+```
+<div style="text-align: center;">
+```{r cars, include=FALSE}
 
-growth <- function(x, freq){ (x / lag.xts(x, k = freq) - 1) * 100 }
 
-monthStart <- function(x) { x <- as.POSIXlt(x) x$mday <- 1 as.Date(x) }
+#inflation weight
+library(httr)
+library(readxl)
+library(rvest)
+library('tidyverse')
+library('xts')
+library('openxlsx')
+library("dplyr")
+library(xts)
+library(rdbnomics)
+library(csodata)
+library(units)
+library(lubridate)
+library(readxl)
+library(magrittr)
+library(ggplot2)
+library(rdbnomics)
+library(reshape2)
+library(formattable)
+library(knitr)
+library(htmlwidgets)
+library(tframePlus)
+library(kableExtra)
+library(readxl)
+library(eurostat)
 
-CARRYOVER <- function(x){ CURRENTYEAR <- x[paste0("", index(last(x)) %>% year(), "")] LASTYEAR <- x[paste0("", index(last(x)) %>% year() - 1, "")] FY_CURRENTYEAR <- CURRENTYEAR * (1 + (length(LASTYEAR) - length(CURRENTYEAR))) FY_LASTYEAR <- sum(LASTYEAR) ((FY_CURRENTYEAR / FY_LASTYEAR) - 1) * 100 }
+DOF_colours <- c("#01A685", "#A3915E", "#0190D4","#4473c4","#afb6bd","#dbac00")
 
-YTD <- function(x){ CURRENTYEAR_YTD <- x[paste0("", index(last(x)) %>% year(), "")] LASTYEAR <- x[paste0("", (index(CURRENTYEAR_YTD) - years(1)), "")] %>% data.frame() CURRENTYEAR_YTD <- CURRENTYEAR_YTD %>% data.frame() YTD_CURRENTYEAR <- CURRENTYEAR_YTD for(i in 1:nrow(CURRENTYEAR_YTD)){ YTD_CURRENTYEAR[i,] <- ((as.numeric(sum(as.numeric(CURRENTYEAR_YTD[1:i,]))) / as.numeric(sum(as.numeric(LASTYEAR[1:i,])))) - 1) * 100 } return(YTD_CURRENTYEAR) }
+growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
 
-CSO Cache Clear
+monthStart <- function(x) {
+  x <- as.POSIXlt(x)
+  x$mday <- 1
+  as.Date(x)
+}
 
-cso_clear_cache()
 
-Example data block fix (apply similar logic to others)
+CARRYOVER <- function(x){
+  CURRENTYEAR<-x[paste0("",index((last(x))) %>% year(),"")]
+  LASTYEAR<-x[paste0("",index((last(x))) %>% year()-1,"")]
+  FY_CURRENTYEAR<-CURRENTYEAR*(1+(length(LASTYEAR)-length(CURRENTYEAR)))
+  FY_LASTYEAR<- sum(LASTYEAR)
+  ((FY_CURRENTYEAR/FY_LASTYEAR)-1)*100
+}
 
-QNA <- data.frame(subset(cso_get_data("NAQ04"), Statistic == "Expenditure on GNP at Constant Market Prices")) %>% select(-Statistic) if (nrow(QNA) > 1) { Date_95_QNA <- seq(as.Date("1995/01/01"), length.out = (nrow(QNA) - 1), by = "quarters") } else { stop("QNA data is empty or invalid") }
 
-Consumption_Q <- data.frame(subset(QNA, Sector == "Personal Expenditure on Consumer Goods and Services")) %>% select(-Sector) %>% t() %>% as.xts(order.by = Date_95_QNA) colnames(Consumption_Q) <- c("Consumption")
 
-Fix for CSO_HICP_INDEX date sequence
+YTD <- function(x){
+ 
+  CURRENTYEAR_YTD<-x[paste0("",index((last(x))) %>% year(),"")]
+  LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")] %>% data.frame()
+  CURRENTYEAR_YTD<- CURRENTYEAR_YTD %>% data.frame()
+  
+  YTD_CURRENTYEAR <- CURRENTYEAR_YTD
+  
+  for(i in 1:nrow(CURRENTYEAR_YTD)){
+    
+    YTD_CURRENTYEAR[i,]<-((as.numeric(sum(as.numeric(CURRENTYEAR_YTD[1:i,])))/as.numeric(sum(as.numeric(     LASTYEAR[1:i,]))))-1)*100
+  
+    } 
+  return(YTD_CURRENTYEAR)
+}
 
-CSO_HICP_INDEX <- subset(cso_get_data("CPM15"), Statistic == "EU HICP") num_periods <- length(unique(colnames(CSO_HICP_INDEX))) - 2 if (num_periods > 0) { Date <- seq(as.Date("1996-01-01"), length.out = num_periods, by = "month") } else { stop("Invalid number of periods in HICP index") }
 
-Add more blocks and guards here as needed...
+cso_clear_cache() 
+
+
+QNA<- data.frame(subset(cso_get_data("NAQ04"),Statistic=="Expenditure on GNP at Constant Market Prices"))%>% select(-Statistic)
+Date_95_QNA<-seq(as.Date("1995/01/01"), length.out=(length(QNA)-1), by="quarters")
+
+Consumption_Q<-(data.frame(subset(QNA, Sector=="Personal Expenditure on Consumer Goods and Services"))) %>%select(-Sector) %>% t() %>%  as.xts(order.by = Date_95_QNA) 
+colnames(Consumption_Q)<-c("Consumption")
+
+
+QNA_SA<- (data.frame(subset(cso_get_data("NAQ01"),Statistic=="Expenditure on GNP at Constant Market Prices (Seasonally Adjusted)")))%>% select(-Statistic)
+Date_95_QNA_SA<-seq(as.Date("1995/01/01"), length.out=(length(QNA_SA)-1), by="quarters")
+
+Consumption_Q_SA<-(data.frame(subset(QNA_SA, Sectors=="Personal Expenditure on Consumer Goods and Services"))) %>%select(-Sectors) %>% t() %>%  as.xts(order.by = Date_95_QNA_SA) 
+colnames(Consumption_Q_SA)<-c("Consumption")
+
+
+Consumption_Q_Annual_growth<-growth(Consumption_Q,freq=4) %>% round(1)
+Consumption_Q_SA_Growth<-growth(Consumption_Q_SA,freq=1) %>% round(1)
+
+
+EXPORTS_Q<-(data.frame(subset(QNA, Sector=="Exports of Goods and Services (excluding Factor Income Flows)"))) %>%select(-Sector) %>% t() %>%  as.xts(order.by = Date_95_QNA) 
+colnames(EXPORTS_Q)<-c("Exports")
+
+EXPORTS_Q_ANNUAL_GROWTH<-growth(EXPORTS_Q,4)
+
+
+GDP<-(data.frame(subset(QNA, Sector=="Gross Domestic Product at Market Prices"))) %>%select(-Sector) %>% t() %>%  as.xts(order.by = Date_95_QNA) 
+colnames(GDP)<-c("GDP")
+
+GDP_Q_Annual_growth<-growth(GDP,freq=4) %>% round(1)
+
+
+
+EUROSTAT_GDP_FLASH<-get_eurostat("namq_10_gdp",  filters = list(
+    geo = "IE",
+    s_adj = "NSA",
+    unit = "CLV_I20",
+    na_item="B1GQ"
+  ),
+ time_format = "date", cache = FALSE) 
+
+
+EUROSTAT_GDP_FLASH<-EUROSTAT_GDP_FLASH %>% .$values %>% as.xts(order.by=as.Date(EUROSTAT_GDP_FLASH$time)) 
+
+EUROSTAT_GDP_FLASH_GROWTH<-growth(EUROSTAT_GDP_FLASH,4)
+
+
+if(length(EUROSTAT_GDP_FLASH_GROWTH["2022/"])>length(GDP_Q_Annual_growth["2022/"])){
+  GDP_Q_Annual_growth<-EUROSTAT_GDP_FLASH_GROWTH %>% round(2)
+} else {
+GDP_Q_Annual_growth<-GDP_Q_Annual_growth
+  
+}
+
+
+
+
+
+
+
+
+
+All_Retail_INDEX<- t(data.frame(subset(subset(cso_get_data("RSM08"),Statistic=="Retail Sales Index Volume Unadjusted"),NACE.Group =="All retail businesses"))) %>% as.numeric()  %>% na.omit() 
+Retail_Date_index<-seq(as.Date("2021-01-01"), by="month",length.out=NROW(All_Retail_INDEX))
+Retail_XTS<-as.xts(All_Retail_INDEX,order.by=Retail_Date_index)
+
+
+
+CORE_Retail_INDEX<- t(data.frame(subset(subset(cso_get_data("RSM08"),Statistic=="Retail Sales Index Volume Unadjusted"),NACE.Group =="All retail businesses, excluding motor trades"))) %>% as.numeric()  %>% na.omit() %>% as.xts (order.by=Retail_Date_index)
+Core_Annual<-growth(CORE_Retail_INDEX, freq=12) %>% round(1)
+
+
+THREE_RETAIL_INDEX<-rollmean(All_Retail_INDEX, 3) %>% as.xts(order.by=Retail_Date_index[3:length(Retail_Date_index)])
+THREE_CORE_RETAIL_INDEX<-rollmean(CORE_Retail_INDEX, 3) %>% as.numeric() %>% as.xts(order.by=Retail_Date_index[3:length(Retail_Date_index)])
+
+
+retail_Annual<-merge(Retail_XTS,CORE_Retail_INDEX) %>% growth(freq=12) %>% .["2022/"] 
+colnames(retail_Annual)<-c("Retail Sales (y-o-y)","Core Retail Sales (y-o-y)")
+
+
+
+
+Retail_Quarterly<-Retail_XTS   %>% ts(start=c(2021,1), frequency=12) %>% as.quarterly(FUN = mean) %>% as.xts()
+Retail_Quarterly_yoy_growth<-growth(Retail_Quarterly,4) %>% round(1)
+
+
+
+
+library(httr)
+
+CB_URL_Monthly<-"https://opendata.centralbank.ie/dataset/monthly-card-payment-statistics"
+CB_URL_Monthly_download<-read_html(CB_URL_Monthly)
+CB_URL_Monthly_download_text<-CB_URL_Monthly_download %>% html_nodes("li.resource-item")
+CB_URL_Monthly_download_text2<-(CB_URL_Monthly_download_text[[2]])   %>% html_attrs() %>% data.frame() %>% .$. %>% .[2]
+
+URL_CENTRAL_BANK_DATA_DOWNLOAD <- paste0("https://opendata.centralbank.ie/dataset/19af4a3e-ed9f-41ee-ad9b-52dc72354a15/resource/",CB_URL_Monthly_download_text2,"/download/mpcp_cardpayments.csv")
+CB_DATA<-read_csv(URL_CENTRAL_BANK_DATA_DOWNLOAD) %>% data.frame()
+
+CB_DATA_CARD_PAYMENT<-subset(CB_DATA,TYP_TRNSCTN_DESC=="Card payment")
+CB_DATA_CARD_PAYMENT<-subset(CB_DATA_CARD_PAYMENT,TRMNL_LCTN_DESC=="Domestic (home or reference area)")
+CB_DATA_CARD_PAYMENT<-subset(CB_DATA_CARD_PAYMENT,RMT_INTTN_DESC=="Initiated either via remote or non-remote channel")
+CB_DATA_CARD_PAYMENT<-subset(CB_DATA_CARD_PAYMENT,UNIT_MEASURE=="EUR")
+
+
+CB_DATE<-as.Date(CB_DATA_CARD_PAYMENT$REPORTINGPERIOD, format = "%d/%m/%Y") %>% na.omit()
+DOMESTIC_PAYMENT_ALL<-as.numeric(CB_DATA_CARD_PAYMENT$OBSERVATION) %>% na.omit() %>% as.xts(order.by=as.Date(format(CB_DATE, "%Y-%m-01")))
+
+ALL_CB_PAYMENTS_GROWTH<-growth(DOMESTIC_PAYMENT_ALL,12)
+
+
+ALL_CB_PAYMENTS_QUARTERLY<-DOMESTIC_PAYMENT_ALL %>% ts(start=c(2022,10), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+ALL_CB_PAYMENTS_QUARTERLY_GROWTH <- growth(ALL_CB_PAYMENTS_QUARTERLY,4)
+
+#### Infaltion Data for Deflation#######
+EUROSTAT_INFLATION<-get_eurostat("prc_hicp_midx",  filters = list(
+    geo = "IE",
+    coicop = "CP00",
+    unit = "I15"
+  ),
+ time_format = "date", cache = FALSE) 
+
+
+EUROSTAT_INFLATION<-EUROSTAT_INFLATION %>% .$values %>% as.xts(order.by=as.Date(EUROSTAT_INFLATION$time)) 
+
+EUROSTAT_INFLATION_GROWTH<-growth(EUROSTAT_INFLATION,12)
+
+
+
+
+
+
+
+CSO_HICP_INDEX<-subset(cso_get_data("CPM15"),Statistic=="EU HICP")
+Date <-seq(as.Date("1996-01-01"), length.out=length(unique(colnames(CSO_HICP_INDEX[,])))-2,by="month")
+CSO_HICP_INDEX_XTS<-t(CSO_HICP_INDEX) %>% .[3:nrow(.),] %>% as.xts(order.by=Date) 
+colnames(CSO_HICP_INDEX_XTS)<-(unique((CSO_HICP_INDEX[,2]))) 
+
+HICP_XTS<-CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00`
+HICP_SHORT_GROWTH<-growth(as.numeric(as.xts((data.frame(HICP_XTS[index(DOMESTIC_PAYMENT_ALL)])))),12)  %>% as.xts(index(HICP_XTS[index(DOMESTIC_PAYMENT_ALL)]))
+
+
+CORE_HICP_XTS<-CSO_HICP_INDEX_XTS$`HICP All items excluding energy and unprocessed food`
+CORE_HICP_GROWTH<-growth(as.numeric(as.xts((data.frame(CORE_HICP_XTS[index(CORE_HICP_XTS)])))),12)  %>% as.xts(index(CORE_HICP_XTS[index(CORE_HICP_XTS)])) %>% round(2)
+
+HEADLINE_HICP_XTS<-CSO_HICP_INDEX_XTS$`All-items HICP (COICOP 00` 
+
+if(length(EUROSTAT_INFLATION_GROWTH)>length(HEADLINE_HICP_XTS)){
+  HEADLINE_HICP_GROWTH<-EUROSTAT_INFLATION_GROWTH %>% round(2)
+  HEADLINE_HICP_XTS<-EUROSTAT_INFLATION
+} else {
+HEADLINE_HICP_GROWTH<-growth(as.numeric(as.xts((data.frame(HEADLINE_HICP_XTS[index(HEADLINE_HICP_XTS)])))),12)  %>% as.xts(index(HEADLINE_HICP_XTS[index(HEADLINE_HICP_XTS)])) %>% round(2)
+  
+}
+
+
+Deflated_ALL_CB_PAYMENTS_GROWTH<-((1+(ALL_CB_PAYMENTS_GROWTH/100))/(1+(HICP_SHORT_GROWTH/100))-1)*100
+
+INFLATION<-data.frame(HICP_XTS)
+
+HICP_QUARTERLY<-as.numeric(INFLATION[,1]) %>% ts(start=c(1996,01), frequency=12) %>% as.quarterly(FUN = mean) %>% as.xts()
+
+HICP_QUARTERLY_GROWTH<-growth(HICP_QUARTERLY,4)
+
+
+
+
+
+
+
+
+Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY<-((1+(ALL_CB_PAYMENTS_QUARTERLY_GROWTH/100))/(1+(HICP_QUARTERLY_GROWTH["2022-10-01/"]/100))-1)*100
+
+
+
+#interval_vehicles <- data.frame(cso_get_interval("TEM01")) %>% .[,1] %>% ym(format="%Y%M") %>% na.omit()
+#vehicles <- cso_get_data("TEM01") %>% t() %>% .[3:nrow(.),] %>% data.frame()
+#names_vehicles<-cso_get_data("TEM01") %>% t() %>% .[2,]
+#names(vehicles)<-c(names_vehicles)
+
+
+
+#Total_Cars<-as.numeric(vehicles$`New Private Cars`)+as.numeric(vehicles$`Secondhand Private Cars`) %>% as.xts(interval_vehicles)
+#annual_cars<-growth(Total_Cars, freq=12) %>% round(1)
+
+#Total_Cars_YTD<-YTD(Total_Cars)
+#Total_Cars_ROLLSUM<-rollapply(Total_Cars, 12, sum) %>% as.xts(index(Total_Cars))
+
+#CARS_Quarterly_NSA<-Total_Cars %>% ts(start=c(1996,7), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+#CARS_ANNUAL_growth<-growth(CARS_Quarterly_NSA,4) %>% round(1)
+
+#CARS_MONTHLY_YOY_growth<-growth(Total_Cars_ROLLSUM,12) %>% round(1)
+
+
+Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Date_Services_index<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX))), by="quarters")
+Services_Vol_INDEX<-na.omit(Services_Vol_INDEX) %>% na.omit() %>% as.xts (order.by=Date_Services_index)
+Services_Vol_Q_Growth<-growth(Services_Vol_INDEX, freq=4) %>% round(1)
+
+
+Services_Vol_INDEX_months<- t(data.frame(subset(subset(cso_get_data("MSI02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Date_Services_index_months<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX_months))), by="month")
+Services_Vol_INDEX_months<-na.omit(Services_Vol_INDEX_months) %>% na.omit() %>% as.xts(order.by=Date_Services_index_months)
+Services_Vol_M_Growth<-growth(Services_Vol_INDEX_months, freq=12) %>% round(1)
+
+
+Unemployment_Rate<- t(data.frame(subset(subset(subset(cso_get_data("MUM01"),Statistic=="Seasonally Adjusted Monthly Unemployment Rate"), Age.Group=="15 - 74 years"),Sex=="Both sexes"))) %>% as.numeric()  %>% na.omit()
+UR_Date_index<-seq(as.Date("1998-01-01"), by="month",length.out=NROW(Unemployment_Rate))
+Unemployment_Rate_XTS<-as.xts(Unemployment_Rate,order.by=UR_Date_index)
+
+
+Unemployment_Rate<- t(data.frame(subset(subset(subset(cso_get_data("MUM01"),Statistic=="Seasonally Adjusted Monthly Unemployment Rate"), Age.Group=="15 - 74 years"),Sex=="Both sexes"))) %>% as.numeric()  %>% na.omit()
+UR_Date_index<-seq(as.Date("1998-01-01"), by="month",length.out=NROW(Unemployment_Rate))
+Unemployment_Rate_XTS<-as.xts(Unemployment_Rate,order.by=UR_Date_index)
+
+
+
+Unemployment_Rate_QUARTERLY<-Unemployment_Rate_XTS[,1] %>% ts(start=c(1998,1), frequency=12) %>% as.quarterly(FUN = mean) %>% as.xts()
+
+
+Unemployment_Rate_LFS<- t(data.frame(subset(subset(cso_get_data("QLF02"),Statistic=="ILO Unemployment Rates (15 - 74 years) (Seasonally Adjusted)"),Sex =="Both sexes"))) %>% as.numeric() 
+Date_Unemployment_Rate_LFS<-seq(as.Date("1998-01-01"), length.out=(length(na.omit(Unemployment_Rate_LFS))), by="quarter")
+Unemployment_Rate_LFS_XTS<-na.omit(Unemployment_Rate_LFS) %>% na.omit() %>% as.xts(order.by=Date_Unemployment_Rate_LFS)
+
+
+if(length(Unemployment_Rate_LFS_XTS)>=length(na.omit(Unemployment_Rate_QUARTERLY))){   
+  Unemployment_Rate_QUARTERLY<-Unemployment_Rate_LFS_XTS 
+} else { 
+  Unemployment_Rate_QUARTERLY<-Unemployment_Rate_QUARTERLY
+ }
+
+
+Average_Hourly_Earnings<- t(data.frame(subset(subset(subset(cso_get_data("EHQ03"),Statistic=="Average Hourly Earnings"),Economic.Sector.NACE.Rev.2 =="All NACE economic sectors"),Type.of.Employee =="All employees"))) %>% as.numeric() 
+Date_Average_Hourly_Earnings<-seq(as.Date("2008-01-01"), length.out=(length(na.omit(Average_Hourly_Earnings))), by="quarter")
+Average_Hourly_Earnings_XTS<-na.omit(Average_Hourly_Earnings) %>% na.omit() %>% as.xts(order.by=Date_Average_Hourly_Earnings)
+Average_Hourly_Earnings_XTS_GROWTH<-growth(Average_Hourly_Earnings_XTS,4) %>% round(2)
+
+
+
+Savings_Rate<- t(data.frame(subset(subset(subset(cso_get_data("ISQ04"),Statistic=="Saving Ratio (Seasonally Adjusted)"), Ireland=="Ireland")))) %>% as.numeric()  %>% na.omit()
+Savings_Rate_Date<-seq(as.Date("1999-01-01"), by="quarter",length.out=NROW(Savings_Rate))
+Savings_Rate_XTS<-as.xts(Savings_Rate,order.by=Savings_Rate_Date)
+
+sr<-as.xts(Savings_Rate_XTS,as.Date(summary_retail)) %>% round(1)
+
+
+
+COE<- t(data.frame(subset(subset(cso_get_data("NAQ08"),Statistic=="Compensation of Employees at Current Prices"),NACE.Rev..2.Sector =="All Sectors"))) %>% as.numeric()  
+Date_COE<-seq(as.Date("1998-01-01"), length.out=(length(na.omit(COE))), by="quarter")
+COE_XTS<-na.omit(COE) %>% na.omit() %>% as.xts(order.by=Date_COE)
+
+
+
+
+POP<-c(4575,
+4580,
+4584,
+4589,
+4593.7,
+4599,
+4604,
+4609,
+4614.7,
+4622,
+4630,
+4638,
+4645.4,
+4656,
+4667,
+4677,
+4687.8,
+4701,
+4714,
+4727,
+4739.6,
+4757,
+4775,
+4793,
+4810.9,
+4829,
+4848,
+4866,
+4884.9,
+4903,
+4922,
+4940,
+4958.5,
+4976,
+4994,
+5012,
+5029.9,
+5041,
+5052,
+5064,
+5074.7,
+5102.025,
+5129.35,
+5156.675,
+5184,
+5208.4,
+5232.8,
+5257.2,
+5281.6,
+5306.275,
+5330.95,
+5355.625,
+5380,
+5396.35,
+5412.4,
+5428.45,
+5444.5,
+5458.625,
+5472.75,
+5486.875,
+5501,
+5514.75,
+5528.5,
+5542.25,
+5556,
+5569,
+5582,
+5595,
+5608,
+5620.3,
+5632.6,
+5644.9,
+5657.2,
+5669.075,
+5680.95,
+5692.825,
+5704.7,
+5716.575,
+5728.45)
+
+
+POPULATION<-POP %>% as.xts(., order.by=seq(as.Date("2011-04-01"), length.out=length(POP),by='quarter'))
+
+
+
+
+COE_PER_CAPITA_XTS<-COE_XTS["2011-04-01/"]/POPULATION["2011-04-01/"]
+
+COE_XTS_Growth<-growth(COE_XTS, freq=4) %>% round(1)
+COE_PER_CAPITA_XTS_Growth<-growth(COE_PER_CAPITA_XTS, freq=4) %>% round(1)
+
+
+ISA<- t(data.frame(subset(subset(cso_get_data("ISQ01"),Institutional.Sector=="Households including NPISH  (S.14+S.15)"),Current.Account =="1.6 Use of disposable income account : Gross disposable income (B.6g)"))) %>% as.numeric()  
+Date_GDI<-seq(as.Date("1999-01-01"), length.out=(length(na.omit(ISA))), by="quarter")
+GDI_XTS<-na.omit(ISA) %>% na.omit() %>% as.xts(order.by=Date_GDI)
+GDI_XTS_Growth<-growth(GDI_XTS, freq=4) 
+
+
+Deflated_GDI_GROWTH<-((1+(GDI_XTS_Growth["2000/"]/100))/(1+(HICP_QUARTERLY_GROWTH[index(GDI_XTS_Growth["2000/"])]/100))-1)*100 
+GDI_PER_CAPITA_XTS<-GDI_XTS["2011-04-01/"]/POPULATION["2011-04-01/"]
+GDI_PER_CAPITA_XTS_Growth<-growth(GDI_PER_CAPITA_XTS, freq=4) %>% round(1)
+Deflated_GDI_PER_CAPITA_XTS_Growth<-((1+(GDI_PER_CAPITA_XTS_Growth["2012/"]/100))/(1+(HICP_QUARTERLY_GROWTH[index(GDI_PER_CAPITA_XTS_Growth["2012/"])]/100))-1)*100 
+
+
+Employment<- t(data.frame(subset(subset(cso_get_data("QLF01"),Statistic=="Persons aged 15 years and over"),ILO.Economic.Status =="In employment"))) %>% .[,1] %>% as.numeric() %>% na.omit()
+Date_Employment<-seq(as.Date("1998-01-01"), length.out=(length(na.omit(Employment))), by="quarter")
+Employment_XTS<-na.omit(Employment) %>% na.omit() %>% as.xts(order.by=Date_Employment)
+Employment_XTS_Growth<-growth(Employment_XTS, freq=4) %>% round(1)
+
+
+PMOD<- t(data.frame(subset(subset(cso_get_data("EIA03"),Statistic=="Number of Employees"),NACE.Rev.2.Sector =="All NACE economic sectors"))) %>% .[,1] %>% as.numeric() %>% na.omit()
+Date_PMOD<-seq(as.Date("2019-01-01"), length.out=(length(na.omit(PMOD))), by="month")
+PMOD_XTS<-na.omit(PMOD) %>% na.omit() %>% as.xts(order.by=Date_PMOD)
+PMOD_XTS_Growth<-growth(PMOD_XTS, freq=12) %>% round(1)
+
+PMOD_XTS_QUARTERLY<-PMOD_XTS %>% ts(start=c(2019,1), frequency=12) %>% as.quarterly(FUN = mean) %>% as.xts()
+PMOD_XTS_QUARTERLY_GROWTH<-growth(PMOD_XTS_QUARTERLY,4) %>% round(1)
+
+
+
+CB_URL_DEPOSITS<-"https://opendata.centralbank.ie/dataset/retail-interest-rates-deposits-outstanding-amounts"
+CB_URL_DEPOSITS_download<-read_html(CB_URL_DEPOSITS)
+CB_URL_DEPOSITS_download_text<-CB_URL_DEPOSITS_download %>% html_nodes("li.resource-item")
+CB_URL_DEPOSITS_download_text2<-(CB_URL_DEPOSITS_download_text[[1]])   %>% html_attrs() %>% data.frame() %>% .$. %>% .[2]
+
+
+URL_CENTRAL_BANK_DEPOSIT_DATA_DOWNLOAD <- paste0("https://opendata.centralbank.ie/dataset/f4f24cf8-d63e-486f-b27d-ef0df7d071df/resource/",CB_URL_DEPOSITS_download_text2,"/download/b.1.1.csv")
+CB_DEPOSIT_DATA<-read.csv(URL_CENTRAL_BANK_DEPOSIT_DATA_DOWNLOAD,header=FALSE) %>% data.frame()
+
+
+HH_DEPOSITS_DATE<-as.Date(CB_DEPOSIT_DATA$V1,format = "%d/%m/%Y") %>% format(.,"%Y-%m-01") %>% na.omit()
+
+HH_DEPOSITS_XTS<-data.frame((CB_DEPOSIT_DATA[2:nrow(CB_DEPOSIT_DATA),8:11])) %>% na.omit() %>% as.xts(order.by=as.Date(HH_DEPOSITS_DATE))
+HH_DEPOSITS_XTS$TOTAL<-as.numeric(str_remove(HH_DEPOSITS_XTS$V8,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V9,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V10,","))+as.numeric(str_remove(HH_DEPOSITS_XTS$V11,","))
+
+
+HH_DEPOSITS_annual_growth<-growth(HH_DEPOSITS_XTS$TOTAL, freq = 12) %>% round(1)
+
+
+HH_Deposits_Quarterly<-HH_DEPOSITS_XTS$TOTAL   %>% ts(start=c(2003,1), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+HH_Deposits_ANNUAL_growth<-growth(HH_Deposits_Quarterly,4) %>% round(1)
+
+Consumption_Q_Annual_growth<-growth(Consumption_Q,freq=4) %>% round(1)
+Consumption_Q_SA_Growth<-growth(Consumption_Q_SA,freq=1) %>% round(1)
+
+
+Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Date_Services_index<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX))), by="quarters")
+Services_Vol_INDEX<-na.omit(Services_Vol_INDEX) %>% na.omit() %>% as.xts (order.by=Date_Services_index)
+Services_Vol_Q_Growth<-growth(Services_Vol_INDEX, freq=4) %>% round(1)
+
+
+
+
+EXTERNAL_TRADE_VOL<- t(data.frame(subset(cso_get_data("TSM02"),Statistic=="Trade Volume Index for Exports"))) %>% .[,1] %>% as.numeric() %>% na.omit()
+Date_EXTERNAL_TRADE_VOL<-seq(as.Date("1970-01-01"), length.out=(length(na.omit(EXTERNAL_TRADE_VOL))), by="month")
+EXTERNAL_TRADE_VOL_XTS<-na.omit(EXTERNAL_TRADE_VOL) %>% na.omit() %>% as.xts(order.by=Date_EXTERNAL_TRADE_VOL)
+EXTERNAL_TRADE_VOL_XTS_Growth<-growth(EXTERNAL_TRADE_VOL_XTS, freq=12) %>% round(1)
+
+EXTERNAL_TRADE_VOL_XTS_QUARTERLY<-EXTERNAL_TRADE_VOL_XTS %>% ts(start=c(1970,1), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+EXTERNAL_TRADE_VOL_XTS_QUARTERLY_GROWTH<-growth(EXTERNAL_TRADE_VOL_XTS_QUARTERLY,4) %>% round(1)
+
+
+
+EXTERNAL_TRADE_VAL<- t(data.frame(subset(cso_get_data("TSM01"),Statistic=="Total Exports"))) %>% .[,1] %>% as.numeric() %>% na.omit()
+Date_EXTERNAL_TRADE_VAL<-seq(as.Date("1970-01-01"), length.out=(length(na.omit(EXTERNAL_TRADE_VAL))), by="month")
+EXTERNAL_TRADE_VAL_XTS<-na.omit(EXTERNAL_TRADE_VAL) %>% na.omit() %>% as.xts(order.by=Date_EXTERNAL_TRADE_VAL)
+EXTERNAL_TRADE_VAL_XTS_Growth<-growth(EXTERNAL_TRADE_VAL_XTS, freq=12) %>% round(1)
+
+EXTERNAL_TRADE_VAL_XTS_QUARTERLY<-EXTERNAL_TRADE_VAL_XTS %>% ts(start=c(1970,1), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH<-growth(EXTERNAL_TRADE_VAL_XTS_QUARTERLY,4) %>% round(1)
+
+
+
+
+VAT<-c(958313,328500,839274,263186,967608,298627,931211,325461,884810,313217,1071418	,288586	,1138525	,335986	,907584	,277126	,1007009	,288162	,982011	,317807	,930670	,314220	,1032967	,388394	,1156144	,396175	,919379	,
+       436179	,1117309	,316097	,1114500	,308937	,1170220	,345332	,1229223	,375407	,1507241	,328153	,1175359	,256382	,1234709	,298355	,1288791	,240259	,1272536	,304048	,1426646	,388065	,1608214	,321053	,1249142	,301055	,1441982	,329443	,1486293	,310794	,1455593	,285232	,1541468	,363022	,1672738	,510549	,1391326	,376993	,1582415	,356631	,1660132	,338815	,1688398	,413108	,1749043	,348922	,2035575	,422611	,1632914	,317923	,1842946	,323391	,1861888	,376679	,1896172	,393696	,1962536	,381660	,2331507	,431968	,1750908	,392949	,2035905	,335801	,2169119	,321751	,1999690	,442303	,1875341	,409346	,2335014	,363700	,1827988	,351226	,1855918	,344059	,1853324	,252614	,1814642	,315932	,1720065	,395120	,1969657	,277114	,1450698	,137253	,1470837	,263975	,1391949	,241790	,1454018	,
+       294768	,1416167	,301426	,1616164	,330492	,1269024	,204726	,1452330	,249377	,1356044	,260744	,1422426	,284847	,1434612	,220498	,1674183	,225452	,1210161	,277011	,1480225	,207603	,1324247	,221461	,1374103	,201675	,1353954	,190450	,1724848	,203968	,1362563	,190683	,1496593	,209908	,1413479	,224884	,1431860	,222954	,1484078	,204952	,1740838	,237227	,1321132	,176368	,1518475	,185417	,1450690	,169860	,1609924	,212011,	1624788,89270	,1369126	,667167	,1330068	,286419	,1560912	,345127	,1548169	,269919	,1582685	,365677	,1496859	,330801	,1968753	,397267	,1431371	,232837	,1679858	,289697	,1666893	,293314	,1741402	,339597	,1715405	,187652	,2098520	,310048	,1486399	,270721	,1860215	,193146	,1768442	,286641	,1917316	,322593	,1797916	,108523	,2312784	,503081	,1751979	,200317	,2059455	,78049	,1887231	,233500	,1991911	,200821	,2004229,79741	,2445116	,320538	,1910321	,168242	,2071797	,184681	,2086326	,194620	,2188989	,240677	,2269139	,153882	,2729975	,172388	,2083169	,6171	,2316022	,138124	,2302655	,152903	,2411107	,240127	,2286933	,278030	,2701541	,355337	,1080257,86448	,1496398	,201368	,1610916	,261493	,2074689	,274936	,2071889	,208285	,2358553	,298026	,1827490	,198197	,2296065	,225129	,2475515	,137238	,2622796	,168922	,2579507	,253659	,3107722	,260849	,2482287	,191664	,2929814	,115680	,2794045	,275943	,3124333	,177730	,3078177,62707	,3683166	,379541	,2718490	,229375	,3008004	,298122	,2929626	,270935	,3251583	,243210	,3120131	,214589	,
+       3830766, 	 428410, 	 2886341, 	 304605, 	 3372684, 	 129206, 	 3213730, 	 361129,3413659,380458,3095005,
+419228,4051134,507747,3074026,266528) 
+
+
+
+YTD <- function(x){
+  
+  CURRENTYEAR_YTD<-x[paste0("",index((xts::last(x))) %>% year(),"")]
+  LASTYEAR<-x[paste0("",(index(CURRENTYEAR_YTD)-years(1)),"")]
+  
+  YTD_CURRENTYEAR <- CURRENTYEAR_YTD
+  
+  for(i in 1:length(CURRENTYEAR_YTD)){
+    YTD_CURRENTYEAR[i]<-((as.numeric(sum(as.numeric(CURRENTYEAR_YTD[1:i])))/as.numeric(sum(as.numeric(LASTYEAR[1:i]))))-1)*100
+  } 
+  return(YTD_CURRENTYEAR)
+}
+
+
+
+VAT_DATE<-(seq(from=as.Date("2000-01-01"), by='month', length.out=length(VAT)))
+VAT_XTS<-as.xts(VAT, order.by =VAT_DATE )
+VAT_YTD_GROWTH<-rbind(YTD(VAT_XTS["/2024"]),YTD(VAT_XTS))
+colnames(VAT_YTD_GROWTH)<- c("VAT")
+
+
+INFLATION_YTD_GROWTH<-rbind(YTD(HEADLINE_HICP_XTS["/2024"]),YTD(HEADLINE_HICP_XTS))
+colnames(INFLATION_YTD_GROWTH)<- c("INFLATION")
+INFLATION_YTD_GROWTH_VAT<-INFLATION_YTD_GROWTH[paste0("2023/",last(index(VAT_YTD_GROWTH)))]
+
+VAT_XTS_Quarterly<-VAT_XTS   %>% ts(start=c(2000,1), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+VAT_XTS_Quarterly_GROWTH<-growth(VAT_XTS_Quarterly,4)
+
+
+
+HICP_QUARTERLY_FULL_YTD<-(as.xts(as.numeric(INFLATION_YTD_GROWTH),order.by=index(INFLATION_YTD_GROWTH$INFLATION)))   %>% ts(start=c(2024,1), frequency=12) %>% as.quarterly(mean,na.rm=TRUE) %>% as.xts()
+
+
+
+Deflated_VAT_Quarterly_GROWTH<-((1+(VAT_XTS_Quarterly_GROWTH/100))/(1+(HICP_QUARTERLY_FULL_YTD/100))-1)*100
+
+
+
+Deflated_VAT_MONTHLY_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(as.numeric(INFLATION_YTD_GROWTH_VAT)/100))-1)*100
+
+
+
+
+
+inflation<-HICP_XTS
+inflation_rate<-growth(as.xts(as.numeric(HICP_XTS),order.by = index(HICP_XTS)),12)
+
+names(inflation)<-c("inflation")
+inflation<-as.numeric(inflation)
+inflation<-as.xts(inflation, order.by=index(HICP_XTS))
+inflation_GROWTH<-rbind(YTD(inflation["/2023"]),YTD(inflation))
+colnames(inflation_GROWTH)<- c("inflation")
+
+
+
+Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
+
+
+
+
+
+summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-06-01/"]  %>% data.frame() %>% round(1) %>% t() 
+colnames(summary_consumer)<-c(format(as.Date(colnames(summary_consumer)),"%b %y"))
+rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Service Index","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","Goods External Trade Volume","Goods External Trade Value")
+
+
+Quarterly_consumer_Table<-merge(Consumption_Q_Annual_growth$Consumption,Deflated_VAT_Quarterly_GROWTH, Retail_Quarterly_yoy_growth,Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY
+                                ,Services_Vol_Q_Growth,COE_PER_CAPITA_XTS_Growth,Deflated_GDI_PER_CAPITA_XTS_Growth,Average_Hourly_Earnings_XTS_GROWTH,HH_Deposits_ANNUAL_growth,HICP_QUARTERLY_GROWTH,sr,Employment_XTS_Growth,PMOD_XTS_QUARTERLY_GROWTH,Unemployment_Rate_QUARTERLY,GDP_Q_Annual_growth,EXPORTS_Q_ANNUAL_GROWTH,EXTERNAL_TRADE_VOL_XTS_QUARTERLY_GROWTH,EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH) %>% .["2023-10-01/"]   %>% round(1) %>% t()
+rownames(Quarterly_consumer_Table)<-c("Consumption","Real VAT (YTD)","Retail Sales","Real Card Spending","Service Index","Compensation of Employees per person","Real Disposable Income per person","Average Hourly Earnings","Household Deposits", "Inflation Rate", "Savings Rate","Employment Growth", "Payroll Employment", "Unemployment Rate","GDP","Total Exports","External Trade Volume","External Trade Value")
+colnames(Quarterly_consumer_Table)<-colnames(Quarterly_consumer_Table) %>% as.Date() %>% as.yearqtr("%Y") %>% paste()
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+```
+<div style="text-align: center;">
+<span class="text-center" style="color:#34495e"> <center> <font size="3">  **Table 1: Quarterly Economic Indicators Table**  </font> </center> 
+
+```{r Quarterly, echo=FALSE, message=FALSE} 
+options(knitr.kable.NA = '')
+
+library(htmltools)
+library(formattable)
+
+Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)-1], caption = "", booktabs = TRUE, bold=TRUE, colour=DOF_colours[1],align = "c",format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = T) %>% 
+  kable_paper("basic", full_width = T) %>%
+  pack_rows("Consumer Spending", 1, 5,label_row_css = "background-color: #34495e; color: #fff;") %>%
+  pack_rows("Household Income", 6, 11,label_row_css = "background-color: #34495e; color: #fff;") %>%
+  pack_rows("Labour Market", 12, 14,label_row_css = "background-color: #34495e; color: #fff;") %>% 
+  pack_rows("External Trade", 15, 18,label_row_css = "background-color: #34495e; color: #fff;") %>% 
+  column_spec(1,include_thead = TRUE) %>%
+  row_spec(0,bold=TRUE, angle=0, align = "c") %>% column_spec(ncol(Quarterly_consumer_Table),include_thead = FALSE) %>%    
+  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP.","Real Disposable income deflated HICP."))    
+
+
+
+temp_file2 <- tempfile(fileext = ".html")
+kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
+
+webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 900, zoom = 1.2)
+
+
+Date_95_QNA_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date("2030/10/01"), by="quarters")
+
+DOWNLOAD_QUARTERLY_DF<-cbind(Consumption_Q,
+VAT_XTS_Quarterly,
+Retail_Quarterly,
+ALL_CB_PAYMENTS_QUARTERLY,
+Services_Vol_INDEX,
+COE_XTS,
+POPULATION,
+GDI_XTS,
+Average_Hourly_Earnings_XTS,
+HH_Deposits_Quarterly,
+HICP_QUARTERLY,
+sr[,1],
+Employment_XTS,
+PMOD_XTS_QUARTERLY,
+Unemployment_Rate_QUARTERLY,
+GDP,
+EXPORTS_Q,
+EXTERNAL_TRADE_VOL_XTS_QUARTERLY,
+EXTERNAL_TRADE_VAL_XTS_QUARTERLY
+) %>% data.frame() %>% .[101:nrow(.),] %>% cbind(Date_95_QNA_EXTEND,.)
+
+colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
+
+QUARTERLY_DATA_DOWNLOAD_ALL <- list('Quarterly Data Levels' =DOWNLOAD_QUARTERLY_DF)
+
+write.xlsx(QUARTERLY_DATA_DOWNLOAD_ALL, file = 'QUARTERLY_DATA_DOWNLOAD_ALL.xlsx')
+
+
+```
+<div style="text-align: center;">
+<br>
+<span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/QUARTERLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+<br>
+
+
+***
+
+
+
+<span class="text-center" style="color:#34495e"> <center> <font size="3">  **Table 2: Monthly Economic Indicators Table**  </font> </center> 
+<div style="text-align: center;">
+
+
+```{r monthly, echo=FALSE, echo=FALSE}
+options(knitr.kable.NA = '')
+
+Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, colour=DOF_colours[1],align = "c",format = "html") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = T) %>%
+    kable_paper("striped", full_width = T) %>%
+  pack_rows("Household Spending", 1, 6,label_row_css = "background-color: #34495e; color: #fff;") %>%
+  pack_rows("Labour Market", 7, 8,label_row_css = "background-color: #34495e; color: #fff;") %>% 
+  pack_rows("Prices", 9, 10,label_row_css = "background-color: #34495e; color: #fff;") %>% 
+  pack_rows("External Trade", 11, 12,label_row_css = "background-color: #34495e; color: #fff;") %>% 
+  column_spec(1,include_thead = TRUE) %>%
+  row_spec(0,bold=TRUE, angle=0, align = "c") %>% 
+  column_spec(ncol(summary_consumer),include_thead = FALSE) %>%    
+  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP."))    
+
+
+temp_file <- tempfile(fileext = ".html")
+kableExtra::save_kable(Monthly_TABLE2, file = temp_file)
+webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 680, zoom = 1.2)
+
+
+
+
+  
+
+
+
+Date_95_Monthly_EXTEND<-seq(from=as.Date("01/01/1995"), to=as.Date("01/01/2025"), by="month")
+
+
+
+
+DOWNLOAD_MONTHLY_DF<-cbind(Retail_XTS,
+CORE_Retail_INDEX,
+VAT_XTS,
+DOMESTIC_PAYMENT_ALL,
+Services_Vol_INDEX_months,
+HH_DEPOSITS_XTS$TOTAL,
+PMOD_XTS,
+Unemployment_Rate_XTS,
+HEADLINE_HICP_XTS,
+CORE_HICP_XTS,
+EXTERNAL_TRADE_VOL_XTS,
+EXTERNAL_TRADE_VAL_XTS
+) %>% .[301:nrow(.),] %>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.)
+
+colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
+
+MONTHLY_DATA_DOWNLOAD_ALL <- list('Monthly Data Levels' =DOWNLOAD_MONTHLY_DF)
+
+write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
+
+
+
+
+
+
+```
+
+
+<div style="text-align: center;">
+<span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
 
