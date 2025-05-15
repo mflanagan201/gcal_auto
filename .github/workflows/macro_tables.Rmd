@@ -608,7 +608,7 @@ options(knitr.kable.NA = '')
 library(htmltools)
 library(formattable)
 
-Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)-1], caption = "", booktabs = TRUE, bold=TRUE, colour=DOF_colours[1],align = "c",format = "html") %>%
+Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)], caption = "", booktabs = TRUE, bold=TRUE, colour=DOF_colours[1],align = "c",format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = T) %>% 
   kable_paper("basic", full_width = T) %>%
   pack_rows("Consumer Spending", 1, 5,label_row_css = "background-color: #34495e; color: #fff;") %>%
