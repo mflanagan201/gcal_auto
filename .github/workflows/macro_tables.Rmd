@@ -650,7 +650,7 @@ EXTERNAL_TRADE_VOL_XTS_QUARTERLY,
 EXTERNAL_TRADE_VAL_XTS_QUARTERLY
 ) %>% data.frame() %>% .[101:nrow(.),] %>% cbind(Date_95_QNA_EXTEND,.)
 
-colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Modified Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
 
 QUARTERLY_DATA_DOWNLOAD_ALL <- list('Quarterly Data Levels' =DOWNLOAD_QUARTERLY_DF)
 
@@ -718,7 +718,7 @@ EXTERNAL_TRADE_VOL_XTS,
 EXTERNAL_TRADE_VAL_XTS
 ) %>% .[301:nrow(.),] %>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.)
 
-colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Modified Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
 
 MONTHLY_DATA_DOWNLOAD_ALL <- list('Monthly Data Levels' =DOWNLOAD_MONTHLY_DF)
 
