@@ -270,14 +270,14 @@ Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY<-((1+(ALL_CB_PAYMENTS_QUARTERLY_GROWTH
 #CARS_MONTHLY_YOY_growth<-growth(Total_Cars_ROLLSUM,12) %>% round(1)
 
 
-Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ02"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="All Services (G, H, I, J, L, M, N (excl. 7735), 92, 93, 95, 96)"))) %>% as.numeric()  
+Services_Vol_INDEX<- t(data.frame(subset(subset(cso_get_data("MSQ03"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="Services, excl. Sector J. (G, H, I, L, M, N (excl. N7735), R92, R93, S95, S96)"))) %>% as.numeric()  
 Date_Services_index<-seq(as.Date("2021-01-01"), length.out=(length(na.omit(Services_Vol_INDEX))), by="quarters")
 Services_Vol_INDEX<-na.omit(Services_Vol_INDEX) %>% na.omit() %>% as.xts (order.by=Date_Services_index)
 Services_Vol_Q_Growth<-growth(Services_Vol_INDEX, freq=4) %>% round(1)
 
 
 Services_Vol_INDEX_months<- t(data.frame(subset(subset(cso_get_data("MSI03"),Statistic=="Services Index Volume"),NACE.Rev.2.Sector =="Services, excl. Sector J. (G, H, I, L, M, N (excl. N7735), R92, R93, S95, S96)"))) %>% as.numeric()  
-Date_Services_index_months<-seq(as.Date("2015-01-01"), length.out=(length(na.omit(Services_Vol_INDEX_months))), by="month")
+Date_Services_index_months<-seq(as.Date("2021-01-01"), length.out=(length(na.omit(Services_Vol_INDEX_months))), by="month")
 Services_Vol_INDEX_months<-na.omit(Services_Vol_INDEX_months) %>% na.omit() %>% as.xts(order.by=Date_Services_index_months)
 Services_Vol_M_Growth<-growth(Services_Vol_INDEX_months, freq=12) %>% round(1)
 
