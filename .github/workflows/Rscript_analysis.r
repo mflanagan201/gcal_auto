@@ -565,7 +565,7 @@ Budget_2025 <- Budget %>%
 
 
 
-CALENDAR_ALL<-rbind(EUROSTAT_calendar,event_all,DOF_EVENTS_2024,Budget_2025)
+CALENDAR_ALL<-rbind(event_CB,EUROSTAT_calendar,event_all,DOF_EVENTS_2024,Budget_2025)
 CALENDAR_ALL_XTS<-as.xts(CALENDAR_ALL,order.by=as.Date(CALENDAR_ALL$DTSTART))
 CALENDAR_ALL_short<-CALENDAR_ALL_XTS[seq(from=Sys.Date(),length.out=50, by='days')] %>% data.frame() %>% ical()
 CALENDAR_ALL_short[nrow(CALENDAR_ALL_short),3]<-paste(Sys.Date())
