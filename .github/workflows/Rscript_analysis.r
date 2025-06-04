@@ -138,7 +138,7 @@ colnames(CB_Schedule_table3)<-c("Releases","Date")
 
 for (i in 1:nrow(CB_Schedule_table3)){
 
- if(CB_Schedule_table3$Date[i]!="NA"){
+ if(!is.na(CB_Schedule_table3$Date[i])){
   CB_Schedule_table3$Date[i]<-CB_Schedule_table3$Date[i]
  } else if (!is_empty(CB_Schedule_table3$Date[i-1])) {
   CB_Schedule_table3$Date[i]<-CB_Schedule_table3$Date[i-1]
