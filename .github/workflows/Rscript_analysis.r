@@ -447,7 +447,7 @@ CSO_event = data.frame(DTSTART = CSO_Date,
 CSO_event <- CSO_event %>%
  mutate(UID = replicate(nrow(CSO_event), ic_guid()))
 
-event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,EVENTS_IMF,EVENTS_OECD,EVENTS_EC,PMI_RELEASE)
+event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,EVENTS_IMF,EVENTS_OECD,EVENTS_EC,PMI_RELEASE)
 
 event_all =subset(event_all, !(SUMMARY %like any% c("%Equality%","%Discrimination%","%Deprivation%","%Deprivations%","%Baby Names%","%Press Statement: CSO reveals most popular December Baby Names%","%Services Producer Price Index%","%Farm Structure Survey%","%Suicide%","%Fuel Oil Movements%","%Probation%","%Press Statement: CSO Launch Housing Hub%","%Monthly Mortality and Average Temperatures in Ireland%","%Educational Attainment%","%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
                                                     "%Hospitality: A Value Chain Analysis%",
