@@ -187,7 +187,7 @@ mutate(UID = replicate(nrow(PMI_RELEASE), ic_guid()))
 
  
 
-CB_URL<-https://www.centralbank.ie/news-media/schedule
+CB_URL<-"https://www.centralbank.ie/news-media/schedule"
 
 CB_URL_download<-read_html(CB_URL)
 
