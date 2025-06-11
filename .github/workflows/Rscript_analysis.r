@@ -180,11 +180,6 @@ mutate(UID = replicate(nrow(PMI_RELEASE), ic_guid()))
 
  
 
- 
-
- 
-
- 
 
  
 
@@ -192,7 +187,7 @@ mutate(UID = replicate(nrow(PMI_RELEASE), ic_guid()))
 
  
 
-CB_URL<-"https://www.centralbank.ie/news-media/schedule"
+CB_URL<-https://www.centralbank.ie/news-media/schedule
 
 CB_URL_download<-read_html(CB_URL)
 
@@ -232,7 +227,7 @@ for (i in 1:nrow(CB_Schedule_table3)){
 
  
 
-if(CB_Schedule_table3$Date[i]!="NA"){
+if(!is.na(CB_Schedule_table3$Date[i])){
 
   CB_Schedule_table3$Date[i]<-CB_Schedule_table3$Date[i]
 
@@ -248,29 +243,15 @@ if(CB_Schedule_table3$Date[i]!="NA"){
 
  
 
-if(grepl("Activity:|Publication: Quarterly Bulletin", CB_Schedule_table3$Releases[i], ignore.case = TRUE)){
+  CB_Schedule_table3$Releases[i]<-str_trim(CB_Schedule_table3$Releases[i], side=c("right"))
 
-  RELEASE_CB[i,1]<-CB_Schedule_table3$Date[i]
+  print(CB_Schedule_table3$Releases[i])
+
+if(CB_Schedule_table3$Releases[i] %like any% c("%Quarterly Bulletin%","%Statistics: Mortgage Arrears%","%Activity: Statistics: Monthly Card Payment Statistics%","%Monthly Card Payment Statistics%","%Activity: Private Household Credit and Deposits Statistics%","%Publication: Quarterly Bulletin%","%Interest Rates%","%Private Household Credit and Deposits%","%Mortgage Arrears%","%Credit and Debit Card Statistics%","%Private Household Credit and Deposits Statistics%","%Statistics: Retail Interest Rates%")){
+
+  RELEASE_CB[i,1]<-as.Date(CB_Schedule_table3$Date, format = "%d/%m/%Y")  %>% .[1:i] %>% na.omit() %>% last() %>% paste()
 
   RELEASE_CB[i,2]<-CB_Schedule_table3$Releases[i]
-
- 
-
-} else {
-
-  RELEASE_CB[i,1]<-NA
-
-  RELEASE_CB[i,2]<-NA
-
-}
-
- 
-
-if(grepl("Activity: Statistics: Monthly Card Payment Statistics|Monthly Card Payment Statistics|Activity: Private Household Credit and Deposits Statistics|Publication: Quarterly Bulletin|Interest Rates|Private Household Credit and Deposits|Mortgage Arrears|Credit and Debit Card Statistics|Private Household Credit and Deposits Statistics", CB_Schedule_table3$Releases[i], ignore.case = TRUE)){
-
-  RELEASE_CB[i,1]<-RELEASE_CB[i,1]
-
-  RELEASE_CB[i,2]<-RELEASE_CB[i,2]
 
 } else {
 
@@ -292,13 +273,17 @@ colnames(RELEASE_CB)<-(c("Date","Release"))
 
  
 
-Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"%d/%m/%Y")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+Date_CB<-as.POSIXct(strptime(paste0("",as.POSIXct.Date(as.Date(RELEASE_CB$Date,"%Y-%m-%d")), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
 
 RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Activity:", " ")
 
+RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Statistics:", " ")
+
  
 
-if(is.na(Date_CB[1])){
+ 
+
+if(is.na(RELEASE_CB$Release[1])){
 
 event_CB = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
 
@@ -340,7 +325,8 @@ event_CB = data.frame(DTSTART = Date_CB,
 
 event_CB <- event_CB %>%
 
-mutate(UID = replicate(nrow(event_CB), ic_guid()))
+mutate(UID = replicate(nrow(event_CB), calendar::ic_guid()))
+
 
  
 
