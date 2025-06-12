@@ -2570,9 +2570,9 @@ MISC_GOOD_SERVICES_EA_XTS<-get_eurostat("prc_hicp_ctrb", filters = list(coicop="
 print("ea8")
 
 #NEIG
-CP1212_1213_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1212_1213.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP1212_1213.EA") %>% .$period) 
+#CP1212_1213_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/#M.PC_PNT.CP1212_1213.EA") %>% .$value %>% #as.numeric() %>% as.xts(order.by = #rdb("Eurostat/prc_hicp_ctrb/#M.PC_PNT.CP1212_1213.EA") %>% .$period) 
 
-CP123_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP123.EA") %>% .$value %>% as.numeric() %>% as.xts(order.by = rdb("Eurostat/prc_hicp_ctrb/M.PC_PNT.CP123.EA") %>% .$period) 
+#CP123_EA_XTS<-rdb("Eurostat/prc_hicp_ctrb/#M.PC_PNT.CP123.EA") %>% .$value %>% as.numeric() #%>% as.xts(order.by = rdb("Eurostat/#prc_hicp_ctrb/M.PC_PNT.CP123.EA") %>% .$period) 
 
 
 
