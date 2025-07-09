@@ -21,6 +21,20 @@ library(csodata)
 library(gmailr)
 library(emayili)
 library(eurostat)
+library(tframe)
+library(timeSeries)
+
+as.quarterly <- function (x, FUN=sum, na.rm=FALSE, ...){
+  if (4 == frequency(x)) return(if(na.rm) trimNA(x) else x) 
+  if (12 != frequency(x)) stop("only monthly conversion supported for now.")
+  tf <- tframe(x)
+  nm <- seriesNames(x)
+  x <- tfExpand(x, add.start=(tfstart(tf)[2] %% 3)-1,
+                add.end  =(3 - tfend(tf)[2]) %% 3)
+  r <- aggregate(x, nfrequency=4, FUN=FUN, 
+                 ndeltat=1, ts.eps=getOption("ts.eps"), ...) 
+  if(na.rm) trimNA(r) else r
+}
 
 CALENDAR_ALL_short<-read.csv("ECON_CAL.CSV")
 
