@@ -174,7 +174,7 @@ CB_URL_Monthly_download_text2<-(CB_URL_Monthly_download_text[[2]])   %>% html_at
 URL_CENTRAL_BANK_DATA_DOWNLOAD <- paste0("https://opendata.centralbank.ie/dataset/19af4a3e-ed9f-41ee-ad9b-52dc72354a15/resource/",CB_URL_Monthly_download_text2,"/download/mpcp_cardpayments.csv")
 CB_DATA<-read_csv(URL_CENTRAL_BANK_DATA_DOWNLOAD) %>% data.frame()
 
-CB_DATA_CARD_PAYMENT<-subset(CB_DATA,TYP_TRNSCTN_DESC=="Card payment")
+CB_DATA_CARD_PAYMENT<-subset(CB_DATA,TYP_TRNSCTN_DESC=="Card payments")
 CB_DATA_CARD_PAYMENT<-subset(CB_DATA_CARD_PAYMENT,TRMNL_LCTN_DESC=="Domestic (home or reference area)")
 CB_DATA_CARD_PAYMENT<-subset(CB_DATA_CARD_PAYMENT,RMT_INTTN_DESC=="Initiated either via remote or non-remote channel")
 CB_DATA_CARD_PAYMENT<-subset(CB_DATA_CARD_PAYMENT,UNIT_MEASURE=="EUR")
