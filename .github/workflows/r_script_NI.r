@@ -201,7 +201,7 @@ CSO_Date<-as.POSIXct(strptime(paste0("",as.POSIXct.default(CSO_cal$releasedate),
 
 CSO_event = data.frame(DTSTART = CSO_Date,
                        DTEND = CSO_Date+1,
-                       SUMMARY = paste(CSO_cal_XTS$title, "- ",CSO_cal_XTS$refperiod),
+                       SUMMARY = paste(CSO_cal$title, "- ",CSO_cal$refperiod),
                        LOCATION = c("CSO"),
                        transparent=TRUE)
 CSO_event <- CSO_event %>%
