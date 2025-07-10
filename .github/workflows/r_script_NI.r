@@ -231,10 +231,11 @@ G_ENDPOINT<-oauth_endpoint(authorize="https://accounts.google.com/o/oauth2/auth"
 cat("authentication begins")
 
 
-oauth_2 <- readRDS("C:/Users/flanami/Downloads/credentials_file_1.json")
+oauth_2 <- readRDS("credentials_file_1.json")
 oauth_2$refresh()
 
 cat("authentication ends")
+
 
 calendar_url <- "https://www.googleapis.com/calendar/v3/calendars/dbbeb10c7dfb750b8b154d76a51819b06cef189bee07023acd3fb944b5f31832@group.calendar.google.com/events"
 
