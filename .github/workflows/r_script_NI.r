@@ -12,7 +12,7 @@ library(purrr)
 library(curl)
 library(jsonlite)
 
-URL_<-c("https://www.nisra.gov.uk/upcoming-releases/date/2025?page=0")
+URL<-c("https://www.nisra.gov.uk/upcoming-releases/date/2025?page=0")
 NI_df<- read_html(URL)%>% html_nodes("ul") %>% html_text() %>% stringr::str_split("\n") %>% .[[5]]%>%  trimws() %>% data.frame()  %>% .[!.[1:nrow(.),]=="",] %>% data.frame()  
 
 URL_1<-c("https://www.nisra.gov.uk/upcoming-releases/date/2025?page=1")
