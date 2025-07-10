@@ -196,8 +196,7 @@ CSO_cal<-"https://cdn.cso.ie/static/data/ReleaseCalendar.json" %>%
   pluck("releases") %>%
   as.data.frame()
 
-
-CSO_Date<-as.POSIXct(strptime(paste0("",as.POSIXct.default(CSO_cal_XTS$releasedate), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
+CSO_Date<-as.POSIXct(strptime(paste0("",as.POSIXct.default(CSO_cal$releasedate), " 10:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))
 
 
 CSO_event = data.frame(DTSTART = CSO_Date,
