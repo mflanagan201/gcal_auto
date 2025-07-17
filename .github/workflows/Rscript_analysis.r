@@ -1502,7 +1502,7 @@ Body_weekly_email<-emayili::envelope(
 
   to=c("michael.flanagan@finance.gov.ie"
 
-  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Harry.Williamson@finance.gov.ie","Eoin.OFlaithearta@finance.gov.ie"),
+  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Harry.Williamson@finance.gov.ie","Eoin.OFlaithearta@finance.gov.ie","Louise.Heenan@finance.gov.ie","Leo.Redmond@finance.gov.ie","Paul.Lambert@finance.gov.ie","Daniel.Logan@finance.gov.ie"),
 
  
 
