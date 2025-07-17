@@ -105,7 +105,8 @@ bcc=c("Ian.Power@finance.gov.ie",
 "Harry.Williamson@finance.gov.ie",
 "Eamonn.Sweeney@finance.gov.ie",
 "Rachel.Sheehan@finance.gov.ie",
-"Eoin.OFlaithearta@finance.gov.ie"),
+"Eoin.OFlaithearta@finance.gov.ie",
+"Louise.Heenan@finance.gov.ie","Leo.Redmond@finance.gov.ie","Paul.Lambert@finance.gov.ie","Daniel.Logan@finance.gov.ie"),
 
     subject = "Macroeconomic Tables"
   ) %>%
