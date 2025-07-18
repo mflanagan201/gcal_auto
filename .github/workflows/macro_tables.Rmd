@@ -1,5 +1,5 @@
 ---
-title: <span class="text-center" style="color:#34495e"> <center> <font size="6">  **Maroeconomic Tables**  </font> </center> 
+title: <span class="text-center" style="color:#34495e"> <center> <font size="6">  **Macroeconomic Tables**  </font> </center> 
 
 </span>output: html_document
 ---
