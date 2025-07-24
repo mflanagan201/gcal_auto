@@ -840,7 +840,7 @@ event_all<-rbind(EVENTS_RELEASE_Monetary_Meeting,CSO_event,event_CB,EVENTS_IMF,E
 
  
 
-event_all =subset(event_all, !(SUMMARY %like any% c("%Equality and Discrimination Survey%","%Baby Names%","%Press Statement: CSO reveals most popular December Baby Names%","%Services Producer Price Index%","%Farm Structure Survey%","%Suicide%","%Fuel Oil Movements%","%Probation%","%Press Statement: CSO Launch Housing Hub%","%Monthly Mortality and Average Temperatures in Ireland%","%Educational Attainment%","%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
+event_all =subset(event_all, !(SUMMARY %like any% c("%SILC Poverty by Health Status%","%Equality and Discrimination Survey%","%Baby Names%","%Press Statement: CSO reveals most popular December Baby Names%","%Services Producer Price Index%","%Farm Structure Survey%","%Suicide%","%Fuel Oil Movements%","%Probation%","%Press Statement: CSO Launch Housing Hub%","%Monthly Mortality and Average Temperatures in Ireland%","%Educational Attainment%","%Sustainability of Personal ICT Devices%","%Press Statement: Transport Hub%","%Press Statement Women and Men in Ireland Hub%","%Household Digital Consumer Behaviour%",
 
                                                     "%Hospitality: A Value Chain Analysis%",
 
