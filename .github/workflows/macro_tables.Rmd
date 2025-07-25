@@ -13,6 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 #inflation weight
+
+
+
+
 library(httr)
 library(readxl)
 library(rvest)
@@ -569,11 +573,6 @@ colnames(inflation_GROWTH)<- c("inflation")
 
 Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
 
-TAX_URL<-c("https://databank.finance.gov.ie/FinDataBank.aspx?rep=TaxMthTrend")
-TAX<-read_table(TAX_URL) 
-
-
-
 #iterate through the exchequer releases 
 #extraction table 
 # isolate the indicator 
@@ -656,7 +655,7 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
         next # Skip to the next iteration if URL is not accessible
       }
       
-      message(paste("Accessing publication page:", publication_page_url))
+     # message(paste("Accessing publication page:", publication_page_url))
       
       # STEP 1: Establish an httr session handle and fetch the publication page HTML
       # This handle will manage cookies and ensure the correct Referer for subsequent requests.
@@ -665,7 +664,7 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       
       if (http_status(response_page)$category != "Success") {
         warning(paste("Failed to access publication page:", publication_page_url, "Status:", http_status(response_page)$reason))
-        message("Skipping to next format/date.")
+      #  message("Skipping to next format/date.")
         next 
       }
       
@@ -707,7 +706,7 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       
       temps <- tempfile(fileext = ".pdf")
       
-      message(paste("Attempting to download PDF from:", pdf_url_full))
+      #message(paste("Attempting to download PDF from:", pdf_url_full))
       
       response_pdf <- GET(pdf_url_full, handle = session_handle,
                           base_headers, # Include the base browser headers
@@ -716,11 +715,11 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       
       if (http_status(response_pdf)$category != "Success") {
         warning(paste("Failed to download PDF for date", date, "from", pdf_url_full, "Status:", http_status(response_pdf)$reason))
-        message("Response content (if any, for debugging): ", content(response_pdf, as = "text", encoding = "UTF-8"))
+       # message("Response content (if any, for debugging): ", content(response_pdf, as = "text", encoding = "UTF-8"))
         next 
       }
       
-      message(paste("Successfully downloaded PDF for date:", date, "to", temps))
+      #message(paste("Successfully downloaded PDF for date:", date, "to", temps))
       
       if (!file.exists(temps) || file.info(temps)$size == 0) {
         warning(paste("Downloaded PDF file is missing or empty for date:", date, "Skipping table extraction."))
