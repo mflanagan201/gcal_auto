@@ -94,7 +94,17 @@ for(i in 1:nrow(CALENDAR_ALL_short)){
 
     Body_MACRO_TABLE<-emayili::envelope(
     from = "mflanagan201@gmail.com",
-    to=c("mflanagan201@gmail.com"),
+    to=c("michael.flanagan@ec.europa.eu"),
+    subject = "Macroeconomic Tables"
+  ) %>%
+    emayili::render(".github/workflows/macro_tables.Rmd")  
+
+if(((format(Sys.Date(),"%a")==c("Fri")))){ 
+smtp(Body_MACRO_TABLE)  
+}
+
+     
+
 bcc=c("Ian.Power@finance.gov.ie",
 "David.Hughes@finance.gov.ie",
 "Joanne.Mulholland@finance.gov.ie",
@@ -106,15 +116,4 @@ bcc=c("Ian.Power@finance.gov.ie",
 "Eamonn.Sweeney@finance.gov.ie",
 "Rachel.Sheehan@finance.gov.ie",
 "Eoin.OFlaithearta@finance.gov.ie",
-"Louise.Heenan@finance.gov.ie","Leo.Redmond@finance.gov.ie","Paul.Lambert@finance.gov.ie","Daniel.Logan@finance.gov.ie"),
-
-    subject = "Macroeconomic Tables"
-  ) %>%
-    emayili::render(".github/workflows/macro_tables.Rmd")  
-
-if(((format(Sys.Date(),"%a")==c("Fri")))){ 
-smtp(Body_MACRO_TABLE)  
-}
-
-     
-
+"Louise.Heenan@finance.gov.ie","Leo.Redmond@finance.gov.ie","Paul.Lambert@finance.gov.ie","Daniel.Logan@finance.gov.ie")
