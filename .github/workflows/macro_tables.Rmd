@@ -860,7 +860,7 @@ for(i in 1:length(Exchequer_Statement$extracted_tables)){
 
 
 
-Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),(annual_growth_val[,2]),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y"))
+Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y"))
 colnames(Fiscal_indicators_xts)<-c("gross expenditure","expenditure overruns/underruns", "Tax Revenue","corporation tax")
 
 
@@ -983,7 +983,7 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
 
 temp_file <- tempfile(fileext = ".html")
 kableExtra::save_kable(Monthly_TABLE2, file = temp_file)
-webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 720, zoom = 1.2)
+webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 750, zoom = 1.2)
 
 
 
