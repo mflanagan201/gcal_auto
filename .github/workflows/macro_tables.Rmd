@@ -983,7 +983,7 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
 
 temp_file <- tempfile(fileext = ".html")
 kableExtra::save_kable(Monthly_TABLE2, file = temp_file)
-webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 750, zoom = 1.2)
+webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 780, zoom = 1.2)
 
 
 
@@ -1008,10 +1008,13 @@ Unemployment_Rate_XTS,
 HEADLINE_HICP_XTS,
 CORE_HICP_XTS,
 EXTERNAL_TRADE_VOL_XTS,
-EXTERNAL_TRADE_VAL_XTS
-) %>% .[301:nrow(.),] %>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.)
+EXTERNAL_TRADE_VAL_XTS,
+Fiscal_indicators_xts$`gross expenditure`,
+Fiscal_indicators_xts$`expenditure overruns/underruns`,
+Fiscal_indicators_xts$`Tax Revenue`,
+Fiscal_indicators_xts$`corporation tax`) %>% .[301:nrow(.),] %>% data.frame() %>%  cbind(Date_95_Monthly_EXTEND,.) %>% as.xts()
 
-colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Modified Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_MONTHLY_DF)<-c("Date","Retal Sales Index","Core Retal Sales Index","VAT","Central Bank Card Payment","Modified Service Index","Household Deposits","Payroll Employment","Unemployment Rate","Headline Inflation","Core Inflation","External Trade VOlume Index", "External Trade Value","Gross expenditure","Expenditure overrun (€m)", "Tax revenue","Corporation tax")
 
 MONTHLY_DATA_DOWNLOAD_ALL <- list('Monthly Data Levels' =DOWNLOAD_MONTHLY_DF)
 
