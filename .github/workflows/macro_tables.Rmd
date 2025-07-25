@@ -569,13 +569,313 @@ colnames(inflation_GROWTH)<- c("inflation")
 
 Deflated_VAT_GROWTH<-((1+(VAT_YTD_GROWTH/100))/(1+(inflation_GROWTH/100))-1)*100
 
+TAX_URL<-c("https://databank.finance.gov.ie/FinDataBank.aspx?rep=TaxMthTrend")
+TAX<-read_table(TAX_URL) 
+
+
+
+#iterate through the exchequer releases 
+#extraction table 
+# isolate the indicator 
+#place the indicator into a variable which can store across multiple iteratiions. 
+
+
+url_exists <- function(url) {
+  tryCatch({
+    status_code <- status_code(GET(url,custom_headers))
+    return(status_code == 200)
+  }, error = function(e) {
+    return(FALSE)
+  })
+}
+
+
+DATES_DOF_EXCHE <- seq(as.Date("01/01/2024",format="%d/%m/%Y"), as.Date(Sys.Date(),format="%B"), by = "months") %>% format(.,"%B-%Y") %>% tolower() %>% .[1:length(.)-1]
+url_formats <- c(DOF_FISCAL_MONITOR<-c("https://www.gov.ie/en/department-of-finance/publications/fiscal-monitor-%s/"))
+#for (date in DATES_DOF_EXCHE) {
+#  for (url_format in url_formats) {
+#    url <- sprintf(url_format, date)
+#    Sys.sleep((60))
+#    Sys.sleep(runif(1, min = 3, max = 10))
+#    if(url_exists(url)){
+    #print(url)
+#    }
+#  }
+#}
+
+# Make sure you have these libraries loaded at the beginning of your script:
+ # for stri_reverse, str_squish, str_split_fixed
+
+# Helper function to check URL existence using httr::HEAD
+# This is crucial as original url_exists might not handle 403s properly.
+# It uses HEAD request with proper headers to confirm accessibility.
+url_exists_httr <- function(url, headers) {
+  tryCatch({
+    res <- HEAD(url, headers, timeout(30)) # Add a timeout for robustness
+    # Check for a 200 OK status or a 3xx redirect (which means the URL exists, but moved)
+    status_code(res) %in% c(200, 301, 302, 307, 308) 
+  }, error = function(e) {
+    message(paste("Error checking URL existence for:", url, "-", e$message))
+    FALSE # Return FALSE on any error during the HEAD request
+  })
+}
+
+TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,indicator) {
+  
+  all_extracted_tables <- list()
+  all_annual_growth <- list()
+  all_annual_variance<-list()
+  indicator_table<-list()
+  
+  # Define a robust User-Agent string
+  user_agent_string <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  
+  # Base headers to mimic a typical browser request
+  base_headers <- add_headers(
+    `User-Agent` = user_agent_string,
+    `Accept` = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+    `Accept-Language` = "en-IE,en;q=0.9",
+    `Connection` = "keep-alive",
+    # Including Chrome's client hints, though often not strictly necessary for basic downloads
+    `sec-ch-ua` = "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
+    `sec-ch-ua-mobile` = "?0",
+    `sec-ch-ua-platform` = "\"Windows\""
+  )
+  
+  for (date in DATES_DOF_EXCHE) {
+    message(paste("\n--- Processing date:", date, "---"))
+    
+    for (url_format in url_formats) {
+      publication_page_url <- sprintf(url_format, date)
+      
+      Sys.sleep(runif(1, min = 3, max = 10))
+      
+      message(paste("Checking accessibility of publication page:", publication_page_url))
+      if (!url_exists_httr(publication_page_url, base_headers)) {
+        message(paste("URL does not exist or is not accessible:", publication_page_url, "Skipping to next format/date."))
+        next # Skip to the next iteration if URL is not accessible
+      }
+      
+      message(paste("Accessing publication page:", publication_page_url))
+      
+      # STEP 1: Establish an httr session handle and fetch the publication page HTML
+      # This handle will manage cookies and ensure the correct Referer for subsequent requests.
+      session_handle <- handle(publication_page_url) 
+      response_page <- GET(publication_page_url, handle = session_handle, base_headers, timeout(60))
+      
+      if (http_status(response_page)$category != "Success") {
+        warning(paste("Failed to access publication page:", publication_page_url, "Status:", http_status(response_page)$reason))
+        message("Skipping to next format/date.")
+        next 
+      }
+      
+      message("Successfully accessed publication page. Parsing HTML for PDF link.")
+      
+      # Parse the HTML content *from the response* to find the PDF link
+      # Use content(response_page) to get the raw HTML from the successful GET request
+      html_content <- content(response_page, "text", encoding = "UTF-8")
+      parsed_html <- read_html(html_content)
+      
+      # Extract all 'href' attributes from <a> tags with class 'gi-link' within 'main'
+      pdf_links_found <- parsed_html %>% 
+        html_nodes("main") %>% 
+        html_elements("a.gi-link") %>% 
+        html_attr("href")
+      
+      if (length(pdf_links_found) == 0) {
+        warning(paste("No 'gi-link' elements found for PDF on page:", publication_page_url))
+        next
+      }
+      
+      pdf_relative_path <- NULL
+      pdf_link_index <- which(str_detect(pdf_links_found, "\\.pdf$"))
+      if (length(pdf_link_index) > 0) {
+        pdf_relative_path <- pdf_links_found[pdf_link_index[1]] # Take the first one found
+      } else {
+        if (length(pdf_links_found) >= 2) {
+          pdf_relative_path <- pdf_links_found[2] 
+          warning(paste("No explicit .pdf link found. Falling back to second 'gi-link' for:", publication_page_url))
+        }
+      }
+      
+      if (is.null(pdf_relative_path)) {
+        warning(paste("Could not confidently identify PDF link on page:", publication_page_url))
+        next
+      }
+      
+      pdf_url_full <- url_absolute(pdf_relative_path, publication_page_url) 
+      
+      temps <- tempfile(fileext = ".pdf")
+      
+      message(paste("Attempting to download PDF from:", pdf_url_full))
+      
+      response_pdf <- GET(pdf_url_full, handle = session_handle,
+                          base_headers, # Include the base browser headers
+                          write_disk(temps, overwrite = TRUE),
+                          timeout(120)) # Increase timeout for large PDF downloads
+      
+      if (http_status(response_pdf)$category != "Success") {
+        warning(paste("Failed to download PDF for date", date, "from", pdf_url_full, "Status:", http_status(response_pdf)$reason))
+        message("Response content (if any, for debugging): ", content(response_pdf, as = "text", encoding = "UTF-8"))
+        next 
+      }
+      
+      message(paste("Successfully downloaded PDF for date:", date, "to", temps))
+      
+      if (!file.exists(temps) || file.info(temps)$size == 0) {
+        warning(paste("Downloaded PDF file is missing or empty for date:", date, "Skipping table extraction."))
+        next
+      }
+      
+      PDF_text_content <- tryCatch({
+        pdf_text(temps) %>% readr::read_lines()
+      }, error = function(e) {
+        warning(paste("Error extracting text from PDF for date:", date, "-", e$message))
+        return(NULL) 
+      })
+      
+      if (is.null(PDF_text_content)) {
+        next 
+      }
+      
+      lines <- unlist(str_split(PDF_text_content, "\n"))
+      
+      if (!any(stringr::str_detect(lines, tablename))) {
+        warning(paste("Table name '", tablename, "' not found in PDF for date:", date))
+        next
+      }
+      
+      start_line_index <- last(which(stringr::str_detect(lines, tablename)))
+      
+      end_line_index <- min(start_line_index + tablerows, length(lines))
+      
+      if (end_line_index < start_line_index) { # Check if calculated end is before start
+        warning(paste("Not enough lines after table name '", tablename, "' for date:", date))
+        next
+      }
+      
+      
+      Expenditure<-PDF_text_content
+      Expenditure <- lines[start_line_index:end_line_index]
+      
+
+     # if(format(as.Date(paste0("01-", date), format = "%d-%B-%Y"),"%B") == c("January")){
+        
+        table1<-Expenditure
+        spending_row_index <- which(Expenditure %like any% c(paste(indicator)))[1]
+        indicator_table[[as.character(date)]] <- Expenditure[spending_row_index]
+        
+        
+        
+        
+    #    [j])), " ", n = 5)
+     #   table1[j, ] <- stri_reverse(split_line)
+    #  }
+        
+    #    } else {
+          
+     #   table1 <- data.frame(matrix(NA, nrow = length(Expenditure),ncol=11), stringsAsFactors = FALSE)
+          
+    #    for (j in 1:length(Expenditure)) {
+     #     split_line <- str_split_fixed(str_squish(stri_reverse(Expenditure[j])), " ", n = 11)
+    #      table1[j, ] <- stri_reverse(split_line)
+     #   }
+          
+      #  }
+      
+#      table1<- table1[, rev(seq_len(ncol(table1))), drop = FALSE]
+      all_extracted_tables[[as.character(date)]] <- table1
+      
+ #     if (any(table1[[1]] %like any% c(paste(indicator)), na.rm = TRUE)) {
+  #      spending_row_index <- which(table1[[1]] %like any% c(paste(indicator)))[1]
+   #     indicator_table[[as.character(date)]] <- table1[spending_row_index,]
+         
+    #  }
+    }
+     unlink(temps)
+  }
+  return(list(extracted_tables = all_extracted_tables,indicator_row=indicator_table))
+  
+}
+
+table2<-TABLEEXTRACTION("Analysis of Net Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Cumulative Voted Spending%","%Total Net cumulative Voted Spending%","%Total Net Cumulative Voted Spending%"))
+
+
+annual_growth_val<-matrix(NA, nrow=length(table2$extracted_tables),ncol=2)
+
+for(i in 1:length(table2$extracted_tables)){ 
+          if(format(as.Date(paste0("01-", DATES_DOF_EXCHE[i]), format = "%d-%B-%Y"),"%B") == c("January")){
+            votedspending_df<-(str_split_fixed(str_squish(stri_reverse(table2$indicator_row[i])), " ", n = 5))%>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+          names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
+          annual_growth_val[i,1] <- votedspending_df$yoygrowthFY 
+          
+          } else {
+            votedspending_df<-(str_split_fixed(str_squish(stri_reverse(table2$indicator_row[i])), " ", n = 11))%>% stri_reverse() %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 11) %>% data.frame()
+            names(votedspending_df)<-c("name","profile","outturn","variance","yoy", "yoygrowth","currentFY","lastFY","yoyFY","yoygrowthFY")
+            annual_growth_val[i,1] <- votedspending_df$currentFY 
+            annual_growth_val[i,2] <- votedspending_df$variance
+          }
+  }
+
+
+
+CT_TABLE<-TABLEEXTRACTION("Analysis of Taxation Receipts",25,DATES_DOF_EXCHE,url_formats,c("%Corporation Tax%"))
+            
+CT_annual_growth<-matrix(NA, nrow=length(CT_TABLE$indicator_row),ncol=1)
+
+for(i in 1:length(CT_TABLE$extracted_tables)){ 
+    votedspending_df<-(str_split_fixed(str_squish(stri_reverse(CT_TABLE$indicator_row[i])), " ", n = 5)) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+    names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
+    CT_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
+}
+
+Fiscal_indicators_xts<-data.frame(annual_growth_val,CT_annual_growth) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y"))
+colnames(Fiscal_indicators_xts)<-c("gross expenditure","expenditure overruns/underruns", "corporation tax")
 
 
 
 
-summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth) %>% .["2024-10-01/"]  %>% data.frame() %>% round(1) %>% t() 
+
+
+
+Exchequer_Statement<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"))
+
+
+tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement$extracted_tables),ncol=1)
+for(i in 1:length(Exchequer_Statement$extracted_tables)){ 
+  votedspending_df<-(str_split_fixed(str_squish(stri_reverse(Exchequer_Statement$indicator_row[i])), " ", n = 5)) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+  names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
+  tax_revenue_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
+}
+
+
+Exchequer_Statement_Expenditure<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"))
+
+
+tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement$extracted_tables),ncol=1)
+for(i in 1:length(Exchequer_Statement$extracted_tables)){ 
+  votedspending_df<-(str_split_fixed(str_squish(stri_reverse(Exchequer_Statement$indicator_row[i])), " ", n = 5)) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+  names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
+  tax_revenue_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
+}
+
+
+
+Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),(annual_growth_val[,2]),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y"))
+colnames(Fiscal_indicators_xts)<-c("gross expenditure","expenditure overruns/underruns", "Tax Revenue","corporation tax")
+
+
+
+
+summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth,Fiscal_indicators_xts$`gross expenditure`,Fiscal_indicators_xts$`expenditure overruns/underruns`,Fiscal_indicators_xts$`Tax Revenue`,Fiscal_indicators_xts$`corporation tax`)
+
+
+
+
+
+) %>% .["2024-10-01/"]  %>% data.frame() %>% round(1) %>% t() 
 colnames(summary_consumer)<-c(format(as.Date(colnames(summary_consumer)),"%b %y"))
-rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Modified Services","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","External Trade Volume","External Trade Value")
+rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Modified Services","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","External Trade Volume","External Trade Value","Gross expenditure","Expenditure overrun (€m)", "Tax revenue","Corporation tax")
 
 
 Quarterly_consumer_Table<-merge(Consumption_Q_Annual_growth$Consumption,Deflated_VAT_Quarterly_GROWTH, Retail_Quarterly_yoy_growth,Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY
@@ -681,10 +981,11 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
   pack_rows("Labour Market", 7, 8,label_row_css = "background-color: #34495e; color: #fff;") %>% 
   pack_rows("Prices", 9, 10,label_row_css = "background-color: #34495e; color: #fff;") %>% 
   pack_rows("External Trade", 11, 12,label_row_css = "background-color: #34495e; color: #fff;") %>% 
+  pack_rows("Fiscal Indicators", 13, 16,label_row_css = "background-color: #34495e; color: #fff;") %>% 
   column_spec(1,include_thead = TRUE) %>%
   row_spec(0,bold=TRUE, angle=0, align = "c") %>% 
   column_spec(ncol(summary_consumer),include_thead = FALSE) %>%    
-  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP."))    
+  add_footnote( c("all growth rates are in year on year terms.", "VAT is expressed in YTD terms given the seasonality in the data. VAT is deflated by YTD HICP.","Fiscal indicators are expressed in cummulative terms"))    
 
 
 temp_file <- tempfile(fileext = ".html")
