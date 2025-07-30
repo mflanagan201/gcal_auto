@@ -983,7 +983,7 @@ Monthly_TABLE2<-kbl(summary_consumer,caption = "", booktabs = TRUE, bold=TRUE, c
 
 temp_file <- tempfile(fileext = ".html")
 kableExtra::save_kable(Monthly_TABLE2, file = temp_file)
-webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 780, zoom = 1.2)
+webshot::webshot(temp_file, file = "table_image.png", cliprect = "viewport", vwidth = 900,vheight = 830, zoom = 1.2)
 
 
 
