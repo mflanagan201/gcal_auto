@@ -703,8 +703,10 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       }
       
       pdf_url_full <- url_absolute(pdf_relative_path, publication_page_url) 
-      
       temps <- tempfile(fileext = ".pdf")
+on.exit(unlink(temps), add = TRUE)
+
+      
       
       #message(paste("Attempting to download PDF from:", pdf_url_full))
       
