@@ -832,23 +832,22 @@ for(i in 1:length(CT_TABLE$extracted_tables)){
 DATES_DOF_EXCHE<- seq(as.Date("01/01/2024",format="%d/%m/%Y"), as.Date(Sys.Date(),format="%B"), by = "months") %>% format(.,"%B-%Y") %>% tolower() %>% .[1:length(.)-1]
 
 
-DATES_DOF_EXCHE_CHECK<-data.frame(matrix(NA,nrow=length(DATES_DOF_EXCHE),ncol=1))
+DATES_DOF_EXCHE_CHECK<-DATES_DOF_EXCHE
 
+#url_formats <- #c(DOF_FISCAL_MONITOR<-c("https://www.gov.ie/en#/department-of-finance/publications/fiscal#-monitor-%s/"))
 
-url_formats <- c(DOF_FISCAL_MONITOR<-c("https://www.gov.ie/en/department-of-finance/publications/fiscal-monitor-%s/"))
+#for (i in 1:length(DATES_DOF_EXCHE)) {
+# for (url_format in url_formats) {
+#   url <- sprintf(url_formats, date)
+#   Sys.sleep((60))
+#   Sys.sleep(runif(1, min = 3, max = 10))
+#   if(url_exists(url)){
+   #DATES_DOF_EXCHE_CHECK[i,]<-paste(DATES_DOF_EXCHE#[i,])
+#   }
+# }
+#}
 
-for (i in 1:length(DATES_DOF_EXCHE)) {
- for (url_format in url_formats) {
-   url <- sprintf(url_formats, date)
-   Sys.sleep((60))
-   Sys.sleep(runif(1, min = 3, max = 10))
-   if(url_exists(url)){
-   DATES_DOF_EXCHE_CHECK[i,]<-paste(DATES_DOF_EXCHE[i,])
-   }
- }
-}
-
-DATES_DOF_EXCHE_CHECK<-na.omit(DATES_DOF_EXCHE_CHECK)
+#DATES_DOF_EXCHE_CHECK<-na.omit(DATES_DOF_EXCHE_CHECK)
 
 
 Fiscal_indicators_xts<-data.frame(annual_growth_val,CT_annual_growth) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE_CHECK), format = "%d-%B-%Y"))
