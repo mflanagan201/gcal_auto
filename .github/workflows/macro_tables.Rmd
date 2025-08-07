@@ -793,7 +793,7 @@ on.exit(unlink(temps), add = TRUE)
          
     #  }
     }
-     unlink(temps)
+    
   }
   return(list(extracted_tables = all_extracted_tables,indicator_row=indicator_table))
   
