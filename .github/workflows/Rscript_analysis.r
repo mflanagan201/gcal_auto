@@ -1490,7 +1490,7 @@ smtp <- emayili::server(host = "smtp.gmail.com",
 
                         username = "mflanagan201@gmail.com",
 
-                        password = "ddauvuifpknvsobo")
+                        password = "lbjmgamlgnanfrsd")
 
  
 
