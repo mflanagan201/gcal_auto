@@ -898,7 +898,7 @@ for(i in 1:length(Exchequer_Statement[[1]])){
 
 
 
-Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y")) %>% data.frame(index(.),.) %>% as.xts()
+Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y")) %>% data.frame(index(.),.) %>% as.xts(dateFormat = "Date")
 colnames(Fiscal_indicators_xts)<-c("Date","gross expenditure","expenditure overruns/underruns", "Tax Revenue","corporation tax")
 
 
@@ -937,7 +937,7 @@ options(knitr.kable.NA = '')
 library(htmltools)
 library(formattable)
 
-Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)], caption = "", booktabs = TRUE, bold=TRUE, colour=DOF_colours[1],align = "c",format = "html") %>%
+Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)-1], caption = "", booktabs = TRUE, bold=TRUE, colour=DOF_colours[1],align = "c",format = "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = T) %>% 
   kable_paper("basic", full_width = T) %>%
   pack_rows("Consumer Spending", 1, 5,label_row_css = "background-color: #34495e; color: #fff;") %>%
@@ -1067,6 +1067,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
