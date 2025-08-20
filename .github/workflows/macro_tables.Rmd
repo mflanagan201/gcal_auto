@@ -618,8 +618,14 @@ url_exists_httr <- function(url, headers) {
     FALSE # Return FALSE on any error during the HEAD request
   })
 }
-
-TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,indicator) {
+TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,indicator,existingtable) {
+  existing<-excel_sheet_reader(paste(existingtable))
+  
+  date_existing<-tolower(format(as.Date(paste0("01-", names(existing)),format="%d-%b-%Y"),"%B-%Y"))
+  DATES_DOF_EXCHE<-(DATES_DOF_EXCHE[!(DATES_DOF_EXCHE %like any% date_existing)]) %>% na.omit()
+  if(!is.na(DATES_DOF_EXCHE[1])) {
+    
+    
   
   all_extracted_tables <- list()
   all_annual_growth <- list()
@@ -659,8 +665,9 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       
       # STEP 1: Establish an httr session handle and fetch the publication page HTML
       # This handle will manage cookies and ensure the correct Referer for subsequent requests.
+      Sys.sleep(runif(1, 1, 3))
       session_handle <- handle(publication_page_url) 
-      response_page <- GET(publication_page_url, handle = session_handle, base_headers, timeout(60))
+      response_page <- GET(publication_page_url, handle = session_handle, base_headers, timeout(200))
       
       if (http_status(response_page)$category != "Success") {
         warning(paste("Failed to access publication page:", publication_page_url, "Status:", http_status(response_page)$reason))
@@ -683,6 +690,8 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       
       if (length(pdf_links_found) == 0) {
         warning(paste("No 'gi-link' elements found for PDF on page:", publication_page_url))
+        Sys.sleep(runif(1, 1, 3))
+
         next
       }
       
@@ -699,29 +708,31 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
       
       if (is.null(pdf_relative_path)) {
         warning(paste("Could not confidently identify PDF link on page:", publication_page_url))
+        Sys.sleep(runif(1, 1, 3))
         next
       }
       
       pdf_url_full <- url_absolute(pdf_relative_path, publication_page_url) 
       temps <- tempfile(fileext = ".pdf")
-on.exit(unlink(temps), add = TRUE)
+      on.exit(unlink(temps), add = TRUE)
 
       
       
-      #message(paste("Attempting to download PDF from:", pdf_url_full))
-      
+      message(paste("Attempting to download PDF from:", pdf_url_full))
+      Sys.sleep(runif(1, 1.5, 3))    
       response_pdf <- GET(pdf_url_full, handle = session_handle,
                           base_headers, # Include the base browser headers
                           write_disk(temps, overwrite = TRUE),
-                          timeout(120)) # Increase timeout for large PDF downloads
+                          timeout(240)) # Increase timeout for large PDF downloads
       
       if (http_status(response_pdf)$category != "Success") {
         warning(paste("Failed to download PDF for date", date, "from", pdf_url_full, "Status:", http_status(response_pdf)$reason))
-       # message("Response content (if any, for debugging): ", content(response_pdf, as = "text", encoding = "UTF-8"))
+        message("Response content (if any, for debugging): ", content(response_pdf, as = "text", encoding = "UTF-8"))
+        Sys.sleep(runif(1, 1, 3))
         next 
       }
       
-      #message(paste("Successfully downloaded PDF for date:", date, "to", temps))
+      message(paste("Successfully downloaded PDF for date:", date, "to", temps))
       
       if (!file.exists(temps) || file.info(temps)$size == 0) {
         warning(paste("Downloaded PDF file is missing or empty for date:", date, "Skipping table extraction."))
@@ -785,7 +796,7 @@ on.exit(unlink(temps), add = TRUE)
       #  }
       
 #      table1<- table1[, rev(seq_len(ncol(table1))), drop = FALSE]
-      all_extracted_tables[[as.character(date)]] <- table1
+      all_extracted_tables[[as.character(date)]] <- indicator_table[[as.character(date)]]
       
  #     if (any(table1[[1]] %like any% c(paste(indicator)), na.rm = TRUE)) {
   #      spending_row_index <- which(table1[[1]] %like any% c(paste(indicator)))[1]
@@ -795,23 +806,28 @@ on.exit(unlink(temps), add = TRUE)
     }
     
   }
-  return(list(extracted_tables = all_extracted_tables,indicator_row=indicator_table))
   
+  TABLE<-(list(existing,all_extracted_tables,extracted_tables = all_extracted_tables))
+  } else {
+  TABLE<-(list(existing))
+  }
+  write.xlsx(c(existing[1:length(existing)],TABLE$extracted_tables), file=paste(existingtable))
+  return(TABLE)
 }
 
-table2<-TABLEEXTRACTION("Analysis of Net Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Cumulative Voted Spending%","%Total Net cumulative Voted Spending%","%Total Net Cumulative Voted Spending%"))
+table2<-TABLEEXTRACTION("Analysis of Net Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Total Gross Cumulative Voted Spending%"),"VOTEDSPENDING.XLSX")
 
 
-annual_growth_val<-matrix(NA, nrow=length(table2$extracted_tables),ncol=2)
+annual_growth_val<-matrix(NA, nrow=length(table2[[1]]),ncol=2)
 
-for(i in 1:length(table2$extracted_tables)){ 
+for(i in 1:length(table2[[1]])){ 
           if(format(as.Date(paste0("01-", DATES_DOF_EXCHE[i]), format = "%d-%B-%Y"),"%B") == c("January")){
-            votedspending_df<-(str_split_fixed(str_squish(stri_reverse(table2$indicator_row[i])), " ", n = 5))%>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(table2[[1]][[i]]))))))," ",n=5) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
           names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
           annual_growth_val[i,1] <- votedspending_df$yoygrowthFY 
           
           } else {
-            votedspending_df<-(str_split_fixed(str_squish(stri_reverse(table2$indicator_row[i])), " ", n = 11))%>% stri_reverse() %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 11) %>% data.frame()
+  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(table2[[1]][[i]]))))))," ",n=11) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 11) %>% data.frame()
             names(votedspending_df)<-c("name","profile","outturn","variance","yoy", "yoygrowth","currentFY","lastFY","yoyFY","yoygrowthFY")
             annual_growth_val[i,1] <- votedspending_df$currentFY 
             annual_growth_val[i,2] <- votedspending_df$variance
@@ -820,12 +836,12 @@ for(i in 1:length(table2$extracted_tables)){
 
 
 
-CT_TABLE<-TABLEEXTRACTION("Analysis of Taxation Receipts",25,DATES_DOF_EXCHE,url_formats,c("%Corporation Tax%"))
+CT_TABLE<-TABLEEXTRACTION("Analysis of Taxation Receipts",25,DATES_DOF_EXCHE,url_formats,c("%Corporation Tax%"),"ct.xlsx")
             
-CT_annual_growth<-matrix(NA, nrow=length(CT_TABLE$indicator_row),ncol=1)
+CT_annual_growth<-matrix(NA, nrow=length(CT_TABLE[[1]]),ncol=1)
 
-for(i in 1:length(CT_TABLE$extracted_tables)){ 
-    votedspending_df<-(str_split_fixed(str_squish(stri_reverse(CT_TABLE$indicator_row[i])), " ", n = 5)) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+for(i in 1:length(CT_TABLE[[1]])){ 
+votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(CT_TABLE[[1]][[i]]))))))," ",n=5) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
     names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
     CT_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
 }
@@ -852,41 +868,24 @@ DATES_DOF_EXCHE_CHECK<-DATES_DOF_EXCHE
 #DATES_DOF_EXCHE_CHECK<-na.omit(DATES_DOF_EXCHE_CHECK)
 
 
-Fiscal_indicators_xts<-data.frame(annual_growth_val,CT_annual_growth) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE_CHECK), format = "%d-%B-%Y"))
-colnames(Fiscal_indicators_xts)<-c("gross expenditure","expenditure overruns/underruns", "corporation tax")
+
+Exchequer_Statement<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"),"tax_revenue.xlsx")
 
 
-
-
-
-
-
-Exchequer_Statement<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"))
-
-
-tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement$extracted_tables),ncol=1)
-for(i in 1:length(Exchequer_Statement$extracted_tables)){ 
-  votedspending_df<-(str_split_fixed(str_squish(stri_reverse(Exchequer_Statement$indicator_row[i])), " ", n = 5)) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
-  names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
+tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement[[1]]),ncol=1)
+for(i in 1:length(Exchequer_Statement[[1]])){ 
+  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(Exchequer_Statement[[1]][[i]]))))))," ",n=4) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 4) %>% data.frame()
+  names(votedspending_df)<-c("name","currentFY","lastFY","yoygrowthFY")
   tax_revenue_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
 }
 
 
-Exchequer_Statement_Expenditure<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"))
-
-
-tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement$extracted_tables),ncol=1)
-for(i in 1:length(Exchequer_Statement$extracted_tables)){ 
-  votedspending_df<-(str_split_fixed(str_squish(stri_reverse(Exchequer_Statement$indicator_row[i])), " ", n = 5)) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
-  names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
-  tax_revenue_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
-}
+#Exchequer_Statement_Expenditure<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"),"tax_revenue.xlsx")
 
 
 
-Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y"))
-colnames(Fiscal_indicators_xts)<-c("gross expenditure","expenditure overruns/underruns", "Tax Revenue","corporation tax")
-
+Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y")) %>% data.frame(index(.),.)
+colnames(Fiscal_indicators_xts)<-c("Date","gross expenditure","expenditure overruns/underruns", "Tax Revenue","corporation tax")
 
 
 
@@ -1054,4 +1053,5 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
