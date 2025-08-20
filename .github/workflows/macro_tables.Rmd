@@ -79,6 +79,20 @@ YTD <- function(x){
 }
 
 
+
+excel_sheet_reader <- function(filename) {
+    sheets <- excel_sheets(filename)
+    x <- lapply(sheets, function(X) read_excel(filename, sheet = X))
+    names(x) <- sheets
+    x
+}
+
+
+
+
+
+
+
 cso_clear_cache() 
 
 
@@ -1053,5 +1067,6 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
