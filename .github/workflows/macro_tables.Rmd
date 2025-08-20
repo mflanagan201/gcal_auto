@@ -898,7 +898,7 @@ for(i in 1:length(Exchequer_Statement[[1]])){
 
 
 
-Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y")) %>% data.frame(index(.),.)
+Fiscal_indicators_xts<-data.frame(str_replace(annual_growth_val[,1],"%",""),str_replace(annual_growth_val[,2],",",""),str_replace(tax_revenue_annual_growth,"%",""),str_replace(CT_annual_growth,"%","")) %>% as.xts(order.by=as.Date(paste0("01-", DATES_DOF_EXCHE), format = "%d-%B-%Y")) %>% data.frame(index(.),.) %>% as.xts()
 colnames(Fiscal_indicators_xts)<-c("Date","gross expenditure","expenditure overruns/underruns", "Tax Revenue","corporation tax")
 
 
@@ -1067,6 +1067,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
