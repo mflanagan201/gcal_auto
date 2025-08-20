@@ -59,7 +59,7 @@ jobs:
        git config --local user.email "mflanagan202@gmail.com"
        git config --local user.name "mflanagan201"
        git add .
-       git commit -m "Add Inflation_contributions_graph_data.XLSX, Waterfall_graph_data.XLSX, trimmed_graph_data.XLSX, MEGA_DATA_DOWNLOAD.xlsx,MONTHLY_DATA_DOWNLOAD_ALL.xlsx,QUARTERLY_DATA_DOWNLOAD_ALL.xlsx, SUMMARY_EXPORT_DATA_DOWNLOAD.xlsx and EXPORT_DATA_DOWNLOAD_ALL.xlsx"
+       git commit -m "Add Inflation_contributions_graph_data.XLSX, Waterfall_graph_data.XLSX, trimmed_graph_data.XLSX, MEGA_DATA_DOWNLOAD.xlsx,VOTEDSPENDING.XLSX,ct.xlsx,tax_revenue.xlsx,MONTHLY_DATA_DOWNLOAD_ALL.xlsx,QUARTERLY_DATA_DOWNLOAD_ALL.xlsx, SUMMARY_EXPORT_DATA_DOWNLOAD.xlsx and EXPORT_DATA_DOWNLOAD_ALL.xlsx"
        git pull --rebase origin main # Use rebase to avoid a merge commit
        # Resolve any conflicts that may arise during the pull
        git push
