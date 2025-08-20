@@ -87,6 +87,16 @@ for(i in 1:nrow(CALENDAR_ALL_short)){
 
   
 
+    Body_MACRO_TABLE_TEST<-emayili::envelope(
+    from = "mflanagan201@gmail.com",
+    to=c("michael.flanagan@ec.europa.eu"),
+    subject = "Macroeconomic Tables"
+  ) %>%
+    emayili::render(".github/workflows/macro_tables.Rmd")  
+
+smtp(Body_MACRO_TABLE_TEST)  
+
+
 
 
 
@@ -116,5 +126,6 @@ smtp(Body_MACRO_TABLE)
 }
 
      
+
 
 
