@@ -938,12 +938,12 @@ colnames(Fiscal_indicators_xts)<-c("Date","gross expenditure","expenditure overr
 
 summary_consumer<-merge(retail_Annual$`Retail Sales (y-o-y`,retail_Annual$`Core Retail Sales (y-o-y`,Deflated_VAT_MONTHLY_GROWTH$VAT,Deflated_ALL_CB_PAYMENTS_GROWTH,Services_Vol_M_Growth,HH_DEPOSITS_annual_growth,PMOD_XTS_Growth,Unemployment_Rate_XTS,HEADLINE_HICP_GROWTH,CORE_HICP_GROWTH,EXTERNAL_TRADE_VOL_XTS_Growth,EXTERNAL_TRADE_VAL_XTS_Growth,Fiscal_indicators_xts$`gross expenditure`,Fiscal_indicators_xts$`expenditure overruns/underruns`,Fiscal_indicators_xts$`Tax Revenue`,Fiscal_indicators_xts$`corporation tax`) %>% .["2024-10-01/"]  %>% data.frame() %>% round(1) %>% t() 
 colnames(summary_consumer)<-c(format(as.Date(colnames(summary_consumer)),"%b %y"))
-rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Modified Services","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","External Trade Volume","External Trade Value","Gross expenditure","Expenditure overrun (€m)", "Tax revenue","Corporation tax")
+rownames(summary_consumer)<-c("Retail Sales","Core Retail Sales","Real VAT","Real Card Spending","Modified Services","Deposits","Payroll Employment" ,"Unemployment Rate","Inflation","Core Inflation","External Trade Volume","External Trade Value","Gross expenditure","Expend. overrun (€m)", "Tax revenue","Corporation tax")
 
 
 Quarterly_consumer_Table<-merge(Consumption_Q_Annual_growth$Consumption,Deflated_VAT_Quarterly_GROWTH, Retail_Quarterly_yoy_growth,Deflated_ALL_CB_PAYMENTS_GROWTH_QUARTERLY
                                 ,Services_Vol_Q_Growth,COE_PER_CAPITA_XTS_Growth,Deflated_GDI_PER_CAPITA_XTS_Growth,Average_Hourly_Earnings_XTS_GROWTH,HH_Deposits_ANNUAL_growth,HICP_QUARTERLY_GROWTH,sr,Employment_XTS_Growth,PMOD_XTS_QUARTERLY_GROWTH,Unemployment_Rate_QUARTERLY,GDP_Q_Annual_growth,EXPORTS_Q_ANNUAL_GROWTH,EXTERNAL_TRADE_VOL_XTS_QUARTERLY_GROWTH,EXTERNAL_TRADE_VAL_XTS_QUARTERLY_GROWTH,GGE_XTS_Growth,GGR_XTS_Growth,GGB_GDP_RATIO) %>% .["2023-10-01/"]   %>% round(1) %>% t()
-rownames(Quarterly_consumer_Table)<-c("Consumption","Real VAT (YTD)","Retail Sales","Real Card Spending","Service Index","Comp of Employees per person","Real Disposable Income per person","Average Hourly Earnings","Household Deposits", "Inflation Rate", "Savings Rate","Employment Growth", "Payroll Employment", "Unemployment Rate","GDP","Total Exports","External Trade Volume","External Trade Value","GG Revenue Growth","GG Expenditure Growth","GGB Ratio")
+rownames(Quarterly_consumer_Table)<-c("Consumption","Real VAT (YTD)","Retail Sales","Real Card Spending","Service Index","Comp of Employees per person","Real Dispos Income per person","Average Hourly Earnings","Household Deposits", "Inflation Rate", "Savings Rate","Employment Growth", "Payroll Employment", "Unemployment Rate","GDP","Total Exports","External Trade Volume","External Trade Value","GG Expenditure Growth","GG Revenue Growth","GGB Ratio")
 colnames(Quarterly_consumer_Table)<-colnames(Quarterly_consumer_Table) %>% as.Date() %>% as.yearqtr("%Y") %>% paste()
 
 
@@ -987,7 +987,7 @@ Quarterly_TABLE2<-kbl(Quarterly_consumer_Table[,1:ncol(Quarterly_consumer_Table)
 temp_file2 <- tempfile(fileext = ".html")
 kableExtra::save_kable(Quarterly_TABLE2, file = temp_file2)
 
-webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 1000, zoom = 1.2)
+webshot::webshot(temp_file2, file = "table_image2.png", cliprect = "viewport", vwidth = 900,vheight = 1100, zoom = 1.2)
 
 
 Date_95_QNA_EXTEND<-seq(from=as.Date("1995/01/01"), to=as.Date("2030/10/01"), by="quarters")
@@ -1010,10 +1010,13 @@ Unemployment_Rate_QUARTERLY,
 GDP,
 EXPORTS_Q,
 EXTERNAL_TRADE_VOL_XTS_QUARTERLY,
-EXTERNAL_TRADE_VAL_XTS_QUARTERLY
+EXTERNAL_TRADE_VAL_XTS_QUARTERLY,
+GGE_XTS,
+GGR_XTS,
+GGB_XTS
 ) %>% data.frame() %>% .[101:nrow(.),] %>% cbind(Date_95_QNA_EXTEND,.)
 
-colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Modified Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value")
+colnames(DOWNLOAD_QUARTERLY_DF)<-c("Date","consumption","VAT","Retail Sales","Central Bank Card Payment","Modified Services Index","Compensation of Employees","Population","Gross Disposable Income", "Average Hourly Earnings","Household Deposits","HICP Index","Savings Rate","Employment level","Payroll employment","Unemployment Rate","GDP","Exports","External Trade VOlume Index", "External Trade Value","GG Expenditure","GG Revenue","GG Balance")
 
 QUARTERLY_DATA_DOWNLOAD_ALL <- list('Quarterly Data Levels' =DOWNLOAD_QUARTERLY_DF)
 
@@ -1102,6 +1105,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
