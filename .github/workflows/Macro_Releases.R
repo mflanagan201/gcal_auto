@@ -41,7 +41,7 @@ CALENDAR_ALL_short<-read.csv("ECON_CAL.CSV")
 smtp <- server(host = "smtp.gmail.com",
                port = 465,
                username = "mflanagan201@gmail.com",
-               password = "ddauvuifpknvsobo")
+               password = "lbjmgamlgnanfrsd")
 
 
 
@@ -126,6 +126,7 @@ smtp(Body_MACRO_TABLE)
 }
 
      
+
 
 
 
