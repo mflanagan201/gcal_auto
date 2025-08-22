@@ -188,6 +188,14 @@ CB_URL_Monthly<-"https://opendata.centralbank.ie/dataset/monthly-card-payment-st
 CB_URL_Monthly_download<-read_html(CB_URL_Monthly)
 CB_URL_Monthly_download_text<-CB_URL_Monthly_download %>% html_nodes("li.resource-item")
 CB_URL_Monthly_download_text2<-(CB_URL_Monthly_download_text[[2]])   %>% html_attrs() %>% data.frame() %>% .$. %>% .[2]
+CB_URL_Monthly_download_text1<-(CB_URL_Monthly_download_text[[1]])   %>% html_attrs() %>% data.frame() %>% .$. %>% .[2]
+
+
+
+
+
+
+
 
 URL_CENTRAL_BANK_DATA_DOWNLOAD <- paste0("https://opendata.centralbank.ie/dataset/19af4a3e-ed9f-41ee-ad9b-52dc72354a15/resource/",CB_URL_Monthly_download_text2,"/download/mpcp_cardpayments.csv")
 CB_DATA<-read_csv(URL_CENTRAL_BANK_DATA_DOWNLOAD) %>% data.frame()
@@ -204,8 +212,22 @@ DOMESTIC_PAYMENT_ALL<-as.numeric(CB_DATA_CARD_PAYMENT$OBSERVATION) %>% na.omit()
 ALL_CB_PAYMENTS_GROWTH<-growth(DOMESTIC_PAYMENT_ALL,12)
 
 
-ALL_CB_PAYMENTS_QUARTERLY<-DOMESTIC_PAYMENT_ALL %>% ts(start=c(2022,10), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
+URL_CENTRAL_BANK_DATA_DOWNLOAD_CARDS<-paste0("https://opendata.centralbank.ie/dataset/19af4a3e-ed9f-41ee-ad9b-52dc72354a15/resource/",CB_URL_Monthly_download_text1,"/download/mpci_cardissuance.csv")
+CB_CARD_NUM_DATA<-read_csv(URL_CENTRAL_BANK_DATA_DOWNLOAD_CARDS) %>% data.frame()
+CB_DATA_CARD_CC_NUM<-subset(CB_CARD_NUM_DATA,CRD_FNCTN_DESC =="Credit card")
+CB_DATA_CARD_DC_NUM<-subset(CB_CARD_NUM_DATA,CRD_FNCTN_DESC =="Debit card")
+
+DC_VOLUME<-as.numeric(CB_DATA_CARD_DC_NUM$OBSERVATION_FREE) %>% na.omit() %>% as.xts(order.by=as.Date(format(CB_DATE, "%Y-%m-01")))
+CC_VOLUME<-as.numeric(CB_DATA_CARD_CC_NUM$OBSERVATION_FREE) %>% na.omit() %>% as.xts(order.by=as.Date(format(CB_DATE, "%Y-%m-01")))
+
+CC_DD_VOLUME<-DC_VOLUME+DC_VOLUME
+CARD_PAYMENT_PER_CARD<-(DOMESTIC_PAYMENT_ALL["2022-10-01/"]/CC_DD_VOLUME["2022-10-01/"])
+
+CARD_PAYMENT_PER_CARD_GROWTH<-CARD_PAYMENT_PER_CARD %>% growth(freq=12)
+
+ALL_CB_PAYMENTS_QUARTERLY<-CARD_PAYMENT_PER_CARD %>% ts(start=c(2022,10), frequency=12) %>% as.quarterly(FUN = sum) %>% as.xts()
 ALL_CB_PAYMENTS_QUARTERLY_GROWTH <- growth(ALL_CB_PAYMENTS_QUARTERLY,4)
+
 
 #### Infaltion Data for Deflation#######
 EUROSTAT_INFLATION<-get_eurostat("prc_hicp_midx",  filters = list(
@@ -249,7 +271,7 @@ HEADLINE_HICP_GROWTH<-growth(as.numeric(as.xts((data.frame(HEADLINE_HICP_XTS[ind
 }
 
 
-Deflated_ALL_CB_PAYMENTS_GROWTH<-((1+(ALL_CB_PAYMENTS_GROWTH/100))/(1+(HICP_SHORT_GROWTH/100))-1)*100
+Deflated_ALL_CB_PAYMENTS_GROWTH<-((1+(CARD_PAYMENT_PER_CARD_GROWTH/100))/(1+(HICP_SHORT_GROWTH/100))-1)*100
 
 INFLATION<-data.frame(HICP_XTS)
 
@@ -1106,6 +1128,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
