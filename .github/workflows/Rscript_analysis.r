@@ -16,6 +16,7 @@ library(rlang)
 library(purrr)
 
 library(curl)
+
  
 
 google_client_id <- Sys.getenv("GOOGLE_CLIENT_ID")
@@ -1490,7 +1491,8 @@ smtp <- emayili::server(host = "smtp.gmail.com",
 
                         username = "mflanagan201@gmail.com",
 
-                        password = "lbjmgamlgnanfrsd")
+                          password = Sys.getenv("EMAIL_PASSWORD")
+)
 
  
 
