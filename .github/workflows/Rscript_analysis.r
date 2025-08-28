@@ -1091,11 +1091,8 @@ google_app <- httr::oauth_app(
 
 "THIS_IS_A_NAME",
 
-key = "500583945095-psku68b6caon0uug08f3iuihm3umrnqe.apps.googleusercontent.com",
-
-secret = "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"
-
- 
+key = Sys.getenv("google_app_key"),
+secret =Sys.getenv("google_app_secret")
 
 )
 
@@ -1887,4 +1884,5 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
  
 
  
+
 
