@@ -16,6 +16,11 @@ jobs:
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       GOOGLE_CALENDAR_ID: ${{ secrets.GOOGLE_CALENDAR_ID }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      GOOGLE_APP_SECRET: ${{ secrets.GOOGLE_APP_SECRET }}
+      GOOGLE_APP_KEY: ${{ secrets.GOOGLE_APP_KEY }}
+
+
+
 
 
     steps:
