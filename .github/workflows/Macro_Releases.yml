@@ -15,6 +15,9 @@ jobs:
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       GOOGLE_CALENDAR_ID: ${{ secrets.GOOGLE_CALENDAR_ID }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+  
+
 
     steps:
     - name: Checkout repository
