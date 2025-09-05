@@ -890,7 +890,7 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
   return(TABLE)
 }
 
-table2<-TABLEEXTRACTION("Analysis of Net Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Total Gross Cumulative Voted Spending%"),"VOTEDSPENDING.XLSX")
+table2<-TABLEEXTRACTION("Analysis of Gross Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Total Gross Cumulative Voted Spending%"),"VOTEDSPENDING.XLSX")
 
 
 annual_growth_val<-matrix(NA, nrow=length(table2[[1]]),ncol=2)
@@ -1133,6 +1133,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
