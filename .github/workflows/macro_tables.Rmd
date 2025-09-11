@@ -886,11 +886,11 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
   } else {
   TABLE<-(list(existing))
   }
-  write.xlsx(c(existing[1:length(existing)],TABLE$extracted_tables), file=paste(existingtable))
   return(TABLE)
 }
 
 table2<-TABLEEXTRACTION("Analysis of Gross Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Total Gross Cumulative Voted Spending%"),"VOTEDSPENDING.XLSX")
+write.xlsx(c(table2[[1]][1:length(table2[[1]])],table2$extracted_tables), file="VOTEDSPENDING.XLSX")
 
 
 annual_growth_val<-matrix(NA, nrow=length(table2[[1]]),ncol=2)
@@ -912,6 +912,7 @@ for(i in 1:length(table2[[1]])){
 
 
 CT_TABLE<-TABLEEXTRACTION("Analysis of Taxation Receipts",25,DATES_DOF_EXCHE,url_formats,c("%Corporation Tax%"),"ct.xlsx")
+write.xlsx(c(CT_TABLE[[1]][1:length(CT_TABLE[[1]])],CT_TABLE$extracted_tables), file="ct.xlsx")
             
 CT_annual_growth<-matrix(NA, nrow=length(CT_TABLE[[1]]),ncol=1)
 
@@ -945,6 +946,7 @@ DATES_DOF_EXCHE_CHECK<-DATES_DOF_EXCHE
 
 
 Exchequer_Statement<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"),"tax_revenue.xlsx")
+write.xlsx(c(Exchequer_Statement[[1]][1:length(Exchequer_Statement[[1]])],Exchequer_Statement$extracted_tables), file="tax_revenue.xlsx")
 
 
 tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement[[1]]),ncol=1)
@@ -1133,6 +1135,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
