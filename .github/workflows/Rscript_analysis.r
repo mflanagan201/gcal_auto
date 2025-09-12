@@ -1039,7 +1039,7 @@ mutate(UID = replicate(nrow(DOF_EVENTS), ic_guid()))
 
  
 
-Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-12-17"
+Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2025-10-07"
 
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT")),
 
@@ -1047,15 +1047,15 @@ Budget<-data.frame(DTSTART = as.POSIXct(strptime(paste0("",as.POSIXct.default(pa
 
  
 
-DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2024-12-17"
+DTEND=as.POSIXct(strptime(paste0("",as.POSIXct.default(paste("2025-10-07"
 
 )), " 16:00:00"),format= "%Y-%m-%d %H:%M:%S"),tz = c("GMT"))+1
 
  
 
-,SUMMARY = paste("Quarterly Bulletin"),
+,SUMMARY = paste("Budget"),
 
-LOCATION = c("Central Bank of Ireland"),
+LOCATION = c("Department of Finance"),
 
 transparent=TRUE)
 
@@ -1499,9 +1499,9 @@ smtp <- emayili::server(host = "smtp.gmail.com",
 
 Body_weekly_email<-emayili::envelope(
 
-  to=c("michael.flanagan@finance.gov.ie"
+  to=c("michael.flanagan@ec.europa.eu"
 
-  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","michael.flanagan@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Harry.Williamson@finance.gov.ie","Eoin.OFlaithearta@finance.gov.ie","Louise.Heenan@finance.gov.ie","Leo.Redmond@finance.gov.ie","Paul.Lambert@finance.gov.ie","Daniel.Logan@finance.gov.ie"),
+  ),bcc=c("Ian.Power@finance.gov.ie","Eamonn.Sweeney@finance.gov.ie","Oisin.Tarrant@finance.gov.ie","Joanne.Mulholland@finance.gov.ie","Hannah.Cousins@finance.gov.ie","Fionn.Roche@finance.gov.ie","Luke.Rehill@finance.gov.ie","Eimear.Flynn@finance.gov.ie", "Sorcha.O'Connor@finance.gov.ie","harry.morris@finance.gov.ie","David.Hughes@finance.gov.ie","Pascal.McMenamy@finance.gov.ie","Patrick.OBrien@finance.gov.ie","Harry.Williamson@finance.gov.ie","Eoin.OFlaithearta@finance.gov.ie","Louise.Heenan@finance.gov.ie","Leo.Redmond@finance.gov.ie","Paul.Lambert@finance.gov.ie","Daniel.Logan@finance.gov.ie"),
 
  
 
