@@ -923,7 +923,7 @@ votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names
 }
 
 
-DATES_DOF_EXCHE<- seq(as.Date("01/01/2024",format="%d/%m/%Y"), as.Date(Sys.Date(),format="%B"), by = "months") %>% format(.,"%B-%Y") %>% tolower() %>% .[1:length(.)-1]
+DATES_DOF_EXCHE<- seq(as.Date("01/01/2024",format="%d/%m/%Y"), as.Date(Sys.Date(),format="%B"), by = "months") %>% format(.,"%B-%Y") %>% tolower() %>% .[1:length(.)-2]
 
 
 DATES_DOF_EXCHE_CHECK<-DATES_DOF_EXCHE
@@ -1135,6 +1135,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
