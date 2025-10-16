@@ -57,7 +57,7 @@ EUROSTAT_cal$DTEND<-as.POSIXct(paste0("",EUROSTAT_cal$DTEND.TZID.Europe.Luxembou
 
 #Using grepl with appropriate regex
 
-EUROSTAT_cal = EUROSTAT_cal[grepl("Inflation|inflation|Flash|GDP|Unemployment", EUROSTAT_cal$SUMMARY, ignore.case = TRUE), ]
+EUROSTAT_cal = EUROSTAT_cal[grepl("Inflation|inflation|Flash|GDP|Unemployment|Government finance statistics|Excessive deficit procedure", EUROSTAT_cal$SUMMARY, ignore.case = TRUE), ]
 
 EUROSTAT_cal$LOCATION<-c("Eurostat")
 
@@ -1884,5 +1884,6 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
  
 
  
+
 
 
