@@ -889,23 +889,29 @@ TABLEEXTRACTION <- function(tablename, tablerows, DATES_DOF_EXCHE, url_formats,i
   return(TABLE)
 }
 
+
 table2<-TABLEEXTRACTION("Analysis of Gross Voted Expenditure",100,DATES_DOF_EXCHE,url_formats,c("%Total Gross Cumulative Voted Spending%"),"VOTEDSPENDING.XLSX")
-write.xlsx(c(table2[[1]][1:length(table2[[1]])],table2$extracted_tables), file="VOTEDSPENDING.XLSX")
 
+write.xlsx(c(table2[[1]][1:length(table2[[1]])],table2$extracted_tables), file="VOTEDSPENDING.xlsx")
 
-annual_growth_val<-matrix(NA, nrow=length(table2[[1]]),ncol=2)
+table2<-excel_sheet_reader(paste("VOTEDSPENDING.xlsx"))
 
-for(i in 1:length(table2[[1]])){ 
+annual_growth_val<-matrix(NA, nrow=length(table2),ncol=2)
+
+for(i in 1:length(table2)){ 
           if(format(as.Date(paste0("01-", DATES_DOF_EXCHE[i]), format = "%d-%B-%Y"),"%B") == c("January")){
-  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(table2[[1]][[i]]))))))," ",n=5) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(table2[[i]]))))))," ",n=5) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
           names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
           annual_growth_val[i,1] <- votedspending_df$yoygrowthFY 
           
           } else {
-  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(table2[[1]][[i]]))))))," ",n=11) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 11) %>% data.frame()
+            
+  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(table2[[i]]))))))," ",n=11) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 11) %>% data.frame()
             names(votedspending_df)<-c("name","profile","outturn","variance","yoy", "yoygrowth","currentFY","lastFY","yoyFY","yoygrowthFY")
             annual_growth_val[i,1] <- votedspending_df$currentFY 
             annual_growth_val[i,2] <- votedspending_df$variance
+            
+ 
           }
   }
 
@@ -913,11 +919,13 @@ for(i in 1:length(table2[[1]])){
 
 CT_TABLE<-TABLEEXTRACTION("Analysis of Taxation Receipts",25,DATES_DOF_EXCHE,url_formats,c("%Corporation Tax%"),"ct.xlsx")
 write.xlsx(c(CT_TABLE[[1]][1:length(CT_TABLE[[1]])],CT_TABLE$extracted_tables), file="ct.xlsx")
-            
-CT_annual_growth<-matrix(NA, nrow=length(CT_TABLE[[1]]),ncol=1)
 
-for(i in 1:length(CT_TABLE[[1]])){ 
-votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(CT_TABLE[[1]][[i]]))))))," ",n=5) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
+CT_TABLE<-excel_sheet_reader(paste("ct.xlsx"))
+            
+CT_annual_growth<-matrix(NA, nrow=length(CT_TABLE),ncol=1)
+
+for(i in 1:length(CT_TABLE)){ 
+votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(CT_TABLE[[i]]))))))," ",n=5) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 5) %>% data.frame()
     names(votedspending_df)<-c("name","currentFY","lastFY","yoyFY","yoygrowthFY")
     CT_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
 }
@@ -948,13 +956,18 @@ DATES_DOF_EXCHE_CHECK<-DATES_DOF_EXCHE
 Exchequer_Statement<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"),"tax_revenue.xlsx")
 write.xlsx(c(Exchequer_Statement[[1]][1:length(Exchequer_Statement[[1]])],Exchequer_Statement$extracted_tables), file="tax_revenue.xlsx")
 
+Exchequer_Statement<-excel_sheet_reader(paste("tax_revenue.xlsx"))
 
-tax_revenue_annual_growth<-matrix(NA, nrow=length(Exchequer_Statement[[1]]),ncol=1)
-for(i in 1:length(Exchequer_Statement[[1]])){ 
-  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(Exchequer_Statement[[1]][[i]]))))))," ",n=4) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 4) %>% data.frame()
+tax_revenue_annual_growth<-matrix(NA, nrow=length(DATES_DOF_EXCHE),ncol=1)
+
+for(i in 1:length(Exchequer_Statement)){ 
+  votedspending_df<-stringr::str_split_fixed((str_squish(stri_reverse(unlist(names(c(Exchequer_Statement[[i]]))))))," ",n=4) %>% stri_reverse()  %>% data.frame() %>% t() %>% .[ncol(.):1] %>% matrix(.,ncol = 4) %>% data.frame()
   names(votedspending_df)<-c("name","currentFY","lastFY","yoygrowthFY")
   tax_revenue_annual_growth[i,1] <- votedspending_df$yoygrowthFY 
 }
+
+  
+  
 
 
 #Exchequer_Statement_Expenditure<-TABLEEXTRACTION("Analytical Exchequer Statement",40,DATES_DOF_EXCHE,url_formats,c("%: tax revenue%"),"tax_revenue.xlsx")
@@ -1135,6 +1148,7 @@ write.xlsx(MONTHLY_DATA_DOWNLOAD_ALL, file = 'MONTHLY_DATA_DOWNLOAD_ALL.xlsx')
 
 <div style="text-align: center;">
 <span class="text-center" style="color:#A3915E"> <center> <font size="3"> [Download Data](https://github.com/mflanagan201/gcal_auto/raw/main/MONTHLY_DATA_DOWNLOAD_ALL.xlsx) </font> </center>
+
 
 
 
