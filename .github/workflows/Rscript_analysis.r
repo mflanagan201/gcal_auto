@@ -286,9 +286,9 @@ RELEASE_CB$Release<-str_replace_all(RELEASE_CB$Release, "Statistics:", " ")
 
 if(is.na(RELEASE_CB$Release[1])){
 
-event_CB = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+event_CB = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
 
-            DTEND = c("2025-12-01 10:00:00 GMT"),
+            DTEND = c("2026-12-01 10:00:00 GMT"),
 
             SUMMARY = "NA",
 
@@ -425,9 +425,9 @@ mutate(UID = replicate(nrow(event_CB), calendar::ic_guid()))
 
 #if(is.na(RELEASE_OECD$Release[1])){
 
-# EVENTS_OECD = data.frame(DTSTART = c("2025-12-01 #10:00:00 GMT"),
+# EVENTS_OECD = data.frame(DTSTART = c("2026-12-01 #10:00:00 GMT"),
 
-#            DTEND = c("2025-12-01 10:00:00 GMT"),
+#            DTEND = c("2026-12-01 10:00:00 GMT"),
 
 #            SUMMARY = "NA",
 
@@ -585,9 +585,9 @@ RELEASE_IMF<-na.omit(RELEASE_IMF)
 
 if(is.na(RELEASE_IMF$Release[1])){
 
-EVENTS_IMF = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+EVENTS_IMF = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
 
-             DTEND = c("2025-12-01 10:00:00 GMT"),
+             DTEND = c("2026-12-01 10:00:00 GMT"),
 
              SUMMARY = c("NA"),
 
@@ -741,9 +741,9 @@ colnames(RELEASE_Monetary_Meeting)<-c("Release", "Date")
 
 if(is.na(RELEASE_Monetary_Meeting$Release[1])){
 
-EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = c("2025-12-01 10:00:00 GMT"),
+EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
 
-             DTEND = c("2025-12-01 10:00:00 GMT"),
+             DTEND = c("2026-12-01 10:00:00 GMT"),
 
              SUMMARY = c("NA"),
 
