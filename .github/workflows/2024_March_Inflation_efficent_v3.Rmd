@@ -2420,7 +2420,7 @@ NAMES_HIGH_HEATMAP_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Gra
 text_heatmap_growth_rate_3<-last(Graph_Data_Heatmap[,order(as.numeric(as.character(Graph_Data_Heatmap[nrow(Graph_Data_Heatmap),],decreasing = TRUE)))])[18]  %>% as.numeric() %>% round(2) %>% paste0(sep="%")
 
 
-HEATMAP_DATA_DECREASING<-DF[names(last(CONTRIBUTION[,order(as.numeric(as.character(CONTRIBUTION[nrow(CONTRIBUTION),])),decreasing = FALSE)]))[1:20]] 
+HEATMAP_DATA_DECREASING<-DF[CONTRIBUTION[,order(as.numeric(as.character(CONTRIBUTION[nrow(CONTRIBUTION),])),decreasing = TRUE)] %>% last() %>% .[,1:20] %>% names()]
 HEATMAP_DATA_DECREASING[is.na(HEATMAP_DATA_DECREASING)]<-0
 
 
