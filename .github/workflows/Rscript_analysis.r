@@ -25,9 +25,10 @@ google_client_secret <- Sys.getenv("GOOGLE_CLIENT_SECRET")
 
  
 
+
 #Eurostat Calendar Below
 
-url <- "https://ec.europa.eu/eurostat/cache/RELEASE_CALENDAR/calendar_EN.ics"
+url <- "https://ec.europa.eu/eurostat/o/calendars/eventsIcal?theme=0&category=0"
 
 response <- GET(url)
 
@@ -41,15 +42,15 @@ EUROSTAT_cal<-calendar::ic_read(textConnection(rawToChar(response$content))) %>%
 
  
 
-EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg %>% str_sub(1,8) %>% strptime("%Y%m%d", tz = "GMT")
+EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTSTAMP %>% str_sub(1,8) %>% strptime("%Y%m%d", tz = "GMT")
 
 EUROSTAT_cal$DTSTART<-as.POSIXct(paste0("",EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg," 10:00:00"))
 
  
 
-EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg %>% str_sub(1,8) %>% strptime("%Y%m%d", tz = "GMT")
+EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTSTAMP %>% str_sub(1,8) %>% strptime("%Y%m%d", tz = "GMT")
 
-EUROSTAT_cal$DTEND<-as.POSIXct(paste0("",EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg," 10:00:00"))
+EUROSTAT_cal$DTEND<-as.POSIXct(paste0("",EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg," 10:01:00"))
 
  
 
@@ -1884,6 +1885,7 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
  
 
  
+
 
 
 
