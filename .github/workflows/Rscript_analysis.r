@@ -42,13 +42,13 @@ EUROSTAT_cal<-calendar::ic_read(textConnection(rawToChar(response$content))) %>%
 
  
 
-EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTSTAMP %>% str_sub(1,8) %>% strptime("%Y%m%d", tz = "GMT")
+EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg<-strptime(format(EUROSTAT_cal$DTSTART.VALUE.DATE, "%Y%m%d"),"%Y%m%d", tz = "GMT")
 
 EUROSTAT_cal$DTSTART<-as.POSIXct(paste0("",EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg," 10:00:00"))
 
  
 
-EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTSTAMP %>% str_sub(1,8) %>% strptime("%Y%m%d", tz = "GMT")
+EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg<-EUROSTAT_cal$DTSTART.TZID.Europe.Luxembourg
 
 EUROSTAT_cal$DTEND<-as.POSIXct(paste0("",EUROSTAT_cal$DTEND.TZID.Europe.Luxembourg," 10:01:00"))
 
@@ -1885,6 +1885,7 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
  
 
  
+
 
 
 
