@@ -854,7 +854,7 @@ event_all =subset(event_all, !(SUMMARY %like any% c("%SILC Poverty by Health Sta
 
  
 
-exch_days<-seq(from=as.Date(c("2025-01-01")),to=as.Date(c("2025-12-31")), by="day")
+exch_days<-seq(from=as.Date(c("2025-01-01")),to=as.Date(c("2026-12-31")), by="day")
 
 exch_weekdays<-exch_days[format(exch_days,"%a") %like any% c("Mon", "Tue", "Wed", "Thu", "Fri")]
 
@@ -870,7 +870,7 @@ exch_weekdays<-exch_days[format(exch_days,"%a") %like any% c("Mon", "Tue", "Wed"
 
 for(i in seq_along(exch_weekdays)){
 
-if (grepl("2025-01-01|2025-02-03|2025-03-17|2025-04-21|2025-05-05|2025-06-02|2025-08-04|2025-10-27|2025-12-25|2025-12-26", format(exch_weekdays[i],"%Y-%m-%d"))){
+if (grepl("2026-01-01|2025-02-03|2025-03-17|2025-04-21|2025-05-05|2025-06-02|2025-08-04|2025-10-27|2025-12-25|2025-12-26", format(exch_weekdays[i],"%Y-%m-%d"))){
 
   exch_weekdays[i]<-NA
 
@@ -1885,6 +1885,7 @@ if((NEXT_WEEK_release_text_1!="") &&  (format(Sys.Date(),"%a")==c("Thu"))){
  
 
  
+
 
 
 
