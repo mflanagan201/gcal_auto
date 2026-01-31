@@ -756,7 +756,7 @@ EVENTS_RELEASE_Monetary_Meeting = data.frame(DTSTART = c("2026-12-01 10:00:00 GM
 
 } else {
 
-RELEASE_Monetary_Meeting$Date<-parse_date_time2(paste(RELEASE_Monetary_Meeting$Date,"2025"), orders="%b %d %Y")
+RELEASE_Monetary_Meeting$Date<-parse_date_time2(paste(RELEASE_Monetary_Meeting$Date,"2026"), orders="%b %d %Y")
 
  
 
@@ -854,7 +854,7 @@ event_all =subset(event_all, !(SUMMARY %like any% c("%SILC Poverty by Health Sta
 
  
 
-exch_days<-seq(from=as.Date(c("2025-01-01")),to=as.Date(c("2026-12-31")), by="day")
+exch_days<-seq(from=as.Date(c("2026-01-01")),to=as.Date(c("2026-12-31")), by="day")
 
 exch_weekdays<-exch_days[format(exch_days,"%a") %like any% c("Mon", "Tue", "Wed", "Thu", "Fri")]
 
