@@ -524,7 +524,7 @@ c("https://www.imf.org/en/publications/weo")
 
 IMF_Schedule_table<-IMF_URL_download %>% html_nodes(xpath='/html/body/div/div[2]/div[5]/main/article/div[3]/div/div[2]')  %>% html_text()
 
-IMF_Schedule_table_2<-IMF_Schedule_table[[1]] %>% stringr::str_split("[\r\n]")  %>% data.frame()
+IMF_Schedule_table_2<-IMF_Schedule_table[[2]] %>% stringr::str_split("[\r\n]")  %>% data.frame()
 
  
 
