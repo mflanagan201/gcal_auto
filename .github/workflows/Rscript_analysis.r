@@ -584,7 +584,7 @@ RELEASE_IMF<-na.omit(RELEASE_IMF)
 
  
 
-if(is.na(RELEASE_IMF$Release[1])){
+if(is.na(RELEASE_IMF$Release[2])){
 
 EVENTS_IMF = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
 
