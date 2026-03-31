@@ -524,13 +524,13 @@ c("https://www.imf.org/en/publications/weo")
 
 IMF_Schedule_table<-IMF_URL_download %>% html_nodes(xpath='/html/body/div/div[2]/div[5]/main/article/div[3]/div/div[2]')  %>% html_text()
 
-IMF_Schedule_table_2<-IMF_Schedule_table[[1]] %>% stringr::str_split("[\r\n]")  %>% data.frame()
+#IMF_Schedule_table_2<-IMF_Schedule_table[[1]] #%>% stringr::str_split("[\r\n]")  %>% data.frame()
 
  
 
  
 
-RELEASE_IMF<-data.frame(matrix(NA,nrow=nrow(IMF_Schedule_table_2),ncol=2))
+#RELEASE_IMF<-data.frame(matrix(NA,nrow=nrow(IMF_#Schedule_table_2),ncol=2))
 
  
 
@@ -540,31 +540,15 @@ cat("IMF begins FIRST FOR LOOP BLANKS")
 
  
 
-for(i in 1:nrow(IMF_Schedule_table_2)){
+#for(i in 1:nrow(IMF_Schedule_table_2)){
 
-if(IMF_Schedule_table_2[i,1]==""){
+#if(IMF_Schedule_table_2[i,1]==""){
 
-  IMF_Schedule_table_2[i,1]<-NA
+#  IMF_Schedule_table_2[i,1]<-NA
 
- } else {
+# } else {
 
-  IMF_Schedule_table_2[i,1]<-IMF_Schedule_table_2[i,1]
-
-}
-
-}
-
- 
-
- 
-
-for(i in 1:nrow(IMF_Schedule_table_2)){
-
-if(grepl("World Economic Outlook", IMF_Schedule_table_2[i,1], ignore.case = TRUE)){
-
-  RELEASE_IMF[i,1]<-IMF_Schedule_table_2[i,1]
-
-  RELEASE_IMF[i,2]<-IMF_Schedule_table_2[i+8,1]
+  #IMF_Schedule_table_2[i,1]<-IMF_Schedule_table_2[#i,1]
 
 }
 
@@ -572,7 +556,23 @@ if(grepl("World Economic Outlook", IMF_Schedule_table_2[i,1], ignore.case = TRUE
 
  
 
-colnames(RELEASE_IMF)<-c("Release", "Date")
+ 
+
+#for(i in 1:nrow(IMF_Schedule_table_2)){
+
+#if(grepl("World Economic Outlook", #IMF_Schedule_table_2[i,1], ignore.case = TRUE)){
+
+#  RELEASE_IMF[i,1]<-IMF_Schedule_table_2[i,1]
+
+#  RELEASE_IMF[i,2]<-IMF_Schedule_table_2[i+8,1]
+
+}
+
+}
+
+ 
+
+#colnames(RELEASE_IMF)<-c("Release", "Date")
 
  
 
@@ -584,19 +584,17 @@ RELEASE_IMF<-na.omit(RELEASE_IMF)
 
  
 
-if(is.na(RELEASE_IMF$Release[1])){
+#if(is.na(RELEASE_IMF$Release[1])){
 
-EVENTS_IMF = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
+#EVENTS_IMF = data.frame(DTSTART = c("2026-12-01 #10:00:00 GMT"),
 
-             DTEND = c("2026-12-01 10:00:00 GMT"),
+#             DTEND = c("2026-12-01 10:00:00 #GMT"),
 
-             SUMMARY = c("NA"),
+#             SUMMARY = c("NA"),
 
-             LOCATION = c("IMF"),
+ #            LOCATION = c("IMF"),
 
-             transparent=TRUE)
-
- 
+#             transparent=TRUE)
 
  
 
@@ -604,33 +602,35 @@ EVENTS_IMF = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
 
  
 
-} else {
+ 
 
-RELEASE_IMF$Date<-parse_date_time2(RELEASE_IMF$Date, orders="%B %d, %Y")
+#} else {
+
+#RELEASE_IMF$Date<-parse_date_time2(RELEASE_IMF$D#ate, orders="%B %d, %Y")
 
  
 
-EVENTS_IMF = data.frame(DTSTART = RELEASE_IMF$Date,
+#EVENTS_IMF = data.frame(DTSTART = #RELEASE_IMF$Date,
 
-             DTEND = RELEASE_IMF$Date+1,
+ #            DTEND = RELEASE_IMF$Date+1,
 
-             SUMMARY = c("World Economic Outlook"),
+#             SUMMARY = c("World Economic #Outlook"),
 
-             LOCATION = c("IMF"),
+#             LOCATION = c("IMF"),
 
-             transparent=TRUE)
-
- 
-
-}
+      #       transparent=TRUE)
 
  
 
+#}
+
  
 
-EVENTS_IMF <- EVENTS_IMF %>%
+ 
 
-mutate(UID = replicate(nrow(EVENTS_IMF), ic_guid()))
+#EVENTS_IMF <- EVENTS_IMF %>%
+
+#mutate(UID = replicate(nrow(EVENTS_IMF), #ic_guid()))
 
  
 
