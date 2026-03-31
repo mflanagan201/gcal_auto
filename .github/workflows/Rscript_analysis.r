@@ -524,7 +524,7 @@ c("https://www.imf.org/en/publications/weo")
 
 IMF_Schedule_table<-IMF_URL_download %>% html_nodes(xpath='/html/body/div/div[2]/div[5]/main/article/div[3]/div/div[2]')  %>% html_text()
 
-IMF_Schedule_table_2<-IMF_Schedule_table[[2]] %>% stringr::str_split("[\r\n]")  %>% data.frame()
+IMF_Schedule_table_2<-IMF_Schedule_table[[1]] %>% stringr::str_split("[\r\n]")  %>% data.frame()
 
  
 
@@ -584,7 +584,7 @@ RELEASE_IMF<-na.omit(RELEASE_IMF)
 
  
 
-if(is.na(RELEASE_IMF$Release[2])){
+if(is.na(RELEASE_IMF$Release[1])){
 
 EVENTS_IMF = data.frame(DTSTART = c("2026-12-01 10:00:00 GMT"),
 
