@@ -402,7 +402,7 @@ mutate(UID = replicate(nrow(event_CB), calendar::ic_guid()))
 
 #for(i in 1:nrow(OECD_Schedule_table_2)){
 
-# if(grepl("OECD Economic Outlook", #OECD_Schedule_table_2[i,1], ignore.case = TRUE)){
+# if(grepl("OECD Economic Outlook", #OECD_Schedule_table_2[i,1], ignore.case = TRUE))#{
 
 #  RELEASE_OECD[i,1]<-OECD_Schedule_table_2[i,1]
 
