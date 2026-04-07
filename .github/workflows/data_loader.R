@@ -256,53 +256,11 @@
     }
   }
   
-  BE<-as.numeric(c("NA","3.6","2.5","2.5","2.1","2.1","NA")) %>% data.frame() 
-  BG<-as.numeric(c("NA","6.2","4.9","4.4","4.0","NA","NA")) %>% data.frame()
-  CZ<-as.numeric(c("5.3","4.5","2.5","2.6","2.9","NA","NA")) %>% data.frame()
-  DK<-as.numeric(c("7.2","5.0","5.7","3.8","2.9","NA","NA")) %>% data.frame()
-  DE<-as.numeric(c("NA","4.4","4.5","2.3","1.7","1.6","NA")) %>% data.frame()
-  EE<-as.numeric(c("1.9","7.1","5.1","3.6","3.2","NA","NA")) %>% data.frame()
-  IE<-as.numeric(c("NA","9.9","6.6","6.0","7.6","6.7","6.4")) %>% data.frame()
-  EL<-as.numeric(c("2.6","3.7","3.6","3.1","3.0","NA","NA")) %>% data.frame()
-  ES<-as.numeric(c("5.3","3.7","3.5","3.2","3.0","NA","NA")) %>% data.frame()
-  FR<-as.numeric(c("3.8","0.8","1.2","1.2","1.2","1.1","NA")) %>% data.frame()
-  HR<-as.numeric(c("18.6","6.4","4.9","4.1","3.7","NA","NA")) %>% data.frame()
-  IT<-as.numeric(c("-1.9","1.3","1.6","1.9","1.7","1.5","NA")) %>% data.frame()
-  CY<-as.numeric(c("2.7","6.0","5.0","5.4","4.3","NA","NA")) %>% data.frame()
-  LV<-as.numeric(c("9.1","5.9","3.6","3.4","3.3","NA","NA")) %>% data.frame()
-  LT<-as.numeric(c("NA","6.1","5.2","4.8","4.5","4.3","NA")) %>% data.frame()
-  LU<-as.numeric(c("8.0","5.8","4.7","3.8","5.4","4.7","NA")) %>% data.frame()
-  HU<-as.numeric(c("4.6","4.3","4.0","3.9","3.7","NA","NA")) %>% data.frame()
-  MT<-as.numeric(c("7.4","6.0","5.8","5.8","6.1","NA","NA")) %>% data.frame()
-  NL<-as.numeric(c("6.9","3.5","3.3","3.0","3.0","NA","NA")) %>% data.frame()
-  AT<-as.numeric(c("NA","2.6","2.2","2.2","2.0","2.3","NA")) %>% data.frame()
-  PL<-as.numeric(c("12.5","6.3","4.4","4.0","3.5","NA","NA")) %>% data.frame()
-  PT<-as.numeric(c("11.8","5.0","5.1","1.2","3.3","NA","NA")) %>% data.frame()
-  RO<-as.numeric(c("NA","2.8","2.6","4.6","4.4","4.2","4.0")) %>% data.frame()
-  SI<-as.numeric(c("6.2","5.6","4.4","4.1","4.0","NA","NA")) %>% data.frame()
-  SK<-as.numeric(c("6.2","3.8","0.9","1.6","1.5","NA","NA")) %>% data.frame()
-  FI<-as.numeric(c("3.7","1.6","1.9","2.6","2.6","NA","NA")) %>% data.frame()
-  SE<-as.numeric(c("6.4","4.0","4.4","4.4","4.6","NA","NA")) %>% data.frame()
   
-  Council_REC<-data.frame(BE,BG,CZ,DK,DE,EE,IE,EL,ES,FR,HR,IT,CY,LV,LT,LU,HU,MT,NL,AT,PL,PT,RO,SI,SK,FI,SE) %>% as.xts(.,order.by=seq(from=as.Date("2024-01-01"), to=as.Date("2030-01-01"), by="years"))
-  
-  colnames(Council_REC)<-c("BEL","BGR","CZE","DNK","DEU","EST","IRL","GRC","ESP","FRA","HRV","ITA","CYP","LVA","LTU","LUX","HUN","MLT","NLD","AUT","POL","PRT","ROM","SVN","SVK","FIN","SWE")
   
   NEG_RATE<-data.frame(index(NEG_RATE),NEG_RATE)
   colnames(NEG_RATE)<-c("DATE",MS)
   NEG_RATE<-as.xts(NEG_RATE)
-  
-  Council_REC_LONG<-matrix(NA,nrow=length(as.Date.character(seq(from=as.Date.character(NEG_RATE$DATE)[1], to="2031-01-01", by="year"))),ncol=ncol(NEG_RATE)-1) %>% as.xts(order.by=as.Date.character(seq(from=as.Date.character(NEG_RATE$DATE)[1], to="2031-01-01", by="year")))
-  for(j in 1:ncol(Council_REC)){
-    for(i in nrow(Council_REC):(nrow(Council_REC)-6)){
-      Council_REC_LONG[index(Council_REC[i,j]),j]<-(Council_REC[i,j])
-    }
-  }
-  
-  Council_REC<-data.frame(index(Council_REC_LONG),Council_REC_LONG)
-  colnames(Council_REC)<-c("DATE","BEL","BGR","CZE","DNK","DEU","EST","IRL","GRC","ESP","FRA","HRV","ITA","CYP","LVA","LTU","LUX","HUN","MLT","NLD","AUT","POL","PRT","ROM","SVN","SVK","FIN","SWE")
-  Council_REC<-as.xts(Council_REC)
-  
   
   
   
@@ -453,7 +411,6 @@
   addWorksheet(wb,'NET_EXP_AFTER_DRMS_GDP_XTS')
   addWorksheet(wb,'NET_DRM_GDP_XTS')
   addWorksheet(wb,'NEG_RATE')
-  addWorksheet(wb,'Council_REC')
   addWorksheet(wb,'NEC')
   addWorksheet(wb,'DEFENCE_GDP_2021BASE_XTS')
   addWorksheet(wb,'DEFENCE_GDP_XTS')
@@ -488,7 +445,7 @@
   writeData(wb,'NET_EXP_AFTER_DRMS_GDP_XTS',data$NET_EXP_AFTER_DRMS_GDP_XTS)
   writeData(wb,'NET_DRM_GDP_XTS',data$NET_DRM_GDP_XTS)
   writeData(wb,'NEG_RATE',data$NEG_RATE)
-  writeData(wb,'Council_REC',data$Council_REC)
+  
   writeData(wb,'NEC',data$NEC)
   writeData(wb,'DEFENCE_GDP_2021BASE_XTS',data$DEFENCE_GDP_2021BASE_XTS)
   writeData(wb,'DEFENCE_GDP_XTS',data$DEFENCE_GDP_XTS)
