@@ -344,7 +344,6 @@
     'NET_DRM'= data.frame(index(NET_DRM),NET_DRM),
     'NET_DRM_GDP_XTS' = data.frame(index(NET_DRM_GDP_XTS),NET_DRM_GDP_XTS),
     'NEG_RATE' = data.frame(index(NEG_RATE),NEG_RATE),
-    'Council_REC' = data.frame(index(Council_REC),Council_REC),
     'NEC' = data.frame(NEC),
     'DEFENCE_GDP_XTS'= data.frame(index(DEFENCE_GDP_XTS),DEFENCE_GDP_XTS),
     'DEFENCE_XTS'= data.frame(index(DEFENCE_XTS),DEFENCE_XTS),
@@ -380,7 +379,7 @@
   names(data$NET_EXP_AFTER_DRMS_GDP_XTS)[1]<-c("Date")
   names(data$NET_DRM_GDP_XTS)[1]<-c("Date")
   names(data$NEG_RATE)[1]<-c("Date")
-  names(data$Council_REC)[1]<-c("Date")
+
   names(data$DEFENCE_GDP_2021BASE_XTS)[1]<-c("Date")
   names(data$UR_xts)[1]<-c("Date")
   names(data$REAL_GDP_xts)[1]<-c("Date")
