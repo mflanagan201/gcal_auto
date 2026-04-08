@@ -274,7 +274,7 @@
   MEMBER_STATES<-data.frame(MS,MS_2L)
   
   
-  UR <- get_eurostat("une_rt_m",filters = list(sex="T",age="TOTAL", s_adj="SA",unit="PC_ACT")) 
+  UR <- get_eurostat("une_rt_m",filters = list(sex="T",age="TOTAL", s_adj="SA",unit="PC_ACT"),cache = FALSE) 
   UR_xts<-matrix(NA,nrow=length(unique(UR$time)),ncol=length(MS_2L)) %>% as.xts(order.by=as.Date(unique(UR$time)))
   
   for(i in 1:length(MS_2L)){
@@ -283,7 +283,7 @@
   
   colnames(UR_xts)<-c(MS_2L)
   
-  REAL_GDP <- get_eurostat("namq_10_gdp",filters = list(s_adj="NSA",unit="CLV_PCH_SM",na_item="B1GQ")) 
+  REAL_GDP <- get_eurostat("namq_10_gdp",filters = list(s_adj="NSA",unit="CLV_PCH_SM",na_item="B1GQ"),cache = FALSE) 
   REAL_GDP_xts<-matrix(NA,nrow=length(unique(REAL_GDP$time)),ncol=length(MS_2L)) %>% as.xts(order.by=as.Date(unique(REAL_GDP$time)))
   
   for(i in 1:length(MS_2L)){
@@ -293,7 +293,7 @@
   colnames(REAL_GDP_xts)<-c(MS_2L)
   
   
-  HICP <- get_eurostat("prc_hicp_minr",filters = list(coicop18="TOTAL",unit="RCH_A",freq="M")) 
+  HICP <- get_eurostat("prc_hicp_minr",filters = list(coicop18="TOTAL",unit="RCH_A",freq="M"),cache = FALSE) 
   HICP_xts<-matrix(NA,nrow=length(unique(HICP$time)),ncol=length(MS_2L)) %>% as.xts(order.by=as.Date(unique(HICP$time)))
   
   for(i in 1:length(MS_2L)){
@@ -303,7 +303,7 @@
   colnames(HICP_xts)<-c(MS_2L)
   
   
-  DEFICIT_Q <- get_eurostat("gov_10q_ggnfa",filters = list(na_item="B9",s_adj="SCA",sector="S13",unit="PC_GDP")) 
+  DEFICIT_Q <- get_eurostat("gov_10q_ggnfa",filters = list(na_item="B9",s_adj="SCA",sector="S13",unit="PC_GDP"),cache = FALSE) 
   DEFICIT_Q_xts<-matrix(NA,nrow=length(unique(DEFICIT_Q$time)),ncol=length(MS_2L)) %>% as.xts(order.by=as.Date(unique(DEFICIT_Q$time)))
   
   for(i in 1:length(MS_2L)){
@@ -313,7 +313,7 @@
   colnames(DEFICIT_Q_xts)<-c(MS_2L)
   
   
-  yield <- get_eurostat("irt_lt_mcby_m",filters = list()) 
+  yield <- get_eurostat("irt_lt_mcby_m",filters = list(),cache = FALSE) 
   yield_xts<-matrix(NA,nrow=length(unique(yield$time)),ncol=length(MS_2L)) %>% as.xts(order.by=as.Date(unique(yield$time)))
   
   for(i in 1:length(MS_2L)){
