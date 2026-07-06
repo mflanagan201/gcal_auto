@@ -82,11 +82,12 @@
   }
   colnames(DEFENCE)<-c(MS_DEFENCE)
   DEFENCE_XTS<-as.xts(DEFENCE,order.by =as.Date(paste0("01-01-", year(as.Date(paste(rdb(ids = paste0("AMECO/UUTG02H/",MS[1],".1.0.0.0.UUTG02H")) %>% data.frame() %>% .$original_period),format=c('%Y')))), format='%d-%m-%Y'))
-  DEFENCE_XTS["2025/", "ROM"]<-DEFENCE_XTS["2025/", "ROM"]*1000
-  DEFENCE_XTS["2025/", "LVA"]<-DEFENCE_XTS["2025/", "LVA"]*1000
-  DEFENCE_XTS["2025/", "LTU"]<-DEFENCE_XTS["2025/", "LTU"]*1000
-  DEFENCE_XTS["2025/", "MLT"]<-DEFENCE_XTS["2025/", "MLT"]*1000
-
+  DEFENCE_XTS["2026/", "ROM"]<-DEFENCE_XTS["2026/", "ROM"]*1000
+  DEFENCE_XTS["2026/", "LVA"]<-DEFENCE_XTS["2026/", "LVA"]*1000
+  DEFENCE_XTS["2026/", "LTU"]<-DEFENCE_XTS["2026/", "LTU"]*1000
+  DEFENCE_XTS["2026/", "MLT"]<-DEFENCE_XTS["2026/", "MLT"]*1000
+  DEFENCE_XTS["2026/", "IRL"]<-DEFENCE_XTS["2026/", "IRL"]*1000
+  
   
   DEFENCE_GDP_XTS<-(DEFENCE_XTS[,paste(MS_DEFENCE)]/GDP_XTS[,paste(MS_DEFENCE)])*100
   
