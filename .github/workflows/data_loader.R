@@ -7,7 +7,6 @@
   library(lubridate)
   library(openxlsx)
   
-  # ---- helper functions ----
   growth <- function(x, freq){(x/lag.xts(x, k = freq)-1)*100}
   growth_pp <- function(x, freq){(x-lag.xts(x, k = freq))}
   safe_col <- function(x, cc) {
@@ -270,7 +269,6 @@
   colnames(NEC)<-  c("BEL","BGR","CZE","DNK","DEU","EST","IRL","GRC","ESP","FRA","HRV","ITA","CYP","LVA","LTU","LUX","HUN","MLT","NLD","AUT","POL","PRT","ROM","SVN","SVK","FIN","SWE")
   
   
-  ####High frenquency indicators 
   MS<-c("AUT" ,"BEL", "BGR", "CYP", "CZE", "DEU" ,"DNK","EST","GRC", "ESP",  "FIN", "FRA", "HRV", "HUN", "IRL", "ITA", "LTU", "LUX", "LVA", "MLT", "NLD","POL", "PRT", "ROM", "SWE","SVN","SVK")
   MS_2L<-c("AT", "BE", "BG", "CY", "CZ", "DE" ,"DK", "EE", "EL", "ES", "FI", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE","SI", "SK")  
   MEMBER_STATES<-data.frame(MS,MS_2L)
@@ -356,7 +354,6 @@
     'DEFICIT_Q_xts' = data.frame(index(DEFICIT_Q_xts),DEFICIT_Q_xts),
     'yield_xts' = data.frame(index(yield_xts),yield_xts),
     'MEMBER_STATES' = data.frame(MEMBER_STATES),
-    'safe_col' = data.frame(safe_col)
   )
   
   
@@ -422,7 +419,6 @@
   addWorksheet(wb,'DEFICIT_Q_xts')
   addWorksheet(wb,'yield_xts')
   addWorksheet(wb,'MEMBER_STATES')
-  addWorksheet(wb,'safe_col')
   addWorksheet(wb,'NET_DRM')
   
 
