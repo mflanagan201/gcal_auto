@@ -353,7 +353,7 @@
     'HICP_xts' = data.frame(index(HICP_xts),HICP_xts),
     'DEFICIT_Q_xts' = data.frame(index(DEFICIT_Q_xts),DEFICIT_Q_xts),
     'yield_xts' = data.frame(index(yield_xts),yield_xts),
-    'MEMBER_STATES' = data.frame(MEMBER_STATES),
+    'MEMBER_STATES' = data.frame(MEMBER_STATES)
   )
   
   
